@@ -304,7 +304,7 @@ class rPCB: rViewController
       
       for el in cxDicArray
       {
-         print("\(el["cx"] ?? 0)\t \(el["cy"] ?? 0)")
+         print("\(el[keyA] ?? 0)\t \(el[keyB] ?? 0)")
       }
        
       
@@ -315,13 +315,13 @@ class rPCB: rViewController
       var oldcx = 0
       for el in cxDicArray
       {
-         oldcx = equaldic["cx"]! // Wert von cx: Dics mit gleichem Wert suchen und in equalarray sammeln
-         let cx = el["cx"]! // aktueller wert
+         oldcx = equaldic[keyA]! // Wert von cx: Dics mit gleichem Wert suchen und in equalarray sammeln
+         let cx = el[keyA]! // aktueller wert
          print("****                   eqindex 0: \(eqindex) cx: \(cx)")
          if cx == oldcx // Punkt mit gleichem cx, in equaldicarray einsetzen
          {
             equaldicarray.append(el)
-            print("eqindex A: \(eqindex) cx: \(cx)")
+            //print("eqindex A: \(eqindex) cx: \(cx)")
          }
          else // neuer Wert. 
          {
@@ -331,20 +331,20 @@ class rPCB: rViewController
                // equaldicarray mit gleichem cx nach cy sortieren
                var equaldicarraysorted = [[String:Int]]()
                equaldicarraysorted = equaldicarray.sorted {
-                  guard let s1 = $0[key1], let s2 = $1[key1] else 
+                  guard let s1 = $0[keyB], let s2 = $1[keyB] else 
                   {
                      return false
                   }
                   return s1 < s2
                }
 
-               print("eqindex B: \(eqindex) cx: \(cx)")
+               //print("eqindex B: \(eqindex) cx: \(cx)")
                equalarray.append(equaldicarraysorted)
                equaldicarray.removeAll() // aufräumen
             }
             
             // neues Element in leerem equaldicarray einsetzen
-            print("eqindex C: \(eqindex) cx: \(cx)")
+            //print("eqindex C: \(eqindex) cx: \(cx)")
             equaldicarray.append(el)
             
             equaldic = el // aktualisieren
@@ -352,7 +352,7 @@ class rPCB: rViewController
          eqindex += 1
          if eqindex == origDicArray.count // letztes, einzelnes Element noch einsetzen
          {
-            print("eqindex last: \(eqindex)  cx: \(cx)")
+            //print("eqindex last: \(eqindex)  cx: \(cx)")
             equalarray.append(equaldicarray)
          }
       }
@@ -363,7 +363,7 @@ class rPCB: rViewController
       
        for el in equalarray
        {
-         print("el: \(el)") 
+         //print("el: \(el)") 
       }
        
       print("equalarray anz: \(equalarray.count)") 
@@ -374,7 +374,7 @@ class rPCB: rViewController
             
             for e in el
             {
-               print("\(e["cx"] ?? 0)\t \(e["cy"] ?? 0)")
+               //print("\(e[keyA] ?? 0)\t \(e[keyB] ?? 0)")
                returnDicArray.append(e)
             }
          }
@@ -383,7 +383,7 @@ class rPCB: rViewController
       
          for el in returnDicArray
          {
-            print("\(el["cx"] ?? 0)\t \(el["cy"] ?? 0)")
+            print("\(el[keyA] ?? 0)\t \(el[keyB] ?? 0)")
          }
       return returnDicArray
    }
