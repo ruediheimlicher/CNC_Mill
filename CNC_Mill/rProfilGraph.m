@@ -122,13 +122,13 @@ int (^add)(int,int) = ^(int number1, int number2){
    stepperposition = pos;
    if ([DatenArray count] && pos< [DatenArray count])
    {
-      NSPoint PunktA=NSMakePoint([[[DatenArray objectAtIndex:pos]objectForKey:@"ax"]floatValue]*scale,[[[DatenArray objectAtIndex:pos]objectForKey:@"ay"]floatValue]*scale);
+      NSPoint PunktA=NSMakePoint([[[DatenArray objectAtIndex:pos]objectForKey:@"ax"]doubleValue]*scale,[[[DatenArray objectAtIndex:pos]objectForKey:@"ay"]doubleValue]*scale);
       //NSLog(@"i: %d Punkt.x: %.4f Punkt.y: %.4f",i,Punkt.x,Punkt.y);
       NSRect tempMarkARect=NSMakeRect(PunktA.x-4.1, PunktA.y-4.1, 8.2, 8.2);
       [self setNeedsDisplayInRect:tempMarkARect];
       
       /*
-      NSPoint PunktB=NSMakePoint([[[DatenArray objectAtIndex:pos]objectForKey:@"bx"]floatValue]*scale,([[[DatenArray objectAtIndex:pos]objectForKey:@"by"]floatValue]+GraphOffset)*scale);
+      NSPoint PunktB=NSMakePoint([[[DatenArray objectAtIndex:pos]objectForKey:@"bx"]doubleValue]*scale,([[[DatenArray objectAtIndex:pos]objectForKey:@"by"]doubleValue]+GraphOffset)*scale);
       //NSLog(@"i: %d Punkt.x: %.4f Punkt.y: %.4f",i,Punkt.x,Punkt.y);
       NSRect tempMarkBRect=NSMakeRect(PunktB.x-4.1, PunktB.y-4.1, 8.1, 8.1);
       [self setNeedsDisplayInRect:tempMarkBRect];
@@ -143,8 +143,8 @@ int (^add)(int,int) = ^(int number1, int number2){
 	int i;
 	for(i=0;i<[DatenArray count];i++)
 	{
-		NSPoint tempPunktA=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"ax"]floatValue], [[[DatenArray objectAtIndex:i]objectForKey:@"ay"]floatValue]);
-		NSPoint tempPunktB=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"bx"]floatValue], [[[DatenArray objectAtIndex:i]objectForKey:@"by"]floatValue]+GraphOffset);
+		NSPoint tempPunktA=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"ax"]doubleValue], [[[DatenArray objectAtIndex:i]objectForKey:@"ay"]doubleValue]);
+		NSPoint tempPunktB=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"bx"]doubleValue], [[[DatenArray objectAtIndex:i]objectForKey:@"by"]doubleValue]+GraphOffset);
 		//NSLog(@"tempPunkt x: %2.2f y: %2.2f",tempPunkt.x,tempPunkt.y);
 		//NSLog(@"derPunkt x: %2.2f y: %2.2f",derPunkt.x,derPunkt.y);
 		//KlickFeld=NSMakeRect(derPunkt.x-3, derPunkt.y-3, 6, 6);
@@ -193,8 +193,8 @@ int (^add)(int,int) = ^(int number1, int number2){
        //NSDictionary* tempdic2 =[DatenArray objectAtIndex:i+1];
       }
       //NSLog(@"clickedAbschnittvonMaus: i:%d",i);
-		NSPoint tempPunktA=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"ax"]floatValue], [[[DatenArray objectAtIndex:i]objectForKey:@"ay"]floatValue]);
-		NSPoint tempPunktB=NSMakePoint([[[DatenArray objectAtIndex:i+1]objectForKey:@"ax"]floatValue], [[[DatenArray objectAtIndex:i+1]objectForKey:@"ay"]floatValue]);
+		NSPoint tempPunktA=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"ax"]doubleValue], [[[DatenArray objectAtIndex:i]objectForKey:@"ay"]doubleValue]);
+		NSPoint tempPunktB=NSMakePoint([[[DatenArray objectAtIndex:i+1]objectForKey:@"ax"]doubleValue], [[[DatenArray objectAtIndex:i+1]objectForKey:@"ay"]doubleValue]);
       //NSLog(@"tempPunktA: x: %2.2f y: %2.2f",tempPunktA.x,tempPunktA.y);
       //NSLog(@"tempPunktB: x: %2.2f y: %2.2f",tempPunktB.x,tempPunktB.y);
 //		float tanphi=(tempPunktA.y-tempPunktB.y)/(tempPunktA.x-tempPunktB.x);
@@ -602,7 +602,7 @@ int (^add)(int,int) = ^(int number1, int number2){
    //NSLog(@"mouseDragged Klickseite: %d",Klickseite);
 	if (Klickpunkt >=0 && [DatenArray count]> Klickpunkt)
 	{
-		NSPoint aktivPunkt=NSMakePoint([[[DatenArray objectAtIndex:Klickpunkt]objectForKey:@"ax"]floatValue]*scale, [[[DatenArray objectAtIndex:Klickpunkt]objectForKey:@"ay"]floatValue]*scale);
+		NSPoint aktivPunkt=NSMakePoint([[[DatenArray objectAtIndex:Klickpunkt]objectForKey:@"ax"]doubleValue]*scale, [[[DatenArray objectAtIndex:Klickpunkt]objectForKey:@"ay"]doubleValue]*scale);
 		NSRect aktivFeld=NSMakeRect(aktivPunkt.x-3, aktivPunkt.y-3, 6, 6);
 		
 		if ([self mouse:aktivPunkt inRect:aktivFeld])
@@ -668,20 +668,20 @@ int (^add)(int,int) = ^(int number1, int number2){
    if ([DatenArray count])
    {
       int anz=[DatenArray count];
-      StartPunktA=NSMakePoint([[[DatenArray objectAtIndex:0]objectForKey:@"ax"]floatValue]*scale,[[[DatenArray objectAtIndex:0]objectForKey:@"ay"]floatValue]*scale);
-      //NSLog(@"drawRect startpunkt x: %.2f  y: %.2f",[[[DatenArray objectAtIndex:0]objectForKey:@"ax"]floatValue],[[[DatenArray objectAtIndex:0]objectForKey:@"ay"]floatValue]);
-      EndPunktA=NSMakePoint([[[DatenArray objectAtIndex:anz-1]objectForKey:@"ax"]floatValue],[[[DatenArray objectAtIndex:anz-1]objectForKey:@"ay"]floatValue]);
+      StartPunktA=NSMakePoint([[[DatenArray objectAtIndex:0]objectForKey:@"ax"]doubleValue]*scale,[[[DatenArray objectAtIndex:0]objectForKey:@"ay"]doubleValue]*scale);
+      //NSLog(@"drawRect startpunkt x: %.2f  y: %.2f",[[[DatenArray objectAtIndex:0]objectForKey:@"ax"]doubleValue],[[[DatenArray objectAtIndex:0]objectForKey:@"ay"]doubleValue]);
+      EndPunktA=NSMakePoint([[[DatenArray objectAtIndex:anz-1]objectForKey:@"ax"]doubleValue],[[[DatenArray objectAtIndex:anz-1]objectForKey:@"ay"]doubleValue]);
       
-      StartPunktB=NSMakePoint([[[DatenArray objectAtIndex:0]objectForKey:@"bx"]floatValue]*scale,([[[DatenArray objectAtIndex:0]objectForKey:@"by"]floatValue]+GraphOffset)*scale);
-      //NSLog(@"drawRect startpunkt x: %.2f  y: %.2f",[[[DatenArray objectAtIndex:0]objectForKey:@"ax"]floatValue],[[[DatenArray objectAtIndex:0]objectForKey:@"ay"]floatValue]);
-      EndPunktB=NSMakePoint([[[DatenArray objectAtIndex:anz-1]objectForKey:@"bx"]floatValue]*scale,([[[DatenArray objectAtIndex:anz-1]objectForKey:@"by"]floatValue]+GraphOffset)*scale);
+      StartPunktB=NSMakePoint([[[DatenArray objectAtIndex:0]objectForKey:@"bx"]doubleValue]*scale,([[[DatenArray objectAtIndex:0]objectForKey:@"by"]doubleValue]+GraphOffset)*scale);
+      //NSLog(@"drawRect startpunkt x: %.2f  y: %.2f",[[[DatenArray objectAtIndex:0]objectForKey:@"ax"]doubleValue],[[[DatenArray objectAtIndex:0]objectForKey:@"ay"]doubleValue]);
+      EndPunktB=NSMakePoint([[[DatenArray objectAtIndex:anz-1]objectForKey:@"bx"]doubleValue]*scale,([[[DatenArray objectAtIndex:anz-1]objectForKey:@"by"]doubleValue]+GraphOffset)*scale);
       
       
       if (screen)
       {
          
-         NSPoint AA=NSMakePoint(0, [[[DatenArray objectAtIndex:0]objectForKey:@"ay"]floatValue]*scale);
-         NSPoint AB=NSMakePoint([self frame].size.width, [[[DatenArray objectAtIndex:0]objectForKey:@"ay"]floatValue]*scale);
+         NSPoint AA=NSMakePoint(0, [[[DatenArray objectAtIndex:0]objectForKey:@"ay"]doubleValue]*scale);
+         NSPoint AB=NSMakePoint([self frame].size.width, [[[DatenArray objectAtIndex:0]objectForKey:@"ay"]doubleValue]*scale);
          NSBezierPath* GrundLinieA=[NSBezierPath bezierPath];
          [GrundLinieA moveToPoint:AA];
          [GrundLinieA lineToPoint:AB];
@@ -690,8 +690,8 @@ int (^add)(int,int) = ^(int number1, int number2){
          
          
          
-         NSPoint BA=NSMakePoint(0, ([[[DatenArray objectAtIndex:0]objectForKey:@"by"]floatValue]+GraphOffset)*scale);
-         NSPoint BB=NSMakePoint([self frame].size.width, ([[[DatenArray objectAtIndex:0]objectForKey:@"by"]floatValue]+GraphOffset)*scale);
+         NSPoint BA=NSMakePoint(0, ([[[DatenArray objectAtIndex:0]objectForKey:@"by"]doubleValue]+GraphOffset)*scale);
+         NSPoint BB=NSMakePoint([self frame].size.width, ([[[DatenArray objectAtIndex:0]objectForKey:@"by"]doubleValue]+GraphOffset)*scale);
          NSBezierPath* GrundLinieB=[NSBezierPath bezierPath];
          [GrundLinieB moveToPoint:BA];
          [GrundLinieB lineToPoint:BB];
@@ -736,10 +736,10 @@ int (^add)(int,int) = ^(int number1, int number2){
          }
       }
       //NSLog(@"startabbrandindex: %d",startabbrandindex);
-      NSPoint AbbrandStartPunktA=NSMakePoint([[[DatenArray objectAtIndex:startabbrandindexa]objectForKey:@"abrax"]floatValue]*scale,[[[DatenArray objectAtIndex:startabbrandindexa]objectForKey:@"abray"]floatValue]*scale);
+      NSPoint AbbrandStartPunktA=NSMakePoint([[[DatenArray objectAtIndex:startabbrandindexa]objectForKey:@"abrax"]doubleValue]*scale,[[[DatenArray objectAtIndex:startabbrandindexa]objectForKey:@"abray"]doubleValue]*scale);
       AbbrandStartPunktA.y +=abbbranddelay;
       
-      NSPoint AbbrandEndPunktA=NSMakePoint(([[[DatenArray objectAtIndex:anz-1]objectForKey:@"abrax"]floatValue]),([[[DatenArray objectAtIndex:anz-1]objectForKey:@"abray"]floatValue]+GraphOffset));
+      NSPoint AbbrandEndPunktA=NSMakePoint(([[[DatenArray objectAtIndex:anz-1]objectForKey:@"abrax"]doubleValue]),([[[DatenArray objectAtIndex:anz-1]objectForKey:@"abray"]doubleValue]+GraphOffset));
       
       [AbbrandLinieA moveToPoint:AbbrandStartPunktA];
       //
@@ -758,9 +758,9 @@ int (^add)(int,int) = ^(int number1, int number2){
       }
       //NSLog(@"startabbrandindexa: %d startabbrandindexb: %d",startabbrandindexa,startabbrandindexb);
       
-      NSPoint AbbrandStartPunktB=NSMakePoint(([[[DatenArray objectAtIndex:startabbrandindexb]objectForKey:@"abrbx"]floatValue])*scale,([[[DatenArray objectAtIndex:startabbrandindexb]objectForKey:@"abrby"]floatValue]+GraphOffset)*scale);
+      NSPoint AbbrandStartPunktB=NSMakePoint(([[[DatenArray objectAtIndex:startabbrandindexb]objectForKey:@"abrbx"]doubleValue])*scale,([[[DatenArray objectAtIndex:startabbrandindexb]objectForKey:@"abrby"]doubleValue]+GraphOffset)*scale);
       AbbrandStartPunktB.y +=abbbranddelay;
-      NSPoint AbbrandEndPunktB=NSMakePoint([[[DatenArray objectAtIndex:anz-1]objectForKey:@"abrbx"]floatValue],[[[DatenArray objectAtIndex:anz-1]objectForKey:@"abrby"]floatValue]);
+      NSPoint AbbrandEndPunktB=NSMakePoint([[[DatenArray objectAtIndex:anz-1]objectForKey:@"abrbx"]doubleValue],[[[DatenArray objectAtIndex:anz-1]objectForKey:@"abrby"]doubleValue]);
       
       [AbbrandLinieB moveToPoint:AbbrandStartPunktB];
       
@@ -771,12 +771,12 @@ int (^add)(int,int) = ^(int number1, int number2){
       //    NSLog(@"drawrect KlicksetA: %@",[KlicksetA description]);
       for (i=0;i<anz;i++)
       {
-         NSPoint PunktA=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"ax"]floatValue]*scale,[[[DatenArray objectAtIndex:i]objectForKey:@"ay"]floatValue]*scale);
+         NSPoint PunktA=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"ax"]doubleValue]*scale,[[[DatenArray objectAtIndex:i]objectForKey:@"ay"]doubleValue]*scale);
          //NSLog(@"i: %d Punkt.x: %.4f Punkt.y: %.4f",i,Punkt.x,Punkt.y);
          [LinieA lineToPoint:PunktA];
          //   NSBezierPath* tempMarkA;//=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect];
          
-         NSPoint PunktB=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"bx"]floatValue]*scale ,([[[DatenArray objectAtIndex:i]objectForKey:@"by"]floatValue]+GraphOffset)*scale);
+         NSPoint PunktB=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"bx"]doubleValue]*scale ,([[[DatenArray objectAtIndex:i]objectForKey:@"by"]doubleValue]+GraphOffset)*scale);
          //NSLog(@"i: %d Punkt.x: %.4f Punkt.y: %.4f",i,Punkt.x,Punkt.y);
          
          [LinieB lineToPoint:PunktB];
@@ -862,7 +862,7 @@ int (^add)(int,int) = ^(int number1, int number2){
          
          if ([[DatenArray objectAtIndex:i]objectForKey:@"abrbx"]&& screen)
          {
-            NSPoint AbbrandPunktB=NSMakePoint(([[[DatenArray objectAtIndex:i]objectForKey:@"abrbx"]floatValue])*scale,([[[DatenArray objectAtIndex:i]objectForKey:@"abrby"]floatValue]+GraphOffset)*scale);
+            NSPoint AbbrandPunktB=NSMakePoint(([[[DatenArray objectAtIndex:i]objectForKey:@"abrbx"]doubleValue])*scale,([[[DatenArray objectAtIndex:i]objectForKey:@"abrby"]doubleValue]+GraphOffset)*scale);
             AbbrandPunktB.y +=abbbranddelay;
             [AbbrandLinieB lineToPoint:AbbrandPunktB];
             NSBezierPath* AbbranddeltaB=[NSBezierPath bezierPath];
@@ -876,7 +876,7 @@ int (^add)(int,int) = ^(int number1, int number2){
          // Seite A
          if ([[DatenArray objectAtIndex:i]objectForKey:@"abrax"]&& screen)
          {
-            NSPoint AbbrandPunktA=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"abrax"]floatValue]*scale,[[[DatenArray objectAtIndex:i]objectForKey:@"abray"]floatValue]*scale);
+            NSPoint AbbrandPunktA=NSMakePoint([[[DatenArray objectAtIndex:i]objectForKey:@"abrax"]doubleValue]*scale,[[[DatenArray objectAtIndex:i]objectForKey:@"abray"]doubleValue]*scale);
             AbbrandPunktA.y +=abbbranddelay;
             [AbbrandLinieA lineToPoint:AbbrandPunktA];
             NSBezierPath* AbbranddeltaA=[NSBezierPath bezierPath];

@@ -11,7 +11,15 @@ import Cocoa
 class rPCB: rViewController 
 {
    
+   
+   
    var circledicarray = [[String:Int]]()
+   
+   var circlearray = [[Int]]() // Koordinaten der Punkte
+   
+   var zoomfaktor:Double = 1.0
+   
+   var transformfaktor:Double = 0.3527777777779440
    
   // var servoPfad = rServoPfad()
  //  var usbstatus: Int32 = 0
@@ -21,7 +29,15 @@ class rPCB: rViewController
    @IBOutlet weak var readSVG_Knopf: NSButton!
    
    @IBOutlet weak var horizontal_checkbox: NSButton!
+   @IBOutlet weak var linear_checkbox: NSButton!
+   
+   @IBOutlet weak var zoomFeld: NSTextField!
+   
    @IBOutlet weak var fahrtweg: NSTextField!
+   @IBOutlet weak var speedFeld: NSTextField!
+ 
+   @IBOutlet weak var stepsFeld: NSTextField!
+
    /*
    @IBOutlet weak var manufactorer: NSTextField!
    @IBOutlet weak var Counter: NSTextField!
@@ -114,8 +130,8 @@ class rPCB: rViewController
    
    
    
-   let U_DIVIDER:Float = 9.8
-   let ADC_REF:Float = 3.26
+   let U_DIVIDER:Double = 9.8
+   let ADC_REF:Double = 3.26
    
    let ACHSE0_BYTE_H = 4
    let ACHSE0_BYTE_L = 5
@@ -184,8 +200,8 @@ class rPCB: rViewController
       /*
       Pot0_Slider.integerValue = Int(ACHSE0_START)
       Pot0_Feld.integerValue = Int(ACHSE0_START)
-      let intpos0 = UInt16(Float(ACHSE0_START) * FAKTOR0)
-      Pot0_Feld.integerValue = Int(UInt16(Float(ACHSE0_START) * FAKTOR0))
+      let intpos0 = UInt16(Double(ACHSE0_START) * FAKTOR0)
+      Pot0_Feld.integerValue = Int(UInt16(Double(ACHSE0_START) * FAKTOR0))
       Pot0_Stepper_L.integerValue = 0
       Pot0_Stepper_L_Feld.integerValue = 0
       Pot0_Stepper_H.integerValue = Int(Pot0_Slider.maxValue)
@@ -194,8 +210,8 @@ class rPCB: rViewController
       // Pot 1
       Pot1_Slider.integerValue = Int(ACHSE1_START)
       //Pot1_Feld.integerValue = Int(ACHSE1_START)
-      let intpos1 = UInt16(Float(ACHSE1_START) * FAKTOR1)
-      Pot1_Feld.integerValue = Int(UInt16(Float(ACHSE1_START) * FAKTOR1))
+      let intpos1 = UInt16(Double(ACHSE1_START) * FAKTOR1)
+      Pot1_Feld.integerValue = Int(UInt16(Double(ACHSE1_START) * FAKTOR1))
       //Pot1_Feld.integerValue = Int(intpos1)
       Pot1_Stepper_L.integerValue = 0
       Pot1_Stepper_L_Feld.integerValue = 0 
@@ -247,7 +263,12 @@ class rPCB: rViewController
       var returnDicArray:[[String:Int]] = [[String:Int]]()
       // https://useyourloaf.com/blog/sorting-an-array-of-dictionaries
       
-      
+      var linear = 0
+      if linear_checkbox.state == .on
+      {
+            print("linear on")
+            linear = 1
+      }
       // Array nach cx sortieren
       var cxDicArray:[[String:Int]] = [[String:Int]]()
       var keyA = "" // keys je nach order
@@ -317,7 +338,7 @@ class rPCB: rViewController
       {
          oldcx = equaldic[keyA]! // Wert von cx: Dics mit gleichem Wert suchen und in equalarray sammeln
          let cx = el[keyA]! // aktueller wert
-         print("****                   eqindex 0: \(eqindex) cx: \(cx)")
+         //print("****                   eqindex 0: \(eqindex) cx: \(cx)")
          if cx == oldcx // Punkt mit gleichem cx, in equaldicarray einsetzen
          {
             equaldicarray.append(el)
@@ -335,7 +356,14 @@ class rPCB: rViewController
                   {
                      return false
                   }
-                  return s1 < s2
+                  if linear == 1 && eqindex % 2 == 0
+                  {
+                     return s1 > s2
+                  }
+                  else
+                  {
+                     return s1 < s2
+                  }
                }
 
                //print("eqindex B: \(eqindex) cx: \(cx)")
@@ -359,7 +387,7 @@ class rPCB: rViewController
         
       
 
-      print("equalarray anz: \(equalarray.count)")  
+      print("sortDicArray_opt equalarray anz: \(equalarray.count)")  
       
        for el in equalarray
        {
@@ -444,6 +472,8 @@ class rPCB: rViewController
       // https://stackoverflow.com/questions/10016475/create-nsscrollview-programmatically-in-an-nsview-cocoa
       guard let fileURL = SVG_URL else { return  }
       
+      circledicarray.removeAll()
+      
       //reading
       do {
          print("readSVG")
@@ -458,7 +488,7 @@ class rPCB: rViewController
          var i=0
          var circle = 0
          var circlenummer = 0
-         var circlearray = [[Int]]()
+         circlearray = [[Int]]()
          var circleelementarray = [Int]()
          
          var circleelementdic = [String:Int]()
@@ -494,15 +524,25 @@ class rPCB: rViewController
                      }
                      else if zeilenindex == 1
                      {
-                        
-                        
-                        
-                        //var partA = element.split(separator:"=")[1]
+                         //var partA = element.split(separator:"=")[1]
                         //  print("partA: \(partA)")
                         let partB = element.replacingOccurrences(of: "\"", with: "")
                         //print("partB: \(partB)")
-                        let partfloat = (partB as NSString).floatValue * 1000 // Vorbereitung Int
+                        let partfloat = (partB as NSString).doubleValue * 1000000 // Vorbereitung Int
                         let partint = Int(partfloat)
+                        if partint > 0xFFFFFFFF
+                           {
+                              print("partint zu  gross*** partfloat: \(partfloat) partint: \(partint)")
+                        }
+                        let partintA:UInt8 = UInt8(UInt(partint) & 0x000000FF)
+                        let partintB:UInt8 = UInt8((UInt(partint) & 0x0000FF00) >> 8)
+                        let partintC:UInt8 = UInt8((UInt(partint) & 0x00FF0000) >> 16)
+                        let partintD:UInt8 = UInt8((UInt(partint) & 0xFF000000) >> 24)
+                        
+                  //      print(" partfloat: \(partfloat) partint: \(partint) partintA: \(partintA) partintB: \(partintB) partintC: \(partintC) partintD: \(partintD)")
+                        print("  partint:  partintD: \(partintD)")
+                        
+                       // print("partB: \(partB) partfloat: \(partfloat) partint: \(partint)")
                         circleelementarray.append(partint)
                      }
                      zeilenindex += 1
@@ -517,27 +557,23 @@ class rPCB: rViewController
                   //   circleelementdic["id"] = circleelementarray[0]  // nirgends verwendet
                      circleelementdic["cx"] = circleelementarray[1]
                      circleelementdic["cy"] = circleelementarray[2]
-                     circledicarray.append(circleelementdic)
+                     
+                     circledicarray.append(circleelementdic) // [[String:Int]]
                   }
                }
                
                circle -= 1
             }
-            
-            
-            
-            
-            
-            
-            
-            i = i+1
+                        i = i+1
          }
+         
     //     print("PCB circlearray")
     //     print(circlearray)
    //      let sorted = circlearray.sorted()
    //      print("PCB circledicarray")
    //      print(circledicarray)
          
+      
      //    let sortedarray = circledicarray.sorted {$0["cx"]! < $1["cx"]!}
    /*
          var testarray = sortDicArray(origDicArray: circledicarray,key0:"cx", key1:"cy", order: true)
@@ -569,10 +605,7 @@ class rPCB: rViewController
             break
          }
          //print(circledicarray)
-         
-         
-         
-         
+          
          //let sortedarray = sorted(circledicarray, key=lambda k: k['cx'])
          //print("PCB sortedarray")
          //print(sortedarray)
@@ -580,18 +613,43 @@ class rPCB: rViewController
          var zeilendicindex:Int = 0
          for zeilendic in sortedarray
          {
-            let cx:Int = (zeilendic["cx"]!)
-            let cy:Int = (zeilendic["cy"]!)
+            let cx:Int = (zeilendic["cx"]!) 
+            let cy:Int = (zeilendic["cy"]!) 
             
             //print("\(zeilendicindex) \(cx) \(cy)")
             let zeilendicarray = [zeilendicindex,cx,cy]
             circlearray.append(zeilendicarray)
             zeilendicindex += 1
          }
+         print("report_readSVG circlearray")
+         for el in circlearray
+         {
+            
+            print("\(el[0] )\t \(el[1] ) \(el[2])")
+         }
 
+         // circlearray: [[Int]] x,y
    //      servoPfad?.addSVG_Pfadarray(newPfad: circlearray)
-         let l = Plattefeld.setWeg(newWeg: circlearray)
+         let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
          fahrtweg.integerValue = l
+         
+         var CNC_DatendicArray = [[String:Any]]()
+         for zeilendaten in circlearray
+         {
+            
+            var zeilendic = [String:Any]()
+            zeilendic["startpunktx"] = zeilendaten[1]
+            zeilendic["startpunkty"] = zeilendaten[2]
+            
+            CNC_DatendicArray.append(zeilendic)
+         }
+         print("report_readSVG CNC_DatendicArray")
+         for el in CNC_DatendicArray
+         {
+            print("* \(el["startpunktx"] ?? 0) \(el["startpunkty"] ?? 0)")
+         }
+
+ //        var steuerdaten:[String:Int] = CNC.SteuerdatenVonDi(derDatenDic: CNC_DatendicArray[0])
          
       }
       catch 
@@ -603,6 +661,127 @@ class rPCB: rViewController
       
       
    }
+   
+   
+   @IBAction func report_PCB_Daten(_ sender: NSButton)
+   {
+      // s SteuerdatenVonDic in CNC.m
+      /*
+       [KoordinatenTabelle addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:PositionA.x],@"ax",[NSNumber numberWithFloat:PositionA.y],@"ay",[NSNumber numberWithFloat:PositionB.x],@"bx", [NSNumber numberWithFloat:PositionB.y],@"by",[NSNumber numberWithInt:index],@"index",[NSNumber numberWithInt:0],@"lage",[NSNumber numberWithFloat:aktuellepwm*red_pwm],@"pwm",nil]];
+       */
+      print("report_PCB_Daten")
+      
+      let speed = speedFeld.intValue
+      let propfaktor = 2834645.67 // 14173.23
+      var SchnittdatenArray:[[String:Any]] = [[:]]
+      var zeilenindex = 0
+      zoomfaktor = zoomFeld.doubleValue
+      let steps = stepsFeld.intValue // Schritte fuer 1mm
+      for zeilenindex in stride(from: 0, to: circlearray.count-1, by: 1)
+      {
+         let next = circlearray[zeilenindex+1]
+         let akt = circlearray[zeilenindex]
+         let diffX:Double = (Double((next[1] - akt[1]))) * zoomfaktor
+         
+         let diffY:Double = (Double((next[2] - akt[2]))) * zoomfaktor
+          // dic aufbauen
+         var position:UInt8 = 0
+         var code:UInt8 = 0
+         
+         var zeilendic:[String:Any] = [:]
+         
+         let aktX = (akt[1]) //* stepsFeld.intValue
+         let aktY = (akt[2]) //* stepsFeld.intValue
+         let nextX = (next[1])
+         let nextY = (next[2])
+         
+         let distanzX = Double(nextX - aktX) //* stepsFeld.floatValue
+         let distanzY = Double(nextY - aktY) //* stepsFeld.floatValue
+  //       var distanz = Double(hypotf(Float(distanzX),Float(distanzY)))
+         //let distanz = (distanzX * distanzX + distanzY * distanzY).squareRoot()
+         let distanz = (diffX * diffX + diffY * diffY).squareRoot()
+         let distanzstring = String(distanz)
+  //       print("distanz: \(distanz)  \(distanzstring)")
+         zeilendic["startpunktx"] = aktX
+         zeilendic["startpunkty"] = aktY
+         zeilendic["endpunktx"] = nextX
+         zeilendic["endpunkty"] = nextY
+         zeilendic["distanz"] = distanz
+         
+         let zeit:Double = Double(distanz)/Double(speed) //   Schnittzeit für Distanz
+         
+         var schrittex = Double(stepsFeld.integerValue) * distanzX 
+         schrittex /= propfaktor
+         var schrittexRound = round(schrittex)
+         var schrittexInt:Int = 0
+         if schrittexRound >= Double(Int.min) && schrittexRound < Double(Int.max)
+         {
+           // print("schritteXInt OK")
+            schrittexInt = Int(schrittexRound)
+            if schrittexInt < 0 // negativer Weg
+            {
+               schrittexInt *= -1
+               schrittexInt |= 0x80000000
+            }
+         }
+         else
+         {
+            print("schritteXround zu gross")
+         }
+
+         //let schrittex = distanzX
+         zeilendic["schrittex"] = schrittexInt
+   //     let schrittexstring = String(schrittexInt)
+         //print("schrittex: \(schrittex)  \(schrittexstring)")
+
+        var schrittey = Double(stepsFeld.integerValue) * distanzY  
+         //let schrittey = distanzY
+         schrittey /= propfaktor
+         var schritteyRound = round(schrittey)
+         var schritteyInt:Int = 0
+         if schritteyRound >= Double(Int.min) && schritteyRound < Double(Int.max)
+         {
+           // print("schritteYInt OK")
+            schritteyInt = Int(schritteyRound)
+            if schritteyInt < 0 // negativer Weg
+            {
+               schritteyInt *= -1
+               schritteyInt |= 0x80000000
+            }
+         }
+         else
+         {
+            print("schritteYInt zu gross")
+         }
+         zeilendic["schrittey"] = schritteyInt
+         //print("schrittey: \(schrittey)  \(schritteystring)")
+
+         zeilendic["code"] = code
+         if zeilenindex == 0
+         {
+            position |= (1<<FIRST_BIT) // Start markieren
+         }
+         if zeilenindex == circlearray.count - 1
+         {
+            position |= (1<<LAST_BIT)
+         }
+          zeilendic["position"] = position
+         zeilendic["zoomfaktor"] = zoomfaktor
+          SchnittdatenArray.append(zeilendic)
+      } // for Zeilendaten
+      
+      print("report_PCBDaten SchnittdtenArray")
+      for el in SchnittdatenArray
+      {
+         //print(el)
+   //      print("\(el["startpunktx"] ?? 0)\t \(el["startpunkty"] ?? 0) \t\(el["endpunktx"] ?? 0)\t \(el["endpunkty"] ?? 0) \t\(el["distanz"] ?? 0)\t \(el["schrittex"] ?? 0)\t\(el["schrittey"] ?? 0) \t\(el["zoomfaktor"] ?? 0) \t\(el["code"] ?? 0)")
+         print("\(el["distanz"] ?? 0)\t \(el["schrittex"] ?? 0)\t\(el["schrittey"] ?? 0) \t\(el["zoomfaktor"] ?? 0) \t\(el["code"] ?? 0)")
+       
+      }
+      
+   
+   
+   }// report_PCB_Daten
  
    @objc func usbstatusAktion(_ notification:Notification) 
    {
@@ -641,10 +820,10 @@ class rPCB: rViewController
          {
             x = w
          }
-         goto_x.integerValue = Int(Float(x*faktorw))
-         joystick_x.integerValue = Int(Float(x*faktorw))
-         goto_x_Stepper.integerValue = Int(Float(x*faktorw))
-         let achse0 = UInt16(Float(x*faktorw) * FAKTOR0)
+         goto_x.integerValue = Int(Double(x*faktorw))
+         joystick_x.integerValue = Int(Double(x*faktorw))
+         goto_x_Stepper.integerValue = Int(Double(x*faktorw))
+         let achse0 = UInt16(Double(x*faktorw) * FAKTOR0)
          //print("x: \(x) achse0: \(achse0)")
          teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((achse0 & 0xFF00) >> 8) // hb
          teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((achse0 & 0x00FF) & 0xFF) // lb
@@ -661,14 +840,14 @@ class rPCB: rViewController
             y = h
          }
          let z = 0
-         goto_y.integerValue = Int(Float(y*faktorh))
-         joystick_y.integerValue = Int(Float(y*faktorh))
-         goto_y_Stepper.integerValue = Int(Float(y*faktorh))
-         let achse1 = UInt16(Float(y*faktorh) * FAKTOR1)
+         goto_y.integerValue = Int(Double(y*faktorh))
+         joystick_y.integerValue = Int(Double(y*faktorh))
+         goto_y_Stepper.integerValue = Int(Double(y*faktorh))
+         let achse1 = UInt16(Double(y*faktorh) * FAKTOR1)
          //print("y: \(y) achse1: \(achse1)")
          teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8((achse1 & 0xFF00) >> 8) // hb
          teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8((achse1 & 0x00FF) & 0xFF) // lb
-         let achse2 =  UInt16(Float(z*faktorz) * FAKTOR2)
+         let achse2 =  UInt16(Double(z*faktorz) * FAKTOR2)
          teensy.write_byteArray[ACHSE2_BYTE_H] = UInt8((achse2 & 0xFF00) >> 8) // hb
          teensy.write_byteArray[ACHSE2_BYTE_L] = UInt8((achse2 & 0x00FF) & 0xFF) // lb
          
@@ -699,9 +878,9 @@ class rPCB: rViewController
                
                print("joystickAktion lastx: \(lastx) nextx: \(nextx) lasty: \(lasty) nexty: \(nexty)")
                
-               let hyp:Float = (sqrt((Float(hypx + hypy + hypz))))
+               let hyp:Double = (sqrt((Double(hypx + hypy + hypz))))
                
-               let anzahlsteps = hyp/schrittweiteFeld.floatValue
+               let anzahlsteps = hyp/schrittweiteFeld.doubleValue
                print("Basis joystickAktion hyp: \(hyp) anzahlsteps: \(anzahlsteps) ")
                
                teensy.write_byteArray[HYP_BYTE_H] = UInt8((Int(hyp) & 0xFF00) >> 8) // hb
@@ -832,10 +1011,39 @@ class rPCB: rViewController
          zeilendicindex += 1
       }
       
-      let l = Plattefeld.setWeg(newWeg: circlearray)
+      let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 400 , transform:  transformfaktor)
       self.fahrtweg.integerValue = l
-      
    }
+   
+   @IBAction  func report_linearCheckbox(_ sender: NSButton)
+   {
+      print("report_linearCheckbox IntVal: \(sender.intValue)")
+      let state = horizontal_checkbox.state
+      var order = false
+      if state == .on
+      {
+         order = true
+      }
+      var sortedarray = [[String:Int]]()
+      sortedarray = sortDicArray_opt(origDicArray: circledicarray,key0:"cx", key1:"cy", order: order)
+      
+        var circlearray = [[Int]]()
+      var zeilendicindex:Int = 0
+      for zeilendic in sortedarray
+      {
+         let cx:Int = (zeilendic["cx"]!)
+         let cy:Int = (zeilendic["cy"]!)
+         
+         //print("\(zeilendicindex) \(cx) \(cy)")
+         let zeilendicarray = [zeilendicindex,cx,cy]
+         circlearray.append(zeilendicarray)
+         zeilendicindex += 1
+      }
+      
+      let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 400 , transform:  transformfaktor)
+      self.fahrtweg.integerValue = l
+   }
+
    
    //MARK: Slider 0
    @IBAction override func report_Slider0(_ sender: NSSlider)
@@ -843,7 +1051,7 @@ class rPCB: rViewController
       teensy.write_byteArray[0] = SET_0 // Code 
       print("report_Slider0 IntVal: \(sender.intValue)")
       
-      let pos = sender.floatValue
+      let pos = sender.doubleValue
       
       let intpos = UInt16(pos * FAKTOR0)
       let Ustring = formatter.string(from: NSNumber(value: intpos))
@@ -893,8 +1101,8 @@ class rPCB: rViewController
       teensy.write_byteArray[0] = SET_0 // Code 
       
       // senden mit faktor 1000
-      //let u = Pot0_Feld.floatValue 
-      let Pot0_wert = Pot0_Feld.floatValue * 100
+      //let u = Pot0_Feld.doubleValue 
+      let Pot0_wert = Pot0_Feld.doubleValue * 100
       let Pot0_intwert = UInt(Pot0_wert)
       
       let Pot0_HI = (Pot0_intwert & 0xFF00) >> 8
@@ -903,8 +1111,8 @@ class rPCB: rViewController
       print("report_set_Pot0 Pot0_wert: \(Pot0_wert) Pot0 HI: \(Pot0_HI) Pot0 LO: \(Pot0_LO) ")
       let 
       intpos = sender.intValue 
-      self.Pot0_Slider.floatValue = Pot0_wert //sender.floatValue
-      self.Pot0_Stepper_L.floatValue = Pot0_wert//sender.floatValue
+      self.Pot0_Slider.doubleValue = Pot0_wert //sender.doubleValue
+      self.Pot0_Stepper_L.doubleValue = Pot0_wert//sender.doubleValue
       
       teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8(Pot0_LO)
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8(Pot0_HI)
@@ -928,7 +1136,7 @@ class rPCB: rViewController
       teensy.write_byteArray[0] = SET_1 // Code
       print("report_Slider1 IntVal: \(sender.intValue)")
       
-      let pos = sender.floatValue
+      let pos = sender.doubleValue
       let intpos = UInt16(pos * FAKTOR0)
       let Istring = formatter.string(from: NSNumber(value: intpos))
       print("intpos: \(intpos) IString: \(Istring)") 
@@ -989,10 +1197,10 @@ class rPCB: rViewController
       }
       
       print("report_goto_0  x: \(x) y: \(y)")
-      self.goto_0(x:Float(x),y:Float(y),z: 0)
+      self.goto_0(x:Double(x),y:Double(y),z: 0)
    }
    
-   override func goto_0(x:Float, y:Float, z:Float)
+   override func goto_0(x:Double, y:Double, z:Double)
    {
       teensy.write_byteArray[0] = GOTO_0
       print("goto_0 x: \(x) y: \(y)")
@@ -1021,15 +1229,15 @@ class rPCB: rViewController
       print("report_goto_x_Stepper IntVal: \(sender.intValue)")
       let intpos = sender.integerValue 
       goto_x.integerValue = intpos
-      let intposx = UInt16(Float(intpos ) * FAKTOR0)
+      let intposx = UInt16(Double(intpos ) * FAKTOR0)
       teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((intposx & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((intposx & 0x00FF) & 0xFF) // lb
       
       let w = Double(Joystickfeld.bounds.size.width) // Breite Joystickfeld
-      let invertfaktorw:Float = Float(w / (Pot0_Slider.maxValue - Pot0_Slider.minValue)) 
+      let invertfaktorw:Double = Double(w / (Pot0_Slider.maxValue - Pot0_Slider.minValue)) 
       
       var currpunkt:NSPoint = Joystickfeld.weg.currentPoint
-      currpunkt.x = CGFloat(Float(intpos) * invertfaktorw)
+      currpunkt.x = CGFloat(Double(intpos) * invertfaktorw)
       Joystickfeld.weg.line(to: currpunkt)
       Joystickfeld.needsDisplay = true 
       if (usbstatus > 0)
@@ -1044,15 +1252,15 @@ class rPCB: rViewController
       //print("report_goto_y_Stepper IntVal: \(sender.intValue)")
       let intpos = sender.integerValue 
       goto_y.integerValue = intpos
-      let intposy = UInt16(Float(intpos ) * FAKTOR0)
+      let intposy = UInt16(Double(intpos ) * FAKTOR0)
       teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8((intposy & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8((intposy & 0x00FF) & 0xFF) // lb
       
       let h = Double(Joystickfeld.bounds.size.width) // Breite Joystickfeld
-      let invertfaktorh:Float = Float(h / (Pot1_Slider.maxValue - Pot1_Slider.minValue)) 
+      let invertfaktorh:Double = Double(h / (Pot1_Slider.maxValue - Pot1_Slider.minValue)) 
       
       var currpunkt:NSPoint = Joystickfeld.weg.currentPoint
-      currpunkt.y = CGFloat(Float(intpos) * invertfaktorh)
+      currpunkt.y = CGFloat(Double(intpos) * invertfaktorh)
       Joystickfeld.weg.line(to: currpunkt)
       Joystickfeld.needsDisplay = true 
       

@@ -1,0 +1,332 @@
+2020-06-05 20:59:58.045474+0200 USB_Stepper[53043:893128] SteuerdatenVonDic: {
+    code = 0;
+    codea = 0;
+    codeb = 0;
+    endpunkta = "{83.0302734375, 42.724609375}";
+    endpunktb = "{83.0302734375, 42.724609375}";
+    index = 0;
+    position = 1;
+    pwm = 84;
+    startpunkta = "{94.0302734375, 48.974609375}";
+    startpunktb = "{94.0302734375, 48.974609375}";
+    teil = 0;
+    zoomfaktor = 1;
+}
+2020-06-05 20:59:58.046162+0200 USB_Stepper[53043:893128] SchnittdatenVonDic derDatenDic: {
+    anzaxminus = "-528";
+    anzaxplus = 0;
+    anzayminus = "-300";
+    anzayplus = 0;
+    anzbxminus = "-528";
+    anzbxplus = 0;
+    anzbyminus = "-300";
+    anzbyplus = 0;
+    code = 0;
+    codea = 0;
+    codeb = 0;
+    delayax = "47.92266";
+    delayaxh = 0;
+    delayaxl = 47;
+    delayay = "84.34387";
+    delayayh = 0;
+    delayayl = 84;
+    delaybx = "47.92266";
+    delaybxh = 0;
+    delaybxl = 47;
+    delayby = "84.34387";
+    delaybyh = 0;
+    delaybyl = 84;
+    distanza = "12.65158";
+    distanzax = "-11";
+    distanzay = "-6.25";
+    distanzb = "12.65158";
+    distanzbx = "-11";
+    distanzby = "-6.25";
+    endpunkta = "{83.0302734375, 42.724609375}";
+    endpunktb = "{83.0302734375, 42.724609375}";
+    index = 0;
+    indexh = 0;
+    indexl = 0;
+    motorstatus = 1;
+    position = 1;
+    pwm = 84;
+    relevantezeit = "2.530316";
+    schritteax = "-528";
+    schritteaxh = 130;
+    schritteaxl = 16;
+    schritteay = "-300";
+    schritteayh = 129;
+    schritteayl = 44;
+    schrittebx = "-528";
+    schrittebxh = 130;
+    schrittebxl = 16;
+    schritteby = "-300";
+    schrittebyh = 129;
+    schrittebyl = 44;
+    schrittex = 0;
+    schrittey = 0;
+    startpunkta = "{94.0302734375, 48.974609375}";
+    startpunktb = "{94.0302734375, 48.974609375}";
+    teil = 0;
+    zoomfaktor = 1;
+}
+2020-06-05 20:59:58.046696+0200 USB_Stepper[53043:893128] SchnittdatenVonDic tempArray: (
+    16,
+    130,
+    44,
+    129,
+    47,
+    0,
+    84,
+    0,
+    16,
+    130,
+    44,
+    129,
+    47,
+    0,
+    84,
+    0,
+    0,
+    1,
+    0,
+    0,
+    84,
+    1
+)
+2020-06-05 20:59:58.046859+0200 USB_Stepper[53043:893128] SteuerdatenVonDic: {
+    code = 0;
+    codea = 0;
+    codeb = 0;
+    endpunkta = "{97.5302734375, 31.224609375}";
+    endpunktb = "{97.5302734375, 31.224609375}";
+    index = 1;
+    position = 0;
+    pwm = 84;
+    startpunkta = "{83.0302734375, 42.724609375}";
+    startpunktb = "{83.0302734375, 42.724609375}";
+    teil = 0;
+    zoomfaktor = 1;
+}
+2020-06-05 20:59:58.065104+0200 USB_Stepper[53043:893128] SchnittdatenVonDic derDatenDic: {
+    anzaxminus = 0;
+    anzaxplus = 696;
+    anzayminus = "-552";
+    anzayplus = 0;
+    anzbxminus = 0;
+    anzbxplus = 696;
+    anzbyminus = "-552";
+    anzbyplus = 0;
+    code = 0;
+    codea = 0;
+    codeb = 0;
+    delayax = "53.18034";
+    delayaxh = 0;
+    delayaxl = 53;
+    delayay = "67.05347";
+    delayayh = 0;
+    delayayl = 67;
+    delaybx = "53.18034";
+    delaybxh = 0;
+    delaybxl = 53;
+    delayby = "67.05347";
+    delaybyh = 0;
+    delaybyl = 67;
+    distanza = "18.50676";
+    distanzax = "14.5";
+    distanzay = "-11.5";
+    distanzb = "18.50676";
+    distanzbx = "14.5";
+    distanzby = "-11.5";
+    endpunkta = "{97.5302734375, 31.224609375}";
+    endpunktb = "{97.5302734375, 31.224609375}";
+    index = 1;
+    indexh = 0;
+    indexl = 1;
+    motorstatus = 1;
+    position = 0;
+    pwm = 84;
+    relevantezeit = "3.701351";
+    schritteax = 696;
+    schritteaxh = 2;
+    schritteaxl = 184;
+    schritteay = "-552";
+    schritteayh = 130;
+    schritteayl = 40;
+    schrittebx = 696;
+    schrittebxh = 2;
+    schrittebxl = 184;
+    schritteby = "-552";
+    schrittebyh = 130;
+    schrittebyl = 40;
+    schrittex = 0;
+    schrittey = 0;
+    startpunkta = "{83.0302734375, 42.724609375}";
+    startpunktb = "{83.0302734375, 42.724609375}";
+    teil = 0;
+    zoomfaktor = 1;
+}
+2020-06-05 20:59:58.065630+0200 USB_Stepper[53043:893128] SchnittdatenVonDic tempArray: (
+    184,
+    2,
+    40,
+    130,
+    53,
+    0,
+    67,
+    0,
+    184,
+    2,
+    40,
+    130,
+    53,
+    0,
+    67,
+    0,
+    0,
+    0,
+    0,
+    1,
+    84,
+    1
+)
+2020-06-05 20:59:58.065738+0200 USB_Stepper[53043:893128] SteuerdatenVonDic: {
+    code = 0;
+    codea = 0;
+    codeb = 0;
+    endpunkta = "{107.7802734375, 41.474609375}";
+    endpunktb = "{107.7802734375, 41.474609375}";
+    index = 2;
+    position = 0;
+    pwm = 84;
+    startpunkta = "{97.5302734375, 31.224609375}";
+    startpunktb = "{97.5302734375, 31.224609375}";
+    teil = 0;
+    zoomfaktor = 1;
+}
+2020-06-05 20:59:58.065944+0200 USB_Stepper[53043:893128] SchnittdatenVonDic derDatenDic: {
+    anzaxminus = 0;
+    anzaxplus = 492;
+    anzayminus = 0;
+    anzayplus = 492;
+    anzbxminus = 0;
+    anzbxplus = 492;
+    anzbyminus = 0;
+    anzbyplus = 492;
+    code = 0;
+    codea = 0;
+    codeb = 0;
+    delayax = "58.92557";
+    delayaxh = 0;
+    delayaxl = 58;
+    delayay = "58.92557";
+    delayayh = 0;
+    delayayl = 58;
+    delaybx = "58.92557";
+    delaybxh = 0;
+    delaybxl = 58;
+    delayby = "58.92557";
+    delaybyh = 0;
+    delaybyl = 58;
+    distanza = "14.49569";
+    distanzax = "10.25";
+    distanzay = "10.25";
+    distanzb = "14.49569";
+    distanzbx = "10.25";
+    distanzby = "10.25";
+    endpunkta = "{107.7802734375, 41.474609375}";
+    endpunktb = "{107.7802734375, 41.474609375}";
+    index = 2;
+    indexh = 0;
+    indexl = 2;
+    motorstatus = 1;
+    position = 0;
+    pwm = 84;
+    relevantezeit = "2.899138";
+    schritteax = 492;
+    schritteaxh = 1;
+    schritteaxl = 236;
+    schritteay = 492;
+    schritteayh = 1;
+    schritteayl = 236;
+    schrittebx = 492;
+    schrittebxh = 1;
+    schrittebxl = 236;
+    schritteby = 492;
+    schrittebyh = 1;
+    schrittebyl = 236;
+    schrittex = 0;
+    schrittey = 0;
+    startpunkta = "{97.5302734375, 31.224609375}";
+    startpunktb = "{97.5302734375, 31.224609375}";
+    teil = 0;
+    zoomfaktor = 1;
+}
+2020-06-05 20:59:58.066573+0200 USB_Stepper[53043:893128] SchnittdatenVonDic tempArray: (
+    236,
+    1,
+    236,
+    1,
+    58,
+    0,
+    58,
+    0,
+    236,
+    1,
+    236,
+    1,
+    58,
+    0,
+    58,
+    0,
+    0,
+    0,
+    0,
+    2,
+    84,
+    1
+)
+2020-06-05 20:59:58.067065+0200 USB_Stepper[53043:893128] SteuerdatenVonDic: {
+    code = 0;
+    codea = 0;
+    codeb = 0;
+    endpunkta = "{94.0302734375, 55.724609375}";
+    endpunktb = "{94.0302734375, 55.724609375}";
+    index = 3;
+    position = 0;
+    pwm = 84;
+    startpunkta = "{107.7802734375, 41.474609375}";
+    startpunktb = "{107.7802734375, 41.474609375}";
+    teil = 0;
+    zoomfaktor = 1;
+}
+2020-06-05 20:59:58.067166+0200 USB_Stepper[53043:893128] SchnittdatenVonDic tempArray: (
+    148,
+    130,
+    172,
+    2,
+    60,
+    0,
+    57,
+    0,
+    148,
+    130,
+    172,
+    2,
+    60,
+    0,
+    57,
+    0,
+    0,
+    0,
+    0,
+    3,
+    84,
+    3
+)
+2020-06-05 20:59:58.067199+0200 USB_Stepper[53043:893128] reportStopKnopf KoordinatenString: 
+0	94.03	48.97	94.03	48.97
+1	83.03	42.72	83.03	42.72
+2	97.53	31.22	97.53	31.22
+3	107.78	41.47	107.78	41.47
+4	94.03	55.72	94.03	55.72

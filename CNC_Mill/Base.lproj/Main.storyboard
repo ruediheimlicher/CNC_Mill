@@ -706,11 +706,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="rViewController" customModule="CNC_Mill" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="1001" height="654"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1040" height="840"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3PU-iI-QBc">
-                                <rect key="frame" x="559" y="567" width="112" height="32"/>
+                                <rect key="frame" x="563" y="781" width="112" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="check_USB" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="L4u-Hk-I0d">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -724,14 +724,14 @@
                                 </connections>
                             </button>
                             <containerView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mwe-4y-Gqt">
-                                <rect key="frame" x="20" y="32" width="941" height="485"/>
+                                <rect key="frame" x="20" y="32" width="1000" height="708"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <connections>
                                     <segue destination="LIf-gm-nAU" kind="embed" id="VW7-fa-zdD"/>
                                 </connections>
                             </containerView>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qvH-7y-taC" customClass="NSOutlineView">
-                                <rect key="frame" x="673" y="574" width="25" height="22"/>
+                                <rect key="frame" x="677" y="781" width="35" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <shadow key="shadow">
                                     <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -746,7 +746,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="221.5" y="847"/>
+            <point key="canvasLocation" x="241" y="971"/>
         </scene>
         <!--Device Tab View Controller-->
         <scene sceneID="VNp-If-XAe">
@@ -779,33 +779,11 @@
             <objects>
                 <viewController title="PCB" id="wFL-7s-Z8p" customClass="rPCB" customModule="CNC_Mill" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="uSC-dm-ZpO">
-                        <rect key="frame" x="0.0" y="0.0" width="784" height="506"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1004" height="711"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView fixedFrame="YES" borderType="groove" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EQG-jy-Qht">
-                                <rect key="frame" x="50" y="61" width="659" height="359"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <clipView key="contentView" ambiguous="YES" id="cPV-oA-S2u">
-                                    <rect key="frame" x="2" y="2" width="640" height="340"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <view fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XUX-V5-xCg" customClass="rPlatteView" customModule="CNC_Mill" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </view>
-                                    </subviews>
-                                </clipView>
-                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Hhd-8b-mf2">
-                                    <rect key="frame" x="2" y="342" width="640" height="15"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="xfR-LI-jHt">
-                                    <rect key="frame" x="642" y="2" width="15" height="340"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                            </scrollView>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eex-tQ-W4N">
-                                <rect key="frame" x="139" y="458" width="97" height="32"/>
+                                <rect key="frame" x="128" y="667" width="97" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="read SVG" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ibR-U5-Igg">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -815,8 +793,19 @@
                                     <action selector="report_readSVG:" target="wFL-7s-Z8p" id="rSa-WA-l3c"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1h2-2T-0p4">
+                                <rect key="frame" x="260" y="667" width="108" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="PCB-Daten" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="c58-TH-kyH">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="report_PCB_Daten:" target="wFL-7s-Z8p" id="pi9-K6-qFH"/>
+                                </connections>
+                            </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xp2-G1-erb">
-                                <rect key="frame" x="465" y="467" width="84" height="18"/>
+                                <rect key="frame" x="453" y="672" width="84" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Horizontal" bezelStyle="regularSquare" imagePosition="left" inset="2" id="u9b-fo-Tlb">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -827,23 +816,110 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5N4-eK-xlm">
-                                <rect key="frame" x="586" y="465" width="65" height="17"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="63" y="638" width="65" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Fahrtweg:" id="BOm-cl-nfz">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hgx-YM-eaH">
+                                <rect key="frame" x="63" y="607" width="43" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Speed" id="QZS-hU-IyD">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TFc-go-WmQ">
+                                <rect key="frame" x="277" y="606" width="39" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Steps" id="Hsf-Yr-xfH">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uOs-Jd-n3A">
-                                <rect key="frame" x="28" y="428" width="106" height="22"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="134" y="636" width="106" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" borderStyle="border" drawsBackground="YES" id="ykT-Bx-kU8">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FBI-Ov-pSY">
+                                <rect key="frame" x="134" y="604" width="47" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="10" drawsBackground="YES" id="wHo-QY-iGZ">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PLB-nE-fdB">
+                                <rect key="frame" x="342" y="604" width="47" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="200" drawsBackground="YES" id="oCv-n9-lt0">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ubb-7P-f7L">
+                                <rect key="frame" x="453" y="639" width="60" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Linear" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2QX-8p-Y6v">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="report_linearCheckbox:" target="wFL-7s-Z8p" id="N9N-7U-n0x"/>
+                                </connections>
+                            </button>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FjA-sx-RCl">
+                                <rect key="frame" x="339" y="635" width="52" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="right" title="0.1" drawsBackground="YES" id="D0u-RT-N7L">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bJR-Ly-FGp">
+                                <rect key="frame" x="277" y="639" width="38" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="zoom" id="j0R-rY-zyt">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <scrollView fixedFrame="YES" borderType="groove" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EQG-jy-Qht">
+                                <rect key="frame" x="55" y="60" width="857" height="495"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <clipView key="contentView" ambiguous="YES" id="cPV-oA-S2u">
+                                    <rect key="frame" x="2" y="2" width="838" height="476"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XUX-V5-xCg" customClass="rPlatteView" customModule="CNC_Mill" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="2198" height="2136"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Hhd-8b-mf2">
+                                    <rect key="frame" x="2" y="478" width="838" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="xfR-LI-jHt">
+                                    <rect key="frame" x="840" y="2" width="15" height="476"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
                         </subviews>
                     </view>
                     <connections>
@@ -851,12 +927,16 @@
                         <outlet property="Plattefeld" destination="XUX-V5-xCg" id="5lZ-Hg-XVD"/>
                         <outlet property="fahrtweg" destination="uOs-Jd-n3A" id="fED-f6-SaJ"/>
                         <outlet property="horizontal_checkbox" destination="Xp2-G1-erb" id="qCm-5a-LjN"/>
+                        <outlet property="linear_checkbox" destination="ubb-7P-f7L" id="q9e-aE-2Rw"/>
                         <outlet property="readSVG_Knopf" destination="eex-tQ-W4N" id="7RP-tf-ddy"/>
+                        <outlet property="speedFeld" destination="FBI-Ov-pSY" id="5KE-yI-L2p"/>
+                        <outlet property="stepsFeld" destination="PLB-nE-fdB" id="AIg-mj-66E"/>
+                        <outlet property="zoomFeld" destination="FjA-sx-RCl" id="nKE-x6-duc"/>
                     </connections>
                 </viewController>
                 <customObject id="IXe-1g-t5Y" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="77" y="2412"/>
+            <point key="canvasLocation" x="187" y="2514.5"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="vOC-B7-MU2">

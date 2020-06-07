@@ -61,9 +61,9 @@ class rServoPfad
       }
    }
    
-   func addSVG_Pfadarray(newPfad:[[Float]])
+   func addSVG_Pfadarray(newPfad:[[Double]])
    {
-      let faktor:Float = 10.0
+      let faktor:Double = 10.0
       for pos in newPfad
       {
          var tempposition = position()
@@ -131,7 +131,14 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    var servoPfad = rServoPfad()
    var usbstatus: Int32 = 0
    
+   var  CNCDatenArray = [[String:Int]]();
+   
+   
+   var Koordinatentabelle = [[String:Any]]()
+   
    var teensy = usb_teensy()
+   
+   var CNC = rCNC()
    
     @IBOutlet weak var USB_OK: NSOutlineView!
     @IBOutlet weak var check_USB_Knopf: NSButton!
@@ -235,7 +242,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
                         //  print("partA: \(partA)")
                         let partB = element.replacingOccurrences(of: "\"", with: "")
                         //print("partB: \(partB)")
-                        let partfloat = (partB as NSString).floatValue * 100
+                        let partfloat = (partB as NSString).doubleValue * 100
                         let partint = Int(partfloat)
                         circleelementarray.append(partint)
                      }
@@ -367,7 +374,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       teensy.write_byteArray[0] = SET_0 // Code 
       //print("report_Slider0 IntVal: \(sender.intValue)")
       
-      let pos = sender.floatValue
+      let pos = sender.doubleValue
       
       let intpos = UInt16(pos * FAKTOR0)
       let Ustring = formatter.string(from: NSNumber(value: intpos))
@@ -405,10 +412,10 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       }
       
       print("report_goto_0  x: \(x) y: \(y)")
-      self.goto_0(x:Float(x),y:Float(y),z: 0)
+      self.goto_0(x:Double(x),y:Double(y),z: 0)
    }
    
-   func goto_0(x:Float, y:Float, z:Float)
+   func goto_0(x:Double, y:Double, z:Double)
    {
       teensy.write_byteArray[0] = GOTO_0
       print("goto_0 x: \(x) y: \(y)")
@@ -461,8 +468,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       teensy.write_byteArray[0] = SET_0 // Code 
       
       // senden mit faktor 1000
-      //let u = Pot0_Feld.floatValue 
-      let Pot0_wert = Pot0_Feld.floatValue * 100
+      //let u = Pot0_Feld.doubleValue 
+      let Pot0_wert = Pot0_Feld.doubleValue * 100
       let Pot0_intwert = UInt(Pot0_wert)
       
       let Pot0_HI = (Pot0_intwert & 0xFF00) >> 8
@@ -470,8 +477,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       
       print("report_set_Pot0 Pot0_wert: \(Pot0_wert) Pot0 HI: \(Pot0_HI) Pot0 LO: \(Pot0_LO) ")
       let intpos = sender.intValue 
-      self.Pot0_Slider.floatValue = Pot0_wert //sender.floatValue
-      self.Pot0_Stepper_L.floatValue = Pot0_wert//sender.floatValue
+      self.Pot0_Slider.doubleValue = Pot0_wert //sender.doubleValue
+      self.Pot0_Stepper_L.doubleValue = Pot0_wert//sender.doubleValue
       
       teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8(Pot0_LO)
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8(Pot0_HI)
@@ -491,7 +498,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    {
       teensy.write_byteArray[0] = SET_3 // Code 
       //print("report_Slider2 IntVal: \(sender.intValue)")
-      let pos = sender.floatValue
+      let pos = sender.doubleValue
       
       let intpos = UInt16(pos * FAKTOR3)
       let Ustring = formatter.string(from: NSNumber(value: intpos))
@@ -558,15 +565,15 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       print("report_goto_x_Stepper IntVal: \(sender.intValue)")
       let intpos = sender.integerValue 
       goto_x.integerValue = intpos
-      let intposx = UInt16(Float(intpos ) * FAKTOR0)
+      let intposx = UInt16(Double(intpos ) * FAKTOR0)
       teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((intposx & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((intposx & 0x00FF) & 0xFF) // lb
       
       let w = Double(Joystickfeld.bounds.size.width) // Breite Joystickfeld
-      let invertfaktorw:Float = Float(w / (Pot0_Slider.maxValue - Pot0_Slider.minValue)) 
+      let invertfaktorw:Double = Double(w / (Pot0_Slider.maxValue - Pot0_Slider.minValue)) 
       
       var currpunkt:NSPoint = Joystickfeld.weg.currentPoint
-      currpunkt.x = CGFloat(Float(intpos) * invertfaktorw)
+      currpunkt.x = CGFloat(Double(intpos) * invertfaktorw)
       Joystickfeld.weg.line(to: currpunkt)
       Joystickfeld.needsDisplay = true 
       if (usbstatus > 0)
@@ -581,15 +588,15 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       //print("report_goto_y_Stepper IntVal: \(sender.intValue)")
       let intpos = sender.integerValue 
       goto_y.integerValue = intpos
-      let intposy = UInt16(Float(intpos ) * FAKTOR0)
+      let intposy = UInt16(Double(intpos ) * FAKTOR0)
       teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8((intposy & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8((intposy & 0x00FF) & 0xFF) // lb
       
       let h = Double(Joystickfeld.bounds.size.width) // Breite Joystickfeld
-      let invertfaktorh:Float = Float(h / (Pot1_Slider.maxValue - Pot1_Slider.minValue)) 
+      let invertfaktorh:Double = Double(h / (Pot1_Slider.maxValue - Pot1_Slider.minValue)) 
       
       var currpunkt:NSPoint = Joystickfeld.weg.currentPoint
-      currpunkt.y = CGFloat(Float(intpos) * invertfaktorh)
+      currpunkt.y = CGFloat(Double(intpos) * invertfaktorh)
       Joystickfeld.weg.line(to: currpunkt)
       Joystickfeld.needsDisplay = true 
       
@@ -605,7 +612,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       teensy.write_byteArray[0] = SET_1 // Code
       print("report_Slider1 IntVal: \(sender.intValue)")
       
-      let pos = sender.floatValue
+      let pos = sender.doubleValue
       let intpos = UInt16(pos * FAKTOR0)
       let Istring = formatter.string(from: NSNumber(value: intpos))
       print("intpos: \(intpos) IString: \(Istring)") 
@@ -655,15 +662,15 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    {
       //teensy.write_byteArray[0] = SET_0 // Code 
       print("report_I_Stepper IntVal: \(sender.intValue)")
-      let I = Pot1_Feld.floatValue
+      let I = Pot1_Feld.doubleValue
       let intpos = sender.intValue 
       
-      let pos = sender.floatValue
+      let pos = sender.doubleValue
       let Istring = formatter.string(from: NSNumber(value: intpos))
       //     print("report_U_Stepper u: \(u) Istring: \(Istring ?? "0")")
       Pot1_Feld.stringValue  = Istring!
       
-      self.Pot1_Stepper_H.floatValue = sender.floatValue
+      self.Pot1_Stepper_H.doubleValue = sender.doubleValue
       
       teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8((intpos & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8((intpos & 0x00FF) & 0xFF) // lb
@@ -677,12 +684,12 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    @IBAction func report_StartSinus(_ sender: NSButton)
    {
       print("report_StartSinus ")
-      let intpos0 = UInt16(Float(ACHSE0_START) * FAKTOR0)
-      Pot0_Feld.integerValue = Int(UInt16(Float(ACHSE0_START) * FAKTOR0))
+      let intpos0 = UInt16(Double(ACHSE0_START) * FAKTOR0)
+      Pot0_Feld.integerValue = Int(UInt16(Double(ACHSE0_START) * FAKTOR0))
       
       teensy.write_byteArray[0] = SIN_START
-      let intpos = UInt16(Float(ACHSE0_START) * FAKTOR0)
-      let startwert = UInt16(Float(ACHSE0_START) * FAKTOR0)
+      let intpos = UInt16(Double(ACHSE0_START) * FAKTOR0)
+      let startwert = UInt16(Double(ACHSE0_START) * FAKTOR0)
       
       teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((startwert & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((startwert & 0x00FF) & 0xFF) // lb
@@ -756,8 +763,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    let SIN_START:UInt8 = 0xE0
    let SIN_END:UInt8 = 0xE1
    
-   let U_DIVIDER:Float = 9.8
-   let ADC_REF:Float = 3.26
+   let U_DIVIDER:Double = 9.8
+   let ADC_REF:Double = 3.26
    
    let ACHSE0_BYTE_H = 4
    let ACHSE0_BYTE_L = 5

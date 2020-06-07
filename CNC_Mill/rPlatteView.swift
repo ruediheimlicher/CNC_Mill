@@ -226,15 +226,16 @@ class rPlatteView: NSView
    }
 
    
-   func setWeg(newWeg:[[Int]])-> Int
+   func setWeg(newWeg:[[Int]], scalefaktor:Int , transform:Double)-> Int
    {
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
       fahrtweg = 0
-      
+      let redfaktor:CGFloat = 200
+      let transformfaktor:CGFloat = CGFloat(transform) // px to mm
       var wegindex=0;
-      let faktor:CGFloat = 400
+      let faktor:CGFloat = CGFloat(scalefaktor)
       var  tempMark:NSBezierPath
       var lastpunkt = NSMakePoint(0, 0)
       var elcount = 0
@@ -242,7 +243,7 @@ class rPlatteView: NSView
       {
          elcount += 1
        //  let x = CGFloat(zeile[0])
-         let lokalpunkt = NSMakePoint(CGFloat(zeile[1])/faktor,CGFloat(zeile[2])/faktor)
+         let lokalpunkt = NSMakePoint(CGFloat(zeile[1])/faktor/redfaktor * transformfaktor,CGFloat(zeile[2])/faktor/redfaktor * transformfaktor)
          //print(lokalpunkt)
          if wegindex == 0
          {
@@ -277,6 +278,8 @@ class rPlatteView: NSView
       needsDisplay = true
       return Int(fahrtweg)
    }
+   
+   
    
    func clearWeg()
    {
