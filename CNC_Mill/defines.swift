@@ -9,6 +9,15 @@
 import Foundation
 
 // CNC PCB
+
+let MOTOR_A = 0
+let MOTOR_B = 1
+let MOTOR_C = 2
+let MOTOR_D = 3
+
+
+
+
 let PFEILSCHRITT:UInt8  =   4
 
 let LINE:UInt8  =           0

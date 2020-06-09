@@ -124,14 +124,15 @@ class rDeviceTabViewController: NSTabViewController
 
 class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
 {
-   let notokimage :NSImage = NSImage(named:NSImage.Name(rawValue: "notok_image"))!
-   let okimage :NSImage = NSImage(named:NSImage.Name(rawValue: "ok_image"))!
+   var notokimage :NSImage = NSImage(named:NSImage.Name(rawValue: "notok_image"))!
+   var okimage :NSImage = NSImage(named:NSImage.Name(rawValue: "ok_image"))!
 
    var hintergrundfarbe = NSColor()
    var formatter = NumberFormatter()
    var selectedDevice:String = ""
    var servoPfad = rServoPfad()
    var usbstatus: Int32 = 0
+   
    
    var  CNCDatenArray = [[String:Int]]();
    
@@ -177,6 +178,9 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       view.window?.delegate = self // https://stackoverflow.com/questions/44685445/trying-to-know-when-a-window-closes-in-a-macos-document-based-application
       self.view.window?.acceptsMouseMovedEvents = true
 
+      NotificationCenter.default.addObserver(self, selector:#selector(usbstatusAktion(_:)),name:NSNotification.Name(rawValue: "usb_status"),object:nil)
+      NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
+
       /*
       NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
       NotificationCenter.default.addObserver(self, selector:#selector(tabviewAktion(_:)),name:NSNotification.Name(rawValue: "tabview"),object:nil)
@@ -191,16 +195,16 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    {
       print("viewDidAppear")
       self.view.window?.delegate = self as? NSWindowDelegate 
-     let erfolg = teensy.USBOpen()
+      let erfolg = teensy.USBOpen()
       if erfolg == 1
       {
-          USB_OK_Feld.image = okimage
+         USB_OK_Feld.image = okimage
       }
       else
       {
-          USB_OK_Feld.image = notokimage
+         USB_OK_Feld.image = notokimage
       }
-     
+      
    }
 
     
@@ -314,6 +318,31 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       
     }
  */
+   @objc func usbstatusAktion(_ notification:Notification) 
+   {
+      let info = notification.userInfo
+      print("PCB usbstatusAktion:\t \(info)")
+      let status:Int = info!["usbstatus"] as! Int // 
+      print("PCB usbstatusAktion:\t \(status)")
+      //     usbstatus = Int32(status)
+      
+   }
+   
+   @objc func usbattachAktion(_ notification:Notification) 
+   {
+      let info = notification.userInfo
+      print("PCB usbattachAktion:\t \(info)")
+      let status:Int = info!["attach"] as! Int // 
+      print("PCB usbattachAktion:\t \(status)")
+      if status == USBREMOVED
+      {
+        // USB_OK_Feld.image = notokimage
+       //  USB_OK_Feld.image = notokimage
+      }
+      //usbstatus = Int32(status)
+      
+   }
+
    
    @objc func joystickAktion(_ notification:Notification) 
    {
@@ -797,7 +826,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
          if let taste = USB_OK
          {
             print("Taste USB_OK: USB ist nicht nil")
-            
+            USB_OK_Feld.image = notokimage
             USB_OK.backgroundColor = NSColor.red
             //USB_OK.backgroundColor = NSColor.redColor()
          }

@@ -8,6 +8,9 @@
 
 import Cocoa
 
+let USBATTACHED:Int     =      5
+let USBREMOVED:Int      =      6
+
 class rPCB: rViewController 
 {
    
@@ -178,7 +181,7 @@ class rPCB: rViewController
                                     alpha: 0.25)
       
       self.view.layer?.backgroundColor = hintergrundfarbe.cgColor
-      
+ 
       formatter.maximumFractionDigits = 1
       formatter.minimumFractionDigits = 2
       formatter.minimumIntegerDigits = 1
@@ -192,8 +195,9 @@ class rPCB: rViewController
       let newdataname = Notification.Name("newdata")
       NotificationCenter.default.addObserver(self, selector:#selector(newDataAktion(_:)),name:newdataname,object:nil)
   //    NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
-      NotificationCenter.default.addObserver(self, selector:#selector(usbstatusAktion(_:)),name:NSNotification.Name(rawValue: "usb_status"),object:nil)
-      
+//      NotificationCenter.default.addObserver(self, selector:#selector(usbstatusAktion(_:)),name:NSNotification.Name(rawValue: "usb_status"),object:nil)
+ //     NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
+
       
       // servoPfad
       servoPfad?.setStartposition(x: 0x800, y: 0x800, z: 0)
@@ -391,7 +395,7 @@ class rPCB: rViewController
 
       print("sortDicArray_opt equalarray anz: \(equalarray.count)")  
       
-       for el in equalarray
+       for statusel in equalarray
        {
          //print("el: \(el)") 
       }
@@ -684,6 +688,8 @@ class rPCB: rViewController
       let steps = stepsFeld.intValue // Schritte fuer 1mm
       var code:UInt8 = 0
       
+      var maxsteps:Double = 0
+      //var relevanteschritte
       var zeilenposition = 0
       for zeilenindex in stride(from: 0, to: circlearray.count-1, by: 1)
       {
@@ -736,6 +742,10 @@ class rPCB: rViewController
          {
             print("schritteXInt OK: \(schrittexInt)")
             schrittexInt = Int(schrittexRound)
+            if Double(schrittexInt) > maxsteps
+            {
+               maxsteps = Double(schrittexInt)
+            }
             if schrittexInt < 0 // negativer Weg
             {
                               schrittexInt *= -1
@@ -762,6 +772,11 @@ class rPCB: rViewController
          {
             print("schritteYInt OK: \(schritteyInt)")
             schritteyInt = Int(schritteyRound)
+            if Double(schritteyInt) > maxsteps
+            {
+               maxsteps = Double(schritteyInt)
+            }
+
             if schritteyInt < 0 // negativer Weg
             {
                               schritteyInt *= -1
@@ -789,7 +804,7 @@ class rPCB: rViewController
          SchritteArray.append(zeilendic)
          var zeilenschnittdatenarray = [UInt8]()
          // Schritte X
-         print("schrittex: \(schrittexInt) ")
+         //print("schrittex: \(schrittexInt) ")
          let schrittexA = UInt8(schrittexInt & 0x000000FF)
          let schrittexB = UInt8((schrittexInt & 0x0000FF00) >> 8)
          let schrittexC = UInt8((schrittexInt & 0x00FF0000) >> 16)
@@ -817,25 +832,25 @@ class rPCB: rViewController
          let delayxB = UInt8((delayxInt & 0x0000FF00) >> 8)
          let delayxC = UInt8((delayxInt & 0x00FF0000) >> 16)
          let delayxD = UInt8((delayxInt & 0xFF000000) >> 24)
-         print("delayxA: \(delayxA) ")
-         print("delayxB: \(delayxB) ")
-         print("delayxC: \(delayxC) ")
-         print("delayxD: \(delayxD) ")
+         //print("delayxA: \(delayxA) ")
+         //print("delayxB: \(delayxB) ")
+         //print("delayxC: \(delayxC) ")
+         //print("delayxD: \(delayxD) ")
          zeilenschnittdatenarray.append(delayxA)
          zeilenschnittdatenarray.append(delayxB)
          zeilenschnittdatenarray.append(delayxC)
          zeilenschnittdatenarray.append(delayxD)
          
          // Schritte Y
-         print("*** schritteyInt: \(schritteyInt) ")
+         //print("*** schritteyInt: \(schritteyInt) ")
          let schritteyA = UInt8(schritteyInt & 0x000000FF)
-         print("schritteyA: \(schritteyA) ")
+        // print("schritteyA: \(schritteyA) ")
          let schritteyB = UInt8((schritteyInt & 0x0000FF00) >> 8)
-         print("schritteyB: \(schritteyB) ")
+         //print("schritteyB: \(schritteyB) ")
          let schritteyC = UInt8((schritteyInt & 0x00FF0000) >> 16)
-         print("schritteyC: \(schritteyC) ")
+         //print("schritteyC: \(schritteyC) ")
          let schritteyD = UInt8((schritteyInt & 0xFF000000) >> 24)
-         print("schritteyA: \(schritteyD) ")
+         //print("schritteyA: \(schritteyD) ")
          zeilenschnittdatenarray.append(schritteyA)
          zeilenschnittdatenarray.append(schritteyB)
          zeilenschnittdatenarray.append(schritteyC)
@@ -855,6 +870,8 @@ class rPCB: rViewController
          }
 
          let delayyA = UInt8(delayyInt & 0x000000FF)
+         
+         
         
          let delayyB = UInt8((delayyInt & 0x0000FF00) >> 8)
          let delayyC = UInt8((delayyInt & 0x00FF0000) >> 16)
@@ -886,8 +903,21 @@ class rPCB: rViewController
          zeilenschnittdatenarray.append(zeilenindexh)
          zeilenschnittdatenarray.append(zeilenindexl)
          
+         var motorstatus:UInt8 = 0
          
-         
+         if (fabs(schritteyRound) > fabs(schrittexRound)) // wer hat mehr schritte x
+         {
+            maxsteps = fabs(schritteyRound)
+            
+            motorstatus |= (1<<MOTOR_B);
+         }
+         else 
+         {
+            maxsteps = fabs(schrittexRound)
+            motorstatus |= (1<<MOTOR_A);
+          }
+         print("motorstatus: \(motorstatus) maxsteps: \(maxsteps)")
+         zeilenschnittdatenarray.append(motorstatus)
          print("zeilenschnittdatenarray:\t\(zeilenschnittdatenarray)")
          Schnittdatenarray.append(zeilenschnittdatenarray)
       } // for Zeilendaten
@@ -979,10 +1009,10 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             
             let senderfolg = teensy.send_USB()
             print("write_CNC_Abschnitt senderfolg: \(senderfolg)")
-            print("0: \(tempSchnittdatenArray[0]) ")
-            print("1: \(tempSchnittdatenArray[1]) ")
-            print("2: \(tempSchnittdatenArray[2]) ")
-            print("3: \(tempSchnittdatenArray[3]) ")
+  //          print("0: \(tempSchnittdatenArray[0]) ")
+  //          print("1: \(tempSchnittdatenArray[1]) ")
+  //          print("2: \(tempSchnittdatenArray[2]) ")
+  //          print("3: \(tempSchnittdatenArray[3]) ")
             
             
             var schritteX:UInt32 = UInt32(tempSchnittdatenArray[0]) | UInt32(tempSchnittdatenArray[1])<<8 | UInt32(tempSchnittdatenArray[2])<<16 | UInt32((tempSchnittdatenArray[3] & 0x7F))<<24;
@@ -992,10 +1022,10 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
                
             }
             
-            print("8: \(tempSchnittdatenArray[8]) ")
-            print("9: \(tempSchnittdatenArray[9]) ")
-            print("10: \(tempSchnittdatenArray[10]) ")
-            print("11: \(tempSchnittdatenArray[11]) ")
+ //           print("8: \(tempSchnittdatenArray[8]) ")
+ //           print("9: \(tempSchnittdatenArray[9]) ")
+ //           print("10: \(tempSchnittdatenArray[10]) ")
+ //           print("11: \(tempSchnittdatenArray[11]) ")
             
             var schritteY:UInt32 = UInt32(tempSchnittdatenArray[8]) | UInt32(tempSchnittdatenArray[9])<<8 | UInt32(tempSchnittdatenArray[10])<<16 | UInt32((tempSchnittdatenArray[11] & 0x7F))<<24;
             
@@ -1014,16 +1044,32 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       }// if count
       
    }
-   
+ /*  
    @objc func usbstatusAktion(_ notification:Notification) 
    {
       let info = notification.userInfo
-      let status:Int = info?["usbstatus"] as! Int // 
-      //print("Basis usbstatusAktion:\t \(status)")
-      usbstatus = Int32(status)
+      print("PCB usbstatusAktion:\t \(info)")
+      let status:Int = info!["usbstatus"] as! Int // 
+      print("PCB usbstatusAktion:\t \(status)")
+ //     usbstatus = Int32(status)
       
    }
 
+   @objc func usbattachAktion(_ notification:Notification) 
+   {
+      let info = notification.userInfo
+      print("PCB usbattachAktion:\t \(info)")
+      let status:Int = info!["attach"] as! Int // 
+     print("PCB usbattachAktion:\t \(status)")
+      if status == USBREMOVED
+      {
+         
+         USB_OK_Feld.image = notokimage
+      }
+      //usbstatus = Int32(status)
+      
+   }
+*/
    
  // MARK: joystick
    @objc override func joystickAktion(_ notification:Notification) 

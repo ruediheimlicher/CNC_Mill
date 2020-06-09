@@ -10,4 +10,6 @@ extern const char* get_manu(void);
 extern const char* get_prod(void);
 extern int getX();
 
+//extern deviceAdded(void* refCon, io_iterator_t portIterator);
+
 extern const int BufferSize(void);
