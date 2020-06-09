@@ -124,6 +124,8 @@ class rDeviceTabViewController: NSTabViewController
 
 class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
 {
+   let notokimage :NSImage = NSImage(named:NSImage.Name(rawValue: "notok_image"))!
+   let okimage :NSImage = NSImage(named:NSImage.Name(rawValue: "ok_image"))!
 
    var hintergrundfarbe = NSColor()
    var formatter = NumberFormatter()
@@ -133,15 +135,19 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    
    var  CNCDatenArray = [[String:Int]]();
    
-   
+   var cncstepperposition:Int = 0
+   var cnchalt = 0
    var Koordinatentabelle = [[String:Any]]()
    
    var teensy = usb_teensy()
    
    var CNC = rCNC()
    
+   var readtimer: Timer?
+   
     @IBOutlet weak var USB_OK: NSOutlineView!
     @IBOutlet weak var check_USB_Knopf: NSButton!
+   @IBOutlet weak var CNC_HALT_Knopf: NSButton!
    @IBOutlet weak var TaskTab: NSTabView!
 
    @IBOutlet weak var PlatteScroller: NSScrollView!
@@ -149,6 +155,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
 
    @IBOutlet weak var pop: NSPopUpButton!
    
+   @IBOutlet weak var USB_OK_Feld: NSImageView!
    
    
    override func viewDidLoad() 
@@ -176,11 +183,27 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
 */
       // Do any additional setup after loading the view.
    
-   
+     // USB_OK_Feld.image = notokimage
    
    }
+  // https://nabtron.com/quit-cocoa-app-window-close/
+   override func viewDidAppear() 
+   {
+      print("viewDidAppear")
+      self.view.window?.delegate = self as? NSWindowDelegate 
+     let erfolg = teensy.USBOpen()
+      if erfolg == 1
+      {
+          USB_OK_Feld.image = okimage
+      }
+      else
+      {
+          USB_OK_Feld.image = notokimage
+      }
+     
+   }
 
-   
+    
    func openFile() -> URL? 
    { 
       let myFileDialog = NSOpenPanel() 
@@ -368,7 +391,44 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       let theStringToPrint = timer.userInfo as! String
       print(theStringToPrint)
    }
+ 
    
+   @IBAction func report_HALT(_ sender: NSButton)
+   {
+      print("report_HALT")
+      /*
+ [CNC_Preparetaste setEnabled:![sender state]];
+ [CNC_Starttaste setEnabled:[sender state]];
+ [CNC_Stoptaste setEnabled:![sender state]];
+ [CNC_Sendtaste setEnabled:![sender state]];
+ [CNC_Terminatetaste setEnabled:![sender state]];
+ [DC_Taste setState:0];
+ [self setStepperstrom:1];
+ [self setBusy:0];
+ [PositionFeld setIntValue:0];
+ [PositionFeld setStringValue:@""];
+ 
+ */
+      var notdic = [String:Any]()
+      notdic["haltstatus"] = CNC_HALT_Knopf.state
+      notdic["push"] = 0
+      
+      if CNC_HALT_Knopf.state == .on
+      {
+         teensy.write_byteArray[24] = 0xE0 // code
+         teensy.write_byteArray[26] = 0 // indexh
+         teensy.write_byteArray[27] = 0 // indexl
+         var timerdic:[String:Int] = ["haltstatus":1, "home":0]
+         var timer : Timer? = nil
+         timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(USB_read(timer:)), userInfo: timerdic, repeats: true)
+
+         
+      }
+  
+      
+   }
+   
+
    @IBAction func report_Slider0(_ sender: NSSlider)
    {
       teensy.write_byteArray[0] = SET_0 // Code 
@@ -715,6 +775,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       
       if (rawhid_status()==1)
       {
+         USB_OK_Feld.image = okimage
          print("status 1")
          USB_OK.backgroundColor = NSColor.green
          print("USB-Device da")
@@ -735,17 +796,55 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
          print("status 0")
          if let taste = USB_OK
          {
-            print("Taste USB_OK ist nicht nil")
-            taste.backgroundColor = NSColor.red
+            print("Taste USB_OK: USB ist nicht nil")
+            
+            USB_OK.backgroundColor = NSColor.red
             //USB_OK.backgroundColor = NSColor.redColor()
          }
          else
          {
             print("Taste USB_OK ist nil")
+            USB_OK.backgroundColor = NSColor.red
          }
       }
       print("antwort: \(teensy.status())")
    }
+   
+   @objc func USB_read(timer: Timer!)
+   {
+      print("USB_read note: \(readtimer?.userInfo)")
+      var buffer:[UInt8] = [UInt8]();
+      var reportSize:Int = 32;  
+      var result:Int32  = 0;
+      if cncstepperposition == 0
+      {
+         print("readUSB Stepperposition = 0")
+      }
+      
+      result = rawhid_recv(0, &buffer, 32, 50);
+      let  dataRead:Data = Data(bytes:buffer);
+      if (dataRead != lastDataRead)
+      {
+         print("neue Daten")
+      }
+      print(dataRead as NSData);   
+
+   }
+   
+   func dialogOKCancel(question: String, text: String) -> Bool 
+   {
+      // https://stackoverflow.com/questions/29433487/create-an-nsalert-with-swift
+      let alert = NSAlert()
+      alert.messageText = question
+      alert.informativeText = text
+      alert.alertStyle = .warning
+      alert.addButton(withTitle: "OK")
+      alert.addButton(withTitle: "Cancel")
+      return alert.runModal() == .alertFirstButtonReturn
+   }
+/*
+ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
+ */
    
    //MARK: Konstanten
    // const fuer USB
@@ -813,7 +912,6 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    @IBOutlet weak var Anzeige: NSTextField!
    
    //@IBOutlet weak var USB_OK: NSTextField!
-   @IBOutlet weak var USB_OK_Feld: NSImageView!
    
    
    

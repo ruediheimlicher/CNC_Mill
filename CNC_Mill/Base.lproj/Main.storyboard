@@ -737,10 +737,16 @@
                                     <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </shadow>
                             </customView>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vVh-tG-dFZ">
+                                <rect key="frame" x="729" y="779" width="33" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="notok_image" id="8u8-X9-HxN"/>
+                            </imageView>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="USB_OK" destination="qvH-7y-taC" id="USE-c5-l0r"/>
+                        <outlet property="USB_OK_Feld" destination="vVh-tG-dFZ" id="4nR-Th-VNw"/>
                         <outlet property="check_USB_Knopf" destination="3PU-iI-QBc" id="h1x-ZK-OcZ"/>
                     </connections>
                 </viewController>
@@ -920,9 +926,33 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EBu-nO-PLk">
+                                <rect key="frame" x="561" y="663" width="111" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Send Daten" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nVS-Hd-aFd">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="report_send_Daten:" target="wFL-7s-Z8p" id="afA-hP-BEd"/>
+                                </connections>
+                            </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wwq-u4-Kg2">
+                                <rect key="frame" x="805" y="611" width="48" height="48"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Halt" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="sZM-35-P53">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="report_HALT:" target="wFL-7s-Z8p" id="t2a-gV-nd2"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="CNC_HALT_Knopf" destination="Wwq-u4-Kg2" id="wnv-7E-wxc"/>
+                        <outlet property="DataSendTaste" destination="EBu-nO-PLk" id="u6H-AD-jDN"/>
                         <outlet property="PlatteScroller" destination="EQG-jy-Qht" id="dS1-G5-ggE"/>
                         <outlet property="Plattefeld" destination="XUX-V5-xCg" id="5lZ-Hg-XVD"/>
                         <outlet property="fahrtweg" destination="uOs-Jd-n3A" id="fED-f6-SaJ"/>
@@ -952,4 +982,8 @@
             <point key="canvasLocation" x="-617" y="2128"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Halt" width="538" height="530"/>
+        <image name="notok_image" width="131" height="129"/>
+    </resources>
 </document>

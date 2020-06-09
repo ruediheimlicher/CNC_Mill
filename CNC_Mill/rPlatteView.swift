@@ -21,6 +21,8 @@ class rPlatteView: NSView
    
    var fahrtweg:CGFloat = 0
    
+   var stepperposition:Int = 0
+   
    required init?(coder  aDecoder : NSCoder) 
    {
       super.init(coder: aDecoder)
@@ -47,7 +49,7 @@ class rPlatteView: NSView
       }
       else
       {
-         Swift.print("JoystickView no ident")
+         //Swift.print("JoystickView no ident")
       }
       
    }
