@@ -51,6 +51,13 @@ open class usb_teensy: NSObject
       if (hid_usbstatus > 0)
       {
          print("func usb_teensy.USBOpen USB schon offen")
+         let alert = NSAlert()
+         alert.messageText = "USB Device"
+         alert.informativeText = "USB ist schn offen"
+         alert.alertStyle = .warning
+         alert.addButton(withTitle: "OK")
+        // alert.addButton(withTitle: "Cancel")
+         let antwort =  alert.runModal() == .alertFirstButtonReturn
          return 1;
       }
       let    out = rawhid_open(1, 0x16C0, 0x0486, 0xFFAB, 0x0200)
