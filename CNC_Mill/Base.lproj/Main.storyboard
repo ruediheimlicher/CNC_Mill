@@ -746,7 +746,7 @@
                     </view>
                     <connections>
                         <outlet property="USB_OK" destination="qvH-7y-taC" id="USE-c5-l0r"/>
-                        <outlet property="USB_OK_Feld" destination="vVh-tG-dFZ" id="4nR-Th-VNw"/>
+                        <outlet property="USB_OK_Feld" destination="vVh-tG-dFZ" id="BN6-S5-ZSU"/>
                         <outlet property="check_USB_Knopf" destination="3PU-iI-QBc" id="h1x-ZK-OcZ"/>
                     </connections>
                 </viewController>

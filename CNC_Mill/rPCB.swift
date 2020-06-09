@@ -195,8 +195,8 @@ class rPCB: rViewController
       let newdataname = Notification.Name("newdata")
       NotificationCenter.default.addObserver(self, selector:#selector(newDataAktion(_:)),name:newdataname,object:nil)
   //    NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
-//      NotificationCenter.default.addObserver(self, selector:#selector(usbstatusAktion(_:)),name:NSNotification.Name(rawValue: "usb_status"),object:nil)
- //     NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
+      NotificationCenter.default.addObserver(self, selector:#selector(usbstatusAktion(_:)),name:NSNotification.Name(rawValue: "usb_status"),object:nil)
+      NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
 
       
       // servoPfad
@@ -1044,32 +1044,32 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       }// if count
       
    }
- /*  
-   @objc func usbstatusAktion(_ notification:Notification) 
+   
+   @objc override func usbstatusAktion(_ notification:Notification) 
    {
       let info = notification.userInfo
-      print("PCB usbstatusAktion:\t \(info)")
+     // print("PCB usbstatusAktion:\t \(info)")
       let status:Int = info!["usbstatus"] as! Int // 
       print("PCB usbstatusAktion:\t \(status)")
  //     usbstatus = Int32(status)
       
    }
 
-   @objc func usbattachAktion(_ notification:Notification) 
+   @objc override func usbattachAktion(_ notification:Notification) 
    {
       let info = notification.userInfo
-      print("PCB usbattachAktion:\t \(info)")
+     // print("PCB usbattachAktion:\t \(info)")
       let status:Int = info!["attach"] as! Int // 
      print("PCB usbattachAktion:\t \(status)")
       if status == USBREMOVED
       {
          
-         USB_OK_Feld.image = notokimage
+        // USB_OK_Feld.image = notokimage
       }
       //usbstatus = Int32(status)
       
    }
-*/
+
    
  // MARK: joystick
    @objc override func joystickAktion(_ notification:Notification) 

@@ -178,8 +178,10 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       view.window?.delegate = self // https://stackoverflow.com/questions/44685445/trying-to-know-when-a-window-closes-in-a-macos-document-based-application
       self.view.window?.acceptsMouseMovedEvents = true
 
-      NotificationCenter.default.addObserver(self, selector:#selector(usbstatusAktion(_:)),name:NSNotification.Name(rawValue: "usb_status"),object:nil)
-      NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
+//      NotificationCenter.default.addObserver(self, selector:#selector(usbstatusAktion(_:)),name:NSNotification.Name(rawValue: "usb_status"),object:nil)
+      
+  //    NotificationCenter.default.removeObserver(self, name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
+   //   NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
 
       /*
       NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
@@ -193,8 +195,11 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
   // https://nabtron.com/quit-cocoa-app-window-close/
    override func viewDidAppear() 
    {
+      super.viewDidAppear()
       print("viewDidAppear")
       self.view.window?.delegate = self as? NSWindowDelegate 
+      
+      //return
       let erfolg = teensy.USBOpen()
       if erfolg == 1
       {
@@ -318,28 +323,28 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       
     }
  */
+   
    @objc func usbstatusAktion(_ notification:Notification) 
    {
       let info = notification.userInfo
-      print("PCB usbstatusAktion:\t \(info)")
+     // print("PCB usbstatusAktion:\t \(info)")
       let status:Int = info!["usbstatus"] as! Int // 
-      print("PCB usbstatusAktion:\t \(status)")
-      //     usbstatus = Int32(status)
+      print("viewController usbstatusAktion:\t \(status)")
       
    }
    
    @objc func usbattachAktion(_ notification:Notification) 
    {
       let info = notification.userInfo
-      print("PCB usbattachAktion:\t \(info)")
+     // print("PCB usbattachAktion:\t \(info)")
       let status:Int = info!["attach"] as! Int // 
-      print("PCB usbattachAktion:\t \(status)")
+      print("viewController usbattachAktion:\t \(status)")
+     
       if status == USBREMOVED
       {
-        // USB_OK_Feld.image = notokimage
-       //  USB_OK_Feld.image = notokimage
+         USB_OK_Feld.image = notokimage
       }
-      //usbstatus = Int32(status)
+     
       
    }
 
@@ -798,6 +803,9 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    }
    @IBAction func check_USB(_ sender: NSButton)
    {
+      let notokimage :NSImage = NSImage(named:NSImage.Name(rawValue: "notok_image"))!
+      let okimage :NSImage = NSImage(named:NSImage.Name(rawValue: "ok_image"))!
+
       let erfolg = teensy.USBOpen()
       usbstatus = erfolg
       print("USBOpen erfolg: \(erfolg) usbstatus: \(usbstatus)")
