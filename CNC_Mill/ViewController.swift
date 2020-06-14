@@ -863,8 +863,12 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       if (dataRead != lastDataRead)
       {
          print("neue Daten")
+  //       var abschnittcode:UInt8 = buffer[0]; 
+  //       print("abschnittcode: \(abschnittcode)")
+         lastDataRead = dataRead
       }
-      print(dataRead as NSData);   
+      print(dataRead as NSData);  
+      
 
    }
    

@@ -25,6 +25,8 @@ class rPCB: rViewController
    var transformfaktor:Double = 0.3527777777779440
    
     var Schnittdatenarray = [[UInt8]]()
+   
+   var mouseistdown:Int = 0
   // var servoPfad = rServoPfad()
  //  var usbstatus: Int32 = 0
    
@@ -41,6 +43,8 @@ class rPCB: rViewController
    @IBOutlet weak var fahrtweg: NSTextField!
    @IBOutlet weak var speedFeld: NSTextField!
  
+   @IBOutlet weak var timerintervallFeld: NSTextField!
+   
    @IBOutlet weak var stepsFeld: NSTextField!
 
    /*
@@ -327,12 +331,12 @@ class rPCB: rViewController
  */
       //print(returnDicArray)  
       
-       print("cxDicArray anz: \(cxDicArray.count)") 
+       //print("cxDicArray anz: \(cxDicArray.count)") 
       
-      for el in cxDicArray
-      {
-         print("\(el[keyA] ?? 0)\t \(el[keyB] ?? 0)")
-      }
+ //     for el in cxDicArray
+//      {
+//         print("\(el[keyA] ?? 0)\t \(el[keyB] ?? 0)")
+ //     }
        
       
       var equalarray = [[[String:Int]]]()
@@ -415,10 +419,11 @@ class rPCB: rViewController
       }
       print("returnDicArray anz: \(returnDicArray.count)")  
       
-         for el in returnDicArray
+  /*       for el in returnDicArray
          {
             print("\(el[keyA] ?? 0)\t \(el[keyB] ?? 0)")
          }
+ */
       return returnDicArray
    }
    
@@ -430,7 +435,7 @@ class rPCB: rViewController
       let keyarray = Array(origDicArray[0].keys)
 //      let key0 = keyarray[0]
  //     let key1 = keyarray[1]
-      print("keyarray: \(key0) \(key1)")
+    //  print("keyarray: \(key0) \(key1)")
       if order == false // 
       {
          returnDicArray = origDicArray.sorted {
@@ -627,13 +632,14 @@ class rPCB: rViewController
             circlearray.append(zeilendicarray)
             zeilendicindex += 1
          }
+         /*
          print("report_readSVG circlearray")
          for el in circlearray
          {
             
             print("\(el[0] )\t \(el[1] ) \(el[2])")
          }
-
+*/
          // circlearray: [[Int]] x,y
    //      servoPfad?.addSVG_Pfadarray(newPfad: circlearray)
          let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
@@ -642,17 +648,17 @@ class rPCB: rViewController
          var CNC_DatendicArray = [[String:Any]]()
          for zeilendaten in circlearray
          {
-            
             var zeilendic = [String:Any]()
             zeilendic["startpunktx"] = zeilendaten[1]
             zeilendic["startpunkty"] = zeilendaten[2]
             
             CNC_DatendicArray.append(zeilendic)
          }
-         print("report_readSVG CNC_DatendicArray")
+  //       print("report_readSVG CNC_DatendicArray")
+         
          for el in CNC_DatendicArray
          {
-            print("* \(el["startpunktx"] ?? 0) \(el["startpunkty"] ?? 0)")
+ //           print("* \(el["startpunktx"] ?? 0) \(el["startpunkty"] ?? 0)")
          }
 
  //        var steuerdaten:[String:Int] = CNC.SteuerdatenVonDi(derDatenDic: CNC_DatendicArray[0])
@@ -683,7 +689,6 @@ class rPCB: rViewController
       Schnittdatenarray.removeAll()
       
       var SchritteArray:[[String:Any]] = [[:]]
-      var zeilenindex = 0
       zoomfaktor = zoomFeld.doubleValue
       let steps = stepsFeld.intValue // Schritte fuer 1mm
       var code:UInt8 = 0
@@ -691,6 +696,7 @@ class rPCB: rViewController
       var maxsteps:Double = 0
       //var relevanteschritte
       var zeilenposition = 0
+      let zeilenanzahl = circlearray.count
       for zeilenindex in stride(from: 0, to: circlearray.count-1, by: 1)
       {
          zeilenposition = 0
@@ -740,7 +746,7 @@ class rPCB: rViewController
          var schrittexInt:Int = 0
          if schrittexRound >= Double(Int.min) && schrittexRound < Double(Int.max)
          {
-            print("schritteXInt OK: \(schrittexInt)")
+        //    print("schritteXInt OK: \(schrittexInt)")
             schrittexInt = Int(schrittexRound)
             if Double(schrittexInt) > maxsteps
             {
@@ -756,12 +762,8 @@ class rPCB: rViewController
          {
             print("schritteXround zu gross")
          }
-         
-         //let schrittex = distanzX
-         
+          
          zeilendic["schrittex"] = schrittexInt
-         //     let schrittexstring = String(schrittexInt)
-         //print("schrittex: \(schrittex) ")
          
          var schrittey = Double(stepsFeld.integerValue) * distanzY  
          //let schrittey = distanzY
@@ -770,7 +772,7 @@ class rPCB: rViewController
          var schritteyInt:Int = 0
          if schritteyRound >= Double(Int.min) && schritteyRound < Double(Int.max)
          {
-            print("schritteYInt OK: \(schritteyInt)")
+        //    print("schritteYInt OK: \(schritteyInt)")
             schritteyInt = Int(schritteyRound)
             if Double(schritteyInt) > maxsteps
             {
@@ -788,7 +790,7 @@ class rPCB: rViewController
             print("schritteYInt zu gross")
          }
          zeilendic["schrittey"] = schritteyInt
-         print("schrittey: \(schrittey) ")
+//         print("schrittey: \(schrittey) ")
          
          zeilendic["code"] = code
          if zeilenindex == 0
@@ -857,7 +859,7 @@ class rPCB: rViewController
          zeilenschnittdatenarray.append(schritteyD)
          
          var schritteY_check:UInt32 = UInt32(schritteyA) | UInt32(schritteyB)<<8 | UInt32(schritteyC)<<16 | UInt32(schritteyD)<<24;
-         print("schritteY_check: \(schritteY_check) ")
+  //       print("schritteY_check: \(schritteY_check) ")
          
          let delayy:Double = (zeit / Double((schritteyInt & 0x0FFFFFFF)))
      //    let delayy:Double = (zeit * 1000.0/Double((schritteyInt & 0x0FFFFFFF)))
@@ -891,48 +893,63 @@ class rPCB: rViewController
          zeilenschnittdatenarray.append(0)
          zeilenschnittdatenarray.append(0)
          zeilenschnittdatenarray.append(0)
-
          
-         
-         
+         // code, 
          zeilenschnittdatenarray.append(UInt8(code))
+         // position im Ablauf
          zeilenschnittdatenarray.append(UInt8(zeilenposition))
          
-         let zeilenindexh = UInt8((zeilenindex & 0xFF00)>>8)
-         let zeilenindexl = UInt8((zeilenindex & 0x00FF))
+         // zeilennummer
+         var zeilenindexh = UInt8((zeilenindex & 0xFF00)>>8)
+         var zeilenindexl = UInt8((zeilenindex & 0x00FF))
+
          zeilenschnittdatenarray.append(zeilenindexh)
          zeilenschnittdatenarray.append(zeilenindexl)
          
+         // motorstatus
          var motorstatus:UInt8 = 0
          
          if (fabs(schritteyRound) > fabs(schrittexRound)) // wer hat mehr schritte x
          {
             maxsteps = fabs(schritteyRound)
             
-            motorstatus |= (1<<MOTOR_B);
+            motorstatus = (1<<MOTOR_B)
          }
          else 
          {
             maxsteps = fabs(schrittexRound)
-            motorstatus |= (1<<MOTOR_A);
+            motorstatus = (1<<MOTOR_A)
           }
+         
+         // Testphase
+         motorstatus = (1<<MOTOR_A)
+         
          print("motorstatus: \(motorstatus) maxsteps: \(maxsteps)")
          zeilenschnittdatenarray.append(motorstatus)
-         print("zeilenschnittdatenarray:\t\(zeilenschnittdatenarray)")
+         zeilenschnittdatenarray.append(77) // Pöatzhalter PWM
+         
+         // timerintervall
+         let timerintervall = timerintervallFeld.integerValue
+         zeilenschnittdatenarray.append(UInt8((timerintervall & 0xFF00)>>8))
+         zeilenschnittdatenarray.append(UInt8(timerintervall & 0x00FF))
+         
+  //       print("zeilenschnittdatenarray:\t\(zeilenschnittdatenarray)")
+         if zeilenschnittdatenarray.count > 0
+         {
          Schnittdatenarray.append(zeilenschnittdatenarray)
+         }
       } // for Zeilendaten
       
-//      print("Schnittdatenarray:\t\(Schnittdatenarray)")
+ //     print("Schnittdatenarray:\t\(Schnittdatenarray)")
       
       print("report_PCBDaten SchritteArray")
       for el in SchritteArray
       {
-         //print(el)
+         print(el)
    //      print("\(el["startpunktx"] ?? 0)\t \(el["startpunkty"] ?? 0) \t\(el["endpunktx"] ?? 0)\t \(el["endpunkty"] ?? 0) \t\(el["distanz"] ?? 0)\t \(el["schrittex"] ?? 0)\t\(el["schrittey"] ?? 0) \t\(el["zoomfaktor"] ?? 0) \t\(el["code"] ?? 0)")
-         print("\(el["distanz"] ?? 0)\t \(el["schrittex"] ?? 0)\t\(el["schrittey"] ?? 0) \t\(el["zoomfaktor"] ?? 0) \t\(el["code"] ?? 0)")
-       }
-      
-   
+       //  print("\(el["distanz"] ?? 0)\t \(el["schrittex"] ?? 0)\t\(el["schrittey"] ?? 0) \t\(el["zoomfaktor"] ?? 0) \t\(el["code"] ?? 0)")
+       
+      }
    
    }// report_PCB_Daten
  
@@ -971,6 +988,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          case .alertSecondButtonReturn: // rawValue: 1001
       
          print("antwort 2")
+         return;
          break
          
          default:
@@ -980,10 +998,27 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
      
       Plattefeld.stepperposition = 0
       cncstepperposition = 0
-       write_CNC_Abschnitt()
-      readtimer?.invalidate() 
-      var readtimernote:[String:Int] = ["cncstepperposition":1]
-      readtimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(USB_read(timer:)), userInfo: readtimernote, repeats: false)
+      
+      let anzabschnitte = Schnittdatenarray.count
+         
+//      Schnittdatenarray[0][26] = UInt8((anzabschnitte & 0xFF00) >> 8)
+ //     Schnittdatenarray[0][27] = UInt8(anzabschnitte & 0x00FF)
+      
+      
+      
+      
+      write_CNC_Abschnitt()
+      
+  //    readtimer?.invalidate() 
+      
+      
+      
+      
+      
+      var start_read_USB_erfolg = teensy.start_read_USB(true)
+
+//      var readtimernote:[String:Int] = ["cncstepperposition":1]
+//      readtimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(USB_read(timer:)), userInfo: readtimernote, repeats: true)
 
       
    } // report_send_Daten
@@ -995,6 +1030,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          if CNC_HALT_Knopf.state == .on
          {
             // alles OFF
+            print("write_CNC_Abschnitt HALT")
          }
          else
          {
@@ -1037,9 +1073,9 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             print("schritteX: \(schritteX) schritteY: \(schritteY)")
             
             
+            cncstepperposition += 1
             
-            
-         }
+         } // else
 
       }// if count
       
@@ -1203,61 +1239,97 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    @objc override func newDataAktion(_ notification:Notification) 
    {
+      // analog readUSB() in USB_Stepper
+      print("newDataAktion")
       let lastData = teensy.getlastDataRead()
-      print("lastData:\t \(lastData[1])\t\(lastData[2])   ")
+      
+     // print("lastData:\t \(lastData[1])\t\(lastData[2])   ")
       var ii = 0
       while ii < 10
       {
-         //print("ii: \(ii)  wert: \(lastData[ii])\t")
+         print("\(lastData[ii])\t")
          ii = ii+1
       }
       
-      let u = ((Int32(lastData[1])<<8) + Int32(lastData[2]))
+      //let u = ((Int32(lastData[1])<<8) + Int32(lastData[2]))
       //print("hb: \(lastData[1]) lb: \(lastData[2]) u: \(u)")
+      
       let info = notification.userInfo
       
       //print("info: \(String(describing: info))")
       //print("new Data")
-      let data = notification.userInfo?["data"]
-      //print("data: \(String(describing: data)) \n") // data: Optional([0, 9, 51, 0,....
-      
-      
-      //print("lastDataRead: \(lastDataRead)   ")
+      var data:[UInt8] = notification.userInfo?["data"] as! [UInt8]
+      print("von teensy: data: \(String(describing: data)) ") // data: Optional([0, 9, 51, 0,....
       var i = 0
-      while i < 10
-      {
-         //print("i: \(i)  wert: \(lastDataRead[i])\t")
-         i = i+1
-      }
-      
-      if let d = notification.userInfo!["usbdata"]
-      {
-         
-         //print("d: \(d)\n") // d: [0, 9, 56, 0, 0,... 
-         let t = type(of:d)
-         //print("typ: \(t)\n") // typ: Array<UInt8>
-         
-         //print("element: \(d[1])\n")
-         
-         print("d as string: \(String(describing: d))\n")
-         if d != nil
-         {
-            //print("d not nil\n")
-            var i = 0
-            while i < 10
-            {
-               //print("i: \(i)  wert: \(d![i])\t")
-               i = i+1
-            }
             
-         }
-         
-         
-         //print("dic end\n")
-      }
+      var taskcode = data[0]
       
-      //let dic = notification.userInfo as? [String:[UInt8]]
-      //print("dic: \(dic ?? ["a":[123]])\n")
+      var codehex = String(format:"%02X", taskcode)
+      
+      print("newDataAktion taskcode: \(taskcode) hex: \(codehex)")
+      
+      if taskcode == 0
+         {
+            return
+      }
+      var notificationDic = [String:Any]()
+      let cncstatus:UInt8 = data[20] // cncstatus
+      
+      let abschnittnummer:Int = Int((data[5] << 8) | data[6])
+      let ladeposition = data[8]
+      
+      print("newDataAktion abschnittnummer: \(abschnittnummer) ladeposition: \(ladeposition)")
+      let timeintervall =  Int((data[14] << 8) | data[15])
+      
+      var AnschlagSet:IndexSet = IndexSet()
+      let nc = NotificationCenter.default
+      
+      switch taskcode
+      {
+      case 0xAF:
+         
+         print("readUSB  AF next ")
+         let abschnittnum = Int((data[5] << 8) | data[6])
+         let ladepos =  Int(data[8] )
+         print("readUSB  AF abschnittnum: \(abschnittnum) ladepos: \(ladepos)")
+         
+         break;
+         
+      case 0xE1:
+         print("readUSB  E1 mouseup HALT")
+         Schnittdatenarray.removeAll()
+         if readtimer?.isValid == true
+         {
+            readtimer?.invalidate()
+         }
+         cncstepperposition = 0
+         break
+      
+      case 0xEA:
+         print("readUSB  home gemeldet")
+         break
+      case 0xD0:
+         print("letzter Abschnitt")
+         notificationDic["taskcode"] = taskcode
+         nc.post(name:Notification.Name(rawValue:"usbread"),
+         object: nil,
+         userInfo: notificationDic)
+         break
+      default:
+         break
+      }// switch taskcode
+      
+      
+      
+      
+      
+      
+      
+ 
+      print("newDataAktion writecncabschnitt")
+      write_CNC_Abschnitt()
+      
+      print("\nnewDataAktion  end\n\n")
       
    }
    
