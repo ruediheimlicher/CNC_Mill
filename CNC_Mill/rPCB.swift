@@ -1319,15 +1319,13 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          break
       }// switch taskcode
       
-      
-      
-      
-      
-      
-      
+        
  
       print("newDataAktion writecncabschnitt")
+      
+      // **************************************
       write_CNC_Abschnitt()
+      // **************************************
       
       print("\nnewDataAktion  end\n\n")
       
