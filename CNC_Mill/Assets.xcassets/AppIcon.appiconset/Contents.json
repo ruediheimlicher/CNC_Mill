@@ -3,61 +3,61 @@
     {
       "size" : "16x16",
       "idiom" : "mac",
-      "filename" : "CNC_Icon-1.png",
+      "filename" : "16-1.png",
       "scale" : "1x"
     },
     {
       "size" : "16x16",
       "idiom" : "mac",
-      "filename" : "CNC_Icon.png",
+      "filename" : "32-1.png",
       "scale" : "2x"
     },
     {
       "size" : "32x32",
       "idiom" : "mac",
-      "filename" : "CNC_Icon-4.png",
+      "filename" : "32-2.png",
       "scale" : "1x"
     },
     {
       "size" : "32x32",
       "idiom" : "mac",
-      "filename" : "CNC_Icon-5.png",
+      "filename" : "64-1.png",
       "scale" : "2x"
     },
     {
       "size" : "128x128",
       "idiom" : "mac",
-      "filename" : "CNC_Icon-6.png",
+      "filename" : "128-1.png",
       "scale" : "1x"
     },
     {
       "size" : "128x128",
       "idiom" : "mac",
-      "filename" : "CNC_Icon-7.png",
+      "filename" : "256-1.png",
       "scale" : "2x"
     },
     {
       "size" : "256x256",
       "idiom" : "mac",
-      "filename" : "CNC_Icon-2.png",
+      "filename" : "256-2.png",
       "scale" : "1x"
     },
     {
       "size" : "256x256",
       "idiom" : "mac",
-      "filename" : "CNC_Icon-3.png",
+      "filename" : "512-1.png",
       "scale" : "2x"
     },
     {
       "size" : "512x512",
       "idiom" : "mac",
-      "filename" : "CNC-7.png",
+      "filename" : "512-2.png",
       "scale" : "1x"
     },
     {
       "size" : "512x512",
       "idiom" : "mac",
-      "filename" : "CNC-6.png",
+      "filename" : "1024-1.png",
       "scale" : "2x"
     }
   ],

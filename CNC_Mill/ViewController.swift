@@ -211,6 +211,56 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       }
       
    }
+   
+   @nonobjc  func windowShouldClose(_ sender: Any) 
+   {
+      print("CNC_Mill windowShouldClose")
+      NSApplication.shared.terminate(self)
+   }
+
+   
+   func windowWillClose(_ aNotification: Notification) {
+      print("CNC_Mill windowWillClose")
+      let nc = NotificationCenter.default
+      nc.post(name:Notification.Name(rawValue:"beenden"),
+              object: nil,
+              userInfo: nil)
+      beenden()
+   }
+
+ 
+   @objc func beendenAktion(_ notification:Notification) 
+   {
+      
+      print("CNC_Mill beendenAktion")
+      /*
+       //https://learnappmaking.com/userdefaults-swift-setting-getting-data-how-to/
+       
+       print("beendenAktion Pot1_Stepper_L: \(Pot1_Stepper_L.integerValue) Pot2_Stepper_L: \(Pot2_Stepper_L.integerValue)")
+       UserDefaults.standard.set(Pot1_Stepper_L.integerValue, forKey: "robot1min")
+       UserDefaults.standard.set(Pot2_Stepper_L.integerValue, forKey: "robot2min")
+       
+       UserDefaults.standard.set(rotoffsetstepper.integerValue, forKey: "rotoffset")
+       UserDefaults.standard.set(pot1offsetstepper.integerValue, forKey: "robot1offset")
+       UserDefaults.standard.set(pot2offsetstepper.integerValue, forKey: "robot2offset")
+       
+       UserDefaults.standard.set(winkelfaktor1stepper.floatValue,forKey: "winkelfaktor1")
+       UserDefaults.standard.set(winkelfaktor2stepper.floatValue,forKey: "winkelfaktor2")
+       
+       
+       print("Robot beendenAktion")
+       
+       
+
+      */
+      NSApplication.shared.terminate(self)
+   }
+   
+   func beenden()
+   {
+      print("CNC_Mill beenden")
+      NSApplication.shared.terminate(self)
+   }
 
     
    func openFile() -> URL? 
@@ -472,6 +522,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       
       let intpos = UInt16(pos * FAKTOR0)
       let Ustring = formatter.string(from: NSNumber(value: intpos))
+      
       
       print("report_Slider0 pos: \(pos) intpos: \(intpos)  Ustring: \(Ustring ?? "0")")
       // Pot0_Feld.stringValue  = Ustring!

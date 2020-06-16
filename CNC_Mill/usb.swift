@@ -348,7 +348,7 @@ open class usb_teensy: NSObject
          {
             //new_Data = false
             datafalsecounter += 1
-            print("--- \(read_byteArray[0])\t\(datafalsecounter)")
+        //    print("--- \(read_byteArray[0])\t\(datafalsecounter)")
          }
       }
       else
