@@ -23,6 +23,8 @@ class rPlatteView: NSView
    
    var stepperposition:Int = 0
    
+   var wegarray:[[Int]] = [[Int]]()
+   
    required init?(coder  aDecoder : NSCoder) 
    {
       super.init(coder: aDecoder)
@@ -55,6 +57,7 @@ class rPlatteView: NSView
    }
    
    // https://stackoverflow.com/questions/21751105/mac-os-x-convert-between-nsview-coordinates-and-global-screen-coordinates
+  
    override func draw(_ dirtyRect: NSRect) 
    {
       // https://stackoverflow.com/questions/36596545/how-to-draw-a-dash-line-border-for-nsview
@@ -226,6 +229,11 @@ class rPlatteView: NSView
    {
       return (a * a + b * b).squareRoot()
    }
+   
+   func setStepperposition(pos:Int)
+   {
+      stepperposition = pos
+   }
 
    
    func setWeg(newWeg:[[Int]], scalefaktor:Int , transform:Double)-> Int
@@ -241,6 +249,9 @@ class rPlatteView: NSView
       var  tempMark:NSBezierPath
       var lastpunkt = NSMakePoint(0, 0)
       var elcount = 0
+      
+      wegarray = newWeg
+      
       for zeile in newWeg
       {
          elcount += 1

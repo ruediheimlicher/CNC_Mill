@@ -998,7 +998,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
      
       Plattefeld.stepperposition = 0
       cncstepperposition = 0
-      
+      Plattefeld.setStepperposition(pos:cncstepperposition)
       let anzabschnitte = Schnittdatenarray.count
          
 //      Schnittdatenarray[0][26] = UInt8((anzabschnitte & 0xFF00) >> 8)
@@ -1240,36 +1240,38 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    @objc override func newDataAktion(_ notification:Notification) 
    {
       // analog readUSB() in USB_Stepper
-      print("newDataAktion")
+      
+      
+      //print("newDataAktion")
       let lastData = teensy.getlastDataRead()
       
      // print("lastData:\t \(lastData[1])\t\(lastData[2])   ")
       var ii = 0
       while ii < 10
       {
-         print("\(lastData[ii])\t")
+  //       print("\(lastData[ii])\t")
          ii = ii+1
       }
       
       //let u = ((Int32(lastData[1])<<8) + Int32(lastData[2]))
       //print("hb: \(lastData[1]) lb: \(lastData[2]) u: \(u)")
       
-      let info = notification.userInfo
+     // let info = notification.userInfo
       
       //print("info: \(String(describing: info))")
       //print("new Data")
       var data:[UInt8] = notification.userInfo?["data"] as! [UInt8]
-      print("von teensy: data: \(String(describing: data)) ") // data: Optional([0, 9, 51, 0,....
+//      print("von teensy: data: \(String(describing: data)) ") // data: Optional([0, 9, 51, 0,....
       var i = 0
             
       var taskcode = data[0]
-      
       var codehex = String(format:"%02X", taskcode)
       
-      print("newDataAktion taskcode: \(taskcode) hex: \(codehex)")
+ //     print("newDataAktion taskcode: \(taskcode) hex: \(codehex)")
       
       if taskcode == 0
          {
+            
             return
       }
       var notificationDic = [String:Any]()
@@ -1278,7 +1280,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       let abschnittnummer:Int = Int((data[5] << 8) | data[6])
       let ladeposition = data[8]
       
-      print("newDataAktion abschnittnummer: \(abschnittnummer) ladeposition: \(ladeposition)")
+      print("newDataAktion  taskcode: \(taskcode) hex: \(codehex) abschnittnummer: \(abschnittnummer) ladeposition: \(ladeposition)")
       let timeintervall =  Int((data[14] << 8) | data[15])
       
       var AnschlagSet:IndexSet = IndexSet()
@@ -1327,9 +1329,9 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       write_CNC_Abschnitt()
       // **************************************
       
-      print("\nnewDataAktion  end\n\n")
+   //   print("\nnewDataAktion  end\n\n")
       
-   }
+   } // newDataAktion
    
     @IBAction  func report_horizontalCheckbox(_ sender: NSButton)
     {
