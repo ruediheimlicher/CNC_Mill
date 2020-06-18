@@ -300,7 +300,7 @@ open class usb_teensy: NSObject
          {
             if var count:Int = dic["count"] as? Int 
             {
-               print("*cont_read_USB usb-count von timer: \(count)")
+  //             print("*cont_read_USB usb-count von timer: \(count)")
                count = count + 1
                dic["count"] = count
                

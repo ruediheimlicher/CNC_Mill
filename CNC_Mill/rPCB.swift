@@ -1040,11 +1040,11 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             {
                teensy.write_byteArray.append(el)
             }
-            print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
+     //       print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
             
             
             let senderfolg = teensy.send_USB()
-            print("write_CNC_Abschnitt senderfolg: \(senderfolg)")
+    //        print("write_CNC_Abschnitt senderfolg: \(senderfolg)")
   //          print("0: \(tempSchnittdatenArray[0]) ")
   //          print("1: \(tempSchnittdatenArray[1]) ")
   //          print("2: \(tempSchnittdatenArray[2]) ")
@@ -1070,7 +1070,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
                print("schritteY negativ")
                
             }
-            print("schritteX: \(schritteX) schritteY: \(schritteY)")
+ //           print("schritteX: \(schritteX) schritteY: \(schritteY)")
             
             
             cncstepperposition += 1
@@ -1279,7 +1279,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
       let abschnittnummer:Int = Int((data[5] << 8) | data[6])
       let ladeposition = data[8]
-      
+      Plattefeld.setStepperposition(pos:abschnittnummer)
       print("newDataAktion  taskcode: \(taskcode) hex: \(codehex) abschnittnummer: \(abschnittnummer) ladeposition: \(ladeposition)")
       let timeintervall =  Int((data[14] << 8) | data[15])
       

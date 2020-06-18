@@ -19,6 +19,11 @@ class rPlatteView: NSView
    var hyp:CGFloat = 0
    var hgfarbe:NSColor = NSColor()
    
+   var redfaktor:CGFloat = 200
+   var transformfaktor:CGFloat = 0 // px to mm
+   var wegindex=0;
+   var faktor:CGFloat = 0
+
    var fahrtweg:CGFloat = 0
    
    var stepperposition:Int = 0
@@ -90,6 +95,52 @@ class rPlatteView: NSView
        achsen.lineWidth = 1  // hair line
        achsen.stroke()  // draw line(s) in color
        */
+      
+      // neu
+      var elcount:Int = 0
+      var lastpunkt = NSMakePoint(0, 0)
+
+      for zeile in wegarray
+      {
+         elcount += 1
+         //  let x = CGFloat(zeile[0])
+         let lokalpunkt = NSMakePoint(CGFloat(zeile[1])/faktor/redfaktor * transformfaktor,CGFloat(zeile[2])/faktor/redfaktor * transformfaktor)
+         //print(lokalpunkt)
+         if wegindex == 0
+         {
+            lastpunkt = lokalpunkt
+            weg.move(to: lokalpunkt)
+            
+         }
+         else
+         {
+            let dx = lokalpunkt.x - lastpunkt.x
+            let dy = lokalpunkt.y - lastpunkt.y
+            fahrtweg += hypotenuse(dx, dy)
+            lastpunkt = lokalpunkt
+            weg.line(to: lokalpunkt)
+         }
+         //CNC_Stepper:
+         /*
+          NSRect tempMarkARect=NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
+          tempMarkA=[NSBezierPath bezierPathWithOvalInRect:tempMarkARect];
+          [[NSColor grayColor]set];
+          [tempMarkA stroke];
+          */
+         var tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
+         // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
+         kreis.move(to: lokalpunkt)
+         kreis.appendOval(in: tempMarkRect)
+         //      weg.move(to: lokalpunkt)
+         wegindex += 1
+      }
+ //     print("setWeg fahrtweg: \(fahrtweg) element count: \(elcount)")
+
+      
+      
+      
+      
+      // end neu
       NSColor.blue.set() // choose color
       achsen.stroke() 
       NSColor.red.set() // choose color
@@ -233,6 +284,8 @@ class rPlatteView: NSView
    func setStepperposition(pos:Int)
    {
       stepperposition = pos
+      print("setStepperposition pos: \(pos)")
+      needsDisplay = true
    }
 
    
@@ -242,10 +295,10 @@ class rPlatteView: NSView
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
       fahrtweg = 0
-      let redfaktor:CGFloat = 200
-      let transformfaktor:CGFloat = CGFloat(transform) // px to mm
+      redfaktor = 200.0
+      transformfaktor = CGFloat(transform) // px to mm
       var wegindex=0;
-      let faktor:CGFloat = CGFloat(scalefaktor)
+      faktor = CGFloat(scalefaktor)
       var  tempMark:NSBezierPath
       var lastpunkt = NSMakePoint(0, 0)
       var elcount = 0
