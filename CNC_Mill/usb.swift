@@ -279,6 +279,8 @@ open class usb_teensy: NSObject
    
    @objc open func cont_read_USB(_ timer: Timer)
    {
+     // entspricht readUSB in USB_Stepper
+      
       //print("*cont_read_USB read_OK: \(read_OK)")
       if (read_OK).boolValue
       {
@@ -337,9 +339,20 @@ open class usb_teensy: NSObject
                }
             }
             
-            // http://dev.iachieved.it/iachievedit/notifications-and-userinfo-with-swift-3-0/
-             let nc = NotificationCenter.default
+             
+    
             
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            // http://dev.iachieved.it/iachievedit/notifications-and-userinfo-with-swift-3-0/
+            let nc = NotificationCenter.default           
             nc.post(name:Notification.Name(rawValue:"newdata"),
                     object: nil,
                     userInfo: ["message":"neue Daten", "data":read_byteArray, "usbdata":usbData])
