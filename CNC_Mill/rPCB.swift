@@ -20,6 +20,8 @@ class rPCB: rViewController
    
    var circlearray = [[Int]]() // Koordinaten der Punkte
    
+   var maxdiff:Double = 1000 // maximale differenz fuer doppelte Punkte
+   
    var zoomfaktor:Double = 1.0
    
    var transformfaktor:Double = 0.3527777777779440
@@ -535,12 +537,13 @@ class rPCB: rViewController
                      }
                      else if zeilenindex == 1
                      { 
-                        var partAraw = element.split(separator:"=")
+                        //var partAraw = element.split(separator:"=")
                         //print("partAraw: \(partAraw)")
                         //var partA =  String(element.split(separator:"=")[1])
                         
-                        let partB = element.replacingOccurrences(of: "\"", with: "")
-                        //print("partB: \(partB)")
+                        var partB = element.replacingOccurrences(of: "\"", with: "")
+                        partB = partB.replacingOccurrences(of: "/>", with: "")
+                        //print("i: \(i) \tpartB: \(partB)")
                         let partfloat = (partB as NSString).doubleValue * 1000000 // Vorbereitung Int
                         let partint = Int(partfloat)
                         if partint > 0xFFFFFFFF
@@ -580,8 +583,25 @@ class rPCB: rViewController
             }
                         i = i+1
          }
+         print("report_readSVG circlearray")
+         var ii = 0
+         for el in circlearray
+         {
+            print("\(ii) \(el)")
+            ii += 1
+         }
+         /*
+         print("report_readSVG circledicarray")
+         var iii = 0
+         for el in circledicarray
+         {
+            print("\(iii) \(el)")
+            iii += 1
+         }
+*/
+ 
          
- //        print("PCB circlearray")
+         //        print("PCB circlearray")
  //        print(circlearray)
 //         let sorted = circlearray.sorted()
  //        print("PCB circledicarray")
@@ -602,7 +622,11 @@ class rPCB: rViewController
          var sortedarray_opt = [[String:Int]]()
      //    sortedarray_opt = sortDicArray_opt(origDicArray: circledicarray,key0:"cx", key1:"cy", order: false)
          
-        
+        // Doppelte Punkte suchen
+         
+         var doppelarray = [[String:Int]]()
+         
+         
          
          switch horizontal_checkbox.state
          {
@@ -619,7 +643,18 @@ class rPCB: rViewController
             break
          }
          //print(circledicarray)
-          
+
+         /*
+         print("report_readSVG sortedarray")
+         iii = 0
+         for el in sortedarray
+         {
+            print("\(iii) \(el)")
+            iii += 1
+         }
+  
+         */
+         
          //let sortedarray = sorted(circledicarray, key=lambda k: k['cx'])
          //print("PCB sortedarray")
          //print(sortedarray)
@@ -635,14 +670,109 @@ class rPCB: rViewController
             circlearray.append(zeilendicarray)
             zeilendicindex += 1
          }
-         /*
-         print("report_readSVG circlearray")
+         
+         print("report_readSVG circlearray vor.  count: \(circlearray.count)")
          for el in circlearray
          {
             
             print("\(el[0] )\t \(el[1] ) \(el[2])")
          }
+         
+         var doppelindex:Int = 0
+         
+         for datazeile in circlearray
+         {
+            if doppelindex < circlearray.count
+            {
+               let akt = circlearray[doppelindex]
+               var next = [Int]()
+               var n = 1
+               while doppelindex + n < circlearray.count // naechste Zeilen absuchen
+               {
+                  next = circlearray[doppelindex+n]
+                  var diffX:Double = (Double((next[1] - akt[1]))) 
+                  //print(" zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
+
+                  if diffX < maxdiff
+                  {
+                     //print("diffX < maxdiff  zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
+                     var diffY:Double = (Double((next[2] - akt[2])))
+                     
+                     if diffY < maxdiff
+                     {
+                        //print(" *** diff zu klein akt zeile: \(doppelindex) n: \(n)\t diffX: \(diffX) diffY: \(diffY) ")
+                        circlearray.remove(at: doppelindex + n)
+                        n -= 1 // ein element weniger, next ist bei n-1
+                     }
+                     
+                  }
+                   n += 1
+               }
+               
+         
+         
+         
+         
+            } // if < count
+            doppelindex += 1
+         } // for datazeile
+         
+         /*
+         for datazeile in circlearray
+         {
+            if doppelindex < circlearray.count
+            {
+               let akt = circlearray[doppelindex]
+               var next = [Int]()
+               if doppelindex < circlearray.count-1
+               {
+                  next = circlearray[doppelindex+1]
+                  var diffX:Double = (Double((next[1] - akt[1]))) * zoomfaktor
+                  var diffY:Double = (Double((next[2] - akt[2]))) * zoomfaktor
+                  print(" \(doppelindex)\t diffX: \(diffX) diffY: \(diffY) zeile: \(doppelindex)")
+                  if fabs(diffX) < maxdiff && fabs(diffY) < maxdiff
+                  {
+                     print(" *** diff zu klein \(doppelindex)\t diffX: \(diffX) diffY: \(diffY) zeile: \(doppelindex)")
+                  }
+                  
+                  while fabs(diffX) < maxdiff && fabs(diffY) < maxdiff
+                  {
+                     print(" datazeile *********    differenz null zeile: \(doppelindex)")
+                     circlearray.remove(at: doppelindex + 1)
+                     
+                     if doppelindex < circlearray.count-1
+                     {
+                        next = circlearray[doppelindex+1]
+                        diffX = (Double((next[1] - akt[1]))) * zoomfaktor
+                        diffY = (Double((next[2] - akt[2]))) * zoomfaktor
+                        
+                     }
+                     else
+                     {
+                        continue
+                     }
+                  }
+                  
+               } // if < count
+               
+               doppelindex += 1
+            }
+         }
 */
+         /*
+         print("report_readSVG circlearray nach. count: \(circlearray.count)")
+         for el in circlearray
+         {
+            
+            print("\(el[0] )\t \(el[1] )\t \(el[2])")
+         }
+          */
+         
+         
+         
+         
+         
+         
          // circlearray: [[Int]] x,y
    //      servoPfad?.addSVG_Pfadarray(newPfad: circlearray)
          let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
@@ -657,13 +787,14 @@ class rPCB: rViewController
             
             CNC_DatendicArray.append(zeilendic)
          }
-  //       print("report_readSVG CNC_DatendicArray")
+         /*
+         print("report_readSVG CNC_DatendicArray")
          
          for el in CNC_DatendicArray
          {
- //           print("* \(el["startpunktx"] ?? 0) \(el["startpunkty"] ?? 0)")
+            print("\(el["startpunktx"] ?? 0) \(el["startpunkty"] ?? 0)")
          }
-
+          */
  //        var steuerdaten:[String:Int] = CNC.SteuerdatenVonDi(derDatenDic: CNC_DatendicArray[0])
          
       }
@@ -699,8 +830,64 @@ class rPCB: rViewController
       var maxsteps:Double = 0
       //var relevanteschritte
       var zeilenposition = 0
-      let zeilenanzahl = circlearray.count
-      print("report_PCB_Daten circlearray count: \(zeilenanzahl)")
+      var zeilenanzahl = circlearray.count
+//      print("report_PCB_Daten circlearray vor doppelcheck count: \(zeilenanzahl)")
+      var doppelindex:Int = 0
+    
+      /*
+      
+      for datazeile in circlearray
+      {
+         if doppelindex < circlearray.count
+         {
+            let akt = circlearray[doppelindex]
+            var next = [Int]()
+            if doppelindex < circlearray.count-1
+            {
+               next = circlearray[doppelindex+1]
+               var diffX:Double = (Double((next[1] - akt[1]))) * zoomfaktor
+               var diffY:Double = (Double((next[2] - akt[2]))) * zoomfaktor
+               print(" datazeile diffX: \(diffX) diffY: \(diffY) zeile: \(doppelindex)")
+               while fabs(diffX) < 50 && fabs(diffY) < 50
+               {
+                  print(" datazeile *********    differenz null zeile: \(doppelindex)")
+                  circlearray.remove(at: doppelindex + 1)
+                  
+                  if doppelindex < circlearray.count-1
+                  {
+                     next = circlearray[doppelindex+1]
+                     diffX = (Double((next[1] - akt[1]))) * zoomfaktor
+                     diffY = (Double((next[2] - akt[2]))) * zoomfaktor
+                     
+                  }
+                  else
+                  {
+                     continue
+                  }
+               }
+               
+            } // if < count
+            
+            doppelindex += 1
+         }
+      }
+  */    
+      zeilenanzahl = circlearray.count
+      print("report_PCB_Daten circlearray nach doppelcheck count: \(zeilenanzahl)")
+
+      /*
+      var ii = 0
+      for el in circlearray
+      {
+          print("\(ii) \(el)")
+         ii += 1
+      }
+       */
+       
+      let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
+      fahrtweg.integerValue = l
+
+      
       for zeilenindex in stride(from: 0, to: circlearray.count-1, by: 1)
       {
          zeilenposition = 0
@@ -712,10 +899,13 @@ class rPCB: rViewController
          {
             zeilenposition |= (1<<LAST_BIT);
          }
-if zeilenindex == 22
-{
-   print("22")
+         
+/*         
+         if zeilenindex == 22
+         {
+               print("22")
          }
+*/         
          let next = circlearray[zeilenindex+1]
          let akt = circlearray[zeilenindex]
          let diffX:Double = (Double((next[1] - akt[1]))) * zoomfaktor
@@ -734,7 +924,7 @@ if zeilenindex == 22
 */
          if diffX == 0 && diffY == 0
          {
-            print(" *********    differenz null zeile: \(zeilenindex)")
+            print(" stride *********    differenz null zeile: \(zeilenindex)")
             continue
          }
          
@@ -948,7 +1138,7 @@ if zeilenindex == 22
          // Testphase
   //       motorstatus = (1<<MOTOR_A)
          
-         print("motorstatus: \(motorstatus) maxsteps: \(maxsteps)")
+  //       print("motorstatus: \(motorstatus) maxsteps: \(maxsteps)")
          zeilenschnittdatenarray.append(motorstatus)
          zeilenschnittdatenarray.append(77) // Pöatzhalter PWM
          
@@ -975,9 +1165,16 @@ if zeilenindex == 22
  //     print("Schnittdatenarray:\t\(Schnittdatenarray)")
      
       print("report_PCBDaten Schnittdatenarray count: \(Schnittdatenarray.count)")
+      var i = 0
       for el in Schnittdatenarray
        {
-         print(el)
+         let iH = (i & 0xFF00) >> 8
+         let iL = i & 0x00FF
+         let index = (Int(el[26]) * 256) + Int(el[27])
+   //      print("\(iH) \(iL) index: \(index)")
+
+  //       print("\(i) \(el)")
+         i += 1
       }
       
       /* 
@@ -1078,7 +1275,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             {
                teensy.write_byteArray.append(el)
             }
-            print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
+           // print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
             
             
             let senderfolg = teensy.send_USB()

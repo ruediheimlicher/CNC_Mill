@@ -19,9 +19,9 @@ class rPlatteView: NSView
    var hyp:CGFloat = 0
    var hgfarbe:NSColor = NSColor()
    
-   var rot:Int=90
-   var gruen:Int=240
-   var blau:Int=50
+   var rot:CGFloat=90
+   var gruen:CGFloat=240
+   var blau:CGFloat=50
    
   
    var redfaktor:CGFloat = 200
@@ -44,7 +44,7 @@ class rPlatteView: NSView
    required init?(coder  aDecoder : NSCoder) 
    {
       super.init(coder: aDecoder)
-      //Swift.print("JoystickView init")
+      Swift.print("JoystickView init")
       //   NSColor.blue.set() // choose color
       // let achsen = NSBezierPath() // container for line(s)
       let w:CGFloat = bounds.size.width
@@ -73,12 +73,12 @@ class rPlatteView: NSView
       blau=59
       kreislinienfarbe = NSColor(red: CGFloat(rot/255), green: CGFloat(gruen/255), blue: CGFloat(blau/255), alpha: 1.0)
 
-      rot=110
-      gruen=250
-      blau=135
+      rot=70.0
+      gruen=160
+      blau=100
       kreisfillfarbe = NSColor(red: CGFloat(rot/255), green: CGFloat(gruen/255), blue: CGFloat(blau/255), alpha: 1.0)
 
-  
+  //    Swift.print("rot: \(rot/255)\n")
       
       if let joystickident = self.identifier
       {
@@ -113,21 +113,7 @@ class rPlatteView: NSView
       // draw the dashed path
       currentContext.addRect(bounds.insetBy(dx: dashHeight, dy: dashHeight))
       currentContext.strokePath()
-      /*
-       NSColor.blue.set() // choose color
-       let achsen = NSBezierPath() // container for line(s)
-       let w:CGFloat = bounds.size.width
-       let h:CGFloat = bounds.size.height
-       let mittex:CGFloat = bounds.size.width / 2
-       let mittey:CGFloat = bounds.size.height / 2
-       achsen.move(to: NSMakePoint(0, mittey)) // start point
-       achsen.line(to: NSMakePoint(w, mittey)) // destination
-       achsen.move(to: NSMakePoint(mittex, 0)) // start point
-       achsen.line(to: NSMakePoint(mittex, h)) // destination
-       achsen.lineWidth = 1  // hair line
-       achsen.stroke()  // draw line(s) in color
-       */
- 
+  
       kreis.lineWidth = 1.5
       // neu
       
@@ -203,6 +189,12 @@ class rPlatteView: NSView
                NSColor.green.set() 
  //              kreis.append(localkreis)
                linienfarbe.set() 
+               var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
+               let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
+               let numstring = String(wegindex)
+               numstring.draw(
+                  at: tempNumPunkt, 
+                  withAttributes: atts as [NSAttributedStringKey : Any])
 
                
             }
@@ -376,7 +368,7 @@ class rPlatteView: NSView
    {
       stepperposition = pos
       drawstatus =  1
-      print("\t ******   PlatteView setStepperposition pos: \(pos)")
+   //   print("\t ******   PlatteView setStepperposition pos: \(pos)")
       needsDisplay = true
    }
 
@@ -430,9 +422,18 @@ class rPlatteView: NSView
          kreis.move(to: lokalpunkt)
          kreis.appendOval(in: tempMarkRect)
    //      weg.move(to: lokalpunkt)
+         /*
+         var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
+         let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
+         let numstring = String(wegindex)
+  //       print(numstring)
+         numstring.draw(
+            at: tempNumPunkt, 
+            withAttributes: atts as [NSAttributedStringKey : Any])
+*/
          wegindex += 1
       }
-      print("setWeg fahrtweg: \(fahrtweg) element count: \(elcount)")
+      //print("setWeg fahrtweg: \(fahrtweg) element count: \(elcount)")
       
       needsDisplay = true
       return Int(fahrtweg)
