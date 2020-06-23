@@ -20,7 +20,7 @@ class rPCB: rViewController
    
    var circlearray = [[Int]]() // Koordinaten der Punkte
    
-   var maxdiff:Double = 1000 // maximale differenz fuer doppelte Punkte
+   var maxdiff:Double = 100 // maximale differenz fuer doppelte Punkte
    
    var zoomfaktor:Double = 1.0
    
@@ -583,7 +583,7 @@ class rPCB: rViewController
             }
                         i = i+1
          }
-         print("report_readSVG circlearray")
+         print("report_readSVG circlearray count: \(circlearray.count)")
          var ii = 0
          for el in circlearray
          {
@@ -693,12 +693,12 @@ class rPCB: rViewController
                   var diffX:Double = (Double((next[1] - akt[1]))) 
                   //print(" zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
 
-                  if diffX < maxdiff
+                  if fabs(diffX) < maxdiff
                   {
                      //print("diffX < maxdiff  zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
                      var diffY:Double = (Double((next[2] - akt[2])))
                      
-                     if diffY < maxdiff
+                     if fabs(diffY) < maxdiff
                      {
                         //print(" *** diff zu klein akt zeile: \(doppelindex) n: \(n)\t diffX: \(diffX) diffY: \(diffY) ")
                         circlearray.remove(at: doppelindex + n)
@@ -759,14 +759,14 @@ class rPCB: rViewController
             }
          }
 */
-         /*
+         
          print("report_readSVG circlearray nach. count: \(circlearray.count)")
          for el in circlearray
          {
             
             print("\(el[0] )\t \(el[1] )\t \(el[2])")
          }
-          */
+         
          
          
          
@@ -1298,12 +1298,13 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
  //           print("11: \(tempSchnittdatenArray[11]) ")
             
             var schritteAY:UInt32 = UInt32(tempSchnittdatenArray[8]) | UInt32(tempSchnittdatenArray[9])<<8 | UInt32(tempSchnittdatenArray[10])<<16 | UInt32((tempSchnittdatenArray[11] & 0x7F))<<24;
-            
+            /*
             if (tempSchnittdatenArray[11] & 0x80) > 0
             {
                print("Motor B schritteY negativ")
                
             }
+ */
  //           print("schritteX: \(schritteX) schritteY: \(schritteY)")
             
             
@@ -1498,14 +1499,14 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
 //      print("von teensy: data: \(String(describing: data)) ") // data: Optional([0, 9, 51, 0,....
       var i = 0
             
-      var taskcode = data[0]
-      var codehex = String(format:"%02X", taskcode)
+      let taskcode = data[0]
+      let codehex = String(format:"%02X", taskcode)
       
  //     print("newDataAktion taskcode: \(taskcode) hex: \(codehex)")
       
       if taskcode == 0
          {
-            
+            print("newDataAktion taskcode: NULL")
             return
       }
       var notificationDic = [String:Any]()
@@ -1529,7 +1530,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          let abschnittnum = Int((data[5] << 8) | data[6])
          let ladepos =  Int(data[8] )
          Plattefeld.setStepperposition(pos:ladepos+1)
-        print("newDataAktion  AD abschnittnum: \(abschnittnum) ladepos: \(ladepos)")
+        print("newDataAktion  AD abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
          
          
          break
@@ -1539,7 +1540,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          print("newDataAktion  AF next ")
          let abschnittnum = Int((data[5] << 8) | data[6])
          let ladepos =  Int(data[8] )
-         print("newDataAktion  AF abschnittnum: \(abschnittnum) ladepos: \(ladepos)")
+         print("newDataAktion  AF abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
          
          break
          

@@ -45,6 +45,7 @@ open class usb_teensy: NSObject
       super.init()
    }
    
+   
    open func USBOpen()->Int32
    {
       var r:Int32 = 0
@@ -61,7 +62,10 @@ open class usb_teensy: NSObject
          let antwort =  alert.runModal() == .alertFirstButtonReturn
          return 1;
       }
+      
       let    out = rawhid_open(1, 0x16C0, 0x0486, 0xFFAB, 0x0200)
+     
+      
       print("func usb_teensy.USBOpen out: \(out)")
       
       hid_usbstatus = out as Int32;

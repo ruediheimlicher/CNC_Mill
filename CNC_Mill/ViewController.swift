@@ -504,7 +504,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
          teensy.write_byteArray[27] = 0 // indexl
          var timerdic:[String:Int] = ["haltstatus":1, "home":0]
          var timer : Timer? = nil
-         timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(USB_read(timer:)), userInfo: timerdic, repeats: true)
+         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(USB_read(timer:)), userInfo: timerdic, repeats: true)
 
          
       }
@@ -856,7 +856,6 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    {
       let notokimage :NSImage = NSImage(named:NSImage.Name(rawValue: "notok_image"))!
       let okimage :NSImage = NSImage(named:NSImage.Name(rawValue: "ok_image"))!
-
       let erfolg = teensy.USBOpen()
       usbstatus = erfolg
       print("USBOpen erfolg: \(erfolg) usbstatus: \(usbstatus)")
