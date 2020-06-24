@@ -1540,7 +1540,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          print("newDataAktion  AF next ")
          let abschnittnum = Int((data[5] << 8) | data[6])
          let ladepos =  Int(data[8] )
-         print("newDataAktion  AF abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
+         print("newDataAktion  AF abschnittnum: \(abschnittnum) ladepos: \(ladepos)")
          
          break
          
