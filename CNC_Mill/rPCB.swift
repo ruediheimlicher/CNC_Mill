@@ -1239,7 +1239,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
 //      Schnittdatenarray[0][26] = UInt8((anzabschnitte & 0xFF00) >> 8)
  //     Schnittdatenarray[0][27] = UInt8(anzabschnitte & 0x00FF)
       
-      
+      var i = 0
+      for linie in Schnittdatenarray
+      {
+         print("\(i) \(linie)")
+         i += 1
+      }
       
       
       write_CNC_Abschnitt()
@@ -1260,6 +1265,13 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    func write_CNC_Abschnitt()
    {
+      print("write_CNC_Abschnitt cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
+     
+      if cncstepperposition == Schnittdatenarray.count
+      {
+         print("write_CNC_Abschnitt cncstepperposition ist Schnittdatenarray.count")
+         return
+      }
       if cncstepperposition < Schnittdatenarray.count
       {
          if CNC_HALT_Knopf.state == .on
@@ -1275,7 +1287,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             {
                teensy.write_byteArray.append(el)
             }
-           // print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
+           print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
             
             
             let senderfolg = teensy.send_USB()
@@ -1529,10 +1541,13 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          print("newDataAktion  AD TASK END ")
          let abschnittnum = Int((data[5] << 8) | data[6])
          let ladepos =  Int(data[8] )
+         print("newDataAktion  AD ladepos: \(ladepos)")
          Plattefeld.setStepperposition(pos:ladepos+1)
         print("newDataAktion  AD abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
-         
-         
+         notificationDic["taskcode"] = taskcode
+         nc.post(name:Notification.Name(rawValue:"usbread"),
+                 object: nil,
+                 userInfo: notificationDic)        
          break
          
       case 0xAF:
@@ -1558,7 +1573,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          print("newDataAktion  home gemeldet")
          break
       case 0xD0:
-         print("newDataAktion  letzter Abschnitt")
+         print("newDataAktion  letzter Abschnitt abschnittnummer: \(abschnittnummer)")
          Plattefeld.setStepperposition(pos:abschnittnummer)
          let ladepos =  Int(data[8] )
          notificationDic["taskcode"] = taskcode

@@ -208,7 +208,7 @@ open class usb_teensy: NSObject
          {
             readtimer?.invalidate()
          }
-         readtimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
+         readtimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
       }
       
       return Int(result) //
@@ -327,7 +327,18 @@ open class usb_teensy: NSObject
             
             var taskcode = read_byteArray[0]
             print("+++ cont_read_USB in Timer codehex: \(codehex)")
-       /*
+
+            /*
+            if taskcode == 0xD0
+            {
+                if timer.isValid == true
+                {
+                  print("+++ cont_read_USB Timer invalidate")
+                  timer.invalidate()
+               }
+            }
+ */           
+            /*
             for  i in 0...16
             {
                print(" \(read_byteArray[i])")
@@ -344,17 +355,6 @@ open class usb_teensy: NSObject
             }
             
              
-    
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             // http://dev.iachieved.it/iachievedit/notifications-and-userinfo-with-swift-3-0/
             let nc = NotificationCenter.default           
             nc.post(name:Notification.Name(rawValue:"newdata"),
