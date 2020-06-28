@@ -966,6 +966,17 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q4r-pV-zV0">
+                                <rect key="frame" x="453" y="604" width="57" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Ramp" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="W1Y-i8-Adj">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="report_linearCheckbox:" target="wFL-7s-Z8p" id="Mse-Uj-IQg"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
@@ -976,6 +987,7 @@
                         <outlet property="fahrtweg" destination="uOs-Jd-n3A" id="fED-f6-SaJ"/>
                         <outlet property="horizontal_checkbox" destination="Xp2-G1-erb" id="qCm-5a-LjN"/>
                         <outlet property="linear_checkbox" destination="ubb-7P-f7L" id="q9e-aE-2Rw"/>
+                        <outlet property="ramp_OK_Check" destination="q4r-pV-zV0" id="3st-LK-aWI"/>
                         <outlet property="readSVG_Knopf" destination="eex-tQ-W4N" id="7RP-tf-ddy"/>
                         <outlet property="speedFeld" destination="FBI-Ov-pSY" id="5KE-yI-L2p"/>
                         <outlet property="stepsFeld" destination="PLB-nE-fdB" id="AIg-mj-66E"/>

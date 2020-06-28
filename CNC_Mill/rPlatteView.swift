@@ -23,12 +23,12 @@ class rPlatteView: NSView
    var gruen:CGFloat=240
    var blau:CGFloat=50
    
-  
+   
    var redfaktor:CGFloat = 200
    var transformfaktor:CGFloat = 0 // px to mm
    var wegindex=0;
    var faktor:CGFloat = 0
-
+   
    var fahrtweg:CGFloat = 0
    
    var stepperposition:Int = 0
@@ -36,7 +36,7 @@ class rPlatteView: NSView
    var wegarray:[[Int]] = [[Int]]()
    
    var linienfarbe:NSColor = NSColor()
-  var kreislinienfarbe:NSColor = NSColor()
+   var kreislinienfarbe:NSColor = NSColor()
    var kreisfillfarbe:NSColor = NSColor()
    
    var drawstatus = 0 // 0: setweg zeichnet den Weg  1: draw zeichnet den Weg nach setstepperposition
@@ -60,29 +60,29 @@ class rPlatteView: NSView
       achsen.line(to: NSMakePoint(mittex, h)) // destination
       achsen.lineWidth = 1  // hair line
       //achsen.stroke()  // draw line(s) in color
- 
+      
       rot=36
       gruen=255
       blau=4
       
       linienfarbe = NSColor(red: CGFloat(rot/255), green: CGFloat(gruen/255), blue: CGFloat(blau/255), alpha: 1.0)
- //     linienfarbe = NSColor.green
-  
+      //     linienfarbe = NSColor.green
+      
       rot=27
       gruen=114
       blau=59
       kreislinienfarbe = NSColor(red: CGFloat(rot/255), green: CGFloat(gruen/255), blue: CGFloat(blau/255), alpha: 1.0)
-
+      
       rot=70.0
       gruen=160
       blau=100
       kreisfillfarbe = NSColor(red: CGFloat(rot/255), green: CGFloat(gruen/255), blue: CGFloat(blau/255), alpha: 1.0)
-
-  //    Swift.print("rot: \(rot/255)\n")
+      
+      //    Swift.print("rot: \(rot/255)\n")
       
       if let joystickident = self.identifier
       {
-       //  Swift.print("JoystickView ident: \(joystickident) raw: \(joystickident.rawValue)")
+         //  Swift.print("JoystickView ident: \(joystickident) raw: \(joystickident.rawValue)")
          
       }
       else
@@ -93,13 +93,13 @@ class rPlatteView: NSView
    }
    
    // https://stackoverflow.com/questions/21751105/mac-os-x-convert-between-nsview-coordinates-and-global-screen-coordinates
-  
+   
    override func draw(_ dirtyRect: NSRect) 
    {
       // https://stackoverflow.com/questions/36596545/how-to-draw-a-dash-line-border-for-nsview
       super.draw(dirtyRect)
-  
- 
+      
+      
       // dash customization parameters
       let dashHeight: CGFloat = 1
       let dashColor: NSColor = .gray
@@ -113,7 +113,7 @@ class rPlatteView: NSView
       // draw the dashed path
       currentContext.addRect(bounds.insetBy(dx: dashHeight, dy: dashHeight))
       currentContext.strokePath()
-  
+      
       kreis.lineWidth = 1.5
       // neu
       
@@ -122,7 +122,7 @@ class rPlatteView: NSView
          linienfarbe.set() // choose color
          weg.lineWidth = 1.5
          weg.stroke()  // draw line(s) in color
-
+         
          var elcount:Int = 0
          var lastpunkt = NSMakePoint(0, 0)
          wegindex = 0
@@ -138,29 +138,29 @@ class rPlatteView: NSView
             var tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
             // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
             // Nummer setzen
-  //          var tempNumRect:NSRect = NSMakeRect(lokalpunkt.x-12.1, lokalpunkt.y+4.1, 24.1, 8.1);
-
-
-
+            //          var tempNumRect:NSRect = NSMakeRect(lokalpunkt.x-12.1, lokalpunkt.y+4.1, 24.1, 8.1);
+            
+            
+            
             kreis.move(to: lokalpunkt)
-        //    kreis.appendOval(in: tempMarkRect)
-
+            //    kreis.appendOval(in: tempMarkRect)
+            
             if wegindex <= stepperposition // Start, Marke fuellen
             {
-           //    var localkreis: NSBezierPath = NSBezierPath()
+               //    var localkreis: NSBezierPath = NSBezierPath()
                lastpunkt = lokalpunkt
                weg.move(to: lokalpunkt)
                var localkreis:NSBezierPath =  NSBezierPath()
                localkreis.appendOval(in: tempMarkRect)
- //              var fillcolor:NSColor = NSColor.blue
- //              fillcolor.setFill()
+               //              var fillcolor:NSColor = NSColor.blue
+               //              fillcolor.setFill()
                kreisfillfarbe.set() // choose color
                localkreis.fill()
                kreislinienfarbe.set() // choose color
                localkreis.lineWidth = 1.0
                localkreis.stroke()
                linienfarbe.set() 
- //              kreis.append(localkreis)
+               //              kreis.append(localkreis)
                var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
                let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
                let numstring = String(wegindex)
@@ -175,10 +175,10 @@ class rPlatteView: NSView
                fahrtweg += hypotenuse(dx, dy)
                lastpunkt = lokalpunkt
                weg.line(to: lokalpunkt)
-        //       kreis.fill()
+               //       kreis.fill()
                var localkreis:NSBezierPath =  NSBezierPath()
                localkreis.appendOval(in: tempMarkRect)
-                                
+               
                //              var fillcolor:NSColor = NSColor.blue
                //              fillcolor.setFill()
                NSColor.yellow.set() // choose color
@@ -187,7 +187,7 @@ class rPlatteView: NSView
                localkreis.lineWidth = 1.0
                localkreis.stroke()
                NSColor.green.set() 
- //              kreis.append(localkreis)
+               //              kreis.append(localkreis)
                linienfarbe.set() 
                var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
                let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
@@ -195,7 +195,7 @@ class rPlatteView: NSView
                numstring.draw(
                   at: tempNumPunkt, 
                   withAttributes: atts as [NSAttributedStringKey : Any])
-
+               
                
             }
             //CNC_Stepper:
@@ -218,12 +218,12 @@ class rPlatteView: NSView
          linienfarbe.set() // choose color
          weg.lineWidth = 1.5
          weg.stroke()  // draw line(s) in color
-
+         
          kreislinienfarbe.set() // choose color
          
          kreis.stroke()
          NSColor.green.set() 
- 
+         
       }
       
       // end neu
@@ -231,18 +231,18 @@ class rPlatteView: NSView
       achsen.stroke() 
       NSColor.red.set() // choose color
       kreuz.stroke()
-   //   kreis.lineWidth = 1.5
-  //    kreis.fill()
-  //    kreis.stroke()
+      //   kreis.lineWidth = 1.5
+      //    kreis.fill()
+      //    kreis.stroke()
       
-    }
+   }
    
    override func mouseDown(with theEvent: NSEvent) 
    {
       
       super.mouseDown(with: theEvent)
       //let ident  = self.identifier as! String
-       let ident  = self.identifier
+      let ident  = self.identifier
       
       Swift.print("left mouse ident: \(ident)")
       var identstring = ""
@@ -253,7 +253,7 @@ class rPlatteView: NSView
       else
       {
          identstring = "13"
-      
+         
       }
       
       let location = theEvent.locationInWindow
@@ -285,7 +285,7 @@ class rPlatteView: NSView
          kreuz.line(to: lokalpunkt)
          kreuz.line(to: NSMakePoint(lokalpunkt.x-5, lokalpunkt.y))
          kreuz.line(to: lokalpunkt)
-      
+         
          // zurueck zu localpunkt
          weg.move(to: lokalpunkt)
          
@@ -323,7 +323,7 @@ class rPlatteView: NSView
       let location = theEvent.locationInWindow
       //Swift.print(location)
       var lokalpunkt = convert(theEvent.locationInWindow, from: nil)
-       var userinformation:[String : Any]
+      var userinformation:[String : Any]
       Swift.print(lokalpunkt)
       if (lokalpunkt.x >= self.bounds.size.width)
       {
@@ -345,7 +345,7 @@ class rPlatteView: NSView
       
       weg.line(to: lokalpunkt)
       
- 
+      
       
       needsDisplay = true
       userinformation = ["message":"mousedown", "punkt": lokalpunkt, "index": weg.elementCount, "first": -1] as [String : Any]
@@ -368,10 +368,10 @@ class rPlatteView: NSView
    {
       stepperposition = pos
       drawstatus =  1
-   //   print("\t ******   PlatteView setStepperposition pos: \(pos)")
+      //   print("\t ******   PlatteView setStepperposition pos: \(pos)")
       needsDisplay = true
    }
-
+   
    
    func setWeg(newWeg:[[Int]], scalefaktor:Int , transform:Double)-> Int
    {
@@ -393,7 +393,7 @@ class rPlatteView: NSView
       for zeile in newWeg
       {
          elcount += 1
-       //  let x = CGFloat(zeile[0])
+         //  let x = CGFloat(zeile[0])
          let lokalpunkt = NSMakePoint(CGFloat(zeile[1])/faktor/redfaktor * transformfaktor,CGFloat(zeile[2])/faktor/redfaktor * transformfaktor)
          //print(lokalpunkt)
          if wegindex == 0
@@ -412,25 +412,25 @@ class rPlatteView: NSView
          }
          //CNC_Stepper:
          /*
-         NSRect tempMarkARect=NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
-         tempMarkA=[NSBezierPath bezierPathWithOvalInRect:tempMarkARect];
-         [[NSColor grayColor]set];
-         [tempMarkA stroke];
- */
+          NSRect tempMarkARect=NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
+          tempMarkA=[NSBezierPath bezierPathWithOvalInRect:tempMarkARect];
+          [[NSColor grayColor]set];
+          [tempMarkA stroke];
+          */
          var tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
-        // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
+         // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
          kreis.move(to: lokalpunkt)
          kreis.appendOval(in: tempMarkRect)
-   //      weg.move(to: lokalpunkt)
+         //      weg.move(to: lokalpunkt)
          /*
-         var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
-         let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
-         let numstring = String(wegindex)
-  //       print(numstring)
-         numstring.draw(
-            at: tempNumPunkt, 
-            withAttributes: atts as [NSAttributedStringKey : Any])
-*/
+          var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
+          let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
+          let numstring = String(wegindex)
+          //       print(numstring)
+          numstring.draw(
+          at: tempNumPunkt, 
+          withAttributes: atts as [NSAttributedStringKey : Any])
+          */
          wegindex += 1
       }
       //print("setWeg fahrtweg: \(fahrtweg) element count: \(elcount)")

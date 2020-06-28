@@ -48,7 +48,7 @@ class rPCB: rViewController
    @IBOutlet weak var timerintervallFeld: NSTextField!
    
    @IBOutlet weak var stepsFeld: NSTextField!
-
+   @IBOutlet weak var ramp_OK_Check: NSButton!
    /*
    @IBOutlet weak var manufactorer: NSTextField!
    @IBOutlet weak var Counter: NSTextField!
@@ -506,6 +506,7 @@ class rPCB: rViewController
          
          var circleelementdic = [String:Int]()
          
+         var z = 0
          for zeile in SVG_array
          {
        //     print("i: \(i) zeile: \(zeile)")
@@ -543,7 +544,9 @@ class rPCB: rViewController
                         
                         var partB = element.replacingOccurrences(of: "\"", with: "")
                         partB = partB.replacingOccurrences(of: "/>", with: "")
-                        //print("i: \(i) \tpartB: \(partB)")
+                     //   print("i: \(i) \tz:\t \(z)\tpartB: \t\(partB)")
+                       
+                        z += 1
                         let partfloat = (partB as NSString).doubleValue * 1000000 // Vorbereitung Int
                         let partint = Int(partfloat)
                         if partint > 0xFFFFFFFF
@@ -587,9 +590,11 @@ class rPCB: rViewController
          var ii = 0
          for el in circlearray
          {
-            print("\(ii) \(el)")
+            print("\(ii) \(el[2])")
             ii += 1
          }
+ 
+         
          /*
          print("report_readSVG circledicarray")
          var iii = 0
@@ -808,6 +813,163 @@ class rPCB: rViewController
       
    }
    
+   func schrittdatenvektor(sxInt:Int,syInt:Int, zeit:Double) -> [UInt8]
+   {
+      var vektor = [UInt8]()
+      let sxA = UInt8(sxInt & 0x000000FF)
+      let sxB = UInt8((sxInt & 0x0000FF00) >> 8)
+      let sxC = UInt8((sxInt & 0x00FF0000) >> 16)
+      let sxD = UInt8((sxInt & 0xFF000000) >> 24)
+      vektor.append(sxA)
+      vektor.append(sxB)
+      vektor.append(sxC)
+      vektor.append(sxD)
+      let dx:Double = (zeit / Double((sxInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
+      
+      let dxIntround = round(dx)
+      var dxInt = 0
+      if dxIntround >= Double(Int.min) && dxIntround < Double(Int.max)
+      {
+         // print("delayxInt OK")
+         dxInt = Int(dxIntround)
+      }
+      let dxA = UInt8(dxInt & 0x000000FF)
+      let dxB = UInt8((dxInt & 0x0000FF00) >> 8)
+      let dxC = UInt8((dxInt & 0x00FF0000) >> 16)
+      let dxD = UInt8((dxInt & 0xFF000000) >> 24)
+      vektor.append(dxA)
+      vektor.append(dxB)
+      vektor.append(dxC)
+      vektor.append(dxD)
+
+      let syA = UInt8(syInt & 0x000000FF)
+      let syB = UInt8((syInt & 0x0000FF00) >> 8)
+      let syC = UInt8((syInt & 0x00FF0000) >> 16)
+      let syD = UInt8((syInt & 0xFF000000) >> 24)
+      vektor.append(syA)
+      vektor.append(syB)
+      vektor.append(syC)
+      vektor.append(syD)
+      let dy:Double = (zeit / Double((syInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
+      
+      let dyIntround = round(dx)
+      var dyInt = 0
+      if dyIntround >= Double(Int.min) && dyIntround < Double(Int.max)
+      {
+         dyInt = Int(dyIntround)
+      }
+      let dyA = UInt8(dyInt & 0x000000FF)
+      let dyB = UInt8((dyInt & 0x0000FF00) >> 8)
+      let dyC = UInt8((dyInt & 0x00FF0000) >> 16)
+      let dyD = UInt8((dyInt & 0xFF000000) >> 24)
+      vektor.append(dyA)
+      vektor.append(dyB)
+      vektor.append(dyC)
+      vektor.append(dyD)
+
+      // Motor C Schritte
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+      // Motor C delay
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+
+      vektor.append(0) // el 24, code
+      vektor.append(0) // el 25, lage
+        
+      vektor.append(0) // el 26, zeilenindexh
+      vektor.append(0) // el 27, zeilenindexl
+      
+      // motorstatus
+      var motorstatus:UInt8 = 0
+      var maxsteps:Double = 0
+      if (fabs(dyIntround) > fabs(dxIntround)) // wer hat mehr schritte x
+      {
+         maxsteps = fabs(dyIntround)
+         motorstatus = (1<<MOTOR_B)
+      }
+      else 
+      {
+         maxsteps = fabs(dxIntround)
+         motorstatus = (1<<MOTOR_A)
+      }
+      vektor.append(motorstatus)
+      vektor.append(77) // Pöatzhalter PWM
+      
+      let timerintervall = timerintervallFeld.integerValue
+      vektor.append(UInt8((timerintervall & 0xFF00)>>8))
+      vektor.append(UInt8(timerintervall & 0x00FF))
+
+      return vektor
+   }
+   
+   func wegArrayMitWinkel(winkel:Double, distanz:Double) ->[UInt8]
+   {
+      print("wegMitWinkel")
+      var maxsteps:Double = 0
+      var weg = [Double]()
+      let wegX = distanz * cos(winkel) * zoomfaktor
+      let wegY = distanz * sin(winkel) * zoomfaktor
+      
+      var speed = speedFeld.intValue
+      
+      if ramp_OK_Check.state == NSControl.StateValue.on
+      {
+         speed *= 2
+      }
+      let propfaktor = 2834645.67 // 14173.23
+      
+      let start = [0,0]
+      let ziel = [wegX,wegY]
+      
+      let zeit:Double = Double(distanz)/Double(speed) //   Schnittzeit für Distanz
+      
+      var schrittex = Double(stepsFeld.integerValue) * wegX 
+      schrittex /= propfaktor
+      var schrittexRound = round(schrittex)
+      var schrittexInt:Int = 0
+      if schrittexRound >= Double(Int.min) && schrittexRound < Double(Int.max)
+      {
+         //    print("schritteXInt OK: \(schrittexInt)")
+         schrittexInt = Int(schrittexRound)
+         if schrittexInt < 0 // negativer Weg
+         {
+            schrittexInt *= -1
+            schrittexInt |= 0x80000000
+         }
+      }
+      else
+      {
+         print("schritteXround zu gross")
+      }
+      var schrittey = Double(stepsFeld.integerValue) * wegY 
+      schrittey /= propfaktor
+      var schritteyRound = round(schrittey)
+      var schritteyInt:Int = 0
+      if schritteyRound >= Double(Int.min) && schritteyRound < Double(Int.max)
+      {
+         //    print("schritteXInt OK: \(schrittexInt)")
+         schritteyInt = Int(schritteyRound)
+         if schritteyInt < 0 // negativer Weg
+         {
+            schritteyInt *= -1
+            schritteyInt |= 0x80000000
+         }
+      }
+      else
+      {
+         print("schritteYround zu gross")
+      }
+      
+      var wegschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:schrittexInt,syInt:schritteyInt, zeit:zeit  )// Array mit Daten fuer USB
+      
+      return wegschnittdatenarray
+   }
+   
    
    @IBAction func report_PCB_Daten(_ sender: NSButton)
    {
@@ -817,7 +979,12 @@ class rPCB: rViewController
        */
       print("report_PCB_Daten")
       
-      let speed = speedFeld.intValue
+      var speed = speedFeld.intValue
+      
+       if ramp_OK_Check.state == NSControl.StateValue.on
+      {
+         speed *= 2
+      }
       let propfaktor = 2834645.67 // 14173.23
       
       Schnittdatenarray.removeAll()
@@ -1287,7 +1454,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             {
                teensy.write_byteArray.append(el)
             }
-           print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
+  //         print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
             
             
             let senderfolg = teensy.send_USB()
