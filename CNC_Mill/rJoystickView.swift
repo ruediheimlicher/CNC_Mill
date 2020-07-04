@@ -38,7 +38,7 @@ class rJoystickView: NSView
       //achsen.stroke()  // draw line(s) in color
       if let joystickident = self.identifier
       {
-       //  Swift.print("JoystickView ident: \(joystickident) raw: \(joystickident.rawValue)")
+         Swift.print("JoystickView passt: ident: \(joystickident) raw: \(joystickident.rawValue)")
          
       }
       else

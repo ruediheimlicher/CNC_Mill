@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -429,7 +428,7 @@
                             <tabViewItem label="Linie" identifier="2" id="68">
                                 <view key="view" id="69">
                                     <rect key="frame" x="10" y="33" width="519" height="470"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField verticalHuggingPriority="750" tag="210" id="239">
                                             <rect key="frame" x="111" y="246" width="56" height="22"/>
@@ -1929,16 +1928,10 @@
             </view>
             <point key="canvasLocation" x="141.5" y="449.5"/>
         </window>
-        <collectionViewItem id="492">
-            <connections>
-                <outlet property="view" destination="493" id="495"/>
-            </connections>
-        </collectionViewItem>
-        <view id="493">
-            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
-            <autoresizingMask key="autoresizingMask"/>
-        </view>
+        <collectionViewItem id="492"/>
         <viewController title="Testcontroller" nibName="Testcontroller" id="539"/>
         <userDefaultsController representsSharedInstance="YES" id="530"/>
+        <viewController id="Lws-Qf-dBt" customClass="rEinstellungen" customModule="CNC_Mill" customModuleProvider="target"/>
+        <viewController id="Sug-74-jVa" customClass="NSTabViewController"/>
     </objects>
 </document>

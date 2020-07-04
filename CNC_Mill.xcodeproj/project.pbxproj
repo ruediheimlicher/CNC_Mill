@@ -28,6 +28,7 @@
 		BDF6595124840043009F2E67 /* rPlatteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF6595024840043009F2E67 /* rPlatteView.swift */; };
 		BDF65953248408E7009F2E67 /* rPCB.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF65952248408E7009F2E67 /* rPCB.swift */; };
 		BDF6595524841374009F2E67 /* defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF6595424841374009F2E67 /* defines.swift */; };
+		BDFF6D5424B0B9C9008156B8 /* rJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFF6D5324B0B9C9008156B8 /* rJoystick.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		BDF6595024840043009F2E67 /* rPlatteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = rPlatteView.swift; path = CNC_Mill/rPlatteView.swift; sourceTree = SOURCE_ROOT; };
 		BDF65952248408E7009F2E67 /* rPCB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rPCB.swift; sourceTree = "<group>"; };
 		BDF6595424841374009F2E67 /* defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = defines.swift; path = CNC_Mill/defines.swift; sourceTree = SOURCE_ROOT; };
+		BDFF6D5324B0B9C9008156B8 /* rJoystick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rJoystick.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 			children = (
 				BD33757E248D71E10087C9FF /* Bilder */,
 				BDF65952248408E7009F2E67 /* rPCB.swift */,
+				BDFF6D5324B0B9C9008156B8 /* rJoystick.swift */,
 				BDF659462483B71F009F2E67 /* hid.m */,
 				BDF659442483B71F009F2E67 /* hid.h */,
 				BDF659452483B71F009F2E67 /* usb.swift */,
@@ -231,6 +234,7 @@
 				BDF659472483B71F009F2E67 /* usb.swift in Sources */,
 				BD337593249606240087C9FF /* rJoystickView.swift in Sources */,
 				BDF65953248408E7009F2E67 /* rPCB.swift in Sources */,
+				BDFF6D5424B0B9C9008156B8 /* rJoystick.swift in Sources */,
 				BDF6592E2482E2DC009F2E67 /* ViewController.swift in Sources */,
 				BD337556248816170087C9FF /* rCNC.m in Sources */,
 				BDF6595124840043009F2E67 /* rPlatteView.swift in Sources */,

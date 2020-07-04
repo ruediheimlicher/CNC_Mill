@@ -684,7 +684,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="CNC Mill" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
@@ -754,13 +754,14 @@
             </objects>
             <point key="canvasLocation" x="241" y="971"/>
         </scene>
-        <!--Device Tab View Controller-->
+        <!--CNC-->
         <scene sceneID="VNp-If-XAe">
             <objects>
-                <tabViewController selectedTabViewItemIndex="0" id="LIf-gm-nAU" customClass="rDeviceTabViewController" customModule="CNC_Mill" customModuleProvider="target" sceneMemberID="viewController">
+                <tabViewController title="CNC" selectedTabViewItemIndex="2" id="LIf-gm-nAU" customClass="rDeviceTabViewController" customModule="CNC_Mill" customModuleProvider="target" sceneMemberID="viewController">
                     <tabViewItems>
-                        <tabViewItem identifier="" id="bWy-JH-9G9"/>
-                        <tabViewItem identifier="" id="2qP-ce-DFD"/>
+                        <tabViewItem identifier="pcb" id="bWy-JH-9G9"/>
+                        <tabViewItem identifier="joystick" id="2qP-ce-DFD"/>
+                        <tabViewItem identifier="einstellungen" id="Shm-TQ-hl8"/>
                     </tabViewItems>
                     <tabView key="tabView" type="noTabsNoBorder" id="aeL-ad-qNM">
                         <rect key="frame" x="-85" y="0.0" width="686" height="423"/>
@@ -774,6 +775,7 @@
                         <outlet property="tabView" destination="aeL-ad-qNM" id="R2i-7D-Z4W"/>
                         <segue destination="wFL-7s-Z8p" kind="relationship" relationship="tabItems" id="nC3-tM-et2"/>
                         <segue destination="0FF-Ac-6b9" kind="relationship" relationship="tabItems" id="w6q-hR-KHe"/>
+                        <segue destination="3ii-fs-Tyr" kind="relationship" relationship="tabItems" id="iXQ-BK-eHX"/>
                     </connections>
                 </tabViewController>
                 <customObject id="QLf-FM-4wy" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -999,18 +1001,40 @@
             </objects>
             <point key="canvasLocation" x="187" y="2514.5"/>
         </scene>
-        <!--View Controller-->
+        <!--Joystick-->
         <scene sceneID="vOC-B7-MU2">
             <objects>
-                <viewController id="0FF-Ac-6b9" sceneMemberID="viewController">
-                    <view key="view" id="cop-q1-gZA">
+                <viewController title="Joystick" id="0FF-Ac-6b9" customClass="rJoystick" customModule="CNC_Mill" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" identifier="joystick" id="cop-q1-gZA">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView identifier="1000" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uQO-x6-rMF" customClass="rJoystickView" customModule="CNC_Mill" customModuleProvider="target">
+                                <rect key="frame" x="93" y="71" width="270" height="181"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </customView>
+                        </subviews>
                     </view>
+                    <connections>
+                        <outlet property="Joystickfeld" destination="uQO-x6-rMF" id="cC2-ky-F0x"/>
+                    </connections>
                 </viewController>
                 <customObject id="Wxk-we-ebV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-617" y="2128"/>
+        </scene>
+        <!--Einstellungen-->
+        <scene sceneID="9HI-cu-3L2">
+            <objects>
+                <viewController title="Einstellungen" id="3ii-fs-Tyr" sceneMemberID="viewController">
+                    <view key="view" id="CCj-Dq-HeE">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="iXW-jt-l5i" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="342" y="1746"/>
         </scene>
     </scenes>
     <resources>

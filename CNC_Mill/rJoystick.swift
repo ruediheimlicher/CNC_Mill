@@ -8,10 +8,10 @@
 
 import Cocoa
 
-let USBATTACHED:Int     =      5
-let USBREMOVED:Int      =      6
+//let USBATTACHED:Int     =      5
+//let USBREMOVED:Int      =      6
 
-class rPCB: rViewController 
+class rJoystick: rViewController 
 {
    
    
@@ -170,7 +170,7 @@ class rPCB: rViewController
    
    override func viewDidAppear() 
    {
-      print ("PCB viewDidAppear selectedDevice: \(selectedDevice)")
+      print ("Joystick viewDidAppear selectedDevice: \(selectedDevice)")
    }
    
    override func viewDidLoad() 
@@ -181,9 +181,9 @@ class rPCB: rViewController
       //let view = view[0] as! NSView
       self.view.wantsLayer = true
       
-      hintergrundfarbe  = NSColor.init(red: 0.15, 
+      hintergrundfarbe  = NSColor.init(red: 0.35, 
                                     green: 0.15, 
-                                    blue: 0.85, 
+                                    blue: 0.35, 
                                     alpha: 0.25)
       
       self.view.layer?.backgroundColor = hintergrundfarbe.cgColor
@@ -200,7 +200,7 @@ class rPCB: rViewController
       // Do any additional setup after loading the view.
       let newdataname = Notification.Name("newdata")
       NotificationCenter.default.addObserver(self, selector:#selector(newDataAktion(_:)),name:newdataname,object:nil)
- //     NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
+      NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
       NotificationCenter.default.addObserver(self, selector:#selector(usbstatusAktion(_:)),name:NSNotification.Name(rawValue: "usb_status"),object:nil)
       NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
 
@@ -1524,12 +1524,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
  // MARK: joystick
    @objc override func joystickAktion(_ notification:Notification) 
    {
-      print("PCB joystickAktion usbstatus:\t \(usbstatus) selectedDevice: \(selectedDevice) ident: \(self.view.identifier)")
+      print("Joystick joystickAktion usbstatus:\t \(usbstatus) selectedDevice: \(selectedDevice) ident: \(self.view.identifier)")
       let sel = NSUserInterfaceItemIdentifier.init(selectedDevice)
      // if (selectedDevice == self.view.identifier)
       if (sel == self.view.identifier)
       {
-        print("PCB joystickAktion passt")
+        print("Joystick joystickAktion passt")
          
          let info = notification.userInfo
          let punkt:CGPoint = info?["punkt"] as! CGPoint
@@ -1538,8 +1538,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
   //       print("Basis joystickAktion:\t \(punkt)")
          print("x: \(punkt.x) y: \(punkt.y) index: \(wegindex) first: \(first)")
          
-         teensy.write_byteArray[0] = SET_ROB // Code 
+         var  achse0:UInt16 = 0
+          var  achse1:UInt16 = 0
+          var  achse2:UInt16 = 0
          
+         teensy.write_byteArray[0] = SET_ROB // Code 
+         /*
          // Horizontal Pot0
          let w = Double(Joystickfeld.bounds.size.width) // Breite Joystickfeld
          let faktorw:Double = (Pot0_Slider.maxValue - Pot0_Slider.minValue) / w
@@ -1579,7 +1583,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          let achse2 =  UInt16(Double(z*faktorz) * FAKTOR2)
          teensy.write_byteArray[ACHSE2_BYTE_H] = UInt8((achse2 & 0xFF00) >> 8) // hb
          teensy.write_byteArray[ACHSE2_BYTE_L] = UInt8((achse2 & 0x00FF) & 0xFF) // lb
-         
+         */
          
          let message:String = info?["message"] as! String
          if ((message == "mousedown") && (first >= 0))// Polynom ohne mousedragged
@@ -1608,9 +1612,9 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
                print("joystickAktion lastx: \(lastx) nextx: \(nextx) lasty: \(lasty) nexty: \(nexty)")
                
                let hyp:Double = (sqrt((Double(hypx + hypy + hypz))))
-               
-               let anzahlsteps = hyp/schrittweiteFeld.doubleValue
-               print("Basis joystickAktion hyp: \(hyp) anzahlsteps: \(anzahlsteps) ")
+               var anzahlsteps:UInt16 = 0
+  //             let anzahlsteps = hyp/schrittweiteFeld.doubleValue
+  //             print("Basis joystickAktion hyp: \(hyp) anzahlsteps: \(anzahlsteps) ")
                
                teensy.write_byteArray[HYP_BYTE_H] = UInt8((Int(hyp) & 0xFF00) >> 8) // hb
                teensy.write_byteArray[HYP_BYTE_L] = UInt8((Int(hyp) & 0x00FF) & 0xFF) // lb
@@ -1621,7 +1625,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
                teensy.write_byteArray[INDEX_BYTE_H] = UInt8(((wegindex-1) & 0xFF00) >> 8) // hb // hb // Start, Index 0
                teensy.write_byteArray[INDEX_BYTE_L] = UInt8(((wegindex-1) & 0x00FF) & 0xFF) // lb
                
-               print("Basis joystickAktion hypx: \(hypx) hypy: \(hypy) hypz: \(hypz) hyp: \(hyp)")
+               print("Joystick joystickAktion hypx: \(hypx) hypy: \(hypy) hypz: \(hypz) hyp: \(hyp)")
                
             }
             else
@@ -1645,7 +1649,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       }
       else
       {
-         print("PCB joystickAktion passt nicht")
+         print("Joystick joystickAktion passt nicht")
       }
       
    }

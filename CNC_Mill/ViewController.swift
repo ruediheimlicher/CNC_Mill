@@ -158,6 +158,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    
    @IBOutlet weak var USB_OK_Feld: NSImageView!
    
+   @IBOutlet weak var Joystickfeld: rJoystickView!
   
    
    override func viewDidLoad() 
@@ -184,10 +185,10 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
   //    NotificationCenter.default.removeObserver(self, name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
    //   NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
 
-      /*
+      
       NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
       NotificationCenter.default.addObserver(self, selector:#selector(tabviewAktion(_:)),name:NSNotification.Name(rawValue: "tabview"),object:nil)
-*/
+       
       // Do any additional setup after loading the view.
    
      // USB_OK_Feld.image = notokimage
@@ -210,6 +211,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       {
          USB_OK_Feld.image = notokimage
       }
+      
       
    }
    
@@ -391,11 +393,12 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       let status:Int = info!["attach"] as! Int // 
       print("viewController usbattachAktion:\t \(status)")
      
+      /*
       if status == USBREMOVED
       {
          USB_OK_Feld.image = notokimage
       }
-     
+     */
       
    }
 
@@ -410,7 +413,14 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       //print("x: \(punkt.x) y: \(punkt.y) index: \(wegindex) first: \(first)")
    }
    
-   
+   @objc func tabviewAktion(_ notification:Notification) 
+   {
+      let info = notification.userInfo
+      let ident:String = info?["ident"] as! String  // 
+      //print("Basis tabviewAktion:\t \(ident)")
+      selectedDevice = ident
+   }
+
   
    @objc func newDataAktion(_ notification:Notification) 
    {
@@ -1060,7 +1070,6 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    @IBOutlet weak var Pot3_Stepper_H_Feld: NSTextField!
    @IBOutlet weak var Pot3_Inverse_Check: NSButton!
    
-   @IBOutlet weak var Joystickfeld: rPlatteView!
    
 
 }
