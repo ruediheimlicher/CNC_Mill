@@ -1070,6 +1070,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    @IBOutlet weak var Pot3_Stepper_H_Feld: NSTextField!
    @IBOutlet weak var Pot3_Inverse_Check: NSButton!
    
+   @IBOutlet weak var Joystickfeld: rPlatteView!
    
 
 }

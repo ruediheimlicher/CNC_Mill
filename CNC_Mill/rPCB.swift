@@ -1524,7 +1524,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
  // MARK: joystick
    @objc override func joystickAktion(_ notification:Notification) 
    {
-      print("PCB joystickAktion usbstatus:\t \(usbstatus) selectedDevice: \(selectedDevice) ident: \(self.view.identifier)")
+  //    print("PCB joystickAktion usbstatus:\t \(usbstatus) selectedDevice: \(selectedDevice) ident: \(self.view.identifier)")
       let sel = NSUserInterfaceItemIdentifier.init(selectedDevice)
      // if (selectedDevice == self.view.identifier)
       if (sel == self.view.identifier)
@@ -1645,7 +1645,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       }
       else
       {
-         print("PCB joystickAktion passt nicht")
+  //       print("PCB joystickAktion passt nicht")
       }
       
    }

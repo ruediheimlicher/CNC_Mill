@@ -11,6 +11,13 @@ import Cocoa
 //let USBATTACHED:Int     =      5
 //let USBREMOVED:Int      =      6
 
+
+
+
+
+
+
+
 class rJoystick: rViewController 
 {
    
