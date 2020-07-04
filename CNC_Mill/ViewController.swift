@@ -29,15 +29,15 @@ struct position
    var z:UInt16 = 0
    
 }
-//MARK: rServoPfad
-class rServoPfad 
+//MARK: rSchnittPfad
+class rSchnittPfad 
 {
    var pfadarray = [position]()
    var delta = 1 // Abstand der Schritte
    required init?() 
    {
       //super.init()
-      //Swift.print("servoPfad init")
+      //Swift.print("schnittPfad init")
       var startposition = position()
       startposition.x = 0
       startposition.y = 0
@@ -130,7 +130,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    var hintergrundfarbe = NSColor()
    var formatter = NumberFormatter()
    var selectedDevice:String = ""
-   var servoPfad = rServoPfad()
+   var schnittPfad = rSchnittPfad()
    var usbstatus: Int32 = 0
    
    
@@ -186,7 +186,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    //   NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
 
       
-      NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
+//      NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
       NotificationCenter.default.addObserver(self, selector:#selector(tabviewAktion(_:)),name:NSNotification.Name(rawValue: "tabview"),object:nil)
        
       // Do any additional setup after loading the view.
@@ -362,7 +362,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
   //       print(sorted)
          
          
-      //   servoPfad?.addSVG_Pfadarray(newPfad: circlearray)
+      //   schnittPfad?.addSVG_Pfadarray(newPfad: circlearray)
       //   Plattefeld.setWeg(newWeg: circlearray)
          
       }
@@ -706,7 +706,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       teensy.write_byteArray[INDEX_BYTE_H] = 0 // hb
       teensy.write_byteArray[INDEX_BYTE_L] = 0 // lb
       Joystickfeld.clearWeg()
-      servoPfad?.clearPfadarray()
+      schnittPfad?.clearPfadarray()
       
       if (usbstatus > 0)
       {
@@ -1070,7 +1070,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    @IBOutlet weak var Pot3_Stepper_H_Feld: NSTextField!
    @IBOutlet weak var Pot3_Inverse_Check: NSButton!
    
-   @IBOutlet weak var Joystickfeld: rPlatteView!
+ //  @IBOutlet weak var Joystickfeld: rPlatteView!
    
 
 }

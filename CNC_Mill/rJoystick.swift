@@ -36,7 +36,7 @@ class rJoystick: rViewController
     var Schnittdatenarray = [[UInt8]]()
    
    var mouseistdown:Int = 0
-  // var servoPfad = rServoPfad()
+  // var schnittPfad = rSchnittPfad()
  //  var usbstatus: Int32 = 0
    
  //  var teensy = usb_teensy()
@@ -125,8 +125,8 @@ class rJoystick: rViewController
    var formatter = NumberFormatter()
    
    
-   var achse0_start:UInt16  = ACHSE0_START;
-   var achse0_max:UInt16   = ACHSE0_MAX;
+   var weg0_start:UInt16  = ACHSE0_START;
+   var weg0_max:UInt16   = ACHSE0_MAX;
    
    
    
@@ -151,7 +151,7 @@ class rJoystick: rViewController
    let U_DIVIDER:Double = 9.8
    let ADC_REF:Double = 3.26
    
-   let ACHSE0_BYTE_H = 4
+   let schrittexA = 4
    let ACHSE0_BYTE_L = 5
    
    let ACHSE1_BYTE_H = 6
@@ -212,8 +212,8 @@ class rJoystick: rViewController
       NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
 
       
-      // servoPfad
-      servoPfad?.setStartposition(x: 0x800, y: 0x800, z: 0)
+      // schnittPfad
+      schnittPfad?.setStartposition(x: 0x800, y: 0x800, z: 0)
       
       // Pot 0
       /*
@@ -256,7 +256,7 @@ class rJoystick: rViewController
       Pot3_Stepper_H_Feld.integerValue = Int(Pot3_Slider.maxValue)
       */
       
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8(((ACHSE0_START) & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[schrittexA] = UInt8(((ACHSE0_START) & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8(((ACHSE0_START) & 0x00FF) & 0xFF) // lb
       
       teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8(((ACHSE1_START) & 0xFF00) >> 8) // hb
@@ -786,7 +786,7 @@ class rJoystick: rViewController
          
          
          // circlearray: [[Int]] x,y
-   //      servoPfad?.addSVG_Pfadarray(newPfad: circlearray)
+   //      schnittPfad?.addSVG_Pfadarray(newPfad: circlearray)
          let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
          fahrtweg.integerValue = l
          
@@ -1531,12 +1531,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
  // MARK: joystick
    @objc override func joystickAktion(_ notification:Notification) 
    {
-      print("Joystick joystickAktion usbstatus:\t \(usbstatus) selectedDevice: \(selectedDevice) ident: \(self.view.identifier)")
+//      print("Joystick joystickAktion usbstatus:\t \(usbstatus) selectedDevice: \(selectedDevice) ident: \(self.view.identifier)")
       let sel = NSUserInterfaceItemIdentifier.init(selectedDevice)
      // if (selectedDevice == self.view.identifier)
       if (sel == self.view.identifier)
       {
-        print("Joystick joystickAktion passt")
+ //       print("Joystick joystickAktion passt")
          
          let info = notification.userInfo
          let punkt:CGPoint = info?["punkt"] as! CGPoint
@@ -1545,32 +1545,33 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
   //       print("Basis joystickAktion:\t \(punkt)")
          print("x: \(punkt.x) y: \(punkt.y) index: \(wegindex) first: \(first)")
          
-         var  achse0:UInt16 = 0
-          var  achse1:UInt16 = 0
-          var  achse2:UInt16 = 0
+ //        var  weg0:UInt16 = 0
+ //         var  weg1:UInt16 = 0
+ //         var  achse2:UInt16 = 0
          
          teensy.write_byteArray[0] = SET_ROB // Code 
-         /*
+         
          // Horizontal Pot0
          let w = Double(Joystickfeld.bounds.size.width) // Breite Joystickfeld
-         let faktorw:Double = (Pot0_Slider.maxValue - Pot0_Slider.minValue) / w
+         let faktorw:Double = 1 //(Pot0_Slider.maxValue - Pot0_Slider.minValue) / w
          //      print("w: \(w) faktorw: \(faktorw)")
          var x = Double(punkt.x)
          if (x > w)
          {
             x = w
          }
-         goto_x.integerValue = Int(Double(x*faktorw))
-         joystick_x.integerValue = Int(Double(x*faktorw))
-         goto_x_Stepper.integerValue = Int(Double(x*faktorw))
-         let achse0 = UInt16(Double(x*faktorw) * FAKTOR0)
-         //print("x: \(x) achse0: \(achse0)")
-         teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((achse0 & 0xFF00) >> 8) // hb
-         teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((achse0 & 0x00FF) & 0xFF) // lb
+         
+  //       goto_x.integerValue = Int(Double(x*faktorw))
+   //      joystick_x.integerValue = Int(Double(x*faktorw))
+  //       goto_x_Stepper.integerValue = Int(Double(x*faktorw))
+         let weg0 = UInt16(Double(x*faktorw) *   stepsFeld.doubleValue)
+         //print("x: \(x) weg0: \(weg0)")
+         teensy.write_byteArray[schrittexA] = UInt8((weg0 & 0xFF00) >> 8) // hb
+         teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((weg0 & 0x00FF) & 0xFF) // lb
          
          
          let h = Double(Joystickfeld.bounds.size.height)
-         let faktorh:Double = (Pot1_Slider.maxValue - Pot1_Slider.minValue) / h
+         let faktorh:Double = 1 //(Pot1_Slider.maxValue - Pot1_Slider.minValue) / h
          
          let faktorz = 1
          //     print("h: \(h) faktorh: \(faktorh)")
@@ -1580,40 +1581,42 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             y = h
          }
          let z = 0
-         goto_y.integerValue = Int(Double(y*faktorh))
-         joystick_y.integerValue = Int(Double(y*faktorh))
-         goto_y_Stepper.integerValue = Int(Double(y*faktorh))
-         let achse1 = UInt16(Double(y*faktorh) * FAKTOR1)
-         //print("y: \(y) achse1: \(achse1)")
-         teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8((achse1 & 0xFF00) >> 8) // hb
-         teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8((achse1 & 0x00FF) & 0xFF) // lb
-         let achse2 =  UInt16(Double(z*faktorz) * FAKTOR2)
-         teensy.write_byteArray[ACHSE2_BYTE_H] = UInt8((achse2 & 0xFF00) >> 8) // hb
-         teensy.write_byteArray[ACHSE2_BYTE_L] = UInt8((achse2 & 0x00FF) & 0xFF) // lb
-         */
+  //       goto_y.integerValue = Int(Double(y*faktorh))
+  //       joystick_y.integerValue = Int(Double(y*faktorh))
+ //        goto_y_Stepper.integerValue = Int(Double(y*faktorh))
+       //  let weg1 = UInt16(Double(y*faktorh) * FAKTOR1)
+          let weg1 = UInt16(Double(y*faktorh) * stepsFeld.doubleValue)
+         //print("y: \(y) weg1: \(weg1)")
+         teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8((weg1 & 0xFF00) >> 8) // hb
+         teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8((weg1 & 0x00FF) & 0xFF) // lb
+         
+         let weg2 =  UInt16(Double(z*faktorz)  * stepsFeld.doubleValue)
+         teensy.write_byteArray[ACHSE2_BYTE_H] = UInt8((weg2 & 0xFF00) >> 8) // hb
+         teensy.write_byteArray[ACHSE2_BYTE_L] = UInt8((weg2 & 0x00FF) & 0xFF) // lb
+         
          
          let message:String = info?["message"] as! String
          if ((message == "mousedown") && (first >= 0))// Polynom ohne mousedragged
          {
             teensy.write_byteArray[0] = SET_RING
-            let anz = servoPfad?.anzahlPunkte()
+            let anz = schnittPfad?.anzahlPunkte()
             if (wegindex > 1)
             {
                print("")
-               print("basis joystickAktion cont achse0: \(achse0) achse1: \(achse1)  achse2: \(achse2) anz: \(String(describing: anz)) wegindex: \(wegindex)")
+               print("basis joystickAktion cont weg0: \(weg0) weg1: \(weg1)  weg2: \(weg2) anz: \(String(describing: anz)) wegindex: \(wegindex)")
                
-               let lastposition = servoPfad?.pfadarray.last
+               let lastposition = schnittPfad?.pfadarray.last
                
                let lastx:Int = Int(lastposition!.x)
-               let nextx:Int = Int(achse0)
+               let nextx:Int = Int(weg0)
                let hypx:Int = (nextx - lastx) * (nextx - lastx)
                
                let lasty:Int = Int(lastposition!.y)
-               let nexty:Int = Int(achse1)
+               let nexty:Int = Int(weg1)
                let hypy:Int = (nexty - lasty) * (nexty - lasty)
                
                let lastz:Int = Int(lastposition!.z)
-               let nextz:Int = Int(achse2)
+               let nextz:Int = Int(weg2)
                let hypz:Int = (nextz - lastz) * (nextz - lastz)
                
                print("joystickAktion lastx: \(lastx) nextx: \(nextx) lasty: \(lasty) nexty: \(nexty)")
@@ -1637,7 +1640,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             }
             else
             {
-               print("basis joystickAktion start achse0: \(achse0) achse1: \(achse1)  achse2: \(achse2) anz: \(anz) wegindex: \(wegindex)")
+               print("basis joystickAktion start weg0: \(weg0) weg1: \(weg1)  weg2: \(weg2) anz: \(anz) wegindex: \(wegindex)")
                teensy.write_byteArray[HYP_BYTE_H] = 0 // hb // Start, keine Hypo
                teensy.write_byteArray[HYP_BYTE_L] = 0 // lb
                teensy.write_byteArray[INDEX_BYTE_H] = 0 // hb // Start, Index 0
@@ -1645,7 +1648,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
                
             }
             
-            servoPfad?.addPosition(newx: achse0, newy: achse1, newz: 0)
+            schnittPfad?.addPosition(newx: weg0, newy: weg1, newz: 0)
          }
          
          if (usbstatus > 0)
@@ -1858,7 +1861,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       Pot0_Stepper_H.integerValue  = Int(sender.maxValue) // Stepper max setzen
       Pot0_Stepper_H_Feld.integerValue = Int(sender.maxValue)
       
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((intpos & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[schrittexA] = UInt8((intpos & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((intpos & 0x00FF) & 0xFF) // lb
       
       if (usbstatus > 0)
@@ -1908,7 +1911,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       self.Pot0_Slider.doubleValue = Pot0_wert //sender.doubleValue
       self.Pot0_Stepper_L.doubleValue = Pot0_wert//sender.doubleValue
       
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8(Pot0_LO)
+      teensy.write_byteArray[schrittexA] = UInt8(Pot0_LO)
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8(Pot0_HI)
       
       if (usbstatus > 0)
@@ -2001,7 +2004,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       // achse 0
       let intposx = UInt16(x * FAKTOR0)
       goto_x_Stepper.integerValue = Int(x) //Int(intposx)
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((intposx & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[schrittexA] = UInt8((intposx & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((intposx & 0x00FF) & 0xFF) // lb
       
       // Achse 1
@@ -2024,7 +2027,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       let intpos = sender.integerValue 
       goto_x.integerValue = intpos
       let intposx = UInt16(Double(intpos ) * FAKTOR0)
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((intposx & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[schrittexA] = UInt8((intposx & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((intposx & 0x00FF) & 0xFF) // lb
       
       let w = Double(Joystickfeld.bounds.size.width) // Breite Joystickfeld
@@ -2075,7 +2078,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    {
       print("report_clear_Ring ")
       teensy.write_byteArray[0] = CLEAR_RING
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8(((ACHSE0_START) & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[schrittexA] = UInt8(((ACHSE0_START) & 0xFF00) >> 8) // hb
       teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8(((ACHSE0_START) & 0x00FF) & 0xFF) // lb
       
       teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8(((ACHSE1_START) & 0xFF00) >> 8) // hb
@@ -2090,7 +2093,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       teensy.write_byteArray[INDEX_BYTE_H] = 0 // hb
       teensy.write_byteArray[INDEX_BYTE_L] = 0 // lb
       Joystickfeld.clearWeg()
-      servoPfad?.clearPfadarray()
+      schnittPfad?.clearPfadarray()
       
       if (usbstatus > 0)
       {
