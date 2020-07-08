@@ -76,3 +76,8 @@ let DREHKNOPF_FAKTOR:Double = 18.1 // Anpassen auf Mitte bei 3272
 //let ACHSE1_START:Double = 600
 //let ACHSE2_START:Double = 1800
 //let ACHSE2_MAX:Double = 300
+
+
+let DEVICE_MILL:UInt8 =  1
+let DEVICE_JOY:UInt8 =  2
+let DEVICE_PCB:UInt8 =  3

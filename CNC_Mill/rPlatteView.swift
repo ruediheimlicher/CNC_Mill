@@ -244,7 +244,7 @@ class rPlatteView: NSView
       //let ident  = self.identifier as! String
       let ident  = self.identifier
       
-      Swift.print("left mouse ident: \(ident)")
+      //Swift.print("left mouse ident: \(ident)")
       var identstring = ""
       if let rawident:String = ident?.rawValue
       {

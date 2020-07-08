@@ -29,6 +29,7 @@ struct position
    var z:UInt16 = 0
    
 }
+
 //MARK: rSchnittPfad
 class rSchnittPfad 
 {
@@ -402,7 +403,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       
    }
 
-   
+    
    @objc func joystickAktion(_ notification:Notification) 
    {
       let info = notification.userInfo
@@ -543,8 +544,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       Pot0_Stepper_H.integerValue  = Int(sender.maxValue) // Stepper max setzen
       Pot0_Stepper_H_Feld.integerValue = Int(sender.maxValue)
       
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((intpos & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((intpos & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[SCHRITTEX_A] = UInt8((intpos & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[SCHRITTEX_B] = UInt8((intpos & 0x00FF) & 0xFF) // lb
       
       if (usbstatus > 0)
       {
@@ -578,14 +579,14 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       // achse 0
       let intposx = UInt16(x * FAKTOR0)
       goto_x_Stepper.integerValue = Int(x) //Int(intposx)
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((intposx & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((intposx & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[SCHRITTEX_A] = UInt8((intposx & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[SCHRITTEX_B] = UInt8((intposx & 0x00FF) & 0xFF) // lb
       
       // Achse 1
       let intposy = UInt16(y * FAKTOR1)
       goto_y_Stepper.integerValue = Int(y)
-      teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8((intposy & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8((intposy & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[DELAYX_A] = UInt8((intposy & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[DELAYX_B] = UInt8((intposy & 0x00FF) & 0xFF) // lb
       
       if (usbstatus > 0)
       {
@@ -636,8 +637,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       self.Pot0_Slider.doubleValue = Pot0_wert //sender.doubleValue
       self.Pot0_Stepper_L.doubleValue = Pot0_wert//sender.doubleValue
       
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8(Pot0_LO)
-      teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8(Pot0_HI)
+      teensy.write_byteArray[SCHRITTEX_A] = UInt8(Pot0_LO)
+      teensy.write_byteArray[SCHRITTEX_B] = UInt8(Pot0_HI)
       
       if (usbstatus > 0)
       {
@@ -667,8 +668,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       Pot2_Stepper_H.integerValue  = Int(sender.maxValue) // Stepper max setzen
       Pot2_Stepper_H_Feld.integerValue = Int(sender.maxValue)
       
-      teensy.write_byteArray[ACHSE3_BYTE_H] = UInt8((intpos & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE3_BYTE_L] = UInt8((intpos & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[DELAYY_A] = UInt8((intpos & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[DELAYY_B] = UInt8((intpos & 0x00FF) & 0xFF) // lb
       
       if (usbstatus > 0)
       {
@@ -691,20 +692,20 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    {
       print("report_clear_Ring ")
       teensy.write_byteArray[0] = CLEAR_RING
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8(((ACHSE0_START) & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8(((ACHSE0_START) & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[SCHRITTEX_A] = UInt8(((ACHSE0_START) & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[SCHRITTEX_B] = UInt8(((ACHSE0_START) & 0x00FF) & 0xFF) // lb
       
-      teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8(((ACHSE1_START) & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8(((ACHSE1_START) & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[DELAYX_A] = UInt8(((ACHSE1_START) & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[DELAYX_B] = UInt8(((ACHSE1_START) & 0x00FF) & 0xFF) // lb
       
-      teensy.write_byteArray[ACHSE2_BYTE_H] = UInt8(((ACHSE2_START) & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE2_BYTE_L] = UInt8(((ACHSE2_START) & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[SCHRITTEY_A] = UInt8(((ACHSE2_START) & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[SCHRITTEY_B] = UInt8(((ACHSE2_START) & 0x00FF) & 0xFF) // lb
       
-      teensy.write_byteArray[HYP_BYTE_H] = 0 // hb
-      teensy.write_byteArray[HYP_BYTE_L] = 0 // lb
+      teensy.write_byteArray[schrittezA] = 0 // hb
+      teensy.write_byteArray[schrittezB] = 0 // lb
       
-      teensy.write_byteArray[INDEX_BYTE_H] = 0 // hb
-      teensy.write_byteArray[INDEX_BYTE_L] = 0 // lb
+      teensy.write_byteArray[delayzA] = 0 // hb
+      teensy.write_byteArray[delayzB] = 0 // lb
       Joystickfeld.clearWeg()
       schnittPfad?.clearPfadarray()
       
@@ -722,8 +723,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       let intpos = sender.integerValue 
       goto_x.integerValue = intpos
       let intposx = UInt16(Double(intpos ) * FAKTOR0)
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((intposx & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((intposx & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[SCHRITTEX_A] = UInt8((intposx & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[SCHRITTEX_B] = UInt8((intposx & 0x00FF) & 0xFF) // lb
       
       let w = Double(Joystickfeld.bounds.size.width) // Breite Joystickfeld
       let invertfaktorw:Double = Double(w / (Pot0_Slider.maxValue - Pot0_Slider.minValue)) 
@@ -745,8 +746,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       let intpos = sender.integerValue 
       goto_y.integerValue = intpos
       let intposy = UInt16(Double(intpos ) * FAKTOR0)
-      teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8((intposy & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8((intposy & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[DELAYX_A] = UInt8((intposy & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[DELAYX_B] = UInt8((intposy & 0x00FF) & 0xFF) // lb
       
       let h = Double(Joystickfeld.bounds.size.width) // Breite Joystickfeld
       let invertfaktorh:Double = Double(h / (Pot1_Slider.maxValue - Pot1_Slider.minValue)) 
@@ -781,8 +782,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       
       
       
-      teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8((intpos & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8((intpos & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[DELAYX_A] = UInt8((intpos & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[DELAYX_B] = UInt8((intpos & 0x00FF) & 0xFF) // lb
       
       if (usbstatus > 0)
       {
@@ -828,8 +829,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       
       self.Pot1_Stepper_H.doubleValue = sender.doubleValue
       
-      teensy.write_byteArray[ACHSE1_BYTE_H] = UInt8((intpos & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE1_BYTE_L] = UInt8((intpos & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[DELAYX_A] = UInt8((intpos & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[DELAYX_B] = UInt8((intpos & 0x00FF) & 0xFF) // lb
       
       if (usbstatus > 0)
       {
@@ -847,8 +848,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       let intpos = UInt16(Double(ACHSE0_START) * FAKTOR0)
       let startwert = UInt16(Double(ACHSE0_START) * FAKTOR0)
       
-      teensy.write_byteArray[ACHSE0_BYTE_H] = UInt8((startwert & 0xFF00) >> 8) // hb
-      teensy.write_byteArray[ACHSE0_BYTE_L] = UInt8((startwert & 0x00FF) & 0xFF) // lb
+      teensy.write_byteArray[SCHRITTEX_A] = UInt8((startwert & 0xFF00) >> 8) // hb
+      teensy.write_byteArray[SCHRITTEX_B] = UInt8((startwert & 0x00FF) & 0xFF) // lb
       if (usbstatus > 0)
       {
          let senderfolg = teensy.send_USB()
@@ -919,7 +920,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
          print("readUSB Stepperposition = 0")
       }
       
-      result = rawhid_recv(0, &buffer, 32, 50);
+      result = rawhid_recv(0, &buffer, 64, 50);
       let  dataRead:Data = Data(bytes:buffer);
       if (dataRead != lastDataRead)
       {
@@ -967,35 +968,39 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    let U_DIVIDER:Double = 9.8
    let ADC_REF:Double = 3.26
    
-   let ACHSE0_BYTE_H = 4
-   let ACHSE0_BYTE_L = 5
-   let ACHSE0_START_BYTE_H = 6
-   let ACHSE0_START_BYTE_L = 7
+   let SCHRITTEX_A = 0
+   let SCHRITTEX_B = 1
+   let SCHRITTEX_C = 2
+   let SCHRITTEX_D = 3
    
    
-   let ACHSE1_BYTE_H = 11
-   let ACHSE1_BYTE_L = 12
-   let ACHSE1_START_BYTE_H = 13
-   let ACHSE1_START_BYTE_L = 14
+   let DELAYX_A = 4
+   let DELAYX_B = 5
+   let DELAYX_C = 6
+   let DELAYX_D = 7
    
-   let ACHSE2_BYTE_H = 17
-   let ACHSE2_BYTE_L = 18
-   let ACHSE2_START_BYTE_H = 19
-   let ACHSE2_START_BYTE_L = 20
+   let SCHRITTEY_A = 8
+   let SCHRITTEY_B = 9
+   let SCHRITTEY_C = 10
+   let SCHRITTEY_D = 11
    
-   let ACHSE3_BYTE_H = 23
-   let ACHSE3_BYTE_L = 24
-   let ACHSE3_START_BYTE_H = 25
-   let ACHSE3_START_BYTE_L = 26
+   let DELAYY_A = 12
+   let DELAYY_B = 13
+   let DELAYY_C = 14
+   let DELAYY_D = 15
+
+   let schrittezA = 8
+   let schrittezB = 9
+   let schrittezC = 10
+   let schrittezD = 11
    
-   let HYP_BYTE_H = 32 // Hypotenuse
-   let HYP_BYTE_L = 33
+   let delayzA = 12
+   let delayzB = 13
+   let delayzC = 14
+   let delayzD = 15
    
-   let INDEX_BYTE_H = 34
-   let INDEX_BYTE_L = 35
-   
-   let STEPS_BYTE_H = 36
-   let STEPS_BYTE_L = 37
+   let code = 24
+   let lage = 0
    
    
    

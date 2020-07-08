@@ -283,22 +283,22 @@ open class usb_teensy: NSObject
    
    @objc open func cont_read_USB(_ timer: Timer)
    {
-     // entspricht readUSB in USB_Stepper
+      // entspricht readUSB in USB_Stepper
       
       //print("*cont_read_USB read_OK: \(read_OK)")
       if (read_OK).boolValue
       {
          //var tempbyteArray = [UInt8](count: 32, repeatedValue: 0x00)
-        //read_byteArray[0]  = 0
-      var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
-      let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 50)
-      if (result == 0)
-      {
-         return;
+         //read_byteArray[0]  = 0
+         var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
+         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 50)
+         if (result == 0)
+         {
+            return;
          }
          read_byteArray = readarray
          let usbData = Data(bytes:read_byteArray)
-          
+         
          // var timerdic: [String: Int]
          var i = 0
          
@@ -306,7 +306,7 @@ open class usb_teensy: NSObject
          {
             if var count:Int = dic["count"] as? Int 
             {
-  //             print("*cont_read_USB usb-count von timer: \(count)")
+               //             print("*cont_read_USB usb-count von timer: \(count)")
                count = count + 1
                dic["count"] = count
                
@@ -327,24 +327,24 @@ open class usb_teensy: NSObject
             
             var taskcode = read_byteArray[0]
             print("+++ cont_read_USB in Timer codehex: \(codehex)")
-
+            
             /*
-            if taskcode == 0xD0
-            {
-                if timer.isValid == true
-                {
-                  print("+++ cont_read_USB Timer invalidate")
-                  timer.invalidate()
-               }
-            }
- */           
+             if taskcode == 0xD0
+             {
+             if timer.isValid == true
+             {
+             print("+++ cont_read_USB Timer invalidate")
+             timer.invalidate()
+             }
+             }
+             */           
             /*
-            for  i in 0...16
-            {
-               print(" \(read_byteArray[i])")
-            }
+             for  i in 0...16
+             {
+             print(" \(read_byteArray[i])")
+             }
              print("\n")
-         */   
+             */   
             var home:Int = 0 // HALT-Anweisung
             if timer.isValid == true
             {
@@ -354,7 +354,7 @@ open class usb_teensy: NSObject
                }
             }
             
-             
+            
             // http://dev.iachieved.it/iachievedit/notifications-and-userinfo-with-swift-3-0/
             let nc = NotificationCenter.default           
             nc.post(name:Notification.Name(rawValue:"newdata"),
@@ -365,7 +365,7 @@ open class usb_teensy: NSObject
          {
             //new_Data = false
             datafalsecounter += 1
-        //    print("--- \(read_byteArray[0])\t\(datafalsecounter)")
+            //    print("--- \(read_byteArray[0])\t\(datafalsecounter)")
          }
       }
       else
@@ -409,7 +409,7 @@ open class usb_teensy: NSObject
    open func rep_read_USB(_ inTimer: Timer)
    {
       var result:Int32  = 0;
-      var reportSize:Int = 32;   
+      var reportSize:Int = 64;   
       var buffer = [UInt8]();
       result = rawhid_recv(0, &buffer, 64, 50);
       
