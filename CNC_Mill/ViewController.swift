@@ -226,9 +226,9 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    func windowWillClose(_ aNotification: Notification) {
       print("CNC_Mill windowWillClose")
       let nc = NotificationCenter.default
-      nc.post(name:Notification.Name(rawValue:"beenden"),
-              object: nil,
-              userInfo: nil)
+  //    nc.post(name:Notification.Name(rawValue:"beenden"),
+  //            object: nil,
+  //            userInfo: nil)
       beenden()
    }
 

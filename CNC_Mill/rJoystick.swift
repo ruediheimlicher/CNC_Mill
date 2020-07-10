@@ -270,7 +270,7 @@ class rJoystick: rViewController
 //      print("wegarray: \(wegarray)")
 
    }
-   
+ 
  /*  
    func openFile() -> URL? 
    { 
@@ -279,6 +279,7 @@ class rJoystick: rViewController
       return myFileDialog.url 
    }  
    */
+ 
    
    func sortDicArray_opt(origDicArray:[[String:Int]], key0:String, key1: String, order:Bool) -> [[String:Int]]
    {
@@ -1454,8 +1455,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       vektor.append(sxB)
       vektor.append(sxC)
       vektor.append(sxD)
-      let dx:Double = (zeit / Double((sxInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
       
+      let dx:Double = (zeit / Double((sxInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
       
       let dxIntround = round(dx)
       var dxInt = 0
@@ -1464,23 +1465,40 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          // print("delayxInt OK")
          dxInt = Int(dxIntround)
       }
-      print("Fehlerkorr X")
-      print("sxInt: \(sxInt) dx: \(dx) dxInt: \(dxInt)")
-      let kontrolledoublex = Int(Double(sxInt) * dx)
-      let kontrolleintx = sxInt * dxInt
-      let diffx = Int(kontrolledoublex) - kontrolleintx
-      print("kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
-      let korrekturintervallx = kontrolleintx / diffx
-      print("korrekturintervallx: \(korrekturintervallx) \n")
-      
       let dxA = UInt8(dxInt & 0x000000FF)
       let dxB = UInt8((dxInt & 0x0000FF00) >> 8)
-      let dxC = UInt8((dxInt & 0x00FF0000) >> 16)
-      let dxD = UInt8((dxInt & 0xFF000000) >> 24)
       vektor.append(dxA)
       vektor.append(dxB)
-      vektor.append(dxC)
-      vektor.append(dxD)
+      
+      print("Fehlerkorrektur X")
+      
+      let vorzeichenx = (sxInt & 0x80000000)
+
+      print("vorzeichenx: \(vorzeichenx)")
+      
+      print("sxInt: \(sxInt) dx: \(dx) dxInt: \(dxInt)")
+      let kontrolledoublex = Int(Double(sxInt) * dx) //  Kontrolle mit Double-Wert von dx
+      let kontrolleintx = sxInt * dxInt //               Kontrolle mit Int-Wert von dx
+      let diffx = Int(kontrolledoublex) - kontrolleintx // differenz, Rundungsfehler
+      print("kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
+      
+      let intervallx = Double(kontrolleintx / diffx)
+      var korrekturintervallx:Int = Int(round(intervallx)) // Rundungsfehler aufteilen ueber Abschnitt: 
+                                                            // alle korrekturintervallx dexInt incrementieren oder decrementieren
+      print("korrekturintervallx: \(korrekturintervallx)")
+      
+       if korrekturintervallx < 0 // negative korrektur
+       {
+         print("korrekturintervallx negativ")
+         korrekturintervallx *= -1
+         korrekturintervallx |= 0x8000
+       }
+      print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
+
+      vektor.append(UInt8(korrekturintervallx & 0x00FF))
+      vektor.append(UInt8((korrekturintervallx & 0xFF00)>>8))
+
+
       
       let syA = UInt8(syInt & 0x000000FF)
       let syB = UInt8((syInt & 0x0000FF00) >> 8)
@@ -1499,25 +1517,37 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       {
          dyInt = Int(dyIntround)
       }
+      let dyA = UInt8(dyInt & 0x000000FF)
+      let dyB = UInt8((dyInt & 0x0000FF00) >> 8)
+      vektor.append(dyA)
+      vektor.append(dyB)
+
       
       print("Fehlerkorr Y")
+      let vorzeicheny = (syInt & 0x80000000)
+      
+      print("vorzeicheny: \(vorzeicheny)")
+
       print("syInt: \(syInt) dy: \(dy) dyInt: \(dyInt)")
       let kontrolledoubley = Int(Double(syInt) * dy)
       let kontrolleinty = syInt * dyInt
-      let diffy = Int(kontrolledoubley) - kontrolleinty
+      let diffy = (kontrolledoubley) - kontrolleinty
       print("kontrolledoubley: \(kontrolledoubley) kontrolleinty: \(kontrolleinty) diffy: \(diffy)")
-      let korrekturintervally = kontrolleinty / diffy
+      let intervally = Double(kontrolleinty / diffy)
+      var korrekturintervally:Int = Int(round(intervally))
       print("korrekturintervally: \(korrekturintervally) \n")
 
       
-      let dyA = UInt8(dyInt & 0x000000FF)
-      let dyB = UInt8((dyInt & 0x0000FF00) >> 8)
-      let dyC = UInt8((dyInt & 0x00FF0000) >> 16)
-      let dyD = UInt8((dyInt & 0xFF000000) >> 24)
-      vektor.append(dyA)
-      vektor.append(dyB)
-      vektor.append(dyC)
-      vektor.append(dyD)
+      if korrekturintervally < 0 // negative korrektur
+      {
+         print("korrekturintervally negativ")
+         korrekturintervally *= -1
+         korrekturintervally |= 0x8000
+      }
+      print("korrekturintervally mit Vorzeichenkorr: \(korrekturintervally) \n")
+      
+      vektor.append(UInt8(korrekturintervally & 0x00FF))
+      vektor.append(UInt8((korrekturintervally & 0xFF00)>>8))
       
       // Motor C Schritte
       vektor.append(0)
@@ -1597,6 +1627,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          schrittexInt = Int(schrittexRound)
          if schrittexInt < 0 // negativer Weg
          {
+            print("schrittexInt negativ")
             schrittexInt *= -1
             schrittexInt |= 0x80000000
          }
@@ -1615,6 +1646,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          schritteyInt = Int(schritteyRound)
          if schritteyInt < 0 // negativer Weg
          {
+            print("schritteyInt negativ")
             schritteyInt *= -1
             schritteyInt |= 0x80000000
          }
