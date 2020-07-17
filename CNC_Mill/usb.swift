@@ -326,7 +326,7 @@ open class usb_teensy: NSObject
             var codehex = String(format:"%02X", read_byteArray[0])
             
             var taskcode = read_byteArray[0]
-            print("+++ cont_read_USB in Timer codehex: \(codehex)")
+            print("\n+++                               cont_read_USB in Timer codehex: \(codehex)")
             
             /*
              if taskcode == 0xD0
@@ -381,7 +381,13 @@ open class usb_teensy: NSObject
       read_OK = false
    }
    
-   
+   open func clear_writearray()
+   {
+      for zeilenindex in stride(from: 0, to: write_byteArray.count, by: 1)
+      {
+         write_byteArray[zeilenindex] = 0
+      }
+   }
    
    open func send_USB()->Int32
    {

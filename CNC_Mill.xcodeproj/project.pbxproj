@@ -18,6 +18,16 @@
 		BD33758A249604A00087C9FF /* CNC_Eingabe.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD337589249604A00087C9FF /* CNC_Eingabe.xib */; };
 		BD337591249604F40087C9FF /* rEinstellungen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD337590249604F40087C9FF /* rEinstellungen.swift */; };
 		BD337593249606240087C9FF /* rJoystickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD337592249606230087C9FF /* rJoystickView.swift */; };
+		BDC357EE24BB2DF4003F20F8 /* pfeil_links_mini.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E524BB2DF2003F20F8 /* pfeil_links_mini.jpg */; };
+		BDC357EF24BB2DF4003F20F8 /* pfeil_up_mini.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E624BB2DF2003F20F8 /* pfeil_up_mini.jpg */; };
+		BDC357F024BB2DF4003F20F8 /* pfeil_rechts.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E724BB2DF2003F20F8 /* pfeil_rechts.jpg */; };
+		BDC357F124BB2DF4003F20F8 /* pfeil_links.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E824BB2DF3003F20F8 /* pfeil_links.jpg */; };
+		BDC357F224BB2DF4003F20F8 /* pfeil_rechts_mini.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E924BB2DF3003F20F8 /* pfeil_rechts_mini.jpg */; };
+		BDC357F324BB2DF4003F20F8 /* pfeil_down_mini.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357EA24BB2DF3003F20F8 /* pfeil_down_mini.jpg */; };
+		BDC357F424BB2DF4003F20F8 /* pfeil_down.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357EB24BB2DF3003F20F8 /* pfeil_down.jpg */; };
+		BDC357F524BB2DF4003F20F8 /* pfeil_up.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357EC24BB2DF3003F20F8 /* pfeil_up.jpg */; };
+		BDC357F624BB2DF4003F20F8 /* home.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357ED24BB2DF4003F20F8 /* home.jpg */; };
+		BDC357F824C099C2003F20F8 /* BBB.txt in Resources */ = {isa = PBXBuildFile; fileRef = BDC357F724C099C2003F20F8 /* BBB.txt */; };
 		BDF6592C2482E2DC009F2E67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF6592B2482E2DC009F2E67 /* AppDelegate.swift */; };
 		BDF6592E2482E2DC009F2E67 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF6592D2482E2DC009F2E67 /* ViewController.swift */; };
 		BDF659302482E2DD009F2E67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BDF6592F2482E2DD009F2E67 /* Assets.xcassets */; };
@@ -46,6 +56,16 @@
 		BD33758C249604B60087C9FF /* CNC_Mill-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CNC_Mill-Bridging-Header.h"; sourceTree = "<group>"; };
 		BD337590249604F40087C9FF /* rEinstellungen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rEinstellungen.swift; sourceTree = "<group>"; };
 		BD337592249606230087C9FF /* rJoystickView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = rJoystickView.swift; path = CNC_Mill/rJoystickView.swift; sourceTree = SOURCE_ROOT; };
+		BDC357E524BB2DF2003F20F8 /* pfeil_links_mini.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_links_mini.jpg; sourceTree = "<group>"; };
+		BDC357E624BB2DF2003F20F8 /* pfeil_up_mini.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_up_mini.jpg; sourceTree = "<group>"; };
+		BDC357E724BB2DF2003F20F8 /* pfeil_rechts.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_rechts.jpg; sourceTree = "<group>"; };
+		BDC357E824BB2DF3003F20F8 /* pfeil_links.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_links.jpg; sourceTree = "<group>"; };
+		BDC357E924BB2DF3003F20F8 /* pfeil_rechts_mini.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_rechts_mini.jpg; sourceTree = "<group>"; };
+		BDC357EA24BB2DF3003F20F8 /* pfeil_down_mini.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_down_mini.jpg; sourceTree = "<group>"; };
+		BDC357EB24BB2DF3003F20F8 /* pfeil_down.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_down.jpg; sourceTree = "<group>"; };
+		BDC357EC24BB2DF3003F20F8 /* pfeil_up.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_up.jpg; sourceTree = "<group>"; };
+		BDC357ED24BB2DF4003F20F8 /* home.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = home.jpg; sourceTree = "<group>"; };
+		BDC357F724C099C2003F20F8 /* BBB.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BBB.txt; sourceTree = "<group>"; };
 		BDF659282482E2DC009F2E67 /* CNC_Mill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CNC_Mill.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDF6592B2482E2DC009F2E67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BDF6592D2482E2DC009F2E67 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -79,6 +99,15 @@
 		BD33757E248D71E10087C9FF /* Bilder */ = {
 			isa = PBXGroup;
 			children = (
+				BDC357ED24BB2DF4003F20F8 /* home.jpg */,
+				BDC357EA24BB2DF3003F20F8 /* pfeil_down_mini.jpg */,
+				BDC357EB24BB2DF3003F20F8 /* pfeil_down.jpg */,
+				BDC357E524BB2DF2003F20F8 /* pfeil_links_mini.jpg */,
+				BDC357E824BB2DF3003F20F8 /* pfeil_links.jpg */,
+				BDC357E924BB2DF3003F20F8 /* pfeil_rechts_mini.jpg */,
+				BDC357E724BB2DF2003F20F8 /* pfeil_rechts.jpg */,
+				BDC357E624BB2DF2003F20F8 /* pfeil_up_mini.jpg */,
+				BDC357EC24BB2DF3003F20F8 /* pfeil_up.jpg */,
 				BD337587248E52BF0087C9FF /* Halt.jpg */,
 				BD337580248D71F30087C9FF /* notok_image.png */,
 				BD33757F248D71F30087C9FF /* notok.png */,
@@ -123,6 +152,7 @@
 				BDF659452483B71F009F2E67 /* usb.swift */,
 				BDF6592B2482E2DC009F2E67 /* AppDelegate.swift */,
 				BDF6592D2482E2DC009F2E67 /* ViewController.swift */,
+				BDC357F724C099C2003F20F8 /* BBB.txt */,
 				BDF6593B2482E2FC009F2E67 /* Code */,
 				BDF6592F2482E2DD009F2E67 /* Assets.xcassets */,
 				BDF659312482E2DD009F2E67 /* Main.storyboard */,
@@ -212,14 +242,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDC357F624BB2DF4003F20F8 /* home.jpg in Resources */,
+				BDC357F424BB2DF4003F20F8 /* pfeil_down.jpg in Resources */,
+				BDC357EF24BB2DF4003F20F8 /* pfeil_up_mini.jpg in Resources */,
+				BDC357F324BB2DF4003F20F8 /* pfeil_down_mini.jpg in Resources */,
+				BDC357F224BB2DF4003F20F8 /* pfeil_rechts_mini.jpg in Resources */,
 				BD337585248D71F30087C9FF /* ok.png in Resources */,
 				BD337583248D71F30087C9FF /* notok.png in Resources */,
+				BDC357F024BB2DF4003F20F8 /* pfeil_rechts.jpg in Resources */,
+				BDC357EE24BB2DF4003F20F8 /* pfeil_links_mini.jpg in Resources */,
+				BDC357F824C099C2003F20F8 /* BBB.txt in Resources */,
 				BDF659302482E2DD009F2E67 /* Assets.xcassets in Resources */,
 				BDF659332482E2DD009F2E67 /* Main.storyboard in Resources */,
 				BD337588248E52BF0087C9FF /* Halt.jpg in Resources */,
 				BD337584248D71F30087C9FF /* notok_image.png in Resources */,
 				BD33758A249604A00087C9FF /* CNC_Eingabe.xib in Resources */,
+				BDC357F124BB2DF4003F20F8 /* pfeil_links.jpg in Resources */,
 				BD337586248D71F30087C9FF /* ok_image.png in Resources */,
+				BDC357F524BB2DF4003F20F8 /* pfeil_up.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

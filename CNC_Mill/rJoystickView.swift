@@ -35,6 +35,10 @@ class rJoystickView: NSView
       achsen.move(to: NSMakePoint(mittex, 0)) // start point
       achsen.line(to: NSMakePoint(mittex, h)) // destination
       achsen.lineWidth = 1  // hair line
+      
+      weg.move(to: NSMakePoint(0, 0))
+//       weg.move(to: NSMakePoint(mittex, mittey))
+      Swift.print("weg anz: \(weg.elementCount)")
       //achsen.stroke()  // draw line(s) in color
       if let joystickident = self.identifier
       {
@@ -93,7 +97,6 @@ class rJoystickView: NSView
    
    override func mouseDown(with theEvent: NSEvent) 
    {
-      
       super.mouseDown(with: theEvent)
       //let ident  = self.identifier as! String
        let ident  = self.identifier
@@ -106,16 +109,20 @@ class rJoystickView: NSView
       }
       else
       {
-         identstring = "13"
+         identstring = "23"
       
       }
       
       let location = theEvent.locationInWindow
       //    Swift.print(location)
       //    NSPoint lokalpunkt = [self convertPoint: [anEvent locationInWindow] fromView: nil];
-      let lokalpunkt = convert(theEvent.locationInWindow, from: nil)
+      var lokalpunkt = convert(theEvent.locationInWindow, from: nil)
       //    Swift.print(lokalpunkt)
-      
+      lokalpunkt.x -= mittelpunkt.x
+      lokalpunkt.y -= mittelpunkt.y
+
+      lokalpunkt.x = 0
+      lokalpunkt.y = 0
       
       // setup the context
       // setup the context
@@ -129,6 +136,7 @@ class rJoystickView: NSView
       var userinformation:[String : Any]
       if kreuz.isEmpty
       {
+         
          kreuz.move(to: lokalpunkt)
          // kreuz zeichnen
          kreuz.line(to: NSMakePoint(lokalpunkt.x, lokalpunkt.y+5))
@@ -138,12 +146,12 @@ class rJoystickView: NSView
          kreuz.line(to: NSMakePoint(lokalpunkt.x, lokalpunkt.y-5))
          kreuz.line(to: lokalpunkt)
          kreuz.line(to: NSMakePoint(lokalpunkt.x-5, lokalpunkt.y))
-         kreuz.line(to: lokalpunkt)
-      
-         // zurueck zu localpunkt
-         weg.move(to: lokalpunkt)
+         kreuz.line(to: lokalpunkt)// zurueck zu localpunkt
          
-         userinformation = ["message":"mousedown", "punkt": lokalpunkt, "index": weg.elementCount, "first": 1, "ident" :identstring] as [String : Any]
+         // weg zeichnen
+         weg.line(to: lokalpunkt)
+         
+          userinformation = ["message":"mousedown", "punkt": lokalpunkt, "index": weg.elementCount, "first": 1, "ident" :identstring] as [String : Any]
          //userinformation["ident"] = self.identifier
       }
       else
@@ -153,6 +161,7 @@ class rJoystickView: NSView
          userinformation = ["message":"mousedown", "punkt": lokalpunkt, "index": weg.elementCount, "first": 0, "ident" :identstring] as [String : Any]
          //userinformation["ident"] = self.identifier
       }
+      
       
       let nc = NotificationCenter.default
       nc.post(name:Notification.Name(rawValue:"joystick"),
@@ -204,9 +213,9 @@ class rJoystickView: NSView
       userinformation["ident"] = self.identifier
       
       let nc = NotificationCenter.default
-      nc.post(name:Notification.Name(rawValue:"joystick"),
-              object: nil,
-              userInfo: userinformation)
+//      nc.post(name:Notification.Name(rawValue:"joystick"),
+//              object: nil,
+//              userInfo: userinformation)
       
       
    }
@@ -214,6 +223,7 @@ class rJoystickView: NSView
    func clearWeg()
    {
       weg.removeAllPoints()
+      weg.move(to: NSMakePoint(0, 0))
       kreuz.removeAllPoints()
       needsDisplay = true
       

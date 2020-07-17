@@ -184,6 +184,7 @@ static void free_all_hid(void)
 
 const char* get_manu()
 {
+   
    hid_t * cnc = get_hid(0);
    if (cnc)
    {

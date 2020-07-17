@@ -5,7 +5,7 @@
 //  Created by Ruedi Heimlicher on 06.08.2019.
 //  Copyright © 2019 Ruedi Heimlicher. All rights reserved.
 //
-
+import Foundation
 import Cocoa
 
 //let USBATTACHED:Int     =      5
@@ -37,7 +37,7 @@ class rJoystick: rViewController
    
    var mouseistdown:Int = 0
    
-   var lastklickoposition:position = position()
+   var lastklickposition:position = position()
   // var schnittPfad = rSchnittPfad()
  //  var usbstatus: Int32 = 0
    
@@ -46,6 +46,8 @@ class rJoystick: rViewController
    @IBOutlet weak var readSVG_Knopf: NSButton!
    
    @IBOutlet weak var DataSendTaste: NSButton!
+   
+   
    @IBOutlet weak var linear_checkbox: NSButton!
    @IBOutlet weak var horizontal_checkbox:NSButton!
    
@@ -58,6 +60,19 @@ class rJoystick: rViewController
    
    @IBOutlet weak var stepsFeld: NSTextField!
    @IBOutlet weak var ramp_OK_Check: NSButton!
+   
+   
+   
+   @IBOutlet weak var dxFeld: NSTextField!
+   @IBOutlet weak var dyFeld: NSTextField!
+   
+   @IBOutlet weak var dx_Stepper: NSStepper!
+   @IBOutlet weak var dy_Stepper: NSStepper!
+
+   @IBOutlet weak var homexFeld: NSTextField!
+   @IBOutlet weak var homeyFeld: NSTextField!
+
+   
    /*
    @IBOutlet weak var manufactorer: NSTextField!
    @IBOutlet weak var Counter: NSTextField!
@@ -211,9 +226,15 @@ class rJoystick: rViewController
       NotificationCenter.default.addObserver(self, selector:#selector(newDataAktion(_:)),name:newdataname,object:nil)
       NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
       NotificationCenter.default.addObserver(self, selector:#selector(usbstatusAktion(_:)),name:NSNotification.Name(rawValue: "usb_status"),object:nil)
-      NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
+  //    NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
+
+      //NotificationCenter.default.addObserver(self, selector:#selector(mausstatusAktion(_:)),name:NSNotification.Name(rawValue: "maus_status"),object:nil)
 
       
+      dx_Stepper.intValue = dxFeld.intValue
+      dx_Stepper.increment = 10
+      dy_Stepper.intValue = dyFeld.intValue
+      dy_Stepper.increment = 10
       // schnittPfad
       schnittPfad?.setStartposition(x: 0x800, y: 0x800, z: 0)
       
@@ -279,7 +300,29 @@ class rJoystick: rViewController
       return myFileDialog.url 
    }  
    */
- 
+ /*
+   override func mouseDown(with theEvent: NSEvent) 
+   {
+      
+      super.mouseDown(with: theEvent)
+      //let ident  = self.identifier as! String
+      //let ident  = self.tag
+      let location = theEvent.locationInWindow
+      //    Swift.print(location)
+      //    NSPoint lokalpunkt = [self convertPoint: [anEvent locationInWindow] fromView: nil];
+      let lokalpunkt = self.view.convert(theEvent.locationInWindow, from: nil)
+      //    Swift.print(lokalpunkt)
+      
+      Swift.print("joystick left mouse lokalpunkt")
+      var notificationDic = [String:Any]()
+       let nc = NotificationCenter.default
+//      nc.post(name:Notification.Name(rawValue:"maus_status"),
+ //             object: nil,
+ //             userInfo: notificationDic)        
+
+   }
+  */ 
+   
    
    func sortDicArray_opt(origDicArray:[[String:Int]], key0:String, key1: String, order:Bool) -> [[String:Int]]
    {
@@ -841,7 +884,7 @@ class rJoystick: rViewController
       {
          speed *= 2
       }
-      let propfaktor = 2834645.67 // 14173.23
+ //     let propfaktor = 2834645.67 // 14173.23
       
       let start = [0,0]
       let ziel = [wegX,wegY]
@@ -905,7 +948,7 @@ class rJoystick: rViewController
       {
          speed *= 2
       }
-      let propfaktor = 2834645.67 // 14173.23
+ //     let propfaktor = 2834645.67 // 14173.23
       
       Schnittdatenarray.removeAll()
       
@@ -1273,8 +1316,186 @@ class rJoystick: rViewController
        
       }
 */   
-   }// report_PCB_Daten
+   }  
+   @IBAction func report_send_TextDaten(_ sender: NSButton)
+   {
+      print("report_send_TextDaten")
+      let dx = dxFeld.doubleValue
+      let dy = dyFeld.doubleValue
+      
+      print("report_send_TextDaten dx: \(dx) dy: \(dy)")
+      lastklickposition.x = 0
+      lastklickposition.y = 0
+      let punkt:NSPoint = NSMakePoint(CGFloat(dx), CGFloat(dy))
+      var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
+ //     var wegarray = wegArrayMitWegXY(wegx:dx, wegy:dy)
+      
+      wegarray[32] = DEVICE_JOY
+      Schnittdatenarray.removeAll(keepingCapacity: true)
+      cncstepperposition = 0
+      if Schnittdatenarray.count == 0 // Array im Teensy loeschen
+      {
+         wegarray[25] = 1 //erstes Element
+         teensy.write_byteArray[24] = 0xE0 // Stopp
+         if teensy.dev_present() > 0
+         {
+            let senderfolg = teensy.send_USB()
+            print("joystickAktion clear senderfolg: \(senderfolg)")
+         }
+         
+      }
+      wegarray[32] = DEVICE_JOY
+      wegarray[25] = 3 
+      
+      wegarray[24] = 0xB3
+      
+      var zeilenposition:UInt8 = 0
+      Schnittdatenarray.append(wegarray)
+     
+      /*
+      for zeilenindex in stride(from: 0, to: Schnittdatenarray.count-1, by: 1)
+      {
+         zeilenposition = 0
+         if zeilenindex == 0
+         {
+            
+            zeilenposition |= (1<<FIRST_BIT); // Erstes Element, Start
+         }
+         if zeilenindex == Schnittdatenarray.count - 1
+         {
+            zeilenposition |= (1<<LAST_BIT);
+         }
+         
+         Schnittdatenarray[zeilenindex][25] = zeilenposition // innere Elemente
+         
+      }
+ */
+      print("wegarray: \t\(wegarray)")
+      
+      if Schnittdatenarray.count == 1
+      {
+         print("report_send_TextDaten start CNC")
+         write_CNC_Abschnitt()   
+         
+         
+         teensy.start_read_USB(true)
+      }
+   }// report_send_TextDaten
  
+   @IBAction func report_flip_TextDaten(_ sender: NSButton)
+   {
+      print("report_flip_TextDaten")
+      let buf = dxFeld.doubleValue
+      dxFeld.doubleValue = dyFeld.doubleValue
+      dyFeld.doubleValue = buf
+   }
+   
+   
+   @IBAction func report_dx_Stepper(_ sender: NSStepper) // 
+   {
+      print("report_dx_Stepper IntVal: \(sender.integerValue)")
+      
+      let intpos = sender.integerValue 
+      dxFeld.doubleValue = Double(intpos)
+      
+      
+   }
+
+   @IBAction func report_dy_Stepper(_ sender: NSStepper) // 
+   {
+      print("report_dy_Stepper IntVal: \(sender.integerValue)")
+      
+      let intpos = sender.integerValue 
+      dyFeld.doubleValue = Double(intpos)
+      
+      
+   }
+
+   
+   @IBAction func report_goXY(_ sender: NSButton) // 
+   {
+      // left: 1, right: 2, up: 3, down: 4
+      print("Joystick report_goXY tag: \(sender.tag)")
+      var dx = 0
+      var dy = 0
+      let schrittweite = 10
+      switch sender.tag
+      {
+      case 1: // right
+         dx = schrittweite
+         break
+      case 2: // up
+         dy = schrittweite
+         break
+      case 3: // left
+         dx = schrittweite * -1
+         break
+      case 4: // down
+         dy = schrittweite * -1
+         break
+      default:
+         break
+      }
+      lastklickposition.x = 0
+      lastklickposition.y = 0
+      let punkt:NSPoint = NSMakePoint(CGFloat(dx), CGFloat(dy))
+      var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
+      //     var wegarray = wegArrayMitWegXY(wegx:dx, wegy:dy)
+      
+      wegarray[32] = DEVICE_JOY
+      Schnittdatenarray.removeAll(keepingCapacity: true)
+      cncstepperposition = 0
+      if Schnittdatenarray.count == 0 // Array im Teensy loeschen
+      {
+         wegarray[25] = 1 //erstes Element
+         teensy.write_byteArray[24] = 0xE0 // Stopp
+         if teensy.dev_present() > 0
+         {
+            let senderfolg = teensy.send_USB()
+            print("joystickAktion report_goXY senderfolg: \(senderfolg)")
+         }
+         
+      }
+      wegarray[32] = DEVICE_JOY
+      var zeilenposition:UInt8 = 0
+      Schnittdatenarray.append(wegarray)
+      /*
+       for zeilenindex in stride(from: 0, to: Schnittdatenarray.count-1, by: 1)
+       {
+       zeilenposition = 0
+       if zeilenindex == 0
+       {
+       
+       zeilenposition |= (1<<FIRST_BIT); // Erstes Element, Start
+       }
+       if zeilenindex == Schnittdatenarray.count - 1
+       {
+       zeilenposition |= (1<<LAST_BIT);
+       }
+       
+       Schnittdatenarray[zeilenindex][25] = zeilenposition // innere Elemente
+       
+       }
+       */
+      print("wegarray: \t\(wegarray)")
+      
+      if Schnittdatenarray.count == 1
+      {
+         print("report_goXY start CNC")
+         write_CNC_Abschnitt()   
+         
+         
+         teensy.start_read_USB(true)
+      }
+      
+   }
+   
+   
+   
+   
+   
+   
+   
    @IBAction func report_send_Daten(_ sender: NSButton)
    {
       print("report_send_Daten")
@@ -1350,13 +1571,41 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
    } // report_send_Daten
    
+   
+   @IBAction func report_clear(_ sender: NSButton)
+   {
+      print("Joystick report_clear")
+      teensy.write_byteArray[24] = 0xF1
+      //write_CNC_Abschnitt()
+  //    if (usbstatus > 0)
+  //    {
+         let senderfolg = teensy.send_USB()
+         print("report_clear senderfolg: \(senderfolg)")
+  //    }
+      teensy.clear_writearray()
+      cncstepperposition = 0
+      Schnittdatenarray.removeAll(keepingCapacity: true)
+      Joystickfeld.clearWeg()
+      Joystickfeld.needsDisplay = true
+      lastklickposition.x = 0
+      lastklickposition.y = 0
+
+      print("reportclear homeX: \(homeX) homeY: \(homeY)")
+      homeX = 0
+      homeY = 0
+      homexFeld.integerValue = homeX
+      homeyFeld.integerValue = homeY
+
+   }
+   
    func write_CNC_Abschnitt()
    {
       print("Joystick write_CNC_Abschnitt cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count) ")
      
       if cncstepperposition == Schnittdatenarray.count
       {
-         print("write_CNC_Abschnitt cncstepperposition ist Schnittdatenarray.count")
+         print("+++          write_CNC_Abschnitt cncstepperposition ist Schnittdatenarray.count >> END\n")
+         
          return
       }
       if cncstepperposition < Schnittdatenarray.count
@@ -1379,7 +1628,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             
             let senderfolg = teensy.send_USB()
     //        print("write_CNC_Abschnitt senderfolg: \(senderfolg)")
-  //          print("0: \(tempSchnittdatenArray[0]) ")
+ 
+            //          print("0: \(tempSchnittdatenArray[0]) ")
   //          print("1: \(tempSchnittdatenArray[1]) ")
   //          print("2: \(tempSchnittdatenArray[2]) ")
   //          print("3: \(tempSchnittdatenArray[3]) ")
@@ -1405,7 +1655,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             }
  */
  //           print("schritteX: \(schritteX) schritteY: \(schritteY)")
-            
+            homeX += Int(schritteAX)
+            homeY += Int(schritteAY)
+   //        print("Joystick homeX: \(homeX) homeY: \(homeY)")
+            homexFeld.integerValue = homeX
+            homeyFeld.integerValue = homeY
+
             
             cncstepperposition += 1
             
@@ -1430,20 +1685,126 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       let info = notification.userInfo
      // print("PCB usbattachAktion:\t \(info)")
       let status:Int = info!["attach"] as! Int // 
-     print("PCB usbattachAktion:\t \(status)")
+     print("Joystick usbattachAktion:\t \(status)")
       if status == USBREMOVED
       {
          
         // USB_OK_Feld.image = notokimage
       }
-      //usbstatus = Int32(status)
+      usbstatus = Int32(status)
       
+   }
+   
+   @IBAction func report_home(_ sender: NSButton)
+   {
+      
+      print("Joystick report_home homex: \(homeX) homey: \(homeY)")
+      var dx = homexFeld.doubleValue * -1 
+      var dy = homeyFeld.doubleValue * -1
+      print("Joystick report_home dx: \(dx) dy: \(dy)")
+      //      dx = 10
+      //      dy = 0
+      lastklickposition.x = 0
+      lastklickposition.y = 0
+      cncstepperposition = 0
+      var pfeilwegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
+      
+      
+      for z in 0 ... pfeilwegarray.count-1
+      {
+         teensy.write_byteArray[z] = pfeilwegarray[z]
+         // print("\(pfeilwegarray[z])")
+      }
+      print("\(pfeilwegarray)")
+      teensy.write_byteArray[24] = 0xA5
+      teensy.write_byteArray[25] = 3
+      
+      
+      //    homeX += Int(dx)
+      //    homeY += Int(dy)
+      print("Joystick report_home homeX: \(homeX) homeY: \(homeY)")
+      //    homexFeld.integerValue = homeX
+      //    homeyFeld.integerValue = homeY
+      
+      
+      let senderfolg = teensy.send_USB()
+      
+      
+   }
+
+   
+   @objc  override func mausstatusAktion(_ notification:Notification)
+   {
+      let info = notification.userInfo
+      //print("joystick mausstatusAktion:\t \(String(describing: info))")
+      let devtag = info?["devtag"] as! Int
+      if devtag == 2
+      {
+
+      let pfeiltag = info?["tag"] as! Int
+      var schrittweite = info?["schrittweite"] as! Int
+      var dx:Int = 0
+      var dy:Int = 0
+      var vorzeichenx = 0;
+      var vorzeicheny = 0;
+      print("joystick mausstatusAktion devtag:\t \(devtag ) pfeiltag:\t \(pfeiltag) schrittweite: \(schrittweite)\t")
+      
+         switch pfeiltag
+         {
+         case 1: // right
+            dx = schrittweite
+            break
+         case 2: // up
+            dy = schrittweite
+            break
+         case 3: // left
+            dx = schrittweite * (-1)
+            //dx |= 0x80000000
+            vorzeichenx = 1
+            break
+         case 4: // down
+            dy = schrittweite * (-1)
+            //dy |= 0x80000000
+            vorzeicheny = 1
+            break
+         default:
+            break
+            
+            
+         }
+         print("mausstatusAktion \(dx) \(dy)")
+         var pfeilwegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
+         
+         pfeilwegarray[32] = 2
+         
+         
+         for z in 0 ... pfeilwegarray.count-1
+         {
+            teensy.write_byteArray[z] = pfeilwegarray[z]
+            // print("\(pfeilwegarray[z])")
+         }
+         print("\(pfeilwegarray)")
+         teensy.write_byteArray[24] = 0xA5
+         
+         
+         //      homeX += Int(dx)
+         //     homeY += Int(dy)
+         print("mausstatusaktion homeX: \(homeX) homeY: \(homeY)")
+         //     homexFeld.integerValue = homeX
+         //     homeyFeld.integerValue = homeY
+         
+         
+         let senderfolg = teensy.send_USB()
+      }
    }
 
    
    func schrittdatenvektor(sxInt:Int,syInt:Int, zeit:Double) -> [UInt8]
    {
-      print("schrittdatenvektor sxInt: \(sxInt) syInt: \(syInt) zeit: \(zeit)")
+      print("Joystick schrittdatenvektor sxInt: \(sxInt) syInt: \(syInt) zeit: \(zeit)")
+      let sxInt_raw = (sxInt & 0x0FFFFFFF)
+      let syInt_raw = (syInt & 0x0FFFFFFF)
+      
       var vektor = [UInt8]()
       //print("sxInt: \(sxInt) ")
       let sxA = UInt8(sxInt & 0x000000FF)
@@ -1470,31 +1831,41 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       vektor.append(dxA)
       vektor.append(dxB)
       
-      print("Fehlerkorrektur X")
-      
-      let vorzeichenx = (sxInt & 0x80000000)
-
-      print("vorzeichenx: \(vorzeichenx)")
-      
-      print("sxInt: \(sxInt) dx: \(dx) dxInt: \(dxInt)")
-      let kontrolledoublex = Int(Double(sxInt) * dx) //  Kontrolle mit Double-Wert von dx
-      let kontrolleintx = sxInt * dxInt //               Kontrolle mit Int-Wert von dx
-      let diffx = Int(kontrolledoublex) - kontrolleintx // differenz, Rundungsfehler
-      print("kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
-      
-      let intervallx = Double(kontrolleintx / diffx)
-      var korrekturintervallx:Int = Int(round(intervallx)) // Rundungsfehler aufteilen ueber Abschnitt: 
-                                                            // alle korrekturintervallx dexInt incrementieren oder decrementieren
-      print("korrekturintervallx: \(korrekturintervallx)")
-      
-       if korrekturintervallx < 0 // negative korrektur
-       {
-         print("korrekturintervallx negativ")
-         korrekturintervallx *= -1
-         korrekturintervallx |= 0x8000
-       }
-      print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
-
+//      print("Fehlerkorrektur X")
+      var korrekturintervallx:Int = 0
+      if sxInt != 0
+      {
+         let vorzeichenx = (sxInt & 0x80000000)
+         
+//         print("vorzeichenx: \(vorzeichenx)") // Richtung der Bewegung
+         
+//         print("sxInt_raw: \(sxInt_raw) dx: \(dx) dxInt: \(dxInt)")
+         let kontrolledoublex = Int(Double(sxInt_raw) * dx) //  Kontrolle mit Double-Wert von dx
+         let kontrolleintx = sxInt_raw * dxInt //               Kontrolle mit Int-Wert von dx
+         var diffx = Int(kontrolledoublex) - kontrolleintx // differenz, Rundungsfehler
+//         print("kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
+         if diffx == 0
+         {
+            diffx = 1
+         }
+         if diffx != 0
+         {
+         let intervallx = Double(kontrolleintx / diffx)
+         
+         let controlx = Double(sxInt_raw) / intervallx
+         korrekturintervallx = Int(round(intervallx)) // Rundungsfehler aufteilen ueber Abschnitt: 
+         // alle korrekturintervallx dexInt incrementieren oder decrementieren
+  //       print("korrekturintervallx: \(korrekturintervallx) controlx: \(controlx)")
+         
+         if korrekturintervallx < 0 // negative korrektur
+         {
+ //           print("korrekturintervallx negativ")
+            korrekturintervallx *= -1
+            korrekturintervallx |= 0x8000
+         }
+  //       print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
+         } // diffx not 0
+      }
       vektor.append(UInt8(korrekturintervallx & 0x00FF))
       vektor.append(UInt8((korrekturintervallx & 0xFF00)>>8))
 
@@ -1523,29 +1894,36 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       vektor.append(dyB)
 
       
-      print("Fehlerkorr Y")
-      let vorzeicheny = (syInt & 0x80000000)
-      
-      print("vorzeicheny: \(vorzeicheny)")
-
-      print("syInt: \(syInt) dy: \(dy) dyInt: \(dyInt)")
-      let kontrolledoubley = Int(Double(syInt) * dy)
-      let kontrolleinty = syInt * dyInt
-      let diffy = (kontrolledoubley) - kontrolleinty
-      print("kontrolledoubley: \(kontrolledoubley) kontrolleinty: \(kontrolleinty) diffy: \(diffy)")
-      let intervally = Double(kontrolleinty / diffy)
-      var korrekturintervally:Int = Int(round(intervally))
-      print("korrekturintervally: \(korrekturintervally) \n")
-
-      
-      if korrekturintervally < 0 // negative korrektur
+//      print("Fehlerkorr Y")
+      var korrekturintervally:Int = 0
+      if syInt != 0
       {
-         print("korrekturintervally negativ")
-         korrekturintervally *= -1
-         korrekturintervally |= 0x8000
+         let vorzeicheny = (syInt & 0x80000000)
+         
+//         print("vorzeicheny: \(vorzeicheny)")
+         
+         print("syInt: \(syInt) dy: \(dy) dyInt: \(dyInt)")
+         let kontrolledoubley = Int(Double(syInt) * dy)
+         let kontrolleinty = syInt * dyInt
+         let diffy = (kontrolledoubley) - kontrolleinty
+ //        print("kontrolledoubley: \(kontrolledoubley) kontrolleinty: \(kontrolleinty) diffy: \(diffy)")
+        if diffy != 0
+        {
+         let intervally = Double(kontrolleinty / diffy)
+         
+         korrekturintervally = Int(round(intervally))
+ //        print("korrekturintervally: \(korrekturintervally) \n")
+         let controly = Double(syInt_raw) / intervally
+         
+         if korrekturintervally < 0 // negative korrektur
+         {
+  //          print("korrekturintervally negativ")
+            korrekturintervally *= -1
+            korrekturintervally |= 0x8000
+         }
+ //        print("korrekturintervally mit Vorzeichenkorr: \(korrekturintervally)  controly: \(controly)\n")
+         } // diffy not 0
       }
-      print("korrekturintervally mit Vorzeichenkorr: \(korrekturintervally) \n")
-      
       vektor.append(UInt8(korrekturintervally & 0x00FF))
       vektor.append(UInt8((korrekturintervally & 0xFF00)>>8))
       
@@ -1593,7 +1971,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    func wegArrayMitWegXY(wegx:Double, wegy:Double) ->[UInt8]
    {
       zoomfaktor = zoomFeld.doubleValue
-      print("wegMitXY")
+      print("Joystick wegMitXY")
       var maxsteps:Double = 0
       var weg = [Double]()
       
@@ -1660,12 +2038,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
       return wegschnittdatenarray
    }
-   
-   
-   
-   
-
-   
+    
  // MARK: joystick
    @objc override func joystickAktion(_ notification:Notification) 
    {
@@ -1674,9 +2047,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
      // if (selectedDevice == self.view.identifier)
       if (sel == self.view.identifier)
       {
-         //       print("Joystick joystickAktion passt")
-         
-         
+         print("                                        Joystick joystickAktion passt")
+ //        print("lastklickposition.x: \(lastklickposition.x) lastklickposition.y: \(lastklickposition.y) ")
          let info = notification.userInfo
          let punkt:CGPoint = info?["punkt"] as! CGPoint
          let wegindex:Int = info?["index"] as! Int // 
@@ -1685,11 +2057,18 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          //       print("Basis joystickAktion:\t \(punkt)")
          print("x: \(punkt.x) y: \(punkt.y) index: \(wegindex) first: \(first)")
          
-         var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickoposition.x)),wegy:Double(punkt.y - CGFloat(lastklickoposition.y)))
-         wegarray[32] = DEVICE_JOY
-         lastklickoposition.x = UInt16(punkt.x)
-         lastklickoposition.y = UInt16(punkt.y)
+         var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
          
+         let diffx = Double(punkt.x - CGFloat(lastklickposition.x))
+         let diffy = Double(punkt.y - CGFloat(lastklickposition.y))
+         
+         print("diffx: \(diffx) diffy: \(diffy) ")
+         
+         
+         wegarray[32] = DEVICE_JOY
+ //        lastklickposition.x = UInt16(punkt.x)
+ //        lastklickposition.y = UInt16(punkt.y)
+         /*
          if Schnittdatenarray.count == 0 // Array im Teensy loeschen
          {
             wegarray[25] = 1 //erstes Element
@@ -1701,10 +2080,38 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             }
 
          }
+ */
+         //teensy.write_byteArray[24] = 0xB5
          
- //        wegarray[25] |= (1<<LAST_BIT);//letztes Element
-         wegarray[32] = DEVICE_JOY
+   //      wegarray[25] |= (1<<LAST_BIT);//letztes Element
+         if Schnittdatenarray.count == 0 // noch leer, wegarray ist erstes element
+         {
+            print("joystickAktion FIRST")
+            wegarray[25] = 1  // erstes Element
+   //         lastklickposition.x = 0
+   //         lastklickposition.y = 0
+
+         }
+         else
+         {
+            lastklickposition.x = UInt16(punkt.x)
+            lastklickposition.y = UInt16(punkt.y)
+
+            print("joystickAktion NOT FIRST")
+            wegarray[25] = 0 
+         }
+ //        wegarray[24] = 0xB1
+         lastklickposition.x = UInt16(punkt.x)
+         lastklickposition.y = UInt16(punkt.y)
+      
+         // Weg nur 1 Element Test
+         //wegarray[25] = 3 
+         
+         
+         print("wegarray: \(wegarray)")
          Schnittdatenarray.append(wegarray)
+         print("Schnittdatenarray count: \t\(Schnittdatenarray.count)")
+         /*
          for zeilenindex in stride(from: 0, to: Schnittdatenarray.count-1, by: 1)
          {
             zeilenposition = 0
@@ -1721,16 +2128,20 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             Schnittdatenarray[zeilenindex][25] = zeilenposition // innere Elemente
             
          }
-         print("wegarray: \t\(wegarray)")
+ */
+   //      print("wegarray: \t\(wegarray)")
          
          if Schnittdatenarray.count == 1
          {
-            print("joystickaktion start CNC")
+            
+            print("\njoystickaktion start CNC")
             write_CNC_Abschnitt()   
             
             
             teensy.start_read_USB(true)
          }
+         
+ //        print("Nach: lastklickposition.x: \(lastklickposition.x) lastklickposition.y: \(lastklickposition.y) ")
          
          return
             
@@ -1905,13 +2316,39 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       var AnschlagSet:IndexSet = IndexSet()
       let nc = NotificationCenter.default
       
+      // MARK: DEVICE_JOY
       
-      device = DEVICE_JOY
+ //     device = DEVICE_JOY
       if device == DEVICE_JOY
       
       {
          switch taskcode
          {
+         case 0xA1: 
+            print("Joystick newDataAktion  A1") // sendstatus 3, Abschnitt fertig
+            let abschnittnummer = Int((data[5] << 8) | data[6])
+            print("Joystick newDataAktion  A1 abschnittnummer: \(abschnittnummer) Schnittdatenarray.count: \(Schnittdatenarray.count)")
+            if abschnittnummer <= (Schnittdatenarray.count - 1)
+            {
+               print("newDataAktion noch Daten da")
+               write_CNC_Abschnitt()
+            }
+            else
+            {
+               print("newDataAktion keine Daten mehr")
+               if readtimer?.isValid == true
+               {
+                  readtimer?.invalidate()
+               }
+               Joystickfeld.clearWeg()
+               Joystickfeld.needsDisplay = true
+               cncstepperposition = 0
+
+            }
+
+            
+            
+            break // A1
          case 0xAD:
             print("Joystick newDataAktion  AD TASK END ")
             let abschnittnum = Int((data[5] << 8) | data[6])
@@ -1963,8 +2400,36 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             break
           
          case 0xD1:
-            print("newDataAktion  D1 Schnittdatenarray.count: \(Schnittdatenarray.count) cncstepperposition; \(cncstepperposition)")
+            // 
+            print("DEVICE 2 newDataAktion  D1 Schnittdatenarray.count: \(Schnittdatenarray.count) cncstepperposition; \(cncstepperposition)")
+            let abschnittnummer = Int((data[5] << 8) | data[6])
+            print("Joystick newDataAktion  D1 abschnittnummer: \(abschnittnummer) Schnittdatenarray.count: \(Schnittdatenarray.count)")
+            if abschnittnummer <= (Schnittdatenarray.count - 1)
+            {
+               print("newDataAktion noch Daten da")
+               write_CNC_Abschnitt()
+            }
+            else
+            {
+               print("newDataAktion keine Daten mehr")
+               if readtimer?.isValid == true
+               {
+                  readtimer?.invalidate()
+               }
+  //             Joystickfeld.clearWeg()
+  //             Joystickfeld.needsDisplay = true
+               cncstepperposition = 0
+               
+            }
             //write_CNC_Abschnitt()
+            
+            
+         case 0xB2: // Joystick
+         
+            print("DEVICE 2 newDataAktion  B2 ") 
+            
+            
+         break;
             
          default:
             //Plattefeld.setStepperposition(pos:abschnittnummer)
@@ -2302,8 +2767,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
  */
       Joystickfeld.clearWeg()
       schnittPfad?.clearPfadarray()
-      lastklickoposition.x = 0
-      lastklickoposition.y = 0
+      lastklickposition.x = 0
+      lastklickposition.y = 0
 
       //Schnittdatenarray.removeAll(keepingCapacity: true)
       if (usbstatus > 0)

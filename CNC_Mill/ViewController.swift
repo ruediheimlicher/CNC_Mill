@@ -21,6 +21,201 @@ var globalusbstatus = 0
 
 // 
 
+class  rPfeiltaste  : NSButton
+{
+   // in IB: Inherits from target anklicken!!
+   var  richtung:Int
+   var pfeiltimer: Timer?
+   var schrittweite:Int
+
+   @IBOutlet weak var  Taste:NSButton!
+
+   required init?(coder aDecoder: NSCoder) 
+{
+   self.richtung = 1
+   self.schrittweite = 0
+   super.init(coder: aDecoder)
+  // Swift.print("Pfeiltaste req init")
+   //     pfadarray.append(startposition)
+   
+}
+   override init(frame frameRect: NSRect) 
+   {
+      Swift.print("Pfeiltaste init")
+      self.richtung = 1
+      self.schrittweite = 0
+      super.init(frame:frameRect)
+   }
+
+   /*
+override  func mouseDragged(with theEvent: NSEvent) 
+   {
+      super.mouseDragged(with: theEvent)
+      print("rPfeiltaste mousedragged")  
+   }
+*/
+   
+// https://stackoverflow.com/questions/34235903/press-and-hold-button-for-repeat-fire
+override  func mouseDown(with theEvent: NSEvent) 
+{
+//   super.mouseDown(with: theEvent)
+   let dev:String = (superview?.identifier)!.rawValue
+   var devtag = 0
+   switch dev
+   {
+      case "pcb":
+         devtag = 1
+      break
+      case "joystick":
+         devtag = 2
+      break;
+      default:
+      break
+   }
+   print("rPfeiltaste mousedown tabview ident: \(dev) devtag: \(devtag)")  
+   let location = theEvent.locationInWindow
+   //    Swift.print(location)
+   //    NSPoint lokalpunkt = [self convertPoint: [anEvent locationInWindow] fromView: nil];
+   //let lokalpunkt = convert(theEvent.locationInWindow, from: nil)
+   let klickcount = theEvent.clickCount
+   //print("lokalpunkt: \(lokalpunkt) klickcount: \(klickcount)")
+
+  let pfeiltag = self.tag
+   print("rPfeiltaste mousedown tag: \(pfeiltag)") 
+   var dx = 0
+   var dy = 0
+   let schrittweite:Int = 6
+
+   switch pfeiltag 
+   {
+   case 1: // right
+      dx = schrittweite
+      break
+   case 2: // up
+      dy = schrittweite
+      break
+   case 3: // left
+      dx = schrittweite * -1
+      break
+   case 4: // down
+      dy = schrittweite * -1
+      break
+   default:
+      break
+   }
+   var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag]
+   pfeiltimer = Timer.scheduledTimer(timeInterval: 0.2 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
+
+   let nc = NotificationCenter.default
+   nc.post(name:Notification.Name(rawValue:"maus_status"),
+           object: nil,
+           userInfo: notificationDic)        
+
+}
+
+override  func mouseUp(with theEvent: NSEvent) 
+   {
+      super.mouseUp(with: theEvent)
+      print("rPfeiltaste mouseup")  
+      pfeiltimer?.invalidate()
+      // let pfeiltag = self.tag
+   }
+   
+@objc   func pfeiltastenstimeraktion()
+{
+   
+   let notificationDic = pfeiltimer?.userInfo
+ //  print("pfeiltastenstimeraktion userinfo: \(notificationDic)")
+   let nc = NotificationCenter.default
+   nc.post(name:Notification.Name(rawValue:"maus_status"),
+   object: nil,
+   userInfo: notificationDic as? [AnyHashable : Any])        
+
+   
+   }
+
+/*
+   - (void)mouseUp:(NSEvent *)event
+{
+   NSLog(@"AVR mouseup");
+   richtung=[self tag];
+   NSLog(@"AVR mouseUp Pfeiltaste richtung: %d",richtung);
+   
+   [self setState:NSOffState];
+   
+   NSMutableDictionary* NotificationDic=[[[NSMutableDictionary alloc]initWithCapacity:0]autorelease];
+   [NotificationDic setObject:[NSNumber numberWithInt:richtung] forKey:@"richtung"];
+   
+   int aktpwm=0;
+   NSPoint location = [event locationInWindow];
+   NSLog(@"Pfeiltaste mouseUp location: %2.2f %2.2f",location.x, location.y);
+   [NotificationDic setObject:[NSNumber numberWithInt:0] forKey:@"push"];
+   [NotificationDic setObject:[NSNumber numberWithFloat:location.x] forKey:@"locationx"];
+   [NotificationDic setObject:[NSNumber numberWithFloat:location.y] forKey:@"locationy"];
+   
+   NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
+   [nc postNotificationName:@"Pfeil" object:self userInfo:NotificationDic];
+   
+   
+   }
+   
+   - (void)mouseDown:(NSEvent *)theEvent
+{
+   
+   richtung=[self tag];
+   
+   //NSLog(@"AVR mouseDown: Pfeiltaste richtung: %d",richtung);
+   [self setState:NSOnState];
+   
+   
+   NSMutableDictionary* NotificationDic=[[[NSMutableDictionary alloc]initWithCapacity:0]autorelease];
+   [NotificationDic setObject:[NSNumber numberWithInt:richtung] forKey:@"richtung"];
+   [NotificationDic setObject:[NSNumber numberWithInt:1] forKey:@"push"];// Start, nur fuer AVR
+   NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
+   [nc postNotificationName:@"Pfeil" object:self userInfo:NotificationDic];
+   [super mouseDown:theEvent];
+   
+   [self mouseUp:theEvent];
+   
+   }
+   
+   */
+   /*
+    - (void)mouseUp:(NSEvent *)theEvent
+    {
+    richtung=[self tag];
+    NSLog(@"Pfeiltaste mouseUp richtung: %d",richtung);
+    [self setState:NSOffState];
+    
+    NSMutableDictionary* NotificationDic=[[[NSMutableDictionary alloc]initWithCapacity:0]autorelease];
+    [NotificationDic setObject:[NSNumber numberWithInt:richtung] forKey:@"richtung"];
+    [NotificationDic setObject:[NSNumber numberWithInt:0] forKey:@"push"];
+    NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
+    [nc postNotificationName:@"Pfeil" object:self userInfo:NotificationDic];
+    [super mouseDown:theEvent];
+    
+    }
+    */
+   /*
+   - (void)setRichtung:(int)dieRichtung
+{
+   richtung=dieRichtung;
+   }
+   
+   - (int)Tastestatus
+      {
+         return [Taste state];
+      }
+      
+      
+      
+      - (int)Richtung
+         {
+            return richtung;
+}
+ */
+}
+
 //
 struct position
 {
@@ -134,8 +329,11 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    var schnittPfad = rSchnittPfad()
    var usbstatus: Int32 = 0
    
-   
+   var homeX:Int = 0
+   var homeY:Int = 0
    var  CNCDatenArray = [[String:Int]]();
+   
+   var propfaktor = 283464.567 // 14173.23
    
    var cncstepperposition:Int = 0
    var cnchalt = 0
@@ -184,12 +382,14 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
 //      NotificationCenter.default.addObserver(self, selector:#selector(usbstatusAktion(_:)),name:NSNotification.Name(rawValue: "usb_status"),object:nil)
       
   //    NotificationCenter.default.removeObserver(self, name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
-   //   NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
+      NotificationCenter.default.addObserver(self, selector:#selector(usbattachAktion(_:)),name:NSNotification.Name(rawValue: "usb_attach"),object:nil)
 
       
 //      NotificationCenter.default.addObserver(self, selector:#selector(joystickAktion(_:)),name:NSNotification.Name(rawValue: "joystick"),object:nil)
       NotificationCenter.default.addObserver(self, selector:#selector(tabviewAktion(_:)),name:NSNotification.Name(rawValue: "tabview"),object:nil)
-       
+ 
+      NotificationCenter.default.addObserver(self, selector:#selector(mausstatusAktion(_:)),name:NSNotification.Name(rawValue: "maus_status"),object:nil)
+      
       // Do any additional setup after loading the view.
    
      // USB_OK_Feld.image = notokimage
@@ -394,12 +594,15 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       let status:Int = info!["attach"] as! Int // 
       print("viewController usbattachAktion:\t \(status)")
      
-      /*
+      
       if status == USBREMOVED
       {
          USB_OK_Feld.image = notokimage
       }
-     */
+     else if status == USBATTACHED
+      {
+         USB_OK_Feld.image = okimage
+      }
       
    }
 
@@ -488,6 +691,10 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       print(theStringToPrint)
    }
  
+   @objc  func mausstatusAktion(_ notification:Notification)
+   {
+       print("ViewController mausstatusAktion")
+   }
    
    @IBAction func report_HALT(_ sender: NSButton)
    {
@@ -595,6 +802,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       
       
    }
+   
    @IBAction func report_Pot0_Stepper_L(_ sender: NSStepper) // untere Grenze
    {
       print("report_Pot0_Stepper_L IntVal: \(sender.integerValue)")
@@ -878,12 +1086,12 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
          print("status 1")
          USB_OK.backgroundColor = NSColor.green
          print("USB-Device da")
-         let manu = get_manu()
+  //       let manu = get_manu()
          //println(manu) // ok, Zahl
          //         var manustring = UnsafePointer<CUnsignedChar>(manu)
          //println(manustring) // ok, Zahl
          
-         let manufactorername = String(cString: UnsafePointer(manu!))
+    //     let manufactorername = String(cString: UnsafePointer(manu!))
  //        print("str: %s", manufactorername)
  //        manufactorer.stringValue = manufactorername
          
