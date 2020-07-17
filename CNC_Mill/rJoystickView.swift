@@ -118,8 +118,8 @@ class rJoystickView: NSView
       //    NSPoint lokalpunkt = [self convertPoint: [anEvent locationInWindow] fromView: nil];
       var lokalpunkt = convert(theEvent.locationInWindow, from: nil)
       //    Swift.print(lokalpunkt)
-      lokalpunkt.x -= mittelpunkt.x
-      lokalpunkt.y -= mittelpunkt.y
+ //     lokalpunkt.x -= mittelpunkt.x
+ //     lokalpunkt.y -= mittelpunkt.y
 
       lokalpunkt.x = 0
       lokalpunkt.y = 0
