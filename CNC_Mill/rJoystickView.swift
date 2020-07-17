@@ -121,9 +121,7 @@ class rJoystickView: NSView
  //     lokalpunkt.x -= mittelpunkt.x
  //     lokalpunkt.y -= mittelpunkt.y
 
-      lokalpunkt.x = 0
-      lokalpunkt.y = 0
-      
+       
       // setup the context
       // setup the context
       let dashHeight: CGFloat = 1
