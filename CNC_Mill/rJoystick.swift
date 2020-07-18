@@ -1344,7 +1344,6 @@ class rJoystick: rViewController
          }
          
       }
-      wegarray[32] = DEVICE_JOY
       wegarray[25] = 3 
       
       wegarray[24] = 0xB3
@@ -1370,7 +1369,7 @@ class rJoystick: rViewController
          
       }
  */
-      print("wegarray: \t\(wegarray)")
+      print("sendTextdaten Schnittdatenarray: \(Schnittdatenarray)")
       
       if Schnittdatenarray.count == 1
       {
@@ -2048,7 +2047,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       if (sel == self.view.identifier)
       {
          print("                                        Joystick joystickAktion passt")
- //        print("lastklickposition.x: \(lastklickposition.x) lastklickposition.y: \(lastklickposition.y) ")
+         print("joystickAktion lastklickposition.x: \(lastklickposition.x) lastklickposition.y: \(lastklickposition.y) ")
          let info = notification.userInfo
          let punkt:CGPoint = info?["punkt"] as! CGPoint
          let wegindex:Int = info?["index"] as! Int // 
@@ -2091,6 +2090,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    //         lastklickposition.x = 0
    //         lastklickposition.y = 0
 
+            
          }
          else
          {
@@ -2100,7 +2100,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             print("joystickAktion NOT FIRST")
             wegarray[25] = 0 
          }
- //        wegarray[24] = 0xB1
+         wegarray[24] = 0xB3
          lastklickposition.x = UInt16(punkt.x)
          lastklickposition.y = UInt16(punkt.y)
       
@@ -2111,8 +2111,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          print("wegarray: \(wegarray)")
          Schnittdatenarray.append(wegarray)
          print("Schnittdatenarray count: \t\(Schnittdatenarray.count)")
-         /*
-         for zeilenindex in stride(from: 0, to: Schnittdatenarray.count-1, by: 1)
+         
+         for zeilenindex in stride(from: 0, to: Schnittdatenarray.count, by: 1)
          {
             zeilenposition = 0
             if zeilenindex == 0
@@ -2124,12 +2124,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             {
                zeilenposition |= (1<<LAST_BIT);
             }
-            
+            print("zeilenindex: \(zeilenindex) zeilenposition: \(zeilenposition)")
             Schnittdatenarray[zeilenindex][25] = zeilenposition // innere Elemente
-            
+            print("Schnittdatenarray: \(Schnittdatenarray[zeilenindex]) ")
          }
- */
-   //      print("wegarray: \t\(wegarray)")
+ 
+         print("joystickaktion Schnittdatenarray: \(Schnittdatenarray) ")
          
          if Schnittdatenarray.count == 1
          {
@@ -2287,7 +2287,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
      // let info = notification.userInfo
       
       //print("info: \(String(describing: info))")
-      //print("new Data")
+      print("newDataAktion")
       var data:[UInt8] = notification.userInfo?["data"] as! [UInt8]
 //      print("von teensy: data: \(String(describing: data)) ") // data: Optional([0, 9, 51, 0,....
       var i = 0
@@ -2404,21 +2404,21 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             print("DEVICE 2 newDataAktion  D1 Schnittdatenarray.count: \(Schnittdatenarray.count) cncstepperposition; \(cncstepperposition)")
             let abschnittnummer = Int((data[5] << 8) | data[6])
             print("Joystick newDataAktion  D1 abschnittnummer: \(abschnittnummer) Schnittdatenarray.count: \(Schnittdatenarray.count)")
-            if abschnittnummer <= (Schnittdatenarray.count - 1)
+            if abschnittnummer < (Schnittdatenarray.count - 1)
             {
                print("newDataAktion noch Daten da")
-               write_CNC_Abschnitt()
+ //              write_CNC_Abschnitt()
             }
             else
             {
                print("newDataAktion keine Daten mehr")
-               if readtimer?.isValid == true
-               {
-                  readtimer?.invalidate()
-               }
+   //            if readtimer?.isValid == true
+   //            {
+   //               readtimer?.invalidate()
+   //            }
   //             Joystickfeld.clearWeg()
   //             Joystickfeld.needsDisplay = true
-               cncstepperposition = 0
+   //            cncstepperposition = 0
                
             }
             //write_CNC_Abschnitt()
