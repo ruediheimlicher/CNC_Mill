@@ -1330,7 +1330,7 @@ class rPCB: rViewController
          zeilenschnittdatenarray.append(delayxA)
          zeilenschnittdatenarray.append(delayxB)
         
-         
+  //       korrekturintervallx = 0
          zeilenschnittdatenarray.append(UInt8(korrekturintervallx & 0x00FF))
          zeilenschnittdatenarray.append(UInt8((korrekturintervallx & 0xFF00)>>8))
          
@@ -1408,6 +1408,7 @@ class rPCB: rViewController
          zeilenschnittdatenarray.append(delayyA)
          zeilenschnittdatenarray.append(delayyB)
 
+  //       korrekturintervally = 0
          zeilenschnittdatenarray.append(UInt8(korrekturintervally & 0x00FF))
          zeilenschnittdatenarray.append(UInt8((korrekturintervally & 0xFF00)>>8))
          
@@ -1481,6 +1482,7 @@ class rPCB: rViewController
  //     print("Schnittdatenarray:\t\(Schnittdatenarray)")
      
       print("report_PCBDaten Schnittdatenarray count: \(Schnittdatenarray.count)")
+      /*
       var i = 0
       for el in Schnittdatenarray
        {
@@ -1492,7 +1494,7 @@ class rPCB: rViewController
   //       print("\(i) \(el)")
          i += 1
       }
-      
+      */
       /* 
       for el in SchritteArray
       {
@@ -1561,7 +1563,18 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          
 //      Schnittdatenarray[0][26] = UInt8((anzabschnitte & 0xFF00) >> 8)
  //     Schnittdatenarray[0][27] = UInt8(anzabschnitte & 0x00FF)
-      
+      if Schnittdatenarray.count == 0 // Array im Teensy loeschen
+      {
+         teensy.write_byteArray[25] = 1 //erstes Element
+         teensy.write_byteArray[24] = 0xE0 // Stopp
+         if teensy.dev_present() > 0
+         {
+ //           let senderfolg = teensy.send_USB()
+            //            print("joystickAktion report_goXY senderfolg: \(senderfolg)")
+         }
+         
+      }
+
       var i = 0
       for linie in Schnittdatenarray
       {
@@ -1569,12 +1582,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          i += 1
       }
       
-      var start_read_USB_erfolg = teensy.start_read_USB(true)
+ //     var start_read_USB_erfolg = teensy.start_read_USB(true)
   
       write_CNC_Abschnitt()
       
       
-      
+      var start_read_USB_erfolg = teensy.start_read_USB(true)
       
       
       
@@ -1598,7 +1611,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       print("report_clear senderfolg: \(senderfolg)")
       //    }
       cncstepperposition = 0
+      teensy.clear_writearray()
       Schnittdatenarray.removeAll(keepingCapacity: true)
+      Plattefeld.clearWeg()
+      lastklickposition.x = 0
+      lastklickposition.y = 0
+
       print("PCB reportclear homeX: \(homeX) homeY: \(homeY)")
       homeX = 0
       homeY = 0

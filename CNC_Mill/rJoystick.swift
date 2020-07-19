@@ -1545,7 +1545,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          
 //      Schnittdatenarray[0][26] = UInt8((anzabschnitte & 0xFF00) >> 8)
  //     Schnittdatenarray[0][27] = UInt8(anzabschnitte & 0x00FF)
-      
+ 
       var i = 0
       for linie in Schnittdatenarray
       {
@@ -1622,7 +1622,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             {
                teensy.write_byteArray.append(el)
             }
-           print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray) 32: \(teensy.write_byteArray[32])")
+           print("cncstepperposition: \(cncstepperposition) write_byteArray: \n\(teensy.write_byteArray) byte32: \(teensy.write_byteArray[32])")
             
             
             let senderfolg = teensy.send_USB()
@@ -1637,7 +1637,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             var schritteAX:UInt32 = UInt32(tempSchnittdatenArray[0]) | UInt32(tempSchnittdatenArray[1])<<8 | UInt32(tempSchnittdatenArray[2])<<16 | UInt32((tempSchnittdatenArray[3] & 0x7F))<<24;
             if (tempSchnittdatenArray[3] & 0x80) > 0
             {
-               print("Motor A schritteX negativ")
+ //              print("Motor A schritteX negativ")
             }
             
  //           print("8: \(tempSchnittdatenArray[8]) ")
@@ -1653,7 +1653,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
                
             }
  */
- //           print("schritteX: \(schritteX) schritteY: \(schritteY)")
+            print("schritteX: \(schritteAX) schritteY: \(schritteAY)")
             homeX += Int(schritteAX)
             homeY += Int(schritteAY)
    //        print("Joystick homeX: \(homeX) homeY: \(homeY)")
@@ -2351,20 +2351,26 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             break // A1
          case 0xAD:
             print("Joystick newDataAktion  AD TASK END ")
-            let abschnittnum = Int((data[5] << 8) | data[6])
+            var abschnittnum = Int((data[5] << 8) | data[6])
+            
             let ladepos =  Int(data[8] )
-            print("newDataAktion  AD ladepos: \(ladepos) Schnittdatenarray.count: \(Schnittdatenarray.count)")
+            print("Joystick newDataAktion  AD abschnittnum: \(abschnittnum) ladepos: \(ladepos) Schnittdatenarray.count: \(Schnittdatenarray.count)")
             //         Plattefeld.setStepperposition(pos:ladepos+1)
+            abschnittnum += 1
             if abschnittnum < (Schnittdatenarray.count - 1)
             {
                print("newDataAktion noch Daten da")
                write_CNC_Abschnitt()
             }
+            else
+            {
+               print("newDataAktion keine Daten mehr da")
+            }
             // print("newDataAktion  AD abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
             notificationDic["taskcode"] = taskcode
-            nc.post(name:Notification.Name(rawValue:"usbread"),
-                    object: nil,
-                    userInfo: notificationDic)        
+   //         nc.post(name:Notification.Name(rawValue:"usbread"),
+   //                 object: nil,
+   //                 userInfo: notificationDic)        
             break
             
          case 0xAF:
@@ -2441,7 +2447,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          //      print("newDataAktion writecncabschnitt")
          
          // **************************************
-         write_CNC_Abschnitt()
+  //       write_CNC_Abschnitt()
          // **************************************
          
          //      print("newDataAktion  end\n\n")
