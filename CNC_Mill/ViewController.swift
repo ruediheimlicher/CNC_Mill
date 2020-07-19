@@ -655,6 +655,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
          i = i+1
       }
       
+      
       if let d = notification.userInfo!["usbdata"]
       {
          
@@ -723,7 +724,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
          teensy.write_byteArray[27] = 0 // indexl
          var timerdic:[String:Int] = ["haltstatus":1, "home":0]
          var timer : Timer? = nil
-         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(USB_read(timer:)), userInfo: timerdic, repeats: true)
+  //       timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(USB_read(timer:)), userInfo: timerdic, repeats: true)
 
          
       }

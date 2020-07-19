@@ -1335,7 +1335,7 @@ class rJoystick: rViewController
       cncstepperposition = 0
       if Schnittdatenarray.count == 0 // Array im Teensy loeschen
       {
-         wegarray[25] = 1 //erstes Element
+         teensy.write_byteArray[25] = 1 //erstes Element
          teensy.write_byteArray[24] = 0xE0 // Stopp
          if teensy.dev_present() > 0
          {
@@ -1801,7 +1801,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    func schrittdatenvektor(sxInt:Int,syInt:Int, zeit:Double) -> [UInt8]
    {
       print("Joystick schrittdatenvektor sxInt: \(sxInt) syInt: \(syInt) zeit: \(zeit)")
-      let sxInt_raw = (sxInt & 0x0FFFFFFF)
+      let sxInt_raw = (sxInt & 0x0FFFFFFF) // sxInt_raw ist >= 0
       let syInt_raw = (syInt & 0x0FFFFFFF)
       
       var vektor = [UInt8]()
@@ -1817,6 +1817,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       vektor.append(sxD)
       
       let dx:Double = (zeit / Double((sxInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
+       // dx >= 0 
       
       let dxIntround = round(dx)
       var dxInt = 0
@@ -1830,7 +1831,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       vektor.append(dxA)
       vektor.append(dxB)
       
-//      print("Fehlerkorrektur X")
+      print("Fehlerkorrektur X")
       var korrekturintervallx:Int = 0
       if sxInt != 0
       {
@@ -1839,22 +1840,22 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
 //         print("vorzeichenx: \(vorzeichenx)") // Richtung der Bewegung
          
 //         print("sxInt_raw: \(sxInt_raw) dx: \(dx) dxInt: \(dxInt)")
-         let kontrolledoublex = Int(Double(sxInt_raw) * dx) //  Kontrolle mit Double-Wert von dx
-         let kontrolleintx = sxInt_raw * dxInt //               Kontrolle mit Int-Wert von dx
-         var diffx = Int(kontrolledoublex) - kontrolleintx // differenz, Rundungsfehler
-//         print("kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
+         let kontrolledoublex = Int(Double(sxInt_raw) * dx) // Zeit,  Kontrolle mit Double-Wert von dx
+         let kontrolleintx = sxInt_raw * dxInt //           // Zeit,  Kontrolle mit Int-Wert von dx
+         var diffx = Int(kontrolledoublex) - kontrolleintx // Zeitdifferenz, Rundungsfehler
+         print("kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
          if diffx == 0
          {
             diffx = 1
          }
          if diffx != 0
          {
-         let intervallx = Double(kontrolleintx / diffx)
+         var intervallx = Double(kontrolleintx / diffx )
          
          let controlx = Double(sxInt_raw) / intervallx
-         korrekturintervallx = Int(round(intervallx)) // Rundungsfehler aufteilen ueber Abschnitt: 
+         korrekturintervallx = Int(round(intervallx))  // Rundungsfehler aufteilen ueber Abschnitt: 
          // alle korrekturintervallx dexInt incrementieren oder decrementieren
-  //       print("korrekturintervallx: \(korrekturintervallx) controlx: \(controlx)")
+         print("korrekturintervallx: \(korrekturintervallx) controlx: \(controlx)")
          
          if korrekturintervallx < 0 // negative korrektur
          {
@@ -1862,7 +1863,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             korrekturintervallx *= -1
             korrekturintervallx |= 0x8000
          }
-  //       print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
+         print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
+         
          } // diffx not 0
       }
       vektor.append(UInt8(korrekturintervallx & 0x00FF))
@@ -2126,6 +2128,10 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             }
             print("zeilenindex: \(zeilenindex) zeilenposition: \(zeilenposition)")
             Schnittdatenarray[zeilenindex][25] = zeilenposition // innere Elemente
+            Schnittdatenarray[zeilenindex][26] = UInt8((zeilenindex & 0xFF00) >> 8)
+            Schnittdatenarray[zeilenindex][27] = UInt8(zeilenindex & 0x00FF)
+            
+            
             print("Schnittdatenarray: \(Schnittdatenarray[zeilenindex]) ")
          }
  
@@ -2137,8 +2143,20 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             print("\njoystickaktion start CNC")
             write_CNC_Abschnitt()   
             
-            
-            teensy.start_read_USB(true)
+       //     teensy.start_read_USB(true)
+            if teensy.readtimervalid() == true
+            {
+               print("Joystick readtimer valid")
+               
+            }
+            else 
+            {
+               print("Joystick readtimer not valid")
+               
+               var start_read_USB_erfolg = teensy.start_read_USB(true)
+            }
+
+         
          }
          
  //        print("Nach: lastklickposition.x: \(lastklickposition.x) lastklickposition.y: \(lastklickposition.y) ")
@@ -2269,7 +2287,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    {
       // analog readUSB() in USB_Stepper
       
-      
+  /*    
       //print("newDataAktion")
       let lastData = teensy.getlastDataRead()
       
@@ -2287,21 +2305,25 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
      // let info = notification.userInfo
       
       //print("info: \(String(describing: info))")
-      print("newDataAktion")
+ */
+      print("Joystick newDataAktion")
       var data:[UInt8] = notification.userInfo?["data"] as! [UInt8]
 //      print("von teensy: data: \(String(describing: data)) ") // data: Optional([0, 9, 51, 0,....
       var i = 0
             
       let taskcode = data[0]
       let codehex = String(format:"%02X", taskcode)
-      var device = data[24]
-      print("\n\t                            Joystick newDataAktion taskcode hex: \(codehex) device: \(device)")
       
+       
       if taskcode == 0
          {
             print("newDataAktion taskcode: NULL")
             return
       }
+      let device = data[24]
+      
+      print("\n\t                            Joystick newDataAktion taskcode hex: \(codehex) device: \(device)")
+    
       var notificationDic = [String:Any]()
       let cncstatus:UInt8 = data[20] // cncstatus
       
@@ -2330,12 +2352,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             print("Joystick newDataAktion  A1 abschnittnummer: \(abschnittnummer) Schnittdatenarray.count: \(Schnittdatenarray.count)")
             if abschnittnummer <= (Schnittdatenarray.count - 1)
             {
-               print("newDataAktion noch Daten da")
+               print("A1 newDataAktion noch Daten da")
                write_CNC_Abschnitt()
             }
             else
             {
-               print("newDataAktion keine Daten mehr")
+               print("A1 newDataAktion keine Daten mehr")
                if readtimer?.isValid == true
                {
                   readtimer?.invalidate()
@@ -2354,17 +2376,17 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             var abschnittnum = Int((data[5] << 8) | data[6])
             
             let ladepos =  Int(data[8] )
-            print("Joystick newDataAktion  AD abschnittnum: \(abschnittnum) ladepos: \(ladepos) Schnittdatenarray.count: \(Schnittdatenarray.count)")
+            print("Joystick newDataAktion  AD abschnittnum: \(abschnittnum) ladepos: \(ladepos) Schnittdatenarray.count: \(Schnittdatenarray.count) cncstepperposition: \(cncstepperposition)")
             //         Plattefeld.setStepperposition(pos:ladepos+1)
             abschnittnum += 1
             if abschnittnum < (Schnittdatenarray.count - 1)
             {
-               print("newDataAktion noch Daten da")
+               print("AD newDataAktion noch Daten da")
                write_CNC_Abschnitt()
             }
             else
             {
-               print("newDataAktion keine Daten mehr da")
+               print("AD newDataAktion keine Daten mehr da")
             }
             // print("newDataAktion  AD abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
             notificationDic["taskcode"] = taskcode
@@ -2412,12 +2434,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             print("Joystick newDataAktion  D1 abschnittnummer: \(abschnittnummer) Schnittdatenarray.count: \(Schnittdatenarray.count)")
             if abschnittnummer < (Schnittdatenarray.count - 1)
             {
-               print("newDataAktion noch Daten da")
+               print("D1 newDataAktion noch Daten da")
  //              write_CNC_Abschnitt()
             }
             else
             {
-               print("newDataAktion keine Daten mehr")
+               print("D1 newDataAktion keine Daten mehr")
    //            if readtimer?.isValid == true
    //            {
    //               readtimer?.invalidate()

@@ -122,7 +122,14 @@ open class usb_teensy: NSObject
       return prodstring
    }
    
-   
+   open func readtimervalid()->Bool
+   {
+      if readtimer?.isValid  ?? false
+      {
+         return true
+      }
+      return false
+   }
    
    open func status()->Int32
    {
@@ -297,11 +304,9 @@ open class usb_teensy: NSObject
             return;
          }
          read_byteArray = readarray
-         let usbData = Data(bytes:read_byteArray)
+  //       let usbData = Data(bytes:read_byteArray)
          
-         // var timerdic: [String: Int]
-         var i = 0
-         
+ /*        
          if  var dic = timer.userInfo as? NSMutableDictionary
          {
             if var count:Int = dic["count"] as? Int 
@@ -312,7 +317,7 @@ open class usb_teensy: NSObject
                
             }
          }
-         
+ */        
          let timerdic:Dictionary<String,Int?> = timer.userInfo as! Dictionary<String,Int?>
          //let messageString = userInfo["message"]
          var tempcount = timerdic["count"]!

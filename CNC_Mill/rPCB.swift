@@ -1586,9 +1586,17 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
   
       write_CNC_Abschnitt()
       
+      if teensy.readtimervalid() == true
+      {
+         print("PCB readtimer valid")
+         
+      }
+      else 
+      {
+         print("PCB readtimer not valid")
       
       var start_read_USB_erfolg = teensy.start_read_USB(true)
-      
+      }
       
       
   //    var start_read_USB_erfolg = teensy.start_read_USB(true)
@@ -2499,8 +2507,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       // analog readUSB() in USB_Stepper
       
       
-      //print("newDataAktion")
-      let lastData = teensy.getlastDataRead()
+      print("PCB newDataAktion")
+  //    let lastData = teensy.getlastDataRead()
       
      // print("lastData:\t \(lastData[1])\t\(lastData[2])   ")
       var ii = 0
@@ -2517,7 +2525,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
       //print("info: \(String(describing: info))")
       //print("new Data")
-      var data:[UInt8] = notification.userInfo?["data"] as! [UInt8]
+      
+      var data:[UInt8] = notification.userInfo?["data"] as! [UInt8] // teensy.read_byteArray
 //      print("von teensy: data: \(String(describing: data)) ") // data: Optional([0, 9, 51, 0,....
       var i = 0
             
