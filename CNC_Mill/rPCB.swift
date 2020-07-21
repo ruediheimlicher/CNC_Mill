@@ -42,6 +42,7 @@ class rPCB: rViewController
     @IBOutlet weak var PCB_Data_Knopf: NSButton!
    
    @IBOutlet weak var DataSendTaste: NSButton!
+   @IBOutlet weak var ClearPCBTaste: NSButton!
    @IBOutlet weak var linear_checkbox: NSButton!
    @IBOutlet weak var horizontal_checkbox:NSButton!
    
@@ -676,6 +677,8 @@ class rPCB: rViewController
             print("\(el[0] )\t \(el[1] )\t \(el[2])")
          }
          
+         circlearray.append(circlearray[0])
+         
          let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
          fahrtweg.integerValue = l
          
@@ -696,8 +699,10 @@ class rPCB: rViewController
          /* error handling here */
          return
       }
+      
       report_PCB_Daten(PCB_Data_Knopf)
       PCB_Test = 1
+     // report_clear(ClearPCBTaste)
       report_send_Daten(DataSendTaste)
 
    }
@@ -1566,10 +1571,10 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       if Schnittdatenarray.count == 0 // Array im Teensy loeschen
       {
          teensy.write_byteArray[25] = 1 //erstes Element
-         teensy.write_byteArray[24] = 0xE0 // Stopp
+         teensy.write_byteArray[24] = 0xF1 // Stopp
          if teensy.dev_present() > 0
          {
- //           let senderfolg = teensy.send_USB()
+            let senderfolg = teensy.send_USB()
             //            print("joystickAktion report_goXY senderfolg: \(senderfolg)")
          }
          
@@ -1581,19 +1586,29 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          print("\(i) \(linie)")
          i += 1
       }
-      
- //     var start_read_USB_erfolg = teensy.start_read_USB(true)
-  
-      write_CNC_Abschnitt()
-      
+      /*
       if teensy.readtimervalid() == true
       {
-         print("PCB readtimer valid")
+         print("PCB readtimer valid vor")
          
       }
       else 
       {
-         print("PCB readtimer not valid")
+         print("PCB readtimer not valid vor")
+         
+         var start_read_USB_erfolg = teensy.start_read_USB(true)
+      }
+       */
+      write_CNC_Abschnitt()
+      
+      if teensy.readtimervalid() == true
+      {
+         print("PCB readtimer valid nach")
+         
+      }
+      else 
+      {
+         print("PCB readtimer not valid nach")
       
       var start_read_USB_erfolg = teensy.start_read_USB(true)
       }
@@ -1616,12 +1631,13 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       //    if (usbstatus > 0)
       //    {
       let senderfolg = teensy.send_USB()
-      print("report_clear senderfolg: \(senderfolg)")
+      print("PCB report_clear senderfolg: \(senderfolg)")
       //    }
       cncstepperposition = 0
       teensy.clear_writearray()
       Schnittdatenarray.removeAll(keepingCapacity: true)
       Plattefeld.clearWeg()
+      Plattefeld.needsDisplay = true
       lastklickposition.x = 0
       lastklickposition.y = 0
 

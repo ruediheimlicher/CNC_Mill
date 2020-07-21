@@ -1389,6 +1389,14 @@ class rJoystick: rViewController
       dyFeld.doubleValue = buf
    }
    
+   @IBAction func report_inv_TextDaten(_ sender: NSButton)
+   {
+      print("report_inv_TextDaten")
+      let buf = dxFeld.doubleValue
+      dxFeld.doubleValue = dxFeld.doubleValue * (-1)
+      dyFeld.doubleValue = dyFeld.doubleValue * (-1)
+   }
+   
    
    @IBAction func report_dx_Stepper(_ sender: NSStepper) // 
    {
@@ -1579,7 +1587,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
   //    if (usbstatus > 0)
   //    {
          let senderfolg = teensy.send_USB()
-         print("report_clear senderfolg: \(senderfolg)")
+         print("Joystick report_clear senderfolg: \(senderfolg)")
   //    }
       teensy.clear_writearray()
       cncstepperposition = 0
@@ -1863,7 +1871,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             korrekturintervallx *= -1
             korrekturintervallx |= 0x8000
          }
-         print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
+  //       print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
          
          } // diffx not 0
       }
