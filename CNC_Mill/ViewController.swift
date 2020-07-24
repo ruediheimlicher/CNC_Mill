@@ -72,7 +72,7 @@ override  func mouseDown(with theEvent: NSEvent)
       default:
       break
    }
-   print("rPfeiltaste mousedown tabview ident: \(dev) devtag: \(devtag)")  
+ //  print("rPfeiltaste mousedown tabview ident: \(dev) devtag: \(devtag)")  
    let location = theEvent.locationInWindow
    //    Swift.print(location)
    //    NSPoint lokalpunkt = [self convertPoint: [anEvent locationInWindow] fromView: nil];
@@ -81,7 +81,7 @@ override  func mouseDown(with theEvent: NSEvent)
    //print("lokalpunkt: \(lokalpunkt) klickcount: \(klickcount)")
 
   let pfeiltag = self.tag
-   print("rPfeiltaste mousedown tag: \(pfeiltag)") 
+//   print("rPfeiltaste mousedown tag: \(pfeiltag)") 
    var dx = 0
    var dy = 0
    let schrittweite:Int = 6
@@ -116,7 +116,7 @@ override  func mouseDown(with theEvent: NSEvent)
 override  func mouseUp(with theEvent: NSEvent) 
    {
       super.mouseUp(with: theEvent)
-      print("rPfeiltaste mouseup")  
+ //     print("rPfeiltaste mouseup")  
       pfeiltimer?.invalidate()
       // let pfeiltag = self.tag
    }
@@ -343,7 +343,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
    
    var CNC = rCNC()
    
-   var readtimer: Timer?
+//   var readtimer: Timer?
    
     @IBOutlet weak var USB_OK: NSOutlineView!
     @IBOutlet weak var check_USB_Knopf: NSButton!
@@ -473,6 +473,10 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       myFileDialog.runModal() 
       return myFileDialog.url 
    }  
+   
+   
+   
+
    /*
    @IBAction func reportReadSVG(_ sender: NSButton)
    {
@@ -694,7 +698,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
  
    @objc  func mausstatusAktion(_ notification:Notification)
    {
-       print("ViewController mausstatusAktion")
+       //print("ViewController mausstatusAktion")
    }
    
    @IBAction func report_HALT(_ sender: NSButton)
@@ -722,8 +726,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
          teensy.write_byteArray[24] = 0xE0 // code
          teensy.write_byteArray[26] = 0 // indexh
          teensy.write_byteArray[27] = 0 // indexl
-         var timerdic:[String:Int] = ["haltstatus":1, "home":0]
-         var timer : Timer? = nil
+ //        var timerdic:[String:Int] = ["haltstatus":1, "home":0]
+ //        var timer : Timer? = nil
   //       timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(USB_read(timer:)), userInfo: timerdic, repeats: true)
 
          
@@ -1118,6 +1122,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       print("antwort: \(teensy.status())")
    }
    
+   /*
    @objc func USB_read(timer: Timer!)
    {
       print("USB_read note: \(readtimer?.userInfo)")
@@ -1142,6 +1147,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
       
 
    }
+   */
    
    func dialogOKCancel(question: String, text: String) -> Bool 
    {

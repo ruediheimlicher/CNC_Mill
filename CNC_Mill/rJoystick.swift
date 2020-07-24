@@ -533,6 +533,24 @@ class rJoystick: rViewController
       return returnDicArray
    }
    
+   func clearteensy()
+   {
+      Schnittdatenarray.removeAll(keepingCapacity: true)
+      if Schnittdatenarray.count == 0 // Array im Teensy loeschen
+      {
+         teensy.write_byteArray[25] = 1 //erstes Element
+         teensy.write_byteArray[24] = 0xF1 // Stopp
+         if teensy.dev_present() > 0
+         {
+            let senderfolg = teensy.send_USB()
+            print("joystickAktion clear senderfolg: \(senderfolg)")
+         }
+         
+      }
+      
+   }
+
+   
    
    @IBAction func report_readSVG(_ sender: NSButton)
    {
@@ -1320,6 +1338,7 @@ class rJoystick: rViewController
    @IBAction func report_send_TextDaten(_ sender: NSButton)
    {
       print("report_send_TextDaten")
+      clearteensy()
       let dx = dxFeld.doubleValue
       let dy = dyFeld.doubleValue
       
@@ -1704,7 +1723,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    @IBAction func report_home(_ sender: NSButton)
    {
-      
+      clearteensy()
       print("Joystick report_home homex: \(homeX) homey: \(homeY)")
       var dx = homexFeld.doubleValue * -1 
       var dy = homeyFeld.doubleValue * -1
@@ -1754,7 +1773,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       var dy:Int = 0
       var vorzeichenx = 0;
       var vorzeicheny = 0;
-      print("joystick mausstatusAktion devtag:\t \(devtag ) pfeiltag:\t \(pfeiltag) schrittweite: \(schrittweite)\t")
+ //     print("joystick mausstatusAktion devtag:\t \(devtag ) pfeiltag:\t \(pfeiltag) schrittweite: \(schrittweite)\t")
       
          switch pfeiltag
          {
@@ -1766,20 +1785,39 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             break
          case 3: // left
             dx = schrittweite * (-1)
-            //dx |= 0x80000000
             vorzeichenx = 1
             break
          case 4: // down
             dy = schrittweite * (-1)
-            //dy |= 0x80000000
             vorzeicheny = 1
             break
+            
+          case 11:    // links oben
+            dx = schrittweite * (-1)
+            dy = schrittweite
+            break;
+         case 22:    // rechts oben
+            dx = schrittweite
+            dy = schrittweite
+            break;
+         case 33:    // rechts unten
+            dx = schrittweite
+            dy = schrittweite * (-1)
+            break;
+         case 44:    // rechts unten
+            dx = schrittweite * (-1)
+            dy = schrittweite * (-1)
+            break;
+            
+            
+            
+            
          default:
             break
             
             
          }
-         print("mausstatusAktion \(dx) \(dy)")
+         print("mausstatusAktion dx:\(dx) dy:\(dy)")
          var pfeilwegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
          
          pfeilwegarray[32] = 2
@@ -1790,7 +1828,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             teensy.write_byteArray[z] = pfeilwegarray[z]
             // print("\(pfeilwegarray[z])")
          }
-         print("\(pfeilwegarray)")
+         print("pfeilwegarray: \n\(pfeilwegarray)")
          teensy.write_byteArray[24] = 0xA5
          
          
@@ -1808,10 +1846,10 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    func schrittdatenvektor(sxInt:Int,syInt:Int, zeit:Double) -> [UInt8]
    {
-      print("Joystick schrittdatenvektor sxInt: \(sxInt) syInt: \(syInt) zeit: \(zeit)")
       let sxInt_raw = (sxInt & 0x0FFFFFFF) // sxInt_raw ist >= 0
       let syInt_raw = (syInt & 0x0FFFFFFF)
-      
+      print("\n                            Joystick schrittdatenvektor sxInt: \(sxInt) syInt: \(syInt) zeit: \(zeit)")
+      print("sxInt_raw: \(sxInt_raw) syInt_raw: \(syInt_raw)")
       var vektor = [UInt8]()
       //print("sxInt: \(sxInt) ")
       let sxA = UInt8(sxInt & 0x000000FF)
@@ -1824,7 +1862,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       vektor.append(sxC)
       vektor.append(sxD)
       
-      let dx:Double = (zeit / Double((sxInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
+      let dx:Double = (zeit / Double((sxInt_raw))) // Vorzeichen-Bit weg
        // dx >= 0 
       
       let dxIntround = round(dx)
@@ -1839,15 +1877,15 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       vektor.append(dxA)
       vektor.append(dxB)
       
-      print("Fehlerkorrektur X")
+      print("\n***   Fehlerkorrektur X")
       var korrekturintervallx:Int = 0
       if sxInt != 0
       {
          let vorzeichenx = (sxInt & 0x80000000)
          
-//         print("vorzeichenx: \(vorzeichenx)") // Richtung der Bewegung
+         //         print("vorzeichenx: \(vorzeichenx)") // Richtung der Bewegung
          
-//         print("sxInt_raw: \(sxInt_raw) dx: \(dx) dxInt: \(dxInt)")
+         print("sxInt_raw: \(sxInt_raw) dx: \(dx) dxInt: \(dxInt)")
          let kontrolledoublex = Int(Double(sxInt_raw) * dx) // Zeit,  Kontrolle mit Double-Wert von dx
          let kontrolleintx = sxInt_raw * dxInt //           // Zeit,  Kontrolle mit Int-Wert von dx
          var diffx = Int(kontrolledoublex) - kontrolleintx // Zeitdifferenz, Rundungsfehler
@@ -1858,23 +1896,24 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          }
          if diffx != 0
          {
-         var intervallx = Double(kontrolleintx / diffx )
-         
-         let controlx = Double(sxInt_raw) / intervallx
-         korrekturintervallx = Int(round(intervallx))  // Rundungsfehler aufteilen ueber Abschnitt: 
-         // alle korrekturintervallx dexInt incrementieren oder decrementieren
-         print("korrekturintervallx: \(korrekturintervallx) controlx: \(controlx)")
-         
-         if korrekturintervallx < 0 // negative korrektur
-         {
- //           print("korrekturintervallx negativ")
-            korrekturintervallx *= -1
-            korrekturintervallx |= 0x8000
-         }
-  //       print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
-         
+            var intervallx = Double(kontrolleintx / diffx ) // Korrekturintervall zum einschieben oder entfernen von Schritten
+            
+            let controlx = Double(sxInt_raw) / intervallx  
+            korrekturintervallx = Int(round(intervallx))  // Rundungsfehler aufteilen ueber Abschnitt: 
+            // alle korrekturintervallx dexInt incrementieren oder decrementieren
+            print("korrekturintervallx: \(korrekturintervallx) controlx: \(controlx)")
+            
+            if korrekturintervallx < 0 // negative korrektur
+            {
+                          print("korrekturintervallx negativ")
+               korrekturintervallx *= -1
+               korrekturintervallx |= 0x8000
+            }
+                   print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
+            
          } // diffx not 0
       }
+      print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
       vektor.append(UInt8(korrekturintervallx & 0x00FF))
       vektor.append(UInt8((korrekturintervallx & 0xFF00)>>8))
 
@@ -1903,36 +1942,43 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       vektor.append(dyB)
 
       
-//      print("Fehlerkorr Y")
+      print("+++   Fehlerkorr Y")
       var korrekturintervally:Int = 0
       if syInt != 0
       {
          let vorzeicheny = (syInt & 0x80000000)
          
-//         print("vorzeicheny: \(vorzeicheny)")
+         //         print("vorzeicheny: \(vorzeicheny)")
          
-         print("syInt: \(syInt) dy: \(dy) dyInt: \(dyInt)")
-         let kontrolledoubley = Int(Double(syInt) * dy)
-         let kontrolleinty = syInt * dyInt
-         let diffy = (kontrolledoubley) - kontrolleinty
- //        print("kontrolledoubley: \(kontrolledoubley) kontrolleinty: \(kontrolleinty) diffy: \(diffy)")
-        if diffy != 0
-        {
-         let intervally = Double(kontrolleinty / diffy)
-         
-         korrekturintervally = Int(round(intervally))
- //        print("korrekturintervally: \(korrekturintervally) \n")
-         let controly = Double(syInt_raw) / intervally
-         
-         if korrekturintervally < 0 // negative korrektur
+         print("syInt_raw: \(syInt_raw) dy: \(dy) dyInt: \(dyInt)")
+         let kontrolledoubley = Int(Double(syInt_raw) * dy)
+         let kontrolleinty = syInt_raw * dyInt
+         var diffy = (kontrolledoubley) - kontrolleinty
+         print("kontrolledoubley: \(kontrolledoubley) kontrolleinty: \(kontrolleinty) diffy: \(diffy)")
+         if diffy == 0
          {
-  //          print("korrekturintervally negativ")
-            korrekturintervally *= -1
-            korrekturintervally |= 0x8000
+            diffy = 1
          }
- //        print("korrekturintervally mit Vorzeichenkorr: \(korrekturintervally)  controly: \(controly)\n")
+         
+         if diffy != 0
+         {
+            let intervally = Double(kontrolleinty / diffy)
+            
+            korrekturintervally = Int(round(intervally))
+            //       
+            let controly = Double(syInt_raw) / intervally
+            print("korrekturintervally: \(korrekturintervally) controly_ \(controly)\n")
+            
+            if korrekturintervally < 0 // negative korrektur
+            {
+                         print("korrekturintervally negativ")
+               korrekturintervally *= -1
+               korrekturintervally |= 0x8000
+            }
+                    print("korrekturintervally mit Vorzeichenkorr: \(korrekturintervally) \n")
          } // diffy not 0
       }
+      print("korrekturintervally mit Vorzeichenkorr: \(korrekturintervally) \n")
       vektor.append(UInt8(korrekturintervally & 0x00FF))
       vektor.append(UInt8((korrekturintervally & 0xFF00)>>8))
       
@@ -2014,7 +2060,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          schrittexInt = Int(schrittexRound)
          if schrittexInt < 0 // negativer Weg
          {
-            print("schrittexInt negativ")
+ //           print("schrittexInt negativ")
             schrittexInt *= -1
             schrittexInt |= 0x80000000
          }
@@ -2033,7 +2079,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          schritteyInt = Int(schritteyRound)
          if schritteyInt < 0 // negativer Weg
          {
-            print("schritteyInt negativ")
+//            print("schritteyInt negativ")
             schritteyInt *= -1
             schritteyInt |= 0x80000000
          }
@@ -2057,6 +2103,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       if (sel == self.view.identifier)
       {
          print("                                        Joystick joystickAktion passt")
+         clearteensy()
          print("joystickAktion lastklickposition.x: \(lastklickposition.x) lastklickposition.y: \(lastklickposition.y) ")
          let info = notification.userInfo
          let punkt:CGPoint = info?["punkt"] as! CGPoint
@@ -2366,9 +2413,9 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             else
             {
                print("A1 newDataAktion keine Daten mehr")
-               if readtimer?.isValid == true
+               if teensy.readtimervalid() == true
                {
-                  readtimer?.invalidate()
+                  teensy.readtimer?.invalidate()
                }
                Joystickfeld.clearWeg()
                Joystickfeld.needsDisplay = true
@@ -2415,9 +2462,9 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          case 0xE1:
             print("newDataAktion Joystick E1 mouseup HALT")
             //Schnittdatenarray.removeAll()
-            if readtimer?.isValid == true
+            if teensy.readtimervalid() == true
             {
-           //    readtimer?.invalidate()
+                teensy.readtimer?.invalidate()
             }
             //cncstepperposition = 0
             break
