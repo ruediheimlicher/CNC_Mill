@@ -726,14 +726,17 @@ class rPCB: rViewController
       
       report_PCB_Daten(PCB_Data_Knopf)
       PCB_Test = 1
+      /*
       let kreuzarray = kreuz(startnummer: Schnittdatenarray.count)
       
       for el in kreuzarray
       {
+   //
          Schnittdatenarray.append(el)
       }
       let endindex = Schnittdatenarray.endIndex - 1
       Schnittdatenarray[endindex][24] = 3
+ */
       report_send_Daten(DataSendTaste)
 
    }
