@@ -1605,6 +1605,7 @@ class rPCB: rViewController
          //       motorstatus = (1<<MOTOR_A)
          
          //       print("motorstatus: \(motorstatus) maxsteps: \(maxsteps)")
+         
          zeilenschnittdatenarray.append(motorstatus)
          zeilenschnittdatenarray.append(77) // Pöatzhalter PWM
          
@@ -2192,6 +2193,10 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          maxsteps = fabs(dxIntround)
          motorstatus = (1<<MOTOR_A)
       }
+      if (sxInt == 0) && (syInt == 0) && (szInt != 0)
+      {
+         motorstatus = (1<<MOTOR_C)
+      }
       vektor.append(motorstatus)
       vektor.append(77) // Pöatzhalter PWM
       
@@ -2665,6 +2670,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       {
          print("schritteZround zu gross")
       }
+ //     motorstatus = (1<<MOTOR_C)
       var drillschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:0, syInt:0, szInt:schrittezInt, zeit:zeit  )// Array mit Daten fuer USB
       print("drillschnittdatenarray: \(drillschnittdatenarray)")
       return drillschnittdatenarray
@@ -2682,6 +2688,10 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
      
       var drillWegArray = drillMoveArray(wegz: Double(drillweg))
+      drillWegArray[24] = 0xB5
+      drillWegArray[29] = 0 // PWM
+      
+      drillWegArray[32] = DEVICE_MILL
       Schnittdatenarray.append(drillWegArray)
       
       if Schnittdatenarray.count > 0
@@ -2694,7 +2704,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
 
    }
    
- // MARK: joystick
+ // MARK: joystickaktion
    @objc override func joystickAktion(_ notification:Notification) 
    {
   //    print("PCB joystickAktion usbstatus:\t \(usbstatus) selectedDevice: \(selectedDevice) ident: \(self.view.identifier)")
@@ -2824,7 +2834,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
    }
    
-   
+ // MARK: NEWDATAAKRION 
    @objc override func newDataAktion(_ notification:Notification) 
    {
       // analog readUSB() in USB_Stepper
@@ -2878,6 +2888,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       let nc = NotificationCenter.default
       var device = data[24]
 //      print("PCB newDataAktion  device: \(device)")
+// MARK: *** DEVICE_MILL       
       if device == DEVICE_MILL
       {
          print("DEVICE_MILL")
@@ -2910,9 +2921,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          case 0xB6:
          print("newDataAktion  B6 ")
             
-            
-            
-            
+             
          break;
             
          case 0xE1:
