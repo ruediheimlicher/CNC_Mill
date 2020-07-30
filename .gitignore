@@ -6,7 +6,7 @@ build/*
 *.lst
 *.map
 *.sym
-**.xcodeproj/*
+CNC_Mill.xcodeproj/*
 *.hex
 *.o
 .dep/
