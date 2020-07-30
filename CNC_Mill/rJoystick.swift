@@ -856,6 +856,7 @@ class rJoystick: rViewController
          let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
          fahrtweg.integerValue = l
          
+         /*
          var CNC_DatendicArray = [[String:Any]]()
          for zeilendaten in circlearray
          {
@@ -865,9 +866,10 @@ class rJoystick: rViewController
             
             CNC_DatendicArray.append(zeilendic)
          }
-         /*
+         */
          print("report_readSVG CNC_DatendicArray")
          
+         /*
          for el in CNC_DatendicArray
          {
             print("\(el["startpunktx"] ?? 0) \(el["startpunkty"] ?? 0)")
@@ -946,7 +948,7 @@ class rJoystick: rViewController
          print("schritteYround zu gross")
       }
       
-      var wegschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:schrittexInt,syInt:schritteyInt, zeit:zeit  )// Array mit Daten fuer USB
+      var wegschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:schrittexInt,syInt:schritteyInt, szInt:0, zeit:zeit  )// Array mit Daten fuer USB
       
       return wegschnittdatenarray
    }
@@ -1844,7 +1846,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    }
 
    
-   func schrittdatenvektor(sxInt:Int,syInt:Int, zeit:Double) -> [UInt8]
+   func schrittdatenvektor(sxInt:Int,syInt:Int, szInt:Int, zeit:Double) -> [UInt8]
    {
       let sxInt_raw = (sxInt & 0x0FFFFFFF) // sxInt_raw ist >= 0
       let syInt_raw = (syInt & 0x0FFFFFFF)
@@ -2026,7 +2028,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    func wegArrayMitWegXY(wegx:Double, wegy:Double) ->[UInt8]
    {
       zoomfaktor = zoomFeld.doubleValue
-      print("Joystick wegMitXY")
+      print("Joystick wegMitXY wegX: \(wegx) wegY: \(wegy)")
       var maxsteps:Double = 0
       var weg = [Double]()
       
@@ -2089,7 +2091,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          print("schritteYround zu gross")
       }
       
-      var wegschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:schrittexInt,syInt:schritteyInt, zeit:zeit  )// Array mit Daten fuer USB
+      var wegschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:schrittexInt,syInt:schritteyInt, szInt:0, zeit:zeit  )// Array mit Daten fuer USB
       
       return wegschnittdatenarray
    }

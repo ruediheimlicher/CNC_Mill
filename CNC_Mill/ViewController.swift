@@ -225,6 +225,8 @@ struct position
    
 }
 
+
+
 //MARK: rSchnittPfad
 class rSchnittPfad 
 {
@@ -318,8 +320,9 @@ class rDeviceTabViewController: NSTabViewController
    
 }
 
-class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate
+class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTableViewDelegate
 {
+   
    var notokimage :NSImage = NSImage(named:NSImage.Name(rawValue: "notok_image"))!
    var okimage :NSImage = NSImage(named:NSImage.Name(rawValue: "ok_image"))!
 

@@ -23,6 +23,7 @@ class rPlatteView: NSView
    var gruen:CGFloat=240
    var blau:CGFloat=50
    
+   var markarray:[NSBezierPath] = [NSBezierPath]()
    
    var redfaktor:CGFloat = 200
    var transformfaktor:CGFloat = 0 // px to mm
@@ -154,6 +155,7 @@ class rPlatteView: NSView
                localkreis.appendOval(in: tempMarkRect)
                //              var fillcolor:NSColor = NSColor.blue
                //              fillcolor.setFill()
+               markarray.append(localkreis)
                kreisfillfarbe.set() // choose color
                localkreis.fill()
                kreislinienfarbe.set() // choose color
@@ -446,6 +448,7 @@ class rPlatteView: NSView
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
+      markarray.removeAll(keepingCapacity: true)
       needsDisplay = true
       
    }
