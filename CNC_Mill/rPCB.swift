@@ -2217,10 +2217,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
       let distanzX = wegx *  1000000
       let distanzY = wegy *  1000000
+ //     let distanzZ = wegz *  1000000
       
       let wegX = distanzX * zoomfaktor 
       let wegY = distanzY * zoomfaktor 
       let distanz = (wegX*wegX + wegY*wegY).squareRoot()
+      print("distanz: \(distanz)")
       var speed = speedFeld.intValue
       
       if ramp_OK_Check.state == NSControl.StateValue.on
@@ -2611,6 +2613,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    var zeilendic:[String:Any] = [:]
    var position:UInt8 = 0
    lastcncindex = zeilenindex
+   print("dataTableAktion zoomfaktor: \(zoomfaktor)")
    let diffX:Double = (Double(aktX - lastX)) * zoomfaktor
    let diffY:Double = (Double(aktY - lastY)) * zoomfaktor
    
@@ -2632,7 +2635,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    if Schnittdatenarray.count > 0
    {
-      print("dataTableAktion start CNC")
+      print("dataTableAktion start CNC ")
       write_CNC_Abschnitt()   
       
       teensy.start_read_USB(true)
@@ -2645,11 +2648,20 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       zoomfaktor = zoomFeld.doubleValue
       print("PCB drillUp wegz: \(wegz) ")
       let distanzZ = wegz *  1000000
+      
       let wegZ = distanzZ * zoomfaktor 
-      let speed = speedFeld.intValue
-      let distanz = wegZ
+      var speed = speedFeld.intValue
+      if ramp_OK_Check.state == NSControl.StateValue.on
+      {
+         speed *= 2
+      }
+
+      let distanz = abs(wegZ)
+      print("distanz: \(distanz)")
       let propfaktor = 2834645.67 // 14173.23
-      let zeit:Double = Double(abs(distanzZ))/Double(speed) //   Schnittzeit für Distanz
+      let zeit:Double = Double((distanz))/Double(speed) //   Schnittzeit für Distanz
+      
+      
       var schrittez = Double(stepsFeld.integerValue) * distanzZ 
       schrittez /= propfaktor
       let schrittezRound = round(schrittez)
