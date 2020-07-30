@@ -2223,7 +2223,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          speed *= 2
       }
       let propfaktor = 2834645.67 // 14173.23
-       
+      
+      
       let start = [0,0]
       let ziel = [wegX,wegY]
       
