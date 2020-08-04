@@ -560,7 +560,7 @@ class rPCB: rViewController
    {
       let URLString = "file:///Users/ruediheimlicher/Desktop/CNC_SVG/BBB.svg"
       
-      let path = Bundle.main.path(forResource: "BBB.txt", ofType: nil)!
+      let path = Bundle.main.path(forResource: "AAA.txt", ofType: nil)!
    
      // let content = try! String(contentsOfFile: path, encoding: String.Encoding.utf8)
  //     let myStringText = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
@@ -1200,44 +1200,6 @@ class rPCB: rViewController
 //      print("report_PCB_Daten circlearray vor doppelcheck count: \(zeilenanzahl)")
       var doppelindex:Int = 0
     
-      /*
-      
-      for datazeile in circlearray
-      {
-         if doppelindex < circlearray.count
-         {
-            let akt = circlearray[doppelindex]
-            var next = [Int]()
-            if doppelindex < circlearray.count-1
-            {
-               next = circlearray[doppelindex+1]
-               var diffX:Double = (Double((next[1] - akt[1]))) * zoomfaktor
-               var diffY:Double = (Double((next[2] - akt[2]))) * zoomfaktor
-               print(" datazeile diffX: \(diffX) diffY: \(diffY) zeile: \(doppelindex)")
-               while fabs(diffX) < 50 && fabs(diffY) < 50
-               {
-                  print(" datazeile *********    differenz null zeile: \(doppelindex)")
-                  circlearray.remove(at: doppelindex + 1)
-                  
-                  if doppelindex < circlearray.count-1
-                  {
-                     next = circlearray[doppelindex+1]
-                     diffX = (Double((next[1] - akt[1]))) * zoomfaktor
-                     diffY = (Double((next[2] - akt[2]))) * zoomfaktor
-                     
-                  }
-                  else
-                  {
-                     continue
-                  }
-               }
-               
-            } // if < count
-            
-            doppelindex += 1
-         }
-      }
-  */    
       zeilenanzahl = circlearray.count
       print("report_PCB_Daten circlearray nach doppelcheck count: \(zeilenanzahl)")
 
@@ -1634,7 +1596,7 @@ class rPCB: rViewController
       homexFeld.integerValue = xhome
       homeyFeld.integerValue = yhome
       
- //     print("Schnittdatenarray:\t\(Schnittdatenarray)")
+      print("Schnittdatenarray:\t\(Schnittdatenarray)")
      
       print("report_PCBDaten Schnittdatenarray count: \(Schnittdatenarray.count)")
       /*
@@ -1786,7 +1748,10 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       //    }
       cncstepperposition = 0
       teensy.clear_writearray()
-      Schnittdatenarray.removeAll(keepingCapacity: true)
+      Schnittdatenarray.removeAll()
+      circlearray.removeAll()
+      CNC_DatendicArray.removeAll()
+      dataTable.reloadData()
       Plattefeld.clearWeg()
       Plattefeld.needsDisplay = true
       lastklickposition.x = 0
@@ -2203,7 +2168,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       let timerintervall = timerintervallFeld.integerValue
       vektor.append(UInt8((timerintervall & 0xFF00)>>8))
       vektor.append(UInt8(timerintervall & 0x00FF))
-      vektor.append(DEVICE_JOY)
+      vektor.append(DEVICE_MILL)
  //     print("schrittdatenvektor sxInt: \(sxInt) dxInt: \(dxInt) syInt: \(syInt) dyInt: \(dyInt) zeit: \(zeit)")
       return vektor
    }
@@ -2618,11 +2583,13 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    let diffY:Double = (Double(aktY - lastY)) * zoomfaktor
    
    
-   let distanzX = Double(aktX - lastX)  * zoomfaktor  //* stepsFeld.floatValue
-   let distanzY = Double(aktY - lastY)  * zoomfaktor  //* stepsFeld.floatValue
+   let distanzX = Double(aktX - lastX)  * zoomfaktor  
+   let distanzY = Double(aktY - lastY)  * zoomfaktor  
    
-   let dx = (Double(aktX - lastX))/1000000
-   let dy = (Double(aktY - lastY))/1000000
+   let dx = (Double(aktX - lastX))/propfaktor
+   let dy = (Double(aktY - lastY))/propfaktor
+   
+   
    var dataTableWeg = wegArrayMitWegXY(wegx:dx, wegy:dy)
    dataTableWeg[32] = DEVICE_MILL
    dataTableWeg[24] = 0xB5
@@ -2630,6 +2597,10 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    
    print("dataTableAktion dataTableWeg: \(dataTableWeg)")
+   if Schnittdatenarray.count > zeilenindex
+   {
+      print("dataTableAktion zeilenindex: \(zeilenindex)\n Schnittdatenarray : \(Schnittdatenarray[zeilenindex])")
+   }
    
    Schnittdatenarray.append(dataTableWeg)
    
@@ -2690,8 +2661,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    @IBAction func report_move_Drill(_ sender: NSButton)
    {
-      print("report_move_Drill tag: \(sender.tag)")
-      var drillweg = 100
+      print("\n+++++++     report_move_Drill tag: \(sender.tag)")
+      var drillweg = 50
       var drilltag = sender.tag
       if drilltag == 222
       {
@@ -2702,7 +2673,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       var drillWegArray = drillMoveArray(wegz: Double(drillweg))
       drillWegArray[24] = 0xB5
       drillWegArray[29] = 0 // PWM
-      
+      drillWegArray[25] = 3
       drillWegArray[32] = DEVICE_MILL
       Schnittdatenarray.append(drillWegArray)
       

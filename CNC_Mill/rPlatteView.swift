@@ -107,13 +107,13 @@ class rPlatteView: NSView
       
       // setup the context
       let currentContext = NSGraphicsContext.current!.cgContext
-      currentContext.setLineWidth(dashHeight)
+ //     currentContext.setLineWidth(dashHeight)
       //currentContext.setLineDash(phase: 0, lengths: [dashLength])
-      currentContext.setStrokeColor(dashColor.cgColor)
+ //     currentContext.setStrokeColor(dashColor.cgColor)
       
       // draw the dashed path
-      currentContext.addRect(bounds.insetBy(dx: dashHeight, dy: dashHeight))
-      currentContext.strokePath()
+  //    currentContext.addRect(bounds.insetBy(dx: dashHeight, dy: dashHeight))
+ //     currentContext.strokePath()
       
       kreis.lineWidth = 1.5
       // neu
@@ -136,13 +136,16 @@ class rPlatteView: NSView
             //print(lokalpunkt)
             
             // Marke setzen
-            var tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
+            let tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
             // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
             // Nummer setzen
             //          var tempNumRect:NSRect = NSMakeRect(lokalpunkt.x-12.1, lokalpunkt.y+4.1, 24.1, 8.1);
-            
-            
-            
+            var localkreis:NSBezierPath =  NSBezierPath()
+            localkreis.appendOval(in: tempMarkRect)
+            //              var fillcolor:NSColor = NSColor.blue
+            //              fillcolor.setFill()
+            markarray.append(localkreis)
+             
             kreis.move(to: lokalpunkt)
             //    kreis.appendOval(in: tempMarkRect)
             
@@ -151,11 +154,13 @@ class rPlatteView: NSView
                //    var localkreis: NSBezierPath = NSBezierPath()
                lastpunkt = lokalpunkt
                weg.move(to: lokalpunkt)
+               /*
                var localkreis:NSBezierPath =  NSBezierPath()
                localkreis.appendOval(in: tempMarkRect)
                //              var fillcolor:NSColor = NSColor.blue
                //              fillcolor.setFill()
                markarray.append(localkreis)
+ */
                kreisfillfarbe.set() // choose color
                localkreis.fill()
                kreislinienfarbe.set() // choose color
@@ -178,9 +183,11 @@ class rPlatteView: NSView
                lastpunkt = lokalpunkt
                weg.line(to: lokalpunkt)
                //       kreis.fill()
+               /*
                var localkreis:NSBezierPath =  NSBezierPath()
                localkreis.appendOval(in: tempMarkRect)
-               
+               markarray.append(localkreis)
+ */
                //              var fillcolor:NSColor = NSColor.blue
                //              fillcolor.setFill()
                NSColor.yellow.set() // choose color
@@ -380,6 +387,11 @@ class rPlatteView: NSView
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
+      for mark in markarray
+      {
+         mark.removeAllPoints()
+      }
+      markarray.removeAll()
       drawstatus = 0
       fahrtweg = 0
       redfaktor = 200.0
@@ -445,10 +457,19 @@ class rPlatteView: NSView
    
    func clearWeg()
    {
+      Swift.print( "clearWeg" )
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
-      markarray.removeAll(keepingCapacity: true)
+  
+      let clearColor: NSColor = .clear
+      for mark in markarray
+      {
+ //        clearColor.set()
+ //        mark.stroke()
+         mark.removeAllPoints()
+      }
+      markarray.removeAll()
       needsDisplay = true
       
    }
