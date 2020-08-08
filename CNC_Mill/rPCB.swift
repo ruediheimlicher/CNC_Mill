@@ -874,7 +874,7 @@ class rPCB: rViewController
   //                      print("i: \(i) \tz:\t \(z)\tpartB: \t\(partB)")
                         
                         z += 1
-                        let partfloat = (partB as NSString).doubleValue * 1000000 // Vorbereitung Int
+                        let partfloat = (partB as NSString).doubleValue * INTEGERFAKTOR // Vorbereitung Int
                         let partint = Int(partfloat)
                         if partint > 0xFFFFFFFF
                         {
@@ -1013,7 +1013,7 @@ class rPCB: rViewController
          }
          
          var doppelindex:Int = 0
-         
+         var doppelcount = 0
          for datazeile in circlearray
          {
             if doppelindex < circlearray.count
@@ -1034,6 +1034,7 @@ class rPCB: rViewController
                      
                      if fabs(diffY) < maxdiff
                      {
+                        doppelcount+=1
                         //print(" *** diff zu klein akt zeile: \(doppelindex) n: \(n)\t diffX: \(diffX) diffY: \(diffY) ")
                         circlearray.remove(at: doppelindex + n)
                         n -= 1 // ein element weniger, next ist bei n-1
@@ -1045,6 +1046,46 @@ class rPCB: rViewController
              } // if < count
             doppelindex += 1
          } // for datazeile
+         print("report_readSVG  doppelcount 1: \(doppelcount )")
+         
+         // zweiter durchgang
+         doppelindex = 0
+         doppelcount = 0
+         for datazeile in circlearray
+         {
+            if doppelindex < circlearray.count
+            {
+               let akt = circlearray[doppelindex]
+               var next = [Int]()
+               var n = 1
+               while doppelindex + n < circlearray.count // naechste Zeilen absuchen
+               {
+                  next = circlearray[doppelindex+n]
+                  var diffX:Double = (Double((next[1] - akt[1]))) 
+                  //print(" zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
+                  
+                  if fabs(diffX) < maxdiff
+                  {
+                     //print("diffX < maxdiff  zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
+                     var diffY:Double = (Double((next[2] - akt[2])))
+                     
+                     if fabs(diffY) < maxdiff
+                     {
+                        doppelcount+=1
+                        //print(" *** diff zu klein akt zeile: \(doppelindex) n: \(n)\t diffX: \(diffX) diffY: \(diffY) ")
+                        circlearray.remove(at: doppelindex + n)
+                        n -= 1 // ein element weniger, next ist bei n-1
+                     }
+                     
+                  }
+                  n += 1
+               }
+            } // if < count
+            doppelindex += 1
+         } // for datazeile
+         print("report_readSVG  doppelcount 2: \(doppelcount )")
+         
+         
          
          /*
          for datazeile in circlearray
@@ -1118,10 +1159,10 @@ class rPCB: rViewController
          
          for zeilendaten in circlearray
          {
-            let z = Double(zeilendaten[1])/1000000
-            let cx = formater.string(from: NSNumber(value: Double(zeilendaten[1])/1000000))
+            let z = Double(zeilendaten[1])/INTEGERFAKTOR
+            let cx = formater.string(from: NSNumber(value: Double(zeilendaten[1])/INTEGERFAKTOR))
            // print("cx: \(cx)")
-            let cy = formater.string(from: NSNumber(value: Double(zeilendaten[2])/1000000))
+            let cy = formater.string(from: NSNumber(value: Double(zeilendaten[2])/INTEGERFAKTOR))
             //print("cy: \(cy)")
             
             var zeilendic = [String:String]()
@@ -1177,7 +1218,7 @@ class rPCB: rViewController
       /*
        [KoordinatenTabelle addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:PositionA.x],@"ax",[NSNumber numberWithFloat:PositionA.y],@"ay",[NSNumber numberWithFloat:PositionB.x],@"bx", [NSNumber numberWithFloat:PositionB.y],@"by",[NSNumber numberWithInt:index],@"index",[NSNumber numberWithInt:0],@"lage",[NSNumber numberWithFloat:aktuellepwm*red_pwm],@"pwm",nil]];
        */
-      print("report_PCB_Daten")
+//      print("report_PCB_Daten propfaktor: \(propfaktor)")
       
       var speed = speedFeld.intValue
       
@@ -1274,6 +1315,8 @@ class rPCB: rViewController
 // Beginn wegArrayMitWegXY
 
          
+         
+         
          let distanzX = Double(nextX - aktX)  * zoomfaktor  //* stepsFeld.floatValue
          let distanzY = Double(nextY - aktY)  * zoomfaktor  //* stepsFeld.floatValue
          
@@ -1292,6 +1335,7 @@ class rPCB: rViewController
          
          
    //      let distanzstring = String(distanz)
+         print(" ")
          print("reportPCB zeilenindex: \(zeilenindex) distanzX: \(distanzX)  distanzY: \(distanzY)  distanz: \(distanz)")
          zeilendic["startpunktx"] = aktX
          zeilendic["startpunkty"] = aktY
@@ -1377,6 +1421,9 @@ class rPCB: rViewController
          var zeilenschnittdatenarray = [UInt8]()
          
          print("report_PCB schrittexInt: \(schrittexInt) schritteyInt: \(schritteyInt) schrittezInt: \(schrittezInt) zeit: \(zeit)")
+         let xmm = schrittex / Double(steps)
+         let ymm = schrittey / Double(steps)
+         print("report_PCB xmm: \(xmm) ymm: \(ymm)")
          
          var zeilenschnittdatenarray_n:[UInt8] =  schrittdatenvektor(sxInt:schrittexInt,syInt:schritteyInt, szInt:schrittezInt, zeit:zeit  )// Array mit Daten fuer USB
          
@@ -1866,7 +1913,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    func schrittdatenvektor(sxInt:Int,syInt:Int,szInt:Int, zeit:Double) -> [UInt8]
    {
-      print("+++++++++++                               schrittdatenvektor sxInt: \(sxInt) syInt: \(syInt) szInt: \(szInt) zeit: \(zeit)")
+//      print("+++++++++++                               schrittdatenvektor sxInt: \(sxInt) syInt: \(syInt) szInt: \(szInt) zeit: \(zeit)")
       let sxInt_raw = (sxInt & 0x0FFFFFFF)
       let syInt_raw = (syInt & 0x0FFFFFFF)
       let szInt_raw = (szInt & 0x0FFFFFFF)
@@ -1878,7 +1925,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       let sxB = UInt8((sxInt & 0x0000FF00) >> 8)
       let sxC = UInt8((sxInt & 0x00FF0000) >> 16)
       let sxD = UInt8((sxInt & 0xFF000000) >> 24)
-      print("schrittdatenvektor sxInt: \(sxInt) sxA: \(sxA) sxB: \(sxB)")
+//      print("schrittdatenvektor sxInt: \(sxInt) sxA: \(sxA) sxB: \(sxB)")
       vektor.append(sxA)
       vektor.append(sxB)
       vektor.append(sxC)
@@ -2074,14 +2121,16 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    func wegArrayMitWegXY(wegx:Double, wegy:Double) ->[UInt8]
    {
+       
       zoomfaktor = zoomFeld.doubleValue
-      print("PCB wegMitXY wegX: \(wegx) wegY: \(wegy)")
+      print("PCB wegMitXY wegX: \(wegx) wegY: \(wegy) propfaktor: \(propfaktor)")
       var maxsteps:Double = 0
       var weg = [Double]()
       
-      let distanzX = wegx *  1000000
-      let distanzY = wegy *  1000000
- //     let distanzZ = wegz *  1000000
+      let distanzX = wegx *  INTEGERFAKTOR
+      let distanzY = wegy *  INTEGERFAKTOR
+ 
+      //     let distanzZ = wegz *  1000000
       
       let wegX = distanzX * zoomfaktor 
       let wegY = distanzY * zoomfaktor 
@@ -2093,8 +2142,15 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       {
          speed *= 2
       }
-      let propfaktor = 2834645.67 // 14173.23
+      /*
+      SVG: 72 dpi / inch
+       1 p > 0.3528mm
+       1mm > 2.8346p
+       Multiplikator in readSVG: 1000000 (INTEGERFAKTOR)
       
+       */
+      
+      let propfaktor = 2834645.67 // 72 dpi > 25.4mm
       
       
       let start = [0,0]
@@ -2103,7 +2159,9 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       let zeit:Double = Double(distanz)/Double(speed) //   Schnittzeit für Distanz
       
       var schrittex = Double(stepsFeld.integerValue) * distanzX  
-      schrittex /= propfaktor
+      
+      schrittex /= propfaktor // Umrechnung in mm
+      
       var schrittexRound = round(schrittex)
       var schrittexInt:Int = 0
       if schrittexRound >= Double(Int.min) && schrittexRound < Double(Int.max)
@@ -2123,6 +2181,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       }
       var schrittey = Double(stepsFeld.integerValue) * distanzY 
       schrittey /= propfaktor
+     
       var schritteyRound = round(schrittey)
       var schritteyInt:Int = 0
       if schritteyRound >= Double(Int.min) && schritteyRound < Double(Int.max)
@@ -2156,8 +2215,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       var schrittex = Double(sx)
       
       
-      let wegX = Double(sx) *  1000000 * zoomfaktor 
-      let wegY = Double(sy) *  1000000 * zoomfaktor 
+      let wegX = Double(sx) *  INTEGERFAKTOR * zoomfaktor 
+      let wegY = Double(sy) *  INTEGERFAKTOR * zoomfaktor 
       let distanz = (wegX*wegX + wegY*wegY).squareRoot()
       var speed = speedFeld.intValue
       let zeit:Double = Double(distanz)/Double(speed) //   Schnittzeit für Distanz
@@ -2209,7 +2268,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    @IBAction func report_goXY(_ sender: NSButton) // 
    {
       // left: 1, right: 2, up: 3, down: 4
-      print("PCB report_goXY tag: \(sender.tag)")
+      print("PCB report_goXY tag: \(sender.tag) propfaktor: \(propfaktor)")
       var dx = 0
       var dy = 0
       let schrittweite = 10

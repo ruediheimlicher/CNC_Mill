@@ -338,6 +338,17 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    
    var propfaktor = 283464.567 // 14173.23
    
+   
+  /*
+   SVG zu mm
+    4": 288p > 101.6mm
+    SVG:
+    288 > 101.6mm
+    100 p > 35.28mm
+   */
+   
+   let INTEGERFAKTOR:Double = 1000000 // Multiplikatorfuer DAten aus Textfeldern und svg: Vergroesserung der Integer fuer bessere Genauigkeit
+   
    var cncstepperposition:Int = 0
    var cnchalt = 0
    var Koordinatentabelle = [[String:Any]]()
