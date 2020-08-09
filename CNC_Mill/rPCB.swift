@@ -977,7 +977,7 @@ class rPCB: rViewController
       // https://stackoverflow.com/questions/10016475/create-nsscrollview-programmatically-in-an-nsview-cocoa
       guard let fileURL = SVG_URL else { return  }
       
-      print("report_readSVG fileURL: \(fileURL)")
+ //     print("report_readSVG fileURL: \(fileURL)")
       circledicarray.removeAll()
       
       //reading
@@ -1053,21 +1053,13 @@ class rPCB: rViewController
                         {
                            print("partint zu  gross*** partfloat: \(partfloat) partint: \(partint)")
                         }
-                        /*
-                         let partintA:UInt8 = UInt8(UInt(partint) & 0x000000FF)
-                         let partintB:UInt8 = UInt8((UInt(partint) & 0x0000FF00) >> 8)
-                         let partintC:UInt8 = UInt8((UInt(partint) & 0x00FF0000) >> 16)
-                         let partintD:UInt8 = UInt8((UInt(partint) & 0xFF000000) >> 24)
-                         */
-                        //      print(" partfloat: \(partfloat) partint: \(partint) partintA: \(partintA) partintB: \(partintB) partintC: \(partintC) partintD: \(partintD)")
-                        //       print("  partint:  partintD: \(partintD)")
-                        
-                         print("partB: \(partB) partfloat: \(partfloat) partint: \(partint)")
+                        //print("partB: \(partB) partfloat: \(partfloat) partint: \(partint)")
                         circleelementarray.append(partint)
                      }
                      zeilenindex += 1
                   }
                } // circle < 5
+               
                if circle == 1
                {
                   
@@ -1099,6 +1091,7 @@ class rPCB: rViewController
             
             
          }
+         /*
          print("report_readSVG circlearray count: \(circlearray.count)")
          var ii = 0
          for el in circlearray
@@ -1113,7 +1106,7 @@ class rPCB: rViewController
             print("\(ii)\t\(el[1])\t \(el[2])")
             ii += 1
          }
-
+          */
          
     /*     
          print("report_readSVG circledicarray")
@@ -1125,22 +1118,6 @@ class rPCB: rViewController
          }
 */
  
-         
-         //        print("PCB circlearray")
- //        print(circlearray)
-//         let sorted = circlearray.sorted()
- //        print("PCB circledicarray")
- //        print(circledicarray)
-         
-      
-     //    let sortedarray = circledicarray.sorted {$0["cx"]! < $1["cx"]!}
-   /*
-         var testarray = sortDicArray(origDicArray: circledicarray,key0:"cx", key1:"cy", order: true)
-         for el in testarray{
-            print("\(String(describing: el["cx"])) \(String(describing: el["cy"]))")
-         }
-   */      
-        // print("testarray: \(testarray)")
          
          // https://useyourloaf.com/blog/sorting-an-array-of-dictionaries/
          var sortedarray = [[String:Int]]()
@@ -1174,7 +1151,7 @@ class rPCB: rViewController
          }
          //print(circledicarray)
 
-         
+         /*
          print("report_readSVG sortedarray")
          var iii = 0
          iii = 0
@@ -1183,16 +1160,16 @@ class rPCB: rViewController
             print("\(iii) \(el)")
             iii += 1
          }
-
+          */
          print("report_readSVG sortedfloatarray")
-         iii = 0
+         var iii = 0
          for el in sortedfloatarray
          {
             print("\(iii) \(el)")
             iii += 1
          }
 
-         
+ /*        
          
          //let sortedarray = sorted(circledicarray, key=lambda k: k['cx'])
          //print("PCB sortedarray")
@@ -1215,66 +1192,35 @@ class rPCB: rViewController
          {
             print("\(el[0] )\t \(el[1] ) \(el[2])")
          }
-
+*/
          // float
          circlefloatarray.removeAll()
+         var zeilendicindex:Int = 0
          zeilendicindex = 0
          for zeilendic in sortedfloatarray
          {
             let cx:Double = (zeilendic["cx"]!) 
             let cy:Double = (zeilendic["cy"]!) 
             
-            print("\(zeilendicindex) \(cx) \(cy)")
+           // print("\(zeilendicindex) \(cx) \(cy)")
             let zeilendicarray:[Double] = [Double(zeilendicindex),cx,cy]
             circlefloatarray.append(zeilendicarray)
             zeilendicindex += 1
          }
          
+         /*
          print("report_readSVG circlefloatarray vor.  count: \(circlefloatarray.count)")
          for el in circlefloatarray
          {
             print("\(el[0] )\t \(el[1] ) \(el[2])")
          }
-         
+         */
  
          
          var doppelindex:Int = 0
          var doppelcount = 0
-         for datazeile in circlearray
-         {
-            if doppelindex < circlearray.count
-            {
-               let akt = circlearray[doppelindex]
-               var next = [Int]()
-               var n = 1
-               while doppelindex + n < circlearray.count // naechste Zeilen absuchen
-               {
-                  next = circlearray[doppelindex+n]
-                  var diffX:Double = (Double((next[1] - akt[1]))) 
-                  //print(" zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
-
-                  if fabs(diffX) < maxdiff
-                  {
-                     //print("diffX < maxdiff  zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
-                     var diffY:Double = (Double((next[2] - akt[2])))
-                     
-                     if fabs(diffY) < maxdiff
-                     {
-                        doppelcount+=1
-                        //print(" *** diff zu klein akt zeile: \(doppelindex) n: \(n)\t diffX: \(diffX) diffY: \(diffY) ")
-                        circlearray.remove(at: doppelindex + n)
-                        n -= 1 // ein element weniger, next ist bei n-1
-                     }
-                     
-                  }
-                   n += 1
-               }
-             } // if < count
-            doppelindex += 1
-         } // for datazeile
-         print("report_readSVG  doppelcount 1: \(doppelcount )")
          
-         // float
+          // float
          doppelindex = 0
          doppelcount = 0
          for datazeile in circlefloatarray
@@ -1311,7 +1257,7 @@ class rPCB: rViewController
          } // for datazeile
          print("report_readSVG  doppelcount 2: \(doppelcount )")
          
-         
+         /*
          print("report_readSVG circlearray nach. count: \(circlearray.count)")
          for el in circlearray
          {
@@ -1319,7 +1265,7 @@ class rPCB: rViewController
             print("\(el[0] )\t \(el[1] )\t \(el[2])")
             
          }
-         
+         */
          print("report_readSVG circlefloatarray nach. count: \(circlefloatarray.count)")
          for el in circlefloatarray
          {
@@ -1328,7 +1274,7 @@ class rPCB: rViewController
          }
         
          
-         let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
+         let l = Plattefeld.setfloatWeg(newWeg: circlefloatarray, scalefaktor: 5, transform:  transformfaktor)
          fahrtweg.integerValue = l
          
          // https://stackoverflow.com/questions/44630702/formatting-numbers-in-swift-3
@@ -1339,18 +1285,19 @@ class rPCB: rViewController
          formater.numberStyle = .decimal
 
          
-         for zeilendaten in circlearray
+         for zeilendaten in circlefloatarray
          {
             let z = Double(zeilendaten[1])/INTEGERFAKTOR
-            let cx = formater.string(from: NSNumber(value: Double(zeilendaten[1])/INTEGERFAKTOR))
-           // print("cx: \(cx)")
-            let cy = formater.string(from: NSNumber(value: Double(zeilendaten[2])/INTEGERFAKTOR))
+            let cx = formater.string(from: NSNumber(value: Double(zeilendaten[1])))///INTEGERFAKTOR))
+            //print("cx: \(cx)")
+            let cy = formater.string(from: NSNumber(value: Double(zeilendaten[2])))///INTEGERFAKTOR))
             //print("cy: \(cy)")
             
             var zeilendic = [String:String]()
             zeilendic["ind"] = String(zeilendaten[0])
             zeilendic["X"] = cx
             zeilendic["Y"] = cy
+            //cx: Optional("3.985") cy: Optional("26.298")
             /*
             var zeilendic = [String:Double]()
             zeilendic["ind"] = Double(zeilendaten[0])
@@ -1384,11 +1331,12 @@ class rPCB: rViewController
          var PCBDaten = PCB_Daten()
          
          print("report_readSVG PCBDaten")
-         iii = 0
+         
+         //var iii = 0
          for el in PCBDaten
          {
             print("\(el)")
-            iii += 1
+       //     iii += 1
          }
          Schnittdatenarray.append(contentsOf:PCBDaten)
     //     report_PCB_Daten(DataSendTaste)
@@ -1420,15 +1368,15 @@ class rPCB: rViewController
       //var relevanteschritte
       var zeilenposition = 0
 //      var zeilenanzahl = circlefloatarray.count
-      let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
-      fahrtweg.integerValue = l
+ //     let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
+ //     fahrtweg.integerValue = l
 
       var xhome = 0
       var yhome = 0
 
       for zeilenindex in stride(from: 0, to: circlefloatarray.count-1, by: 1)
       {
-         print("vor: \t xhome: \(xhome) yhome: \(yhome)")
+//         print("vor: \t xhome: \(xhome) yhome: \(yhome)")
          zeilenposition = 0
          if zeilenindex == 0
          {
@@ -2398,7 +2346,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    {
        
       zoomfaktor = zoomFeld.doubleValue
-      print("PCB wegArrayMitWegXY wegX: \(wegx) wegY: \(wegy) propfaktor: \(propfaktor)")
+ //     print("PCB wegArrayMitWegXY wegX: \(wegx) wegY: \(wegy) propfaktor: \(propfaktor)")
       var maxsteps:Double = 0
       var weg = [Double]()
       
@@ -2410,7 +2358,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       let wegX = distanzX * zoomfaktor 
       let wegY = distanzY * zoomfaktor 
       let distanz = (wegX*wegX + wegY*wegY).squareRoot()
-      print("++++          wegArrayMitWegXY  distanzX: \(distanzX)  distanzY: \(distanzY)  distanz: \(distanz)")
+//      print("++++          wegArrayMitWegXY  distanzX: \(distanzX)  distanzY: \(distanzY)  distanz: \(distanz)")
       var speed = speedFeld.intValue
       
       if ramp_OK_Check.state == NSControl.StateValue.on
@@ -2441,7 +2389,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
       schrittex /= propfaktor // Umrechnung in mm
       let schrittexmm = schrittex/stepsFeld.doubleValue
-      print("wegArrayMitWegXY schrittex mm: \(schrittexmm)")
+ //     print("wegArrayMitWegXY schrittex mm: \(schrittexmm)")
       
       var schrittexRound = round(schrittex)
       var schrittexInt:Int = 0
@@ -2468,14 +2416,14 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
       schrittey /= propfaktor
       let schritteymm = schrittey/stepsFeld.doubleValue
-     print("wegArrayMitWegXY schrittey mm: \(schritteymm)")
+//     print("wegArrayMitWegXY schrittey mm: \(schritteymm)")
       var schritteyRound = round(schrittey)
       var schritteyInt:Int = 0
       if schritteyRound >= Double(Int.min) && schritteyRound < Double(Int.max)
       {
          
          schritteyInt = Int(schritteyRound)
-         print("wegArrayMitWegXY schritteyInt OK: \(schritteyInt)")
+//         print("wegArrayMitWegXY schritteyInt OK: \(schritteyInt)")
          if schritteyInt < 0 // negativer Weg
          {
  //           print("schritteyInt negativ")
@@ -2489,7 +2437,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       }
       
       let schrittezInt = 0
-      print("+++           wegArrayMitWegXY vor schnittdatenvektor schrittexInt: \(schrittexInt) schritteyInt: \(schritteyInt) schrittezInt: \(schrittezInt) zeit: \(zeit) speed: \(speed)")
+//      print("+++           wegArrayMitWegXY vor schnittdatenvektor schrittexInt: \(schrittexInt) schritteyInt: \(schritteyInt) schrittezInt: \(schrittezInt) zeit: \(zeit) speed: \(speed)")
 
       var wegschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:schrittexInt,syInt:schritteyInt, szInt:0, zeit:zeit  )// Array mit Daten fuer USB
       

@@ -25,7 +25,7 @@ class rPlatteView: NSView
    
    var markarray:[NSBezierPath] = [NSBezierPath]()
    
-   var redfaktor:CGFloat = 200
+   var redfaktor:CGFloat = 1
    var transformfaktor:CGFloat = 0 // px to mm
    var wegindex=0;
    var faktor:CGFloat = 0
@@ -35,6 +35,7 @@ class rPlatteView: NSView
    var stepperposition:Int = 0
    
    var wegarray:[[Int]] = [[Int]]()
+   var wegfloatarray:[[Double]] = [[Double]]()
    
    var linienfarbe:NSColor = NSColor()
    var kreislinienfarbe:NSColor = NSColor()
@@ -381,6 +382,79 @@ class rPlatteView: NSView
       needsDisplay = true
    }
    
+ 
+   func setfloatWeg(newWeg:[[Double]], scalefaktor:Int , transform:Double)-> Int
+   {
+      weg.removeAllPoints()
+      kreuz.removeAllPoints()
+      kreis.removeAllPoints()
+      for mark in markarray
+      {
+         mark.removeAllPoints()
+      }
+      markarray.removeAll()
+      drawstatus = 0
+      fahrtweg = 0
+      //redfaktor = 200.0
+      redfaktor = 1
+      transformfaktor = CGFloat(transform) // px to mm
+      
+      var wegindex=0;
+      faktor = CGFloat(scalefaktor)
+      var  tempMark:NSBezierPath
+      var lastpunkt = NSMakePoint(0, 0)
+      var elcount = 0
+      
+      wegfloatarray = newWeg
+      
+      for zeile in newWeg
+      {
+         elcount += 1
+         //  let x = CGFloat(zeile[0])
+         let lokalpunkt = NSMakePoint(CGFloat(zeile[1])*faktor * transformfaktor,CGFloat(zeile[2])*faktor * transformfaktor)
+         Swift.print(lokalpunkt)
+         if wegindex == 0
+         {
+            lastpunkt = lokalpunkt
+            weg.move(to: lokalpunkt)
+            
+         }
+         else
+         {
+            let dx = lokalpunkt.x - lastpunkt.x
+            let dy = lokalpunkt.y - lastpunkt.y
+            fahrtweg += hypotenuse(dx, dy)
+            lastpunkt = lokalpunkt
+            weg.line(to: lokalpunkt)
+         }
+         //CNC_Stepper:
+         /*
+          NSRect tempMarkARect=NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
+          tempMarkA=[NSBezierPath bezierPathWithOvalInRect:tempMarkARect];
+          [[NSColor grayColor]set];
+          [tempMarkA stroke];
+          */
+         var tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
+         // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
+         kreis.move(to: lokalpunkt)
+         kreis.appendOval(in: tempMarkRect)
+         //      weg.move(to: lokalpunkt)
+         /*
+          var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
+          let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
+          let numstring = String(wegindex)
+          //       print(numstring)
+          numstring.draw(
+          at: tempNumPunkt, 
+          withAttributes: atts as [NSAttributedStringKey : Any])
+          */
+         wegindex += 1
+      }
+      //print("setWeg fahrtweg: \(fahrtweg) element count: \(elcount)")
+      
+      needsDisplay = true
+      return Int(fahrtweg)
+   }
    
    func setWeg(newWeg:[[Int]], scalefaktor:Int , transform:Double)-> Int
    {
