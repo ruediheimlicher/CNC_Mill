@@ -81,10 +81,11 @@ override  func mouseDown(with theEvent: NSEvent)
    //print("lokalpunkt: \(lokalpunkt) klickcount: \(klickcount)")
 
   let pfeiltag = self.tag
-//   print("rPfeiltaste mousedown tag: \(pfeiltag)") 
+   let sw = self.schrittweite
+   print("rPfeiltaste mousedown tag: \(pfeiltag) schrittweite: \(sw)") 
    var dx = 0
    var dy = 0
-   let schrittweite:Int = 6
+   //let schrittweite:Int = 6
 
    switch pfeiltag 
    {
@@ -103,6 +104,7 @@ override  func mouseDown(with theEvent: NSEvent)
    default:
       break
    }
+   
    var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag]
    pfeiltimer = Timer.scheduledTimer(timeInterval: 0.2 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
 
@@ -130,10 +132,13 @@ override  func mouseUp(with theEvent: NSEvent)
    nc.post(name:Notification.Name(rawValue:"maus_status"),
    object: nil,
    userInfo: notificationDic as? [AnyHashable : Any])        
-
-   
    }
 
+   func setSchrittweite(sw:Int)
+   {
+      //print("pfeiltaste setSchrittweite: sw: \(sw)")
+      schrittweite = sw
+   }
 /*
    - (void)mouseUp:(NSEvent *)event
 {
@@ -338,7 +343,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    
    var propfaktor = 283464.567 // 14173.23
    
-   
+   var pfeilschrittweite:Int = 4
   /*
    SVG zu mm
     4": 288p > 101.6mm
@@ -368,6 +373,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    @IBOutlet weak var Plattefeld: rPlatteView!
 
    @IBOutlet weak var pop: NSPopUpButton!
+   
+    @IBOutlet weak var schritteweitepop: NSPopUpButton!
    
    @IBOutlet weak var USB_OK_Feld: NSImageView!
    

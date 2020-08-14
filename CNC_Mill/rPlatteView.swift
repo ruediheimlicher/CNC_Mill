@@ -34,7 +34,7 @@ class rPlatteView: NSView
    
    var stepperposition:Int = 0
    
-   var wegarray:[[Int]] = [[Int]]()
+ //  var wegarray:[[Int]] = [[Int]]()
    var wegfloatarray:[[Double]] = [[Double]]()
    
    var linienfarbe:NSColor = NSColor()
@@ -109,7 +109,7 @@ class rPlatteView: NSView
       // setup the context
       let currentContext = NSGraphicsContext.current!.cgContext
  //     currentContext.setLineWidth(dashHeight)
-      //currentContext.setLineDash(phase: 0, lengths: [dashLength])
+//    currentContext.setLineDash(phase: 0, lengths: [dashLength])
  //     currentContext.setStrokeColor(dashColor.cgColor)
       
       // draw the dashed path
@@ -118,9 +118,10 @@ class rPlatteView: NSView
       
       kreis.lineWidth = 1.5
       // neu
-      
+   //   Swift.print("drawstatus: \(drawstatus)")
       if (drawstatus == 1)
       {
+         //Swift.print("drawstatus 1")
          linienfarbe.set() // choose color
          weg.lineWidth = 1.5
          weg.stroke()  // draw line(s) in color
@@ -128,13 +129,16 @@ class rPlatteView: NSView
          var elcount:Int = 0
          var lastpunkt = NSMakePoint(0, 0)
          wegindex = 0
-         
-         for zeile in wegarray
+   //      let korr:CGFloat = 31.15
+         let korr:CGFloat = 1
+         for zeile in wegfloatarray
          {
             elcount += 1
             //  let x = CGFloat(zeile[0])
-            let lokalpunkt = NSMakePoint(CGFloat(zeile[1])/faktor/redfaktor * transformfaktor,CGFloat(zeile[2])/faktor/redfaktor * transformfaktor)
-            //print(lokalpunkt)
+            //let lokalpunkt = NSMakePoint(CGFloat(zeile[1])/faktor/redfaktor * transformfaktor*korr,CGFloat(zeile[2])/faktor/redfaktor * transformfaktor*korr)
+           
+            let lokalpunkt = NSMakePoint(CGFloat(zeile[0]),CGFloat(zeile[1]))
+            //Swift.print("lokalpunkt: \(lokalpunkt) stepperposition: \(stepperposition)" )
             
             // Marke setzen
             let tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
@@ -208,23 +212,16 @@ class rPlatteView: NSView
                
                
             }
-            //CNC_Stepper:
-            /*
-             NSRect tempMarkARect=NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
-             tempMarkA=[NSBezierPath bezierPathWithOvalInRect:tempMarkARect];
-             [[NSColor grayColor]set];
-             [tempMarkA stroke];
-             */
-            //      weg.move(to: lokalpunkt)
-            wegindex += 1
+             wegindex += 1
          }
-         //     print("setWeg fahrtweg: \(fahrtweg) element count: \(elcount)")
+         //print("draw fahrtweg: \(fahrtweg) element count: \(elcount)")
          
          
          
       }
       else
       {
+         //Swift.print("drawstatus 0")
          linienfarbe.set() // choose color
          weg.lineWidth = 1.5
          weg.stroke()  // draw line(s) in color
@@ -232,6 +229,7 @@ class rPlatteView: NSView
          kreislinienfarbe.set() // choose color
          
          kreis.stroke()
+
          NSColor.green.set() 
          
       }
@@ -378,13 +376,19 @@ class rPlatteView: NSView
    {
       stepperposition = pos
       drawstatus =  1
-      //   print("\t ******   PlatteView setStepperposition pos: \(pos)")
+      /*
+      if pos == 1
+      {
+         print("\t ******   PlatteView setStepperposition pos: \(pos) wegfloatarray: \(wegfloatarray) \nwegfloatarray: \(wegfloatarray)")
+      }
+ */
       needsDisplay = true
    }
    
  
    func setfloatWeg(newWeg:[[Double]], scalefaktor:Int , transform:Double)-> Int
    {
+      //print("\t ******   PlatteView setfloatWeg newWeg: \(newWeg)")
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
@@ -401,18 +405,25 @@ class rPlatteView: NSView
       
       var wegindex=0;
       faktor = CGFloat(scalefaktor)
+      let floatfaktor = Double(scalefaktor)
       var  tempMark:NSBezierPath
       var lastpunkt = NSMakePoint(0, 0)
       var elcount = 0
-      
-      wegfloatarray = newWeg
-      
-      for zeile in newWeg
+      wegfloatarray.removeAll()
+      for pos in 0..<newWeg.count
       {
+         wegfloatarray.append([newWeg[pos][1] * Double(faktor * transformfaktor),newWeg[pos][2] * Double(faktor * transformfaktor)])
+      }
+      
+      
+      for zeile in wegfloatarray
+      {
+         
+   //      wegarray.append([wegindex,Int(zeile[1] * 1000000),Int(zeile[2] * 1000000) ])
          elcount += 1
          //  let x = CGFloat(zeile[0])
-         let lokalpunkt = NSMakePoint(CGFloat(zeile[1])*faktor * transformfaktor,CGFloat(zeile[2])*faktor * transformfaktor)
-         Swift.print(lokalpunkt)
+         let lokalpunkt = NSMakePoint(CGFloat(zeile[0]),CGFloat(zeile[1]))
+         //Swift.print("lokalpunkt: \(lokalpunkt) stepperposition: \(stepperposition)" )
          if wegindex == 0
          {
             lastpunkt = lokalpunkt
@@ -436,7 +447,7 @@ class rPlatteView: NSView
           */
          var tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
          // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
-         kreis.move(to: lokalpunkt)
+  //       kreis.move(to: lokalpunkt)
          kreis.appendOval(in: tempMarkRect)
          //      weg.move(to: lokalpunkt)
          /*
@@ -450,7 +461,7 @@ class rPlatteView: NSView
           */
          wegindex += 1
       }
-      //print("setWeg fahrtweg: \(fahrtweg) element count: \(elcount)")
+      //print("setfloatWeg fahrtweg: \(fahrtweg) element count: \(elcount)")
       
       needsDisplay = true
       return Int(fahrtweg)
@@ -458,6 +469,12 @@ class rPlatteView: NSView
    
    func setWeg(newWeg:[[Int]], scalefaktor:Int , transform:Double)-> Int
    {
+      return 13
+   }
+   /*
+   func setWeg(newWeg:[[Int]], scalefaktor:Int , transform:Double)-> Int
+   {
+      print("\t ******   PlatteView setWeg: wegarray count: \(wegarray.count)  newWeg: \(newWeg)")
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
@@ -477,7 +494,7 @@ class rPlatteView: NSView
       var elcount = 0
       
       wegarray = newWeg
-      
+      print("\t setWeg: wegarray: \(wegarray)")
       for zeile in newWeg
       {
          elcount += 1
@@ -521,12 +538,12 @@ class rPlatteView: NSView
           */
          wegindex += 1
       }
-      //print("setWeg fahrtweg: \(fahrtweg) element count: \(elcount)")
+      print("setWeg fahrtweg: \(fahrtweg) element count: \(elcount)")
       
       needsDisplay = true
       return Int(fahrtweg)
    }
-   
+   */
    
    
    func clearWeg()
@@ -541,9 +558,9 @@ class rPlatteView: NSView
       {
  //        clearColor.set()
  //        mark.stroke()
-         mark.removeAllPoints()
+ //        mark.removeAllPoints()
       }
-      markarray.removeAll()
+ //     markarray.removeAll()
       needsDisplay = true
       
    }

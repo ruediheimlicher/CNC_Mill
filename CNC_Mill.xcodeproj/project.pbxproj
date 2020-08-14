@@ -29,6 +29,7 @@
 		BDC357F624BB2DF4003F20F8 /* home.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357ED24BB2DF4003F20F8 /* home.jpg */; };
 		BDC357F824C099C2003F20F8 /* BBB.txt in Resources */ = {isa = PBXBuildFile; fileRef = BDC357F724C099C2003F20F8 /* BBB.txt */; };
 		BDC357FA24C83C24003F20F8 /* CCC.txt in Resources */ = {isa = PBXBuildFile; fileRef = BDC357F924C83C24003F20F8 /* CCC.txt */; };
+		BDEA297424E03664005331D2 /* rTSP_NN.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEA297324E03664005331D2 /* rTSP_NN.swift */; };
 		BDF6323E24D9524D00F654D9 /* AAA.txt in Resources */ = {isa = PBXBuildFile; fileRef = BDF6323D24D9524C00F654D9 /* AAA.txt */; };
 		BDF6592C2482E2DC009F2E67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF6592B2482E2DC009F2E67 /* AppDelegate.swift */; };
 		BDF6592E2482E2DC009F2E67 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF6592D2482E2DC009F2E67 /* ViewController.swift */; };
@@ -69,6 +70,7 @@
 		BDC357ED24BB2DF4003F20F8 /* home.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = home.jpg; sourceTree = "<group>"; };
 		BDC357F724C099C2003F20F8 /* BBB.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BBB.txt; sourceTree = "<group>"; };
 		BDC357F924C83C24003F20F8 /* CCC.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CCC.txt; sourceTree = "<group>"; };
+		BDEA297324E03664005331D2 /* rTSP_NN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rTSP_NN.swift; sourceTree = "<group>"; };
 		BDF6323D24D9524C00F654D9 /* AAA.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AAA.txt; sourceTree = "<group>"; };
 		BDF659282482E2DC009F2E67 /* CNC_Mill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CNC_Mill.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDF6592B2482E2DC009F2E67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				BD337590249604F40087C9FF /* rEinstellungen.swift */,
 				BD337592249606230087C9FF /* rJoystickView.swift */,
 				BD3375582488165F0087C9FF /* rUtils.m */,
+				BDEA297324E03664005331D2 /* rTSP_NN.swift */,
 				BD33755A248817750087C9FF /* rCNC.swift */,
 				BD337554248816170087C9FF /* rCNC.h */,
 				BD337555248816170087C9FF /* rCNC.m */,
@@ -278,6 +281,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDEA297424E03664005331D2 /* rTSP_NN.swift in Sources */,
 				BDF6594D2483FE7F009F2E67 /* rProfilGraph.m in Sources */,
 				BDF659472483B71F009F2E67 /* usb.swift in Sources */,
 				BD337593249606240087C9FF /* rJoystickView.swift in Sources */,

@@ -842,7 +842,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TFc-go-WmQ">
-                                <rect key="frame" x="277" y="606" width="39" height="17"/>
+                                <rect key="frame" x="259" y="606" width="39" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Steps" id="Hsf-Yr-xfH">
                                     <font key="font" metaFont="system"/>
@@ -869,7 +869,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PLB-nE-fdB">
-                                <rect key="frame" x="339" y="604" width="47" height="22"/>
+                                <rect key="frame" x="304" y="604" width="47" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="48" drawsBackground="YES" id="oCv-n9-lt0">
                                     <font key="font" metaFont="system"/>
@@ -878,7 +878,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ubb-7P-f7L">
-                                <rect key="frame" x="453" y="639" width="60" height="18"/>
+                                <rect key="frame" x="364" y="636" width="60" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Linear" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2QX-8p-Y6v">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -889,16 +889,16 @@
                                 </connections>
                             </button>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FjA-sx-RCl">
-                                <rect key="frame" x="339" y="635" width="52" height="22"/>
+                                <rect key="frame" x="303" y="634" width="47" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="right" title="0.2" drawsBackground="YES" id="D0u-RT-N7L">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="right" title="0.1" drawsBackground="YES" id="D0u-RT-N7L">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bJR-Ly-FGp">
-                                <rect key="frame" x="277" y="639" width="38" height="17"/>
+                                <rect key="frame" x="259" y="639" width="38" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="zoom" id="j0R-rY-zyt">
                                     <font key="font" metaFont="system"/>
@@ -947,7 +947,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q4r-pV-zV0">
-                                <rect key="frame" x="453" y="604" width="57" height="18"/>
+                                <rect key="frame" x="364" y="601" width="57" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Ramp" bezelStyle="regularSquare" imagePosition="left" inset="2" id="W1Y-i8-Adj">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -955,6 +955,17 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="report_linearCheckbox:" target="wFL-7s-Z8p" id="Mse-Uj-IQg"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cvX-mA-Yas">
+                                <rect key="frame" x="364" y="569" width="42" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="NN" bezelStyle="regularSquare" imagePosition="left" inset="2" id="GsS-wx-awe">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="report_NN:" target="wFL-7s-Z8p" id="79p-7d-qzX"/>
                                 </connections>
                             </button>
                             <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="s5Y-ip-nfy" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
@@ -1333,6 +1344,33 @@
                                     <action selector="report_move_Drill:" target="wFL-7s-Z8p" id="Z4O-lO-2jT"/>
                                 </connections>
                             </button>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3xh-qt-IoI">
+                                <rect key="frame" x="456" y="588" width="58" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="cyr-2e-ups" id="2Od-jr-eZV">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <menu key="menu" id="tqg-dR-ODC">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="cyr-2e-ups"/>
+                                            <menuItem title="Item 2" id="MSf-EP-FZt"/>
+                                            <menuItem title="Item 3" id="Y9o-bw-tvo"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="report_SchrittweitePop:" target="wFL-7s-Z8p" id="10b-xS-55y"/>
+                                </connections>
+                            </popUpButton>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZUL-eM-4Dn">
+                                <rect key="frame" x="457" y="614" width="77" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Schrittweite" id="2F9-P5-EIC">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1340,6 +1378,7 @@
                         <outlet property="CNC_HALT_Knopf" destination="Wwq-u4-Kg2" id="wnv-7E-wxc"/>
                         <outlet property="ClearPCBTaste" destination="vua-Lc-4z0" id="nfX-4A-9VS"/>
                         <outlet property="DataSendTaste" destination="EBu-nO-PLk" id="u6H-AD-jDN"/>
+                        <outlet property="NN_OK_Check" destination="cvX-mA-Yas" id="f0c-ha-kDi"/>
                         <outlet property="PCB_Data_Knopf" destination="1h2-2T-0p4" id="4FR-89-sSS"/>
                         <outlet property="PlatteScroller" destination="EQG-jy-Qht" id="dS1-G5-ggE"/>
                         <outlet property="Plattefeld" destination="XUX-V5-xCg" id="5lZ-Hg-XVD"/>
@@ -1355,6 +1394,7 @@
                         <outlet property="linear_checkbox" destination="ubb-7P-f7L" id="q9e-aE-2Rw"/>
                         <outlet property="ramp_OK_Check" destination="q4r-pV-zV0" id="3st-LK-aWI"/>
                         <outlet property="readSVG_Knopf" destination="eex-tQ-W4N" id="7RP-tf-ddy"/>
+                        <outlet property="schritteweitepop" destination="3xh-qt-IoI" id="9kX-oc-GIV"/>
                         <outlet property="speedFeld" destination="FBI-Ov-pSY" id="5KE-yI-L2p"/>
                         <outlet property="stepsFeld" destination="PLB-nE-fdB" id="AIg-mj-66E"/>
                         <outlet property="timerintervallFeld" destination="crK-He-vSS" id="tEN-Nx-PHG"/>
