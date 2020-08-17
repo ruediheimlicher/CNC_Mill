@@ -106,7 +106,7 @@ override  func mouseDown(with theEvent: NSEvent)
    }
    
    var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag]
-   pfeiltimer = Timer.scheduledTimer(timeInterval: 0.2 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
+//   pfeiltimer = Timer.scheduledTimer(timeInterval: 0.3 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
 
    let nc = NotificationCenter.default
    nc.post(name:Notification.Name(rawValue:"maus_status"),
@@ -434,7 +434,18 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
          USB_OK_Feld.image = notokimage
       }
       
-      
+      if teensy.readtimervalid() == true
+      {
+         //print("PCB readtimer valid vor")
+         
+      }
+      else 
+      {
+         //print("PCB readtimer not valid vor")
+         
+         var start_read_USB_erfolg = teensy.start_read_USB(true)
+      }
+
    }
    
    @nonobjc  func windowShouldClose(_ sender: Any) 

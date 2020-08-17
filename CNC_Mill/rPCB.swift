@@ -2617,7 +2617,9 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
       // motorstatus
       var motorstatus:UInt8 = 0
-      var maxsteps:Double = 0
+      var maxsteps:Int = 0
+//      print("\tschrittdatenvektor sxInt_raw: \(sxInt_raw) syInt_raw: \(syInt_raw) szInt_raw: \(szInt_raw) zeit: \(Int(zeit))")
+/*
       if (fabs(dyIntround) > fabs(dxIntround)) // wer hat mehr schritte x
       {
          maxsteps = fabs(dyIntround)
@@ -2628,12 +2630,25 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          maxsteps = fabs(dxIntround)
          motorstatus = (1<<MOTOR_A)
       }
+ */
+      if (abs(syInt_raw) > abs(sxInt_raw)) // wer hat mehr schritte x
+      {
+         maxsteps = abs(syInt_raw)
+         motorstatus = (1<<MOTOR_B)
+      }
+      else 
+      {
+         maxsteps = abs(sxInt_raw)
+         motorstatus = (1<<MOTOR_A)
+      }
+     
       if (sxInt == 0) && (syInt == 0) && (szInt != 0)
       {
          motorstatus = (1<<MOTOR_C)
       }
+      print("schrittdatenvektor motorstatus: \(motorstatus)")
       vektor.append(motorstatus)
-      vektor.append(77) // Pöatzhalter PWM
+      vektor.append(77) // Platzhalter PWM
       
       let timerintervall = timerintervallFeld.integerValue
       vektor.append(UInt8((timerintervall & 0xFF00)>>8))
@@ -2986,10 +3001,11 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             
             
          }
-         print("mausstatusAktion \(dx) \(dy)")
+         print("mausstatusAktion dx: \(dx) dy: \(dy)")
          var pfeilwegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
          
          pfeilwegarray[32] = 2
+         pfeilwegarray[24] = 3
          
          
          for z in 0 ... pfeilwegarray.count-1
@@ -3003,7 +3019,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          
          //      homeX += Int(dx)
          //     homeY += Int(dy)
-         print("mausstatusaktion homeX: \(homeX) homeY: \(homeY)")
+        // print("mausstatusaktion homeX: \(homeX) homeY: \(homeY)")
          //     homexFeld.integerValue = homeX
          //     homeyFeld.integerValue = homeY
          
@@ -3350,7 +3366,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             break
 
          case 0xB6:
-         print("newDataAktion  B6 ")
+             print("newDataAktion  B6 ")
             
              
          break;
@@ -3377,6 +3393,18 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
                     object: nil,
                     userInfo: notificationDic)
             break
+            
+         case 0xC5:
+            let motor = data[1]
+            let anschlagstatus = data[12]
+            let seite = data[13]
+            let cncstatus = data[20]
+            print("newDataAktion  C5 Anschlag")
+            print("  motor: \(motor)  anschlagstatus: \(anschlagstatus)  seite: \(seite) cncstatus: \(cncstatus)")
+            
+
+            
+            
          default:
             print("newDataAktion default abschnittnummer: \(abschnittnummer)")
             Plattefeld.setStepperposition(pos:abschnittnummer)
