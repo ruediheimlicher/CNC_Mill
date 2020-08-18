@@ -3399,8 +3399,9 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             let anschlagstatus = data[12]
             let seite = data[13]
             let cncstatus = data[20]
+            let stop = data[14]
             print("newDataAktion  C5 Anschlag")
-            print("  motor: \(motor)  anschlagstatus: \(anschlagstatus)  seite: \(seite) cncstatus: \(cncstatus)")
+            print("  motor: \(motor)  anschlagstatus: \(anschlagstatus)  seite: \(seite) cncstatus: \(cncstatus) stop: \(stop)")
             
 
             

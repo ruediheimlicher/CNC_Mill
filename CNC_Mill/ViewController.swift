@@ -106,7 +106,7 @@ override  func mouseDown(with theEvent: NSEvent)
    }
    
    var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag]
-//   pfeiltimer = Timer.scheduledTimer(timeInterval: 0.3 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
+   pfeiltimer = Timer.scheduledTimer(timeInterval: 0.3 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
 
    let nc = NotificationCenter.default
    nc.post(name:Notification.Name(rawValue:"maus_status"),
