@@ -80,4 +80,4 @@ let DREHKNOPF_FAKTOR:Double = 18.1 // Anpassen auf Mitte bei 3272
 
 let DEVICE_MILL:UInt8 =  1
 let DEVICE_JOY:UInt8 =  2
-let DEVICE_PCB:UInt8 =  3
+//let DEVICE_PCB:UInt8 =  3

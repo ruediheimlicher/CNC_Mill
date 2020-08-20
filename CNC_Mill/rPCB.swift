@@ -1057,12 +1057,29 @@ class rPCB: rViewController
          var circleelementdic = [String:Int]()
          
           var circlefloatelementdic = [String:Double]()
-         
+         var width_ok = 0
+         var widthfloat:Double = 0
          var z = 0
          for zeile in SVG_array
          {
        //     print("i: \(i) zeile: \(zeile)")
             let trimmzeile = zeile.trimmingCharacters(in: .whitespaces)
+            
+            if trimmzeile.contains("width") && (width_ok == 0)
+            {
+               width_ok = 1
+               //print("SVGdata widthzeile: \(trimmzeile)")
+               let zeilenarray = trimmzeile.split(separator: "=")
+               if zeilenarray.count == 2
+               {
+                  print("SVGdata width: \(zeilenarray[1]) string: \(zeilenarray[1] as NSString)")
+                  let widthfloat = ((zeilenarray[1].replacingOccurrences(of: "\"", with: ""))as NSString).doubleValue
+                  
+                  print("SVGdata widthfloat: \(widthfloat)")
+               }
+            }  
+            
+            
             if (trimmzeile.contains("circle") || trimmzeile.contains("ellipse"))
             {
               // print("i: \(i) trimmzeile: \(trimmzeile)")
@@ -2402,6 +2419,9 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       print("PCB report_home homex: \(homeX) homey: \(homeY)")
       var dx = homexFeld.doubleValue * -1 
       var dy = homeyFeld.doubleValue * -1
+      
+ //     dx = -500
+ //     dy = 0
       print("PCB report_home dx: \(dx) dy: \(dy)")
 //      dx = 10
 //      dy = 0
@@ -2409,15 +2429,15 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       lastklickposition.y = 0
 
       cncstepperposition = 0
-      var pfeilwegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
+      var homewegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
       
       
-      for z in 0 ... pfeilwegarray.count-1
+      for z in 0 ... homewegarray.count-1
       {
-         teensy.write_byteArray[z] = pfeilwegarray[z]
+         teensy.write_byteArray[z] = homewegarray[z]
          // print("\(pfeilwegarray[z])")
       }
-      print("\(pfeilwegarray)")
+      print("\(homewegarray)")
       teensy.write_byteArray[24] = 0xA5
       teensy.write_byteArray[25] = 3
       
@@ -2428,7 +2448,18 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
   //    homexFeld.integerValue = homeX
   //    homeyFeld.integerValue = homeY
       
-      
+      if teensy.readtimervalid() == true
+      {
+         //print("PCB readtimer valid vor")
+         
+      }
+      else 
+      {
+         //print("PCB readtimer not valid vor")
+         
+         var start_read_USB_erfolg = teensy.start_read_USB(true)
+      }
+
       let senderfolg = teensy.send_USB()
       
 
@@ -2799,7 +2830,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
       //     var wegarray = wegArrayMitWegXY(wegx:dx, wegy:dy)
       
-      wegarray[32] = DEVICE_PCB
+      wegarray[32] = DEVICE_MILL
       Schnittdatenarray.removeAll(keepingCapacity: true)
       cncstepperposition = 0
       if Schnittdatenarray.count == 0 // Array im Teensy loeschen
@@ -3013,6 +3044,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             teensy.write_byteArray[z] = pfeilwegarray[z]
     //         print("\(z) \(pfeilwegarray[z])")
          }
+         print("mausstatusAktion pfeilwegarray")
          print("\(pfeilwegarray)")
          teensy.write_byteArray[24] = 0xA5
          
@@ -3022,7 +3054,18 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
         // print("mausstatusaktion homeX: \(homeX) homeY: \(homeY)")
          //     homexFeld.integerValue = homeX
          //     homeyFeld.integerValue = homeY
-         
+         if teensy.readtimervalid() == true
+         {
+            //print("PCB readtimer valid vor")
+            
+         }
+         else 
+         {
+            //print("PCB readtimer not valid vor")
+            
+            var start_read_USB_erfolg = teensy.start_read_USB(true)
+         }
+
          
          let senderfolg = teensy.send_USB()
       }
@@ -3566,7 +3609,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
       //     var wegarray = wegArrayMitWegXY(wegx:dx, wegy:dy)
       
-      wegarray[32] = DEVICE_JOY
+      wegarray[32] = DEVICE_MILL
       Schnittdatenarray.removeAll(keepingCapacity: true)
       cncstepperposition = 0
       if Schnittdatenarray.count == 0 // Array im Teensy loeschen
@@ -3580,7 +3623,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          }
          
       }
-      wegarray[25] = 3 
+      wegarray[25] = 3 // nur 1 Abschnitt
       
       wegarray[24] = 0xB3
       
@@ -3611,9 +3654,20 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       {
          print("report_send_TextDaten start CNC")
          write_CNC_Abschnitt()   
+         if teensy.readtimervalid() == true
+         {
+            //print("PCB readtimer valid vor")
+            
+         }
+         else 
+         {
+            //print("PCB readtimer not valid vor")
+            
+            var start_read_USB_erfolg = teensy.start_read_USB(true)
+         }
+
          
          
-         teensy.start_read_USB(true)
       }
    }// report_send_TextDaten
    
