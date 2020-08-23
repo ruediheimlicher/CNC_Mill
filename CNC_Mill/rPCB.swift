@@ -85,6 +85,7 @@ class rPCB: rViewController
 
    @IBOutlet  var dataTable: NSTableView!
    
+    @IBOutlet weak var drillKnopf: NSButton!
    /*
    @IBOutlet weak var manufactorer: NSTextField!
    @IBOutlet weak var Counter: NSTextField!
@@ -1051,14 +1052,14 @@ class rPCB: rViewController
          var circlenummer = 0
          circlearray = [[Int]]()
          var circleelementarray = [Int]()
-         
          var circlefloatelementarray = [Double]()
-         
          var circleelementdic = [String:Int]()
          
-          var circlefloatelementdic = [String:Double]()
+         var circlefloatelementdic = [String:Double]()
          var width_ok = 0
          var widthfloat:Double = 0
+         var height_ok = 0
+         var heightfloat:Double = 0
          var z = 0
          for zeile in SVG_array
          {
@@ -1072,10 +1073,21 @@ class rPCB: rViewController
                let zeilenarray = trimmzeile.split(separator: "=")
                if zeilenarray.count == 2
                {
-                  print("SVGdata width: \(zeilenarray[1]) string: \(zeilenarray[1] as NSString)")
-                  let widthfloat = ((zeilenarray[1].replacingOccurrences(of: "\"", with: ""))as NSString).doubleValue
-                  
+                  //print("SVGdata width: \(zeilenarray[1]) string: \(zeilenarray[1] as NSString)")
+                  widthfloat = ((zeilenarray[1].replacingOccurrences(of: "\"", with: ""))as NSString).doubleValue
                   print("SVGdata widthfloat: \(widthfloat)")
+               }
+            }  
+            if trimmzeile.contains("height") && (height_ok == 0)
+            {
+               height_ok = 1
+               //print("SVGdata heightzeile: \(trimmzeile)")
+               let zeilenarray = trimmzeile.split(separator: "=")
+               if zeilenarray.count == 2
+               {
+                  //print("SVGdata width: \(zeilenarray[1]) string: \(zeilenarray[1] as NSString)")
+                  heightfloat = ((zeilenarray[1].replacingOccurrences(of: "\"", with: ""))as NSString).doubleValue
+                  print("SVGdata heightfloat: \(heightfloat)")
                }
             }  
             
@@ -1501,10 +1513,10 @@ class rPCB: rViewController
             //     iii += 1
          }
           */
-   
+         //PCBDaten[25] = [UInt8(3)]
          Schnittdatenarray.append(contentsOf:PCBDaten)
     //     report_PCB_Daten(DataSendTaste)
-         
+         stepperschritteFeld.integerValue = Schnittdatenarray.count
       }
       catch 
       {
@@ -2286,33 +2298,34 @@ class rPCB: rViewController
        }
 let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
  */
+      
       if (PCB_Test == 0)
       {
-      let alert = NSAlert()
-      alert.messageText = "CNC-Task starten?"
-      alert.informativeText = "Der Teensy ist noch nicht eingesteckt"
-      alert.alertStyle = .warning
-      alert.addButton(withTitle: "Einstecken und einschalten")
-      alert.addButton(withTitle: "Zurück")
-      antwort = alert.runModal()
-      print("antwort: \(antwort)")
-      switch antwort
-      {
+         let alert = NSAlert()
+         alert.messageText = "CNC-Task starten?"
+         alert.informativeText = "Der Teensy ist noch nicht eingesteckt"
+         alert.alertStyle = .warning
+         alert.addButton(withTitle: "Einstecken und einschalten")
+         alert.addButton(withTitle: "Zurück")
+         antwort = alert.runModal()
+         print("antwort: \(antwort)")
+         switch antwort
+         {
          case .alertFirstButtonReturn: // rawValue: 1000
-      
-         print("antwort 1")
-         break
-   
+            
+            print("antwort 1")
+            break
+            
          case .alertSecondButtonReturn: // rawValue: 1001
-      
-         print("antwort 2")
-         return;
-         break
-         
+            
+            print("antwort 2")
+            return;
+            break
+            
          default:
-         break
-      
-      }
+            break
+            
+         }
       }
       else 
       {
@@ -2321,6 +2334,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
       Plattefeld.stepperposition = 0
       cncstepperposition = 0
+      
  //     Plattefeld.setStepperposition(pos:cncstepperposition)
       let anzabschnitte = Schnittdatenarray.count
          
@@ -2335,7 +2349,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             let senderfolg = teensy.send_USB()
             //            print("joystickAktion report_goXY senderfolg: \(senderfolg)")
          }
-         
+         return
       }
 
       /*
@@ -2357,6 +2371,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          
          var start_read_USB_erfolg = teensy.start_read_USB(true)
       }
+      
+      
       Plattefeld.setStepperposition(pos: 0) // Ersten Punkt markieren
       Schnittdatenarray[0][24] = 0xB5 //
       write_CNC_Abschnitt()
@@ -2370,7 +2386,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       {
          print("PCB readtimer not valid nach")
       
-      var start_read_USB_erfolg = teensy.start_read_USB(true)
+ //     var start_read_USB_erfolg = teensy.start_read_USB(true)
       }
       
       
@@ -2381,6 +2397,11 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
 
       
    } // report_send_Daten
+   
+   @IBAction func report_send_Step(_ sender: NSButton)
+   {
+      print("PCB report_send_Step")
+   }
    
    @IBAction func report_clear(_ sender: NSButton)
    {
@@ -2417,6 +2438,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    {
       
       print("PCB report_home homex: \(homeX) homey: \(homeY)")
+      Schnittdatenarray.removeAll()
       var dx = homexFeld.doubleValue * -1 
       var dy = homeyFeld.doubleValue * -1
       
@@ -2437,6 +2459,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          teensy.write_byteArray[z] = homewegarray[z]
          // print("\(pfeilwegarray[z])")
       }
+      print("homewegarray")
       print("\(homewegarray)")
       teensy.write_byteArray[24] = 0xA5
       teensy.write_byteArray[25] = 3
@@ -2444,7 +2467,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       
   //    homeX += Int(dx)
   //    homeY += Int(dy)
-      print("report_home homeX: \(homeX) homeY: \(homeY)")
+ //     print("report_home homeX: \(homeX) homeY: \(homeY)")
   //    homexFeld.integerValue = homeX
   //    homeyFeld.integerValue = homeY
       
@@ -2461,7 +2484,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       }
 
       let senderfolg = teensy.send_USB()
-      
+      print("PCB report home senderfolg: \(senderfolg)")
 
    }
    
@@ -2685,6 +2708,13 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       vektor.append(UInt8((timerintervall & 0xFF00)>>8))
       vektor.append(UInt8(timerintervall & 0x00FF))
       vektor.append(DEVICE_MILL)
+      
+      // Drill
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+
  //     print("schrittdatenvektor sxInt: \(sxInt) dxInt: \(dxInt) syInt: \(syInt) dyInt: \(dyInt) zeit: \(zeit)")
       return vektor
    }
@@ -2836,11 +2866,11 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       if Schnittdatenarray.count == 0 // Array im Teensy loeschen
       {
          wegarray[25] = 1 //erstes Element
-         teensy.write_byteArray[24] = 0xE0 // Stopp
+         //teensy.write_byteArray[24] = 0xE0 // Stopp
          if teensy.dev_present() > 0
          {
             let senderfolg = teensy.send_USB()
-            print("joystickAktion report_goXY senderfolg: \(senderfolg)")
+            print("report_goXY report_goXY senderfolg: \(senderfolg)")
          }
          
       }
@@ -2881,7 +2911,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    func write_CNC_Abschnitt()
    {
       print("+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
-     
+      stepperpositionFeld.integerValue = cncstepperposition
+      
       if cncstepperposition == Schnittdatenarray.count
       {
          print("write_CNC_Abschnitt cncstepperposition ist Schnittdatenarray.count")
@@ -2905,59 +2936,24 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             //    print("schritteAY: \(schritteAY) ")
             print("     schritteAX: \(schritteAX) schritteAY: \(schritteAY)")
             
-            for el in tempSchnittdatenArray
+            for element in tempSchnittdatenArray
             {
-               teensy.write_byteArray.append(el)
+               teensy.write_byteArray.append(element)
             }
-  //         print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
+          print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
+            print("    write_byteArray24: \(teensy.write_byteArray[24])")
             
             
             let senderfolg = teensy.send_USB()
-            /*
             print("write_CNC_Abschnitt senderfolg: \(senderfolg)")
+            /*
+            
             print("0: \(tempSchnittdatenArray[0]) ")
             print("1: \(tempSchnittdatenArray[1]) ")
             print("2: \(tempSchnittdatenArray[2]) ")
             print("3: \(tempSchnittdatenArray[3]) ")
             */
             
- //           var schritteAX:UInt32 = UInt32(tempSchnittdatenArray[0]) | UInt32(tempSchnittdatenArray[1])<<8 | UInt32(tempSchnittdatenArray[2])<<16 | UInt32((tempSchnittdatenArray[3] & 0x7F))<<24;
-      //      print("schritteAX: \(schritteAX) ")
-    /*        
-            if (tempSchnittdatenArray[3] & 0x80) > 0
-            {
- //              print("Motor A schritteX negativ")
-               homeX -= Int(Double(schritteAX) / stepsFeld.doubleValue)
-            }
-            else
-            {
-               homeX += Int(Double(schritteAX) / stepsFeld.doubleValue)
-            }
-      */      
- //           print("8: \(tempSchnittdatenArray[8]) ")
- //           print("9: \(tempSchnittdatenArray[9]) ")
- //           print("10: \(tempSchnittdatenArray[10]) ")
- //           print("11: \(tempSchnittdatenArray[11]) ")
-            
-  //          var schritteAY:UInt32 = UInt32(tempSchnittdatenArray[8]) | UInt32(tempSchnittdatenArray[9])<<8 | UInt32(tempSchnittdatenArray[10])<<16 | UInt32((tempSchnittdatenArray[11] & 0x7F))<<24;
-        //    print("schritteAY: \(schritteAY) ")
- /* 
-            if (tempSchnittdatenArray[11] & 0x80) > 0
-            {
-  //             print("Motor B schritteY negativ")
-  //             homeY -= Int(Double(schritteAY) / stepsFeld.doubleValue)
-            }
-            else{
-   //            homeY += Int(Double(schritteAY) / stepsFeld.doubleValue)
-            }
- */
- //           print("schritteX: \(schritteX) schritteY: \(schritteY)")
-            
-  //         homeX += Int(Double(schritteAX) / stepsFeld.doubleValue)
-   //         homeY += Int(Double(schritteAY) / stepsFeld.doubleValue)
-  //          print("homeX: \(homeX) homeY: \(homeY)")
- //           homexFeld.integerValue = homeX
- //           homeyFeld.integerValue = homeY
 
             cncstepperposition += 1
             
@@ -3035,8 +3031,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          print("mausstatusAktion dx: \(dx) dy: \(dy)")
          var pfeilwegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
          
-         pfeilwegarray[32] = 2
-         pfeilwegarray[24] = 3
+         pfeilwegarray[32] = 1
+        
          
          
          for z in 0 ... pfeilwegarray.count-1
@@ -3046,7 +3042,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          }
          print("mausstatusAktion pfeilwegarray")
          print("\(pfeilwegarray)")
-         teensy.write_byteArray[24] = 0xA5
+         teensy.write_byteArray[24] = 0xB3
          
          
          //      homeX += Int(dx)
@@ -3135,7 +3131,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       }
 
       let distanz = abs(wegZ)
-      print("distanz: \(distanz)")
+//      print("distanz: \(distanz)")
       let propfaktor = 2834645.67 // 14173.23
       let zeit:Double = Double((distanz))/Double(speed) //   Schnittzeit für Distanz
       
@@ -3148,10 +3144,10 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       {
          //    
          schrittezInt = Int(schrittezRound)
-         print("schrittezInt OK: \(schrittezInt)")
+ //        print("schrittezInt OK: \(schrittezInt)")
          if schrittezInt < 0 // negativer Weg
          {
-            print("schrittezInt negativ")
+ //           print("schrittezInt negativ")
             schrittezInt *= -1
             schrittezInt |= 0x80000000
          }
@@ -3162,7 +3158,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       }
  //     motorstatus = (1<<MOTOR_C)
       var drillschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:0, syInt:0, szInt:schrittezInt, zeit:zeit  )// Array mit Daten fuer USB
-      print("drillschnittdatenarray: \(drillschnittdatenarray)")
+      
+//      print("drillschnittdatenarray: \(drillschnittdatenarray)")
       return drillschnittdatenarray
    }
    
@@ -3193,7 +3190,101 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       }
 
    }
+   @IBAction func report_Drill(_ sender: NSButton)
+   {
+      print("\n+++++++     report_Drill tag: \(sender.tag) ")
+      drill(weg:20)
+      return
+      let stepperpos = stepperpositionFeld.integerValue
+      var drillweg = 20
+      var drillWegArray = drillMoveArray(wegz: Double(drillweg))
+      drillWegArray[24] = 0xBA
+      drillWegArray[29] = 0 // PWM
+      drillWegArray[25] = 0 // lage
+      drillWegArray[32] = DEVICE_MILL
+      print("report_Drill cncstepperposition: \(cncstepperposition)");
+      print(" Schnittdatenarray vor insert count:\(Schnittdatenarray.count)")
+      for line in Schnittdatenarray
+      {
+         print(line)
+      }
+      Schnittdatenarray.insert(drillWegArray, at: cncstepperposition)  
+      print(" Schnittdatenarray nach insert: ")
+      for line in Schnittdatenarray
+      {
+         print(line)
+      }
+
+      if teensy.readtimervalid() == true
+      {
+         //print("PCB readtimer valid vor")
+      }
+      else 
+      {
+         var start_read_USB_erfolg = teensy.start_read_USB(true)
+      }
+
+      if Schnittdatenarray.count > 0
+      {
+         print("report_Drill write CNC")
+         write_CNC_Abschnitt()   
+         print("report_Drill cncstepperposition nach: \(cncstepperposition)");
+         
+      }
+
+
+   }
    
+   @objc func drill(weg:Int)
+   {
+      print("\n+++++++     drill weg: \(weg)")
+      let count = Schnittdatenarray.count
+      print("drill Schnittdatenarray.count: \(count)");
+      let stepperpos = stepperpositionFeld.integerValue
+      print("drill stepperpos: \(stepperpos)");
+      var drillweg = weg
+      var drillWegArray = drillMoveArray(wegz: Double(drillweg))
+      drillWegArray[24] = 0xBA
+      drillWegArray[29] = 0 // PWM
+      drillWegArray[25] = 3 // lage
+      drillWegArray[32] = DEVICE_MILL
+      drillWegArray[33] = 0 // drillstatus
+      print("\n*********************************************************")
+      print("report_Drill cncstepperposition: \(cncstepperposition)");
+      print(" Schnittdatenarray vor insert count:\(Schnittdatenarray.count)")
+      for line in Schnittdatenarray
+      {
+         print(line)
+      }
+      print("*********************************************************")
+      Schnittdatenarray.insert(drillWegArray, at: cncstepperposition) 
+      print("\n*********************************************************")
+      print(" Schnittdatenarray nach insert: ")
+      for line in Schnittdatenarray
+      {
+         print(line)
+      }
+      print("*********************************************************\n")
+      if teensy.readtimervalid() == true
+      {
+         //print("PCB readtimer valid vor")
+      }
+      else 
+      {
+         var start_read_USB_erfolg = teensy.start_read_USB(true)
+      }
+      
+      if Schnittdatenarray.count > 0
+      {
+         print("report_Drill write CNC")
+         write_CNC_Abschnitt()   
+         print("report_Drill cncstepperposition nach: \(cncstepperposition)");
+         
+      }
+      
+      
+      
+   }
  // MARK: joystickaktion
    @objc override func joystickAktion(_ notification:Notification) 
    {
@@ -3349,6 +3440,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       //print("info: \(String(describing: info))")
       //print("new Data")
       
+      var data1 = notification.userInfo?["data"] 
       var data:[UInt8] = notification.userInfo?["data"] as! [UInt8] // teensy.read_byteArray
 //      print("von teensy: data: \(String(describing: data)) ") // data: Optional([0, 9, 51, 0,....
       var i = 0
@@ -3386,10 +3478,30 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          
          switch taskcode
          {
+         case 0xA1:
+            print("PCB newDataAktion  A1 abschnitte: \(Schnittdatenarray.count)") // mehrere Schritte
+            let ladepos =  Int(data[8] )
+            Plattefeld.setStepperposition(pos:ladepos)
+            
+            let state = steppercontKnopf.state
+            
+            if state == .off
+            {
+               print("PCB newDataAktion  A1 return");
+               
+               
+               return;
+            }
+
+            
+            
+            break;
+            
          case 0xAD:
             print("PCB newDataAktion  AD TASK END ")
             let abschnittnum = Int((data[5] << 8) | data[6])
-            let ladepos =  Int(data[8] )
+            
+            let ladepos =  Int((data[7] << 8) | data[8] )
             print("newDataAktion  AD ladepos: \(ladepos)")
             Plattefeld.setStepperposition(pos:ladepos+1)
             print("newDataAktion  AD abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
@@ -3409,10 +3521,90 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             break
 
          case 0xB6:
-             print("newDataAktion  B6 ")
+            print("newDataAktion  B6 Abschnitt 0 abschnitte: \(Schnittdatenarray.count)")
+             // Data angekommen
+            /*
+            let state = steppercontKnopf.state
+             if state == .off
+             {
+               
+               print("PCB newDataAktion  B6 return");
+  //             return;
+             }
+          */
             
              
-         break;
+         break
+         
+         case 0xBB:
+            print("newDataAktion  B8 Drill ")
+            let stepperpos = stepperpositionFeld.integerValue 
+            let datacount = Schnittdatenarray.count
+            print("newDataAktion  B8 stepperpos: \(stepperpos) datacount: \(datacount)")
+            let drillstatus:UInt8 = data[22]
+            print("newDataAktion  B8 drillstatus: \(drillstatus)")
+            if drillstatus > 1
+            {
+               //drillWegArray[25] = 0xFF;
+               //teensy.write_byteArray.removeAll(keepingCapacity: true)
+               
+ //              teensy.write_byteArray[24] = 0xBA
+ //              teensy.write_byteArray[25] = 0xFF
+               
+              // if (usbstatus > 0)
+              // {
+//                  let senderfolg = teensy.send_USB()
+//                  print("newDataAktion BB senderfolg: \(senderfolg)")
+               //}
+               //return
+               break
+            }
+             
+            var drillweg = -20
+            var drillWegArray = drillMoveArray(wegz: Double(drillweg))
+            drillWegArray[24] = 0xBA
+            drillWegArray[29] = 0 // PWM
+            drillWegArray[25] = 3 // lage
+            
+ 
+            drillWegArray[32] = DEVICE_MILL
+            drillWegArray[33] = drillstatus
+            print("\n*********************************************************")
+            print("BB cncstepperposition: \(cncstepperposition)");
+            print(" Schnittdatenarray vor insert count:\(Schnittdatenarray.count)")
+            for line in Schnittdatenarray
+            {
+               print(line)
+            }
+            print("*********************************************************")
+
+            Schnittdatenarray.insert(drillWegArray, at: datacount)  
+            print("\n*********************************************************")
+            print(" Schnittdatenarray nach insert: ")
+            for line in Schnittdatenarray
+            {
+               print(line)
+            }
+            print("*********************************************************\n")
+
+            //print(" Schnittdatenarray nach insert: \(Schnittdatenarray)")
+            if teensy.readtimervalid() == true
+            {
+               //print("PCB readtimer valid vor")
+            }
+            else 
+            {
+               var start_read_USB_erfolg = teensy.start_read_USB(true)
+            }
+            /*
+            if Schnittdatenarray.count > 0
+            {
+               print("report_Drill")
+               write_CNC_Abschnitt()   
+               return
+            }
+             */
+            break
             
          case 0xE1:
             print("newDataAktion  E1 mouseup HALT")
@@ -3440,11 +3632,11 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          case 0xC5:
             let motor = data[1]
             let anschlagstatus = data[12]
-            let seite = data[13]
+            let richtung = data[13]
             let cncstatus = data[20]
-            let stop = data[14]
+            let anschlagcode = data[14]
             print("newDataAktion  C5 Anschlag")
-            print("  motor: \(motor)  anschlagstatus: \(anschlagstatus)  seite: \(seite) cncstatus: \(cncstatus) stop: \(stop)")
+            print("  motor: \(motor)  \nanschlagstatus: \(anschlagstatus)  \nrichtung: \(richtung) \ncncstatus: \(cncstatus) \nanschlagcode: \(anschlagcode)")
             
 
             
@@ -3460,7 +3652,19 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          //      print("newDataAktion writecncabschnitt")
          
          // **************************************
-         write_CNC_Abschnitt()
+         let state = steppercontKnopf.state
+        
+            // print("newDataAktion writecncabschnitt steppercontKnopf state: \(state)")
+         
+         if state == .on
+         {
+            print("newDataAktion writecncabschnitt go cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
+            if cncstepperposition < Schnittdatenarray.count
+            { 
+             write_CNC_Abschnitt()
+            }
+         }
+        
          // **************************************
          
          //      print("newDataAktion  end\n\n")
@@ -3598,7 +3802,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    @IBAction func report_send_TextDaten(_ sender: NSButton)
    {
       print("report_send_TextDaten")
-      clearteensy()
+  //    clearteensy()
       let dx = dxFeld.doubleValue
       let dy = dyFeld.doubleValue
       
@@ -3615,21 +3819,22 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       if Schnittdatenarray.count == 0 // Array im Teensy loeschen
       {
          teensy.write_byteArray[25] = 1 //erstes Element
-         teensy.write_byteArray[24] = 0xE0 // Stopp
+         //teensy.write_byteArray[24] = 0xE0 // Stopp
          if teensy.dev_present() > 0
          {
-            let senderfolg = teensy.send_USB()
-            print("PCB report_send_TextDaten clear senderfolg: \(senderfolg)")
+ //           let senderfolg = teensy.send_USB()
+ //           print("PCB report_send_TextDaten clear senderfolg: \(senderfolg)")
          }
          
       }
+      
       wegarray[25] = 3 // nur 1 Abschnitt
       
       wegarray[24] = 0xB3
       
       var zeilenposition:UInt8 = 0
       Schnittdatenarray.append(wegarray)
-      
+      stepperschritteFeld.integerValue = Schnittdatenarray.count
       /*
        for zeilenindex in stride(from: 0, to: Schnittdatenarray.count-1, by: 1)
        {
@@ -3664,6 +3869,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             //print("PCB readtimer not valid vor")
             
             var start_read_USB_erfolg = teensy.start_read_USB(true)
+            print("PCB report home start_read_USB_erfolg: \(start_read_USB_erfolg)")
          }
 
          

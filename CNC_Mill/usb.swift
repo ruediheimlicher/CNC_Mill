@@ -215,7 +215,7 @@ open class usb_teensy: NSObject
          {
             readtimer?.invalidate()
          }
-         readtimer = Timer.scheduledTimer(timeInterval: 0.08, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
+         readtimer = Timer.scheduledTimer(timeInterval: 0.04, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
       }
       
       return Int(result) //
@@ -303,9 +303,9 @@ open class usb_teensy: NSObject
          {
             return;
          }
+         // read_byteArray puffern
          read_byteArray = readarray
-  //       let usbData = Data(bytes:read_byteArray)
-         
+          
  /*        
          if  var dic = timer.userInfo as? NSMutableDictionary
          {
@@ -320,18 +320,21 @@ open class usb_teensy: NSObject
  */        
          let timerdic:Dictionary<String,Int?> = timer.userInfo as! Dictionary<String,Int?>
          //let messageString = userInfo["message"]
-         var tempcount = timerdic["count"]!
+         //var tempcount = timerdic["count"]!
+         
          
          if !(last_read_byteArray == read_byteArray)
          {
-            lastDataRead = Data(bytes:read_byteArray)
-            let usbData = Data(bytes:read_byteArray)
+            last_read_byteArray = read_byteArray
+            //lastDataRead = Data(bytes:read_byteArray)
+            
+           // let usbData = Data(bytes:read_byteArray)
             new_Data = true
             datatruecounter += 1
-            var codehex = String(format:"%02X", read_byteArray[0])
+            //var codehex = String(format:"%02X", read_byteArray[0])
             
-            var taskcode = read_byteArray[0]
-            print("\n+++                               cont_read_USB in Timer codehex: \(codehex)")
+            //var taskcode = read_byteArray[0]
+            //print("\n+++                               cont_read_USB in Timer codehex: \(codehex)")
             
             /*
              if taskcode == 0xD0
@@ -364,7 +367,7 @@ open class usb_teensy: NSObject
             let nc = NotificationCenter.default           
             nc.post(name:Notification.Name(rawValue:"newdata"),
                     object: nil,
-                    userInfo: ["message":"neue Daten", "data":read_byteArray, "usbdata":usbData])
+                    userInfo: ["message":"neue Daten", "data":read_byteArray])
          }
          else
          {

@@ -380,6 +380,13 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    
    @IBOutlet weak var Joystickfeld: rJoystickView!
   
+   @IBOutlet weak var stepperpositionFeld: NSTextField!
+   @IBOutlet weak var stepperschritteFeld: NSTextField!
+   @IBOutlet weak var steppercontKnopf: NSButton!
+   
+   @IBOutlet weak var nextKnopf: NSStepper!
+  
+  
    
    override func viewDidLoad() 
    {
@@ -673,7 +680,6 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
          ii = ii+1
       }
       
-      let u = ((Int32(lastData[1])<<8) + Int32(lastData[2]))
       //print("hb: \(lastData[1]) lb: \(lastData[2]) u: \(u)")
       let info = notification.userInfo
       
@@ -722,6 +728,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
       //print("dic: \(dic ?? ["a":[123]])\n")
       
    }
+   
+   
    func tester(_ timer: Timer)
    {
       let theStringToPrint = timer.userInfo as! String
@@ -1276,6 +1284,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    @IBOutlet weak var dataFeld: NSTextField!
    
    @IBOutlet weak var schrittweiteFeld: NSTextField!
+   
+   
    
    @IBOutlet weak var Pot0_Feld: NSTextField!
    @IBOutlet weak var Pot0_Slider: NSSlider!
