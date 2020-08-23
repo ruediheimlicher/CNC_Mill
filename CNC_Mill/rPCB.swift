@@ -345,9 +345,9 @@ class rPCB: rViewController
       let nc = NotificationCenter.default
       var notificationDic = [String:Any]()
       notificationDic["selrow"] = selectedRow
-//      nc.post(name:Notification.Name(rawValue:"datatable"),
-//              object: nil,
- //             userInfo: notificationDic)        
+      nc.post(name:Notification.Name(rawValue:"datatable"),
+              object: nil,
+              userInfo: notificationDic)        
 
    }
    
@@ -2491,7 +2491,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    func schrittdatenvektor(sxInt:Int,syInt:Int,szInt:Int, zeit:Double) -> [UInt8]
    {
-//      print("+++++++++++                               schrittdatenvektor sxInt: \(sxInt) syInt: \(syInt) szInt: \(szInt) zeit: \(zeit)")
+      print("\n+++++++++++                               schrittdatenvektor sxInt: \(sxInt) syInt: \(syInt) szInt: \(szInt) zeit: \(zeit)")
       let sxInt_raw = (sxInt & 0x0FFFFFFF)
       let syInt_raw = (syInt & 0x0FFFFFFF)
       let szInt_raw = (szInt & 0x0FFFFFFF)
@@ -2530,23 +2530,25 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          let vorzeichenx = (sxInt & 0x80000000)
          
 //         print("vorzeichenx: \(vorzeichenx)") // Richtung der Bewegung
-         
-//         print("sxInt_raw: \(sxInt_raw) dx: \(dx) dxInt: \(dxInt)")
-         let kontrolledoublex = Int(Double(sxInt_raw) * dx) //  Kontrolle mit Double-Wert von dx
+         print("\n+++++++++++++++++++++++++++++++++++++++++++++")
+         print("sxInt_raw: \(sxInt_raw) dx: \(dx) dxInt: \(dxInt)")
+         let kontrolledoublex = (Double(sxInt_raw) * dx) //  Kontrolle mit Double-Wert von dx
          let kontrolleintx = sxInt_raw * dxInt //               Kontrolle mit Int-Wert von dx
          var diffx = Int(kontrolledoublex) - kontrolleintx // differenz, Rundungsfehler
-//         print("kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
+         print("kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
          if diffx == 0
          {
             diffx = 1
          }
-         let intervallx = Double(kontrolleintx / diffx)
+         var intervallx = Double(kontrolleintx / diffx)
+         
          
          let controlx = Double(sxInt_raw) / intervallx
          korrekturintervallx = Int(round(intervallx)) // Rundungsfehler aufteilen ueber Abschnitt: 
          // alle korrekturintervallx Schritte dexInt incrementieren oder decrementieren
- //       print("korrekturintervallx: \(korrekturintervallx) controlx: \(controlx)")
-         
+        print("korrekturintervallx: \(korrekturintervallx) controlx: \(controlx)")
+        print("\(sxInt_raw)\t\(dx)\t\(dxInt)\t\(kontrolledoublex)\t\(kontrolleintx)\t\(diffx)\t\(korrekturintervallx)\t\(controlx)")
+         print("+++++++++++++++++++++++++++++++++++++++++++++\n") 
          if korrekturintervallx < 0 // negative korrektur
          {
 //            print("korrekturintervallx negativ")
@@ -2590,12 +2592,12 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          let vorzeicheny = (syInt & 0x80000000)
          
          //print("vorzeicheny: \(vorzeicheny)")
-         
-//         print("syInt_raw: \(syInt_raw) dy: \(dy) dyInt: \(dyInt)")
+         print("\n+++++++++++++++++++++++++++++++++++++++++++++")
+         print("syInt_raw: \(syInt_raw) dy: \(dy) dyInt: \(dyInt)")
          let kontrolledoubley = Int(Double(syInt_raw) * dy)
          let kontrolleinty = syInt_raw * dyInt
          var diffy = (kontrolledoubley) - kontrolleinty
-//         print("kontrolledoubley: \(kontrolledoubley) kontrolleinty: \(kontrolleinty) diffy: \(diffy) vorzeicheny: \(vorzeicheny)")
+         print("kontrolledoubley: \(kontrolledoubley) kontrolleinty: \(kontrolleinty) diffy: \(diffy) vorzeicheny: \(vorzeicheny)")
          if diffy == 0
          {
             diffy = 1
@@ -2605,9 +2607,9 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          let controly = Double(syInt_raw) / intervally
          korrekturintervally = Int(round(intervally))
          
- //        print("korrekturintervally: \(korrekturintervally) \n")
+         print("korrekturintervally: \(korrekturintervally)  controly: \(controly)\n")
          
-         
+  print("+++++++++++++++++++++++++++++++++++++++++++++\n")       
          if korrekturintervally < 0 // negative korrektur
          {
  //           print("korrekturintervally negativ")
@@ -3042,7 +3044,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          }
          print("mausstatusAktion pfeilwegarray")
          print("\(pfeilwegarray)")
-         teensy.write_byteArray[24] = 0xB3
+         teensy.write_byteArray[24] = 0xB5
          
          
          //      homeX += Int(dx)
@@ -3109,7 +3111,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
    
    if Schnittdatenarray.count > 0
    {
-      print("dataTableAktion start CNC ")
+      print("dataTableAktion start CNC cncstepperposition: \(cncstepperposition)")
       write_CNC_Abschnitt()   
       
       teensy.start_read_USB(true)
@@ -3508,7 +3510,13 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
             notificationDic["taskcode"] = taskcode
             nc.post(name:Notification.Name(rawValue:"usbread"),
                     object: nil,
-                    userInfo: notificationDic)        
+                    userInfo: notificationDic)     
+            if teensy.readtimervalid() == true
+            {
+               print("PCB AD readtimer valid")
+               //teensy.readtimer?.invalidate()
+            }
+
             break
             
          case 0xAF:
