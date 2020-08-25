@@ -2548,7 +2548,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          // alle korrekturintervallx Schritte dexInt incrementieren oder decrementieren
         print("korrekturintervallx: \(korrekturintervallx) controlx: \(controlx)")
         print("\(sxInt_raw)\t\(dx)\t\(dxInt)\t\(kontrolledoublex)\t\(kontrolleintx)\t\(diffx)\t\(korrekturintervallx)\t\(controlx)")
-         print("+++++++++++++++++++++++++++++++++++++++++++++\n") 
+            print("+++++++++++++++++++++++++++++++++++++++++++++\n") 
          if korrekturintervallx < 0 // negative korrektur
          {
 //            print("korrekturintervallx negativ")
@@ -2602,8 +2602,8 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
          {
             diffy = 1
          }
-         let intervally = Double(kontrolleinty / diffy)
-         
+         var intervally = Double(kontrolleinty / diffy)
+         intervally = Double(diffy / dxInt)
          let controly = Double(syInt_raw) / intervally
          korrekturintervally = Int(round(intervally))
          
