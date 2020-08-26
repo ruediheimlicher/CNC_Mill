@@ -2405,7 +2405,7 @@ class rPCB: rViewController
    
    @IBAction func report_clear(_ sender: NSButton)
    {
-      print("PCB report_clear")
+      print("\n           PCB report_clear")
       teensy.write_byteArray[24] = 0xF1
       
       //write_CNC_Abschnitt()
@@ -2934,13 +2934,13 @@ class rPCB: rViewController
             //      print("schritteAX: \(schritteAX) ")
             var schritteAY:UInt32 = UInt32(tempSchnittdatenArray[8]) | UInt32(tempSchnittdatenArray[9])<<8 | UInt32(tempSchnittdatenArray[10])<<16 | UInt32((tempSchnittdatenArray[11] & 0x7F))<<24;
             //    print("schritteAY: \(schritteAY) ")
-            print("     schritteAX: \(schritteAX) schritteAY: \(schritteAY)")
+            print("write_CNC     schritteAX: \(schritteAX) schritteAY: \(schritteAY)")
             
             for element in tempSchnittdatenArray
             {
                teensy.write_byteArray.append(element)
             }
-            print("cncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
+            print("write_CNCcncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
             print("    write_byteArray24: \(teensy.write_byteArray[24])")
             
             
@@ -2962,7 +2962,7 @@ class rPCB: rViewController
          } // else
          
       }// if count
-      
+      print("\n                                             write_CNC END\n")
    }
    
    @objc override func usbstatusAktion(_ notification:Notification) 
@@ -3120,7 +3120,7 @@ class rPCB: rViewController
    func drillMoveArray(wegz:Double) ->[UInt8] // z-Richtung +: up -: down
    {
       zoomfaktor = zoomFeld.doubleValue
-      print("PCB drillUp wegz: \(wegz) ")
+      print("PCB drillUpDown wegz: \(wegz) ")
       let distanzZ = wegz *  INTEGERFAKTOR
       
       let wegZ = distanzZ * zoomfaktor 
@@ -3144,12 +3144,17 @@ class rPCB: rViewController
       {
          //    
          schrittezInt = Int(schrittezRound)
-         print("schrittezInt OK: \(schrittezInt)")
+  //       print("schrittezInt OK: \(schrittezInt)")
          if schrittezInt < 0 // negativer Weg
          {
-            print("schrittezInt negativ")
+            print("drill up")
+//            print("schrittezInt negativ")
             schrittezInt *= -1
             schrittezInt |= 0x80000000
+         }
+         else
+         {
+            print("drill down")
          }
       }
       else
@@ -3176,7 +3181,7 @@ class rPCB: rViewController
       
       var drillWegArray = drillMoveArray(wegz: Double(drillweg))
       drillWegArray[24] = 0xB5
-      drillWegArray[29] = 0 // PWM
+      drillWegArray[29] = 99 // PWM
       drillWegArray[25] = 3
       drillWegArray[32] = DEVICE_MILL
       Schnittdatenarray.append(drillWegArray)
@@ -3195,6 +3200,7 @@ class rPCB: rViewController
       print("\n+++++++     report_Drill tag: \(sender.tag) ")
       
       drill(weg:20)
+      
       return
 
       
@@ -3239,7 +3245,9 @@ class rPCB: rViewController
       var drillweg = weg
       var drillWegArray = drillMoveArray(wegz: Double(drillweg))
       drillWegArray[24] = 0xBA
-      drillWegArray[29] = 0 // PWM
+      drillWegArray[26] = 0
+      drillWegArray[27] = 0
+      drillWegArray[29] = 99 // PWM
       drillWegArray[25] = 3 // lage
       drillWegArray[32] = DEVICE_MILL
       drillWegArray[33] = 0 // drillstatus
@@ -3546,6 +3554,7 @@ class rPCB: rViewController
             var drillweg = -20
             var drillWegArray = drillMoveArray(wegz: Double(drillweg))
             drillWegArray[24] = 0xBA
+            
             drillWegArray[29] = 0 // PWM
             drillWegArray[25] = 0 // lage
             drillWegArray[32] = DEVICE_MILL
@@ -3594,6 +3603,85 @@ class rPCB: rViewController
             }
              */
             break
+            
+         case 0xBC:
+            print("\n                                             newDataAktion  BC Drill ")
+            let stepperpos = stepperpositionFeld.integerValue 
+            let datacount = Schnittdatenarray.count
+            print("newDataAktion  BC stepperpos: \(stepperpos) datacount: \(datacount)")
+            
+            var abschnittnummer = data[5]<<8 + data[6]
+            print("newDataAktion  BC abschnittnummer A: \(abschnittnummer) cncstepperposition: \(cncstepperposition)")
+            abschnittnummer = data[5]<<8 | data[6]
+            print("newDataAktion  BC abschnittnummer B: \(abschnittnummer)")
+            
+            let drillstatus:UInt8 = data[22]
+            print("newDataAktion  BC drillstatus: \(drillstatus)")
+            if drillstatus > 1 // 
+            {
+               print("                 newDataAktion  BC out\n")
+               //break
+               //cncstepperposition += 2
+               return
+            }
+            
+            var drillweg = -20
+            var drillWegArray = drillMoveArray(wegz: Double(drillweg))
+            drillWegArray[24] = 0xBA
+            
+            drillWegArray[29] = 99 // PWM
+            drillWegArray[25] = 3 // lage
+            drillWegArray[26] = 0 // index H
+            drillWegArray[27] = 1
+            drillWegArray[32] = DEVICE_MILL
+            
+            // 200825
+            drillWegArray[33] = drillstatus
+            print("\n*********************************************************")
+            print("BC cncstepperposition: \(cncstepperposition)");
+            print("BC Schnittdatenarray vor insert count:\(Schnittdatenarray.count)")
+            for line in Schnittdatenarray
+            {
+               print(line)
+            }
+            print("*********************************************************")
+            
+            Schnittdatenarray.insert(drillWegArray, at: datacount)  
+            print("\n*********************************************************")
+            print("BC Schnittdatenarray nach insert: ")
+            for line in Schnittdatenarray
+            {
+               print(line)
+            }
+            print("*********************************************************\n")
+            
+            //print(" Schnittdatenarray nach insert: \(Schnittdatenarray)")
+            if teensy.readtimervalid() == true
+            {
+               //print("PCB readtimer valid vor")
+            }
+            else 
+            {
+               var start_read_USB_erfolg = teensy.start_read_USB(true)
+            }
+            
+            /*
+             print(" Schnittdatenarray vor insert: \(Schnittdatenarray)")
+             Schnittdatenarray.insert(drillWegArray, at: datacount)  
+             print(" Schnittdatenarray nach insert: \(Schnittdatenarray)")
+             if teensy.readtimervalid() == true
+             {
+             //print("PCB readtimer valid vor")
+             }
+             else 
+             {
+             var start_read_USB_erfolg = teensy.start_read_USB(true)
+             }
+             */
+            break
+            
+            
+            
          case 0xE1:
             print("newDataAktion  E1 mouseup HALT")
             Schnittdatenarray.removeAll()
@@ -3649,13 +3737,14 @@ class rPCB: rViewController
             print("newDataAktion writecncabschnitt go cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
             if cncstepperposition < Schnittdatenarray.count
             { 
+               
                write_CNC_Abschnitt()
             }
          }
          
          // **************************************
          
-         //      print("newDataAktion  end\n\n")
+               print("                       newDataAktion  end\n\n")
       } // if DEVICE
    } // newDataAktion
    
