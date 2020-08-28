@@ -3947,9 +3947,7 @@ class rPCB: rViewController
             Plattefeld.setStepperposition(pos:abschnittnummer)
             break
          }// switch taskcode
-         
-         
-         
+                  
          print("newDataAktion writecncabschnitt taskcode: \(taskcode)")
          
          
