@@ -127,7 +127,7 @@ override  func mouseUp(with theEvent: NSEvent)
 {
    
    let notificationDic = pfeiltimer?.userInfo
- //  print("pfeiltastenstimeraktion userinfo: \(notificationDic)")
+   print("pfeiltastenstimeraktion userinfo: \(notificationDic)")
    let nc = NotificationCenter.default
    nc.post(name:Notification.Name(rawValue:"maus_status"),
    object: nil,
@@ -441,6 +441,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
          USB_OK_Feld.image = notokimage
       }
       
+      /*
       if teensy.readtimervalid() == true
       {
          //print("PCB readtimer valid vor")
@@ -452,7 +453,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
          
          var start_read_USB_erfolg = teensy.start_read_USB(true)
       }
-
+*/
    }
    
    @nonobjc  func windowShouldClose(_ sender: Any) 

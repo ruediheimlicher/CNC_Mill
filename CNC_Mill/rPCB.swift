@@ -40,8 +40,8 @@ class rPCB: rViewController
    
    var lastklickposition:position = position()
    
-   var lastcncindex:Int = 0 // letzte  CNC-position in circlearray
-   
+   var lasttabledataindex:Int = 0 // letzte  CNC-position in circlearray
+   var tabledatastatus:UInt8 = 0
    var mouseistdown:Int = 0
    
    var selectetDataTableRow = 0
@@ -86,6 +86,11 @@ class rPCB: rViewController
    @IBOutlet  var dataTable: NSTableView!
    
    @IBOutlet weak var drillKnopf: NSButton!
+   
+    @IBOutlet weak var Zeilen_Stepper: NSStepper!
+   
+   
+   
    /*
     @IBOutlet weak var manufactorer: NSTextField!
     @IBOutlet weak var Counter: NSTextField!
@@ -340,15 +345,20 @@ class rPCB: rViewController
    {
       //     print("tableView  tableViewSelectionDidChange notification: \(notification)")
       let selectedRow = (notification.object as! NSTableView).selectedRow
-      //      print("tableView  tableViewSelectionDidChange selectedRow: \(selectedRow)")
+            print("tableView  tableViewSelectionDidChange selectedRow: \(selectedRow)")
+      
+      
+      datatabletask(zeile:selectedRow)
       
       let nc = NotificationCenter.default
       var notificationDic = [String:Any]()
       notificationDic["selrow"] = selectedRow
-      //      nc.post(name:Notification.Name(rawValue:"datatable"),
-      //              object: nil,
-      //             userInfo: notificationDic)        
       
+    /*
+            nc.post(name:Notification.Name(rawValue:"datatable"),
+                    object: nil,
+                   userInfo: notificationDic)        
+      */
    }
    
    @objc func handleClickedRow()
@@ -987,7 +997,7 @@ class rPCB: rViewController
       }
       //   report_clear(ClearPCBTaste)
       
-      report_PCB_Daten(PCB_Data_Knopf)
+ //     report_PCB_Daten(PCB_Data_Knopf)
       PCB_Test = 1
       /*
        let kreuzarray = kreuz(startnummer: Schnittdatenarray.count)
@@ -1473,11 +1483,12 @@ class rPCB: rViewController
           }
           */
          
-         
+/*         
          let zeile:IndexSet = [0]
-         //        dataTable.selectRowIndexes(zeile, byExtendingSelection: false)
+         dataTable.selectRowIndexes(zeile, byExtendingSelection: false)
          dataTable.reloadData()
-         //         lastcncindex = 0 // Zeile 0 in circlearray
+*/
+         //         lasttabledataindex = 0 // Zeile 0 in circlearray
          
          /*
           print("mill_floatarray C")
@@ -1488,6 +1499,8 @@ class rPCB: rViewController
           }
           */
          var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
+         
+         
          
          /*
           print("mill_floatarray C")
@@ -1517,6 +1530,7 @@ class rPCB: rViewController
          Schnittdatenarray.append(contentsOf:PCBDaten)
          //     report_PCB_Daten(DataSendTaste)
          stepperschritteFeld.integerValue = Schnittdatenarray.count
+         Zeilen_Stepper.maxValue = Double(Schnittdatenarray.count - 1)
       }
       catch 
       {
@@ -1638,15 +1652,16 @@ class rPCB: rViewController
           print("\(el["ind"] ) \(el["X"] ) \(el["Y"] )")
           }
           */
-         
-         let zeile:IndexSet = [0]
-         //       dataTable.selectRowIndexes(zeile, byExtendingSelection: false)
-         dataTable.reloadData()
-         lastcncindex = 0 // Zeile 0 in circlearray
+         //dataTable.reloadData()
+          
+         lasttabledataindex = 0 // Zeile 0 in circlearray
          
       }
-      
-      //print("setPCB_Output End")
+      let zeile:IndexSet = [0]
+      dataTable.reloadData()
+      dataTable.selectRowIndexes(zeile, byExtendingSelection: false)
+
+      print("setPCB_Output End")
    } // setPCB_Outpu
    
    func PCB_Daten(floatarray:[[Double]])->[[UInt8]]
@@ -1722,6 +1737,8 @@ class rPCB: rViewController
          wegArray[26] = UInt8((zeilenindex & 0xFF00)<<8)
          wegArray[27] = UInt8((zeilenindex & 0x00FF))
          
+         wegArray[36] = 0 // default H fuer tabledataZeile
+         wegArray[37] = 0xFF // default L fuer tabledataZeile
          
          PCB_Datenarray.append(wegArray)
          
@@ -2398,10 +2415,10 @@ class rPCB: rViewController
       
    } // report_send_Daten
    
-   @IBAction func report_send_Step(_ sender: NSButton)
-   {
-      print("PCB report_send_Step")
-   }
+    
+ 
+   
+   
    
    @IBAction func report_clear(_ sender: NSButton)
    {
@@ -2714,7 +2731,23 @@ class rPCB: rViewController
       vektor.append(0)
       vektor.append(0)
       vektor.append(0)
+      
+      // tableview
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
 
+      // 48
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+      vektor.append(0)
+
+      print("schrittdatenvektor count: \(vektor.count)")
       //     print("schrittdatenvektor sxInt: \(sxInt) dxInt: \(dxInt) syInt: \(syInt) dyInt: \(dyInt) zeit: \(zeit)")
       return vektor
    }
@@ -2943,9 +2976,12 @@ class rPCB: rViewController
             print("write_CNCcncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
             print("    write_byteArray24: \(teensy.write_byteArray[24])")
             
-            
-            let senderfolg = teensy.send_USB()
-            print("write_CNC_Abschnitt senderfolg: \(senderfolg)")
+            if teensy.dev_present() > 0
+            {
+               
+               let senderfolg = teensy.send_USB()
+               print("write_CNC_Abschnitt senderfolg: \(senderfolg)")
+            }
             /*
              
              print("0: \(tempSchnittdatenArray[0]) ")
@@ -2964,6 +3000,68 @@ class rPCB: rViewController
       }// if count
       print("\n                                             write_CNC END\n")
    }
+   
+   func write_CNC_Zeile(zeilenarray:[UInt8])
+   {
+      print("+++              PCB write_CNC_Zeile zeilenarray: \(zeilenarray) \nSchnittdatenarray.count: \(Schnittdatenarray.count)")
+      
+      if steppercontKnopf.state == .on
+      {
+         stepperpositionFeld.integerValue = lasttabledataindex + 1
+      }
+      
+      if zeilenarray.count >  64 || zeilenarray.count == 0
+      {
+         print("write_CNC_Zeile data err")
+         return
+      }
+      //if zeile < Schnittdatenarray.count
+      
+      if CNC_HALT_Knopf.state == .on
+      {
+         // alles OFF
+         print("write_CNC_Zeile HALT")
+      }
+      else
+      {
+         
+         teensy.write_byteArray.removeAll()
+         //var tempSchnittdatenArray:[UInt8] = Schnittdatenarray[cncstepperposition]
+         var schritteAX:UInt32 = UInt32(zeilenarray[0]) | UInt32(zeilenarray[1])<<8 | UInt32(zeilenarray[2])<<16 | UInt32((zeilenarray[3] & 0x7F))<<24;
+         //      print("schritteAX: \(schritteAX) ")
+         var schritteAY:UInt32 = UInt32(zeilenarray[8]) | UInt32(zeilenarray[9])<<8 | UInt32(zeilenarray[10])<<16 | UInt32((zeilenarray[11] & 0x7F))<<24;
+         //    print("schritteAY: \(schritteAY) ")
+         print("write_CNC_Zeile     schritteAX: \(schritteAX) schritteAY: \(schritteAY)")
+         
+         for element in zeilenarray
+         {
+            teensy.write_byteArray.append(element)
+         }
+         print("write_CNC_Zeile  write_byteArray: \(teensy.write_byteArray)")
+         print("    write_byteArray24: \(teensy.write_byteArray[24])")
+         print("write_CNC_Zeile    write_byteArray38: \(teensy.write_byteArray[38])")
+         
+         if teensy.dev_present() > 0
+         {
+            let senderfolg = teensy.send_USB()
+            print("write_CNC_Zeile senderfolg: \(senderfolg)")
+         }
+         //   cncstepperposition += 1
+         
+         
+         
+         
+         
+      }// if count
+      print("                                            write_CNC_Zeile END\n")
+   }
+   
+   
+   
+   
+   
+   
+   
    
    @objc override func usbstatusAktion(_ notification:Notification) 
    {
@@ -3072,15 +3170,15 @@ class rPCB: rViewController
       let info = notification.userInfo
       let zeilenindex:Int = info?["selrow"] as! Int
       let datazeile = circlearray[zeilenindex]
-      //print("dataTableAktion zeilenindex: \(zeilenindex) datazeile: \(datazeile) lastcncindex: \(lastcncindex)")
-      let lastX = circlearray[lastcncindex][1]
-      let lastY = circlearray[lastcncindex][2]
+      print("dataTableAktion zeilenindex: \(zeilenindex) datazeile: \(datazeile) lasttabledataindex: \(lasttabledataindex)")
+      let lastX = circlearray[lasttabledataindex][1]
+      let lastY = circlearray[lasttabledataindex][2]
       let aktX = datazeile[1]
       let aktY = datazeile[2]
       var maxsteps:Double = 0
       var zeilendic:[String:Any] = [:]
       var position:UInt8 = 0
-      lastcncindex = zeilenindex
+      lasttabledataindex = zeilenindex
       //  print("dataTableAktion zoomfaktor: \(zoomfaktor)")
       let diffX:Double = (Double(aktX - lastX)) * zoomfaktor
       let diffY:Double = (Double(aktY - lastY)) * zoomfaktor
@@ -3112,8 +3210,75 @@ class rPCB: rViewController
          print("dataTableAktion start CNC ")
          write_CNC_Abschnitt()   
          
-         teensy.start_read_USB(true)
+         //teensy.start_read_USB(true)
       }
+      
+   }
+  // MARK: ***       datatabletask  
+   func datatabletask(zeile:Int)
+   {
+      
+      let datazeile = circlearray[zeile]
+      print("datatabletask zeile: \(zeile) datazeile: \(datazeile) lasttabledataindex: \(lasttabledataindex)")
+      if zeile == lasttabledataindex
+      {
+         print("zeile = lasttabledataindex")
+         return
+      }
+      let lastX = circlearray[lasttabledataindex][1]
+      let lastY = circlearray[lasttabledataindex][2]
+      let aktX = datazeile[1]
+      let aktY = datazeile[2]
+      var maxsteps:Double = 0
+      var zeilendic:[String:Any] = [:]
+      var position:UInt8 = 0
+      
+      //  print("dataTableAktion zoomfaktor: \(zoomfaktor)")
+      let diffX:Double = (Double(aktX - lastX)) * zoomfaktor
+      let diffY:Double = (Double(aktY - lastY)) * zoomfaktor
+      
+      
+      let distanzX = Double(aktX - lastX)  * zoomfaktor  
+      let distanzY = Double(aktY - lastY)  * zoomfaktor  
+      
+      let dx = (Double(aktX - lastX))/propfaktor
+      let dy = (Double(aktY - lastY))/propfaktor
+      
+      tabledatastatus |= 1<<0
+      tabledatastatus = 126
+      var dataTableWeg = wegArrayMitWegXY(wegx:dx, wegy:dy)
+      dataTableWeg[32] = DEVICE_MILL
+      
+      dataTableWeg[24] = 0xCA
+      dataTableWeg[25] = 3 // lage
+      dataTableWeg[26] = 0
+      dataTableWeg[27] = 0
+      dataTableWeg[36] = UInt8((zeile & 0xFF00)>>8)
+      dataTableWeg[37] = UInt8(zeile & 0x00FF)
+      dataTableWeg[38] = tabledatastatus
+      
+      lasttabledataindex = zeile
+      
+      print("dataTableAktion lasttabledataindex: \(lasttabledataindex)")
+      if Schnittdatenarray.count > zeile
+      {
+  //       print("datatabletask zeilenindex: \(zeile)\n Schnittdatenarray : \(Schnittdatenarray[zeile])")
+      }
+      // print("dataTableAktion cncstepperposition: \(cncstepperposition)")
+      // cncstepperposition = Schnittdatenarray.count
+      // Schnittdatenarray.append(dataTableWeg)
+      
+      // print("dataTableAktion zeile: \(zeile)\n Schnittdatenarray at zeile : \(Schnittdatenarray[zeile])")
+      
+      
+      // if Schnittdatenarray.count > 0
+      //  {
+      print("datatabletask start CNC ")
+      write_CNC_Zeile(zeilenarray: dataTableWeg)   
+      
+      //teensy.start_read_USB(true)
+      //  }
+      
       
    }
    
@@ -3171,7 +3336,7 @@ class rPCB: rViewController
    @IBAction func report_move_Drill(_ sender: NSButton)
    {
       print("\n+++++++     report_move_Drill tag: \(sender.tag)")
-      var drillweg = 50
+      var drillweg = 30
       var drilltag = sender.tag
       if drilltag == 222
       {
@@ -3195,11 +3360,47 @@ class rPCB: rViewController
       }
       
    }
+   
+   
+    @IBAction func report_Zeilen_Stepper(_ sender: NSStepper)
+    {
+      print("Zeilen_Stepper: \(sender.integerValue)")
+      stepperpositionFeld.integerValue = sender.integerValue
+   }
+   
+   
+   
+   @IBAction func report_goto_Zeile(_ sender: NSButton)
+   {
+      print("\n+++++++     report_goto_Zeile tag: \(sender.tag) ")
+      
+      let zielzeile = stepperpositionFeld.integerValue
+      
+      print("zielzeile: \(zielzeile)  lasttabledataindex: \(lasttabledataindex)") 
+      if circlearray.count > zielzeile
+      {
+         if zielzeile == lasttabledataindex
+         {
+            print("schon da")
+         }
+         else 
+         {
+            datatabletask(zeile:zielzeile)
+         }
+      }
+      else 
+      {
+         print("keine Daten: circlearray count: \(circlearray.count)")
+      }
+      return
+   }
+
+   
    @IBAction func report_Drill(_ sender: NSButton)
    {
       print("\n+++++++     report_Drill tag: \(sender.tag) ")
       
-      drill(weg:20)
+      drilltask(weg:20)
       
       return
 
@@ -3235,7 +3436,7 @@ class rPCB: rViewController
       
    }
    
-   @objc func drill(weg:Int)
+   @objc func drilltask(weg:Int)
    {
       print("\n+++++++     drill weg: \(weg)")
       let count = Schnittdatenarray.count
@@ -3503,12 +3704,29 @@ class rPCB: rViewController
          case 0xAD:
             print("PCB newDataAktion  AD TASK END ")
             let abschnittnum = Int((data[5] << 8) | data[6])
-            
+            print("newDataAktion  AD tabledatastatus: \(data[23])")
+            let ZEILENSTATUS:UInt8 = 0
+            if (data[23] < 0xFF) && ((data[23] & (1<<ZEILENSTATUS)) > 0 )
+            {
+               print("newDataAktion  AD lasttabledataindex: \(lasttabledataindex)")
+               Plattefeld.setStepperposition(pos:lasttabledataindex)
+               break
+            }
+           
+            if data[23] == 13
+            {
+               print("newDataAktion  AD code: \(data[23])")
+               Plattefeld.setStepperposition(pos:lasttabledataindex)
+            }
             let ladepos =  Int((data[7] << 8) | data[8] )
             print("newDataAktion  AD ladepos: \(ladepos)")
+            
             Plattefeld.setStepperposition(pos:ladepos+1)
             print("newDataAktion  AD abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
+            
+             
             notificationDic["taskcode"] = taskcode
+            
             nc.post(name:Notification.Name(rawValue:"usbread"),
                     object: nil,
                     userInfo: notificationDic)        
@@ -3604,6 +3822,8 @@ class rPCB: rViewController
              */
             break
             
+            
+            
          case 0xBC:
             print("\n                                             newDataAktion  BC Drill ")
             let stepperpos = stepperpositionFeld.integerValue 
@@ -3680,7 +3900,12 @@ class rPCB: rViewController
              */
             break
             
+         case 0xCB: 
             
+            let x = 0
+            print("newDataAktion  CB tabledataaktion")
+            
+            break;
             
          case 0xE1:
             print("newDataAktion  E1 mouseup HALT")
@@ -3725,13 +3950,18 @@ class rPCB: rViewController
          
          
          
-         //      print("newDataAktion writecncabschnitt")
+         print("newDataAktion writecncabschnitt taskcode: \(taskcode)")
+         
          
          // **************************************
          let state = steppercontKnopf.state
          
          // print("newDataAktion writecncabschnitt steppercontKnopf state: \(state)")
-         
+         if taskcode == 0xAD 
+         {
+            
+            return
+         }
          if state == .on
          {
             print("newDataAktion writecncabschnitt go cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")

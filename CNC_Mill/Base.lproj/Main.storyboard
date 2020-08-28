@@ -842,7 +842,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TFc-go-WmQ">
-                                <rect key="frame" x="456" y="602" width="70" height="17"/>
+                                <rect key="frame" x="444" y="636" width="70" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Abschnitte" id="Hsf-Yr-xfH">
                                     <font key="font" metaFont="system"/>
@@ -1372,7 +1372,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vdU-AX-dON">
-                                <rect key="frame" x="539" y="601" width="47" height="22"/>
+                                <rect key="frame" x="512" y="630" width="47" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="Uip-Qp-TWn">
                                     <font key="font" metaFont="system"/>
@@ -1383,27 +1383,19 @@
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VAm-bK-VzE">
                                 <rect key="frame" x="539" y="575" width="47" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="qkO-XW-3jW">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="0" drawsBackground="YES" id="qkO-XW-3jW">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Buo-3L-NMd">
-                                <rect key="frame" x="566" y="638" width="101" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Stepper cont" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="SHB-th-bTK">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="report_linearCheckbox:" target="wFL-7s-Z8p" id="We4-eT-lKP"/>
-                                </connections>
-                            </button>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Nd-UJ-9iO">
-                                <rect key="frame" x="725" y="575" width="19" height="27"/>
+                                <rect key="frame" x="591" y="571" width="19" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="aGO-f7-5eU"/>
+                                <stepperCell key="cell" continuous="YES" alignment="left" maxValue="256" id="aGO-f7-5eU"/>
+                                <connections>
+                                    <action selector="report_Zeilen_Stepper:" target="wFL-7s-Z8p" id="KZ6-OY-BDb"/>
+                                </connections>
                             </stepper>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DDO-zf-c2L">
                                 <rect key="frame" x="930" y="353" width="64" height="52"/>
@@ -1417,15 +1409,18 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uq8-vp-L1u">
-                                <rect key="frame" x="596" y="594" width="66" height="32"/>
+                                <rect key="frame" x="609" y="566" width="56" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="next" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="htq-7d-WEY">
+                                <buttonCell key="cell" type="push" title="go" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="htq-7d-WEY">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="report_goto_Zeile:" target="wFL-7s-Z8p" id="xFW-Tr-2ih"/>
+                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xAL-TO-ABX">
-                                <rect key="frame" x="596" y="567" width="66" height="32"/>
+                                <rect key="frame" x="738" y="567" width="66" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="run" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9GK-Db-sFf">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1441,6 +1436,14 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Buo-3L-NMd">
+                                <rect key="frame" x="587" y="608" width="101" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Stepper cont" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="SHB-th-bTK">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1452,6 +1455,7 @@
                         <outlet property="PCB_Data_Knopf" destination="1h2-2T-0p4" id="4FR-89-sSS"/>
                         <outlet property="PlatteScroller" destination="EQG-jy-Qht" id="dS1-G5-ggE"/>
                         <outlet property="Plattefeld" destination="XUX-V5-xCg" id="5lZ-Hg-XVD"/>
+                        <outlet property="Zeilen_Stepper" destination="3Nd-UJ-9iO" id="N74-yG-IUG"/>
                         <outlet property="dataTable" destination="9Dc-YS-HYC" id="ajU-AM-GdF"/>
                         <outlet property="drillKnopf" destination="DDO-zf-c2L" id="CoA-IC-xNw"/>
                         <outlet property="dxFeld" destination="i8B-q7-HKP" id="lI7-4A-MQ0"/>

@@ -360,7 +360,7 @@ class rPlatteView: NSView
       userinformation["ident"] = self.identifier
       
       let nc = NotificationCenter.default
-      nc.post(name:Notification.Name(rawValue:"joystick"),
+      nc.post(name:Notification.Name(rawValue:"pcb"),
               object: nil,
               userInfo: userinformation)
       

@@ -40,6 +40,8 @@ open class usb_teensy: NSObject
    var manustring:String = ""
    var prodstring:String = ""
    
+   var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
+   
    override init()
    {
       super.init()
@@ -297,8 +299,9 @@ open class usb_teensy: NSObject
       {
          //var tempbyteArray = [UInt8](count: 32, repeatedValue: 0x00)
          //read_byteArray[0]  = 0
-         var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
-         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 50)
+        // var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
+         
+         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 100)
          if (result == 0)
          {
             return;
