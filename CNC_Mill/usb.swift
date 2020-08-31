@@ -64,7 +64,7 @@ open class usb_teensy: NSObject
          let antwort =  alert.runModal() == .alertFirstButtonReturn
          return 1;
       }
-      
+      //int rawhid_open(int max, int vid, int pid, int usage_page, int usage)
       let    out = rawhid_open(1, 0x16C0, 0x0486, 0xFFAB, 0x0200)
      
       
@@ -92,13 +92,12 @@ open class usb_teensy: NSObject
             manustring = String(cString: UnsafePointer<CChar>(manustr))
          }
          
-         
-         
-         
          let prod = get_prod();
          //fprintf(stderr,"prod: %s\n",prod);
          let prodstr:String = String(cString: prod!)
-         if (prodstr == nil)
+         // https://stackoverflow.com/questions/40685592/comparing-non-optional-any-to-nil-is-always-false
+         let anyprodstr : Any? = prodstr
+         if (anyprodstr == nil)
          {
             prodstring = "-"
          }
@@ -184,7 +183,7 @@ open class usb_teensy: NSObject
    {
       read_OK = ObjCBool(cont) // read fortsetzen?
       var home = 0
-      var timerDic:NSMutableDictionary  = ["count": 0,"home":0]
+      var timerDic:NSMutableDictionary  = ["count": 0,"home":home]
       var result = 1
       /*
       var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
@@ -209,9 +208,9 @@ open class usb_teensy: NSObject
       
       // var somethingToPass = "It worked in teensy_send_USB"
        */
-      let xcont = cont;
+      let readcont = cont;
       
-      if (xcont == true)
+      if (cont == true) // read fortsetzen? 
       {
          if readtimer?.isValid == true
          {
@@ -292,6 +291,7 @@ open class usb_teensy: NSObject
    
    @objc open func cont_read_USB(_ timer: Timer)
    {
+      //print("*                               cont_read_USB start")
       // entspricht readUSB in USB_Stepper
       
       //print("*cont_read_USB read_OK: \(read_OK)")
@@ -384,6 +384,7 @@ open class usb_teensy: NSObject
          print("*cont_read_USB timer.invalidate")
          timer.invalidate()
       }
+   //   print("*                               cont_read_USB end")
    }
    
    open func report_stop_read_USB(_ inTimer: Timer)

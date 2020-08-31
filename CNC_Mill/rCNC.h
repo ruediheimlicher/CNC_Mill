@@ -28,12 +28,12 @@ float det(float v0[],float v1[]);
 - (float)speed;
 
 - (void)setSchalendicke:(float)dieDicke;
-- (int)schalendicke;
+- (float)schalendicke;
 
 
 - (void)setredpwm:(float)red_pwmwert;
 - (NSDictionary*)SteuerdatenVonDic:(NSDictionary*)derDatenDic;
-- (NSDictionary*)SteuerdatenVonDic:(NSDictionary*)derDatenDic mitAbbrand:(int)mitabbrand;
+//- (NSDictionary*)SteuerdatenVonDic:(NSDictionary*)derDatenDic mitAbbrand:(int)mitabbrand;
 
 - (NSArray*)SchnittdatenVonDic:(NSDictionary*)derDatenDic;
 - (NSArray*)SchnittdatenVonDic:(NSDictionary*)derDatenDic mitAbbrand:(int)mitabbrand;

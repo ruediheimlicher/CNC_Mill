@@ -10,3 +10,5 @@ build/*
 *.hex
 *.o
 .dep/
+*.xcodeproj/
+DerivedData/

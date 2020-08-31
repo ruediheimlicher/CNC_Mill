@@ -14,6 +14,9 @@
 #include <IOKit/hid/IOHIDLib.h>
 #include <IOKit/usb/IOUSBLib.h>
 #include <IOKit/hid/IOHIDBase.h>
+
+
+
 //#include "hid.h"
 #import <Cocoa/Cocoa.h>
 
@@ -378,7 +381,8 @@ int rawhid_open(int max, int vid, int pid, int usage_page, int usage)
          return 0;
       }
    }
-   if (vid > 0 || pid > 0 || usage_page > 0 || usage > 0) {
+   if (vid > 0 || pid > 0 || usage_page > 0 || usage > 0) 
+   {
       // Tell the HID Manager what type of devices we want
       dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
                                        &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
@@ -443,15 +447,13 @@ int rawhid_open_a(int max, int vid, int pid, int usage_page, int usage)
    mach_port_t             masterPort;
    CFMutableDictionaryRef  matchingDict = NULL;
    CFRunLoopSourceRef      runLoopSource;
-   
-   
+    
    //Create a master port for communication with the I/O Kit
    result = IOMasterPort(MACH_PORT_NULL, &masterPort);
    if (result || !masterPort)
    {
       return -1;
    }
-   
    //To set up asynchronous notifications, create a notification port and
    //add its run loop event source to the programs run loop
    gNotifyPort = IONotificationPortCreate(masterPort);

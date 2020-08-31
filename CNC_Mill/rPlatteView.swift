@@ -37,6 +37,9 @@ class rPlatteView: NSView
  //  var wegarray:[[Int]] = [[Int]]()
    var wegfloatarray:[[Double]] = [[Double]]()
    
+   var markfeldarray:[NSRect] = [NSRect]()
+   var klickmarkindex:Int = 0 // klicked punkt
+   var klickmarkIndexset:IndexSet = IndexSet()
    var linienfarbe:NSColor = NSColor()
    var kreislinienfarbe:NSColor = NSColor()
    var kreisfillfarbe:NSColor = NSColor()
@@ -154,7 +157,15 @@ class rPlatteView: NSView
             kreis.move(to: lokalpunkt)
             //    kreis.appendOval(in: tempMarkRect)
             
-            if wegindex <= stepperposition // Start, Marke fuellen
+            linienfarbe.set() 
+            var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
+            let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
+            let numstring = String(wegindex)
+            numstring.draw(
+               at: tempNumPunkt, 
+               withAttributes: atts as [NSAttributedStringKey : Any])
+
+            if (wegindex <= stepperposition) || (klickmarkIndexset.contains(wegindex)) // Start, Marke fuellen
             {
                //    var localkreis: NSBezierPath = NSBezierPath()
                lastpunkt = lokalpunkt
@@ -173,12 +184,14 @@ class rPlatteView: NSView
                localkreis.stroke()
                linienfarbe.set() 
                //              kreis.append(localkreis)
+               /*
                var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
                let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
                let numstring = String(wegindex)
                numstring.draw(
                   at: tempNumPunkt, 
                   withAttributes: atts as [NSAttributedStringKey : Any])
+            */
             }
             else
             {
@@ -203,15 +216,17 @@ class rPlatteView: NSView
                NSColor.green.set() 
                //              kreis.append(localkreis)
                linienfarbe.set() 
+               /*
                var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
                let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
                let numstring = String(wegindex)
                numstring.draw(
                   at: tempNumPunkt, 
                   withAttributes: atts as [NSAttributedStringKey : Any])
-               
+               */
                
             }
+            
              wegindex += 1
          }
          //print("draw fahrtweg: \(fahrtweg) element count: \(elcount)")
@@ -251,7 +266,7 @@ class rPlatteView: NSView
       super.mouseDown(with: theEvent)
       //let ident  = self.identifier as! String
       let ident  = self.identifier
-      
+      let nc = NotificationCenter.default
       //Swift.print("left mouse ident: \(ident)")
       var identstring = ""
       if let rawident:String = ident?.rawValue
@@ -276,11 +291,33 @@ class rPlatteView: NSView
       let dashHeight: CGFloat = 1
       let dashColor: NSColor = .green
       
+ //     https://stackoverflow.com/questions/3051760/how-to-get-a-list-of-points-from-a-uibezierpath
+      var klickindex = 0
+      
+      var userinformation:[String : Any]
+      
+      for feld in markfeldarray
+      {
+       //  Swift.print("klickindex: \(klickindex) lokalpunkt: \(lokalpunkt) feld: \(feld) ")
+         //    let klickrect = NSMakeRect(punkt.x-5, punkt.y-5, 10, 10)
+         if mouse(lokalpunkt, in: feld)
+         {
+            Swift.print("klick in \(klickindex)")
+            userinformation = ["message":"mousedown", "klickpunkt": lokalpunkt, "index": klickindex] as [String : Any]
+            nc.post(name:Notification.Name(rawValue:"klickpunkt"),
+                    object: nil,
+                    userInfo: userinformation)
+            klickmarkindex = klickindex
+            klickmarkIndexset.insert(klickindex)
+            break
+          }
+          klickindex += 1
+      }
       
       //    NSColor.blue.set() // choose color
       // https://stackoverflow.com/questions/47738822/simple-drawing-with-mouse-on-cocoa-swift
       //clearWeg()
-      var userinformation:[String : Any]
+      
       if kreuz.isEmpty
       {
          kreuz.move(to: lokalpunkt)
@@ -308,7 +345,7 @@ class rPlatteView: NSView
          //userinformation["ident"] = self.identifier
       }
       
-      let nc = NotificationCenter.default
+      
       nc.post(name:Notification.Name(rawValue:"joystick"),
               object: nil,
               userInfo: userinformation)
@@ -392,24 +429,28 @@ class rPlatteView: NSView
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
+      markfeldarray.removeAll()
+      wegfloatarray.removeAll()
       for mark in markarray
       {
          mark.removeAllPoints()
       }
       markarray.removeAll()
-      drawstatus = 0
+      drawstatus = 1
       fahrtweg = 0
       //redfaktor = 200.0
       redfaktor = 1
-      transformfaktor = CGFloat(transform) // px to mm
+      klickmarkindex = 0
+      klickmarkIndexset.removeAll()
       
+      transformfaktor = CGFloat(transform) // px to mm
       var wegindex=0;
       faktor = CGFloat(scalefaktor)
       let floatfaktor = Double(scalefaktor)
       var  tempMark:NSBezierPath
       var lastpunkt = NSMakePoint(0, 0)
       var elcount = 0
-      wegfloatarray.removeAll()
+      
       for pos in 0..<newWeg.count
       {
          wegfloatarray.append([newWeg[pos][1] * Double(faktor * transformfaktor),newWeg[pos][2] * Double(faktor * transformfaktor)])
@@ -446,11 +487,17 @@ class rPlatteView: NSView
           [tempMarkA stroke];
           */
          var tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
+        
          // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
   //       kreis.move(to: lokalpunkt)
+         
          kreis.appendOval(in: tempMarkRect)
-         //      weg.move(to: lokalpunkt)
+         tempMarkRect = tempMarkRect.insetBy(dx: -4, dy: -4)
+         markfeldarray.append(tempMarkRect)
+         
          /*
+          
+           
           var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
           let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
           let numstring = String(wegindex)
@@ -461,8 +508,7 @@ class rPlatteView: NSView
           */
          wegindex += 1
       }
-      //print("setfloatWeg fahrtweg: \(fahrtweg) element count: \(elcount)")
-      
+      print("setfloatWeg markfeldarray: \(markfeldarray) ")
       needsDisplay = true
       return Int(fahrtweg)
    }
@@ -552,7 +598,23 @@ class rPlatteView: NSView
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
-  
+      markfeldarray.removeAll()
+      wegfloatarray.removeAll()
+      for mark in markarray
+      {
+         mark.removeAllPoints()
+      }
+      markarray.removeAll()
+      drawstatus = 1
+      fahrtweg = 0
+      //redfaktor = 200.0
+      redfaktor = 1
+      klickmarkindex = 0
+
+      weg.removeAllPoints()
+      kreuz.removeAllPoints()
+      kreis.removeAllPoints()
+      klickmarkIndexset.removeAll()
       let clearColor: NSColor = .clear
       for mark in markarray
       {

@@ -1397,8 +1397,15 @@ class rJoystick: rViewController
          print("report_send_TextDaten start CNC")
          write_CNC_Abschnitt()   
          
-         
-         teensy.start_read_USB(true)
+         if teensy.readtimervalid() == true
+         {
+            //print("PCB readtimer valid vor")
+         }
+         else 
+         {
+            //print("PCB readtimer not valid vor")
+            var start_read_USB_erfolg = teensy.start_read_USB(true)
+         }
       }
    }// report_send_TextDaten
  
@@ -1511,9 +1518,15 @@ class rJoystick: rViewController
       {
          print("report_goXY start CNC")
          write_CNC_Abschnitt()   
-         
-         
-         teensy.start_read_USB(true)
+         if teensy.readtimervalid() == true
+         {
+            //print("PCB readtimer valid vor")
+         }
+         else 
+         {
+            //print("PCB readtimer not valid vor")
+            var start_read_USB_erfolg = teensy.start_read_USB(true)
+         }
       }
       
    }
@@ -1588,10 +1601,18 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
   //    readtimer?.invalidate() 
       
       
+      if teensy.readtimervalid() == true
+      {
+         //print("PCB readtimer valid vor")
+      }
+      else 
+      {
+         //print("PCB readtimer not valid vor")
+         var start_read_USB_erfolg = teensy.start_read_USB(true)
+      }
+
       
       
-      
-      var start_read_USB_erfolg = teensy.start_read_USB(true)
 
 //      var readtimernote:[String:Int] = ["cncstepperposition":1]
 //      readtimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(USB_read(timer:)), userInfo: readtimernote, repeats: true)
