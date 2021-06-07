@@ -373,6 +373,12 @@ int rawhid_open(int max, int vid, int pid, int usage_page, int usage)
    //fflush (stdout); 
    if (max < 1) return 0;
    // Start the HID Manager
+   if (hid_manager) 
+   {
+      CFRelease(hid_manager);
+      hid_manager = NULL;
+   }
+
    // http://developer.apple.com/technotes/tn2007/tn2187.html
    if (!hid_manager) {
       hid_manager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
@@ -419,8 +425,7 @@ int rawhid_open(int max, int vid, int pid, int usage_page, int usage)
       IOHIDManagerSetDeviceMatching(hid_manager, NULL);
    }
    // set up a callbacks for device attach & detach
-   IOHIDManagerScheduleWithRunLoop(hid_manager, CFRunLoopGetCurrent(),
-                                   kCFRunLoopDefaultMode);
+   IOHIDManagerScheduleWithRunLoop(hid_manager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
    IOHIDManagerRegisterDeviceMatchingCallback(hid_manager, attach_callback, NULL);
    IOHIDManagerRegisterDeviceRemovalCallback(hid_manager, detach_callback, NULL);
    ret = IOHIDManagerOpen(hid_manager, kIOHIDOptionsTypeNone);
@@ -484,8 +489,16 @@ int rawhid_open_a(int max, int vid, int pid, int usage_page, int usage)
    //fflush (stdout); 
    if (max < 1) return 0;
    // Start the HID Manager
+   
+   if (hid_manager) 
+   {
+      CFRelease(hid_manager);
+      hid_manager = NULL;
+   }
+
    // http://developer.apple.com/technotes/tn2007/tn2187.html
-   if (!hid_manager) {
+   if (!hid_manager) 
+   {
       hid_manager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
       if (hid_manager == NULL || CFGetTypeID(hid_manager) != IOHIDManagerGetTypeID()) {
          if (hid_manager) CFRelease(hid_manager);
@@ -709,6 +722,7 @@ static void attach_callback(void *context, IOReturn r, void *hid_mgr, IOHIDDevic
    IOHIDDeviceRegisterInputReportCallback(dev, h->buffer, sizeof(h->buffer), input_callback, h);
    h->ref = dev;
    h->open = 1;
+   
    add_hid(h);
    hid_usbstatus=1;
    attach_called++;

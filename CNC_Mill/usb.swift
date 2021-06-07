@@ -98,6 +98,7 @@ open class usb_teensy: NSObject
          // https://stackoverflow.com/questions/40685592/comparing-non-optional-any-to-nil-is-always-false
          let anyprodstr : Any? = prodstr
          if (anyprodstr == nil)
+         //if (prodstr != nil)
          {
             prodstring = "-"
          }
@@ -216,7 +217,7 @@ open class usb_teensy: NSObject
          {
             readtimer?.invalidate()
          }
-         readtimer = Timer.scheduledTimer(timeInterval: 0.04, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
+         readtimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
       }
       
       return Int(result) //

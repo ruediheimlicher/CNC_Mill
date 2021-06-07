@@ -12,7 +12,7 @@
 
 // https://github.com/Arti3DPlayer/USBDeviceSwift/wiki/HID-device-communication
 
-
+//import WebKit
 import Cocoa
 
 public var lastDataRead = Data.init(count:64)
@@ -27,18 +27,18 @@ class  rPfeiltaste  : NSButton
    var  richtung:Int
    var pfeiltimer: Timer?
    var schrittweite:Int
-
-   @IBOutlet weak var  Taste:NSButton!
-
-   required init?(coder aDecoder: NSCoder) 
-{
-   self.richtung = 1
-   self.schrittweite = 0
-   super.init(coder: aDecoder)
-  // Swift.print("Pfeiltaste req init")
-   //     pfadarray.append(startposition)
    
-}
+   @IBOutlet weak var  Taste:NSButton!
+   
+   required init?(coder aDecoder: NSCoder) 
+   {
+      self.richtung = 1
+      self.schrittweite = 0
+      super.init(coder: aDecoder)
+      // Swift.print("Pfeiltaste req init")
+      //     pfadarray.append(startposition)
+      
+   }
    override init(frame frameRect: NSRect) 
    {
       Swift.print("Pfeiltaste init")
@@ -46,145 +46,145 @@ class  rPfeiltaste  : NSButton
       self.schrittweite = 0
       super.init(frame:frameRect)
    }
-
-   /*
-override  func mouseDragged(with theEvent: NSEvent) 
-   {
-      super.mouseDragged(with: theEvent)
-      print("rPfeiltaste mousedragged")  
-   }
-*/
    
-// https://stackoverflow.com/questions/34235903/press-and-hold-button-for-repeat-fire
-override  func mouseDown(with theEvent: NSEvent) 
-{
-//   super.mouseDown(with: theEvent)
-   let dev:String = (superview?.identifier)!.rawValue
-   var devtag = 0
-   switch dev
+   /*
+    override  func mouseDragged(with theEvent: NSEvent) 
+    {
+    super.mouseDragged(with: theEvent)
+    print("rPfeiltaste mousedragged")  
+    }
+    */
+   
+   // https://stackoverflow.com/questions/34235903/press-and-hold-button-for-repeat-fire
+   override  func mouseDown(with theEvent: NSEvent) 
    {
+      //   super.mouseDown(with: theEvent)
+      let dev:String = (superview?.identifier)!.rawValue
+      var devtag = 0
+      switch dev
+      {
       case "pcb":
          devtag = 1
-      break
+         break
       case "joystick":
          devtag = 2
-      break;
+         break;
       default:
-      break
-   }
- //  print("rPfeiltaste mousedown tabview ident: \(dev) devtag: \(devtag)")  
-   let location = theEvent.locationInWindow
-   //    Swift.print(location)
-   //    NSPoint lokalpunkt = [self convertPoint: [anEvent locationInWindow] fromView: nil];
-   //let lokalpunkt = convert(theEvent.locationInWindow, from: nil)
-   let klickcount = theEvent.clickCount
-   //print("lokalpunkt: \(lokalpunkt) klickcount: \(klickcount)")
-
-  let pfeiltag = self.tag
-   let sw = self.schrittweite
-   print("rPfeiltaste mousedown tag: \(pfeiltag) schrittweite: \(sw)") 
-   var dx = 0
-   var dy = 0
-   //let schrittweite:Int = 6
-
-   switch pfeiltag 
-   {
-   case 1: // right
-      dx = schrittweite
-      break
-   case 2: // up
-      dy = schrittweite
-      break
-   case 3: // left
-      dx = schrittweite * -1
-      break
-   case 4: // down
-      dy = schrittweite * -1
-      break
-   default:
-      break
+         break
+      }
+      //  print("rPfeiltaste mousedown tabview ident: \(dev) devtag: \(devtag)")  
+      let location = theEvent.locationInWindow
+      //    Swift.print(location)
+      //    NSPoint lokalpunkt = [self convertPoint: [anEvent locationInWindow] fromView: nil];
+      //let lokalpunkt = convert(theEvent.locationInWindow, from: nil)
+      let klickcount = theEvent.clickCount
+      //print("lokalpunkt: \(lokalpunkt) klickcount: \(klickcount)")
+      
+      let pfeiltag = self.tag
+      let sw = self.schrittweite
+      print("rPfeiltaste mousedown tag: \(pfeiltag) schrittweite: \(sw)") 
+      var dx = 0
+      var dy = 0
+      //let schrittweite:Int = 6
+      
+      switch pfeiltag 
+      {
+      case 1: // right
+         dx = schrittweite
+         break
+      case 2: // up
+         dy = schrittweite
+         break
+      case 3: // left
+         dx = schrittweite * -1
+         break
+      case 4: // down
+         dy = schrittweite * -1
+         break
+      default:
+         break
+      }
+      
+      var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag]
+      pfeiltimer = Timer.scheduledTimer(timeInterval: 0.3 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
+      
+      let nc = NotificationCenter.default
+      nc.post(name:Notification.Name(rawValue:"maus_status"),
+              object: nil,
+              userInfo: notificationDic)        
+      
    }
    
-   var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag]
-   pfeiltimer = Timer.scheduledTimer(timeInterval: 0.3 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
-
-   let nc = NotificationCenter.default
-   nc.post(name:Notification.Name(rawValue:"maus_status"),
-           object: nil,
-           userInfo: notificationDic)        
-
-}
-
-override  func mouseUp(with theEvent: NSEvent) 
+   override  func mouseUp(with theEvent: NSEvent) 
    {
       super.mouseUp(with: theEvent)
- //     print("rPfeiltaste mouseup")  
+      //     print("rPfeiltaste mouseup")  
       pfeiltimer?.invalidate()
       // let pfeiltag = self.tag
    }
    
-@objc   func pfeiltastenstimeraktion()
-{
-   
-   let notificationDic = pfeiltimer?.userInfo
-   print("pfeiltastenstimeraktion userinfo: \(notificationDic)")
-   let nc = NotificationCenter.default
-   nc.post(name:Notification.Name(rawValue:"maus_status"),
-   object: nil,
-   userInfo: notificationDic as? [AnyHashable : Any])        
+   @objc   func pfeiltastenstimeraktion()
+   {
+      
+      let notificationDic = pfeiltimer?.userInfo
+      print("pfeiltastenstimeraktion userinfo: \(notificationDic)")
+      let nc = NotificationCenter.default
+      nc.post(name:Notification.Name(rawValue:"maus_status"),
+              object: nil,
+              userInfo: notificationDic as? [AnyHashable : Any])        
    }
-
+   
    func setSchrittweite(sw:Int)
    {
       //print("pfeiltaste setSchrittweite: sw: \(sw)")
       schrittweite = sw
    }
-/*
-   - (void)mouseUp:(NSEvent *)event
-{
-   NSLog(@"AVR mouseup");
-   richtung=[self tag];
-   NSLog(@"AVR mouseUp Pfeiltaste richtung: %d",richtung);
-   
-   [self setState:NSOffState];
-   
-   NSMutableDictionary* NotificationDic=[[[NSMutableDictionary alloc]initWithCapacity:0]autorelease];
-   [NotificationDic setObject:[NSNumber numberWithInt:richtung] forKey:@"richtung"];
-   
-   int aktpwm=0;
-   NSPoint location = [event locationInWindow];
-   NSLog(@"Pfeiltaste mouseUp location: %2.2f %2.2f",location.x, location.y);
-   [NotificationDic setObject:[NSNumber numberWithInt:0] forKey:@"push"];
-   [NotificationDic setObject:[NSNumber numberWithFloat:location.x] forKey:@"locationx"];
-   [NotificationDic setObject:[NSNumber numberWithFloat:location.y] forKey:@"locationy"];
-   
-   NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
-   [nc postNotificationName:@"Pfeil" object:self userInfo:NotificationDic];
-   
-   
-   }
-   
-   - (void)mouseDown:(NSEvent *)theEvent
-{
-   
-   richtung=[self tag];
-   
-   //NSLog(@"AVR mouseDown: Pfeiltaste richtung: %d",richtung);
-   [self setState:NSOnState];
-   
-   
-   NSMutableDictionary* NotificationDic=[[[NSMutableDictionary alloc]initWithCapacity:0]autorelease];
-   [NotificationDic setObject:[NSNumber numberWithInt:richtung] forKey:@"richtung"];
-   [NotificationDic setObject:[NSNumber numberWithInt:1] forKey:@"push"];// Start, nur fuer AVR
-   NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
-   [nc postNotificationName:@"Pfeil" object:self userInfo:NotificationDic];
-   [super mouseDown:theEvent];
-   
-   [self mouseUp:theEvent];
-   
-   }
-   
-   */
+   /*
+    - (void)mouseUp:(NSEvent *)event
+    {
+    NSLog(@"AVR mouseup");
+    richtung=[self tag];
+    NSLog(@"AVR mouseUp Pfeiltaste richtung: %d",richtung);
+    
+    [self setState:NSOffState];
+    
+    NSMutableDictionary* NotificationDic=[[[NSMutableDictionary alloc]initWithCapacity:0]autorelease];
+    [NotificationDic setObject:[NSNumber numberWithInt:richtung] forKey:@"richtung"];
+    
+    int aktpwm=0;
+    NSPoint location = [event locationInWindow];
+    NSLog(@"Pfeiltaste mouseUp location: %2.2f %2.2f",location.x, location.y);
+    [NotificationDic setObject:[NSNumber numberWithInt:0] forKey:@"push"];
+    [NotificationDic setObject:[NSNumber numberWithFloat:location.x] forKey:@"locationx"];
+    [NotificationDic setObject:[NSNumber numberWithFloat:location.y] forKey:@"locationy"];
+    
+    NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
+    [nc postNotificationName:@"Pfeil" object:self userInfo:NotificationDic];
+    
+    
+    }
+    
+    - (void)mouseDown:(NSEvent *)theEvent
+    {
+    
+    richtung=[self tag];
+    
+    //NSLog(@"AVR mouseDown: Pfeiltaste richtung: %d",richtung);
+    [self setState:NSOnState];
+    
+    
+    NSMutableDictionary* NotificationDic=[[[NSMutableDictionary alloc]initWithCapacity:0]autorelease];
+    [NotificationDic setObject:[NSNumber numberWithInt:richtung] forKey:@"richtung"];
+    [NotificationDic setObject:[NSNumber numberWithInt:1] forKey:@"push"];// Start, nur fuer AVR
+    NSNotificationCenter* nc=[NSNotificationCenter defaultCenter];
+    [nc postNotificationName:@"Pfeil" object:self userInfo:NotificationDic];
+    [super mouseDown:theEvent];
+    
+    [self mouseUp:theEvent];
+    
+    }
+    
+    */
    /*
     - (void)mouseUp:(NSEvent *)theEvent
     {
@@ -202,23 +202,23 @@ override  func mouseUp(with theEvent: NSEvent)
     }
     */
    /*
-   - (void)setRichtung:(int)dieRichtung
-{
-   richtung=dieRichtung;
-   }
-   
-   - (int)Tastestatus
-      {
-         return [Taste state];
-      }
-      
-      
-      
-      - (int)Richtung
-         {
-            return richtung;
-}
- */
+    - (void)setRichtung:(int)dieRichtung
+    {
+    richtung=dieRichtung;
+    }
+    
+    - (int)Tastestatus
+    {
+    return [Taste state];
+    }
+    
+    
+    
+    - (int)Richtung
+    {
+    return richtung;
+    }
+    */
 }
 
 //
@@ -327,7 +327,7 @@ class rDeviceTabViewController: NSTabViewController
 
 class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTableViewDelegate
 {
-   
+//   var webView: WKWebView!
    var notokimage :NSImage = NSImage(named:NSImage.Name(rawValue: "notok_image"))!
    var okimage :NSImage = NSImage(named:NSImage.Name(rawValue: "ok_image"))!
 
@@ -339,6 +339,10 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    
    var homeX:Int = 0
    var homeY:Int = 0
+   var floathomeX:Double = 0
+   var floathomeY:Double = 0
+
+
    var  CNCDatenArray = [[String:Int]]();
    
    var propfaktor = 283464.567 // 14173.23
@@ -386,12 +390,73 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    
    @IBOutlet weak var nextKnopf: NSStepper!
   
-  
+   // kgV
    
+  // kgV(a,b)⋅ggT(a,b)=a⋅b
+   
+   // https://www.informatik.uni-leipzig.de/~meiler/Propaed.dir/PropaedWS12.dir/Vorlesung.dir/Funktionen.dir/EuklidEinfacheVersion/ggTkgV.c
+   // https://jumk.de/formeln/kgv.shtml
+   func ggt(m:Int, n:Int)->Int
+   {
+      if n==0
+      {
+         return m
+      }
+      else
+      {
+         let x = m % n
+         return ggt(m:n,n:x)
+      }
+      
+   }
+   
+   
+   func kgv(m:Int,n:Int)->Int
+   {
+      var o = ggt(m:m,n:n)
+      if !(o == 0)
+      {
+         var p = (m * n) / o
+         return p
+      }
+      else
+      {
+         return 1
+      }
+   }
+
+   func kgv3(m:Int, n: Int, o: Int)->Int
+   {
+      // https://www.computerbase.de/forum/threads/suche-algorithmus-zum-bestimmen-vom-kgv-mehrerer-werte.994573/
+      return kgv(m:m,n:kgv(m:n,n:o))
+   }
+   /*
+   override func loadView() {
+      super.loadView()
+       webView = WKWebView()
+       webView.navigationDelegate = self
+       view = webView
+   }
+   */
    override func viewDidLoad() 
    {
       super.viewDidLoad()
       _ = Hello()
+      
+      
+      
+      
+      
+      
+      let g = ggt(m:200,n:1096)
+      let b2 = kgv(m:200,n:1096)
+      print("kgv: \(b2)")
+      
+      let b3 = kgv3(m: 200, n: 1096, o: 222)
+      
+      // https://forum.zerspanungsbude.net/viewtopic.php?t=13460&start=20
+      // kgV(a,b,c) = kgV(a,kgV(b,c))
+      print("kgv3: \(b3)")
       
       self.view.wantsLayer = true
       self.view.superview?.wantsLayer = true
@@ -442,19 +507,33 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
       }
       
       /*
-      if teensy.readtimervalid() == true
-      {
-         //print("PCB readtimer valid vor")
-         
-      }
-      else 
-      {
-         //print("PCB readtimer not valid vor")
-         
-         var start_read_USB_erfolg = teensy.start_read_USB(true)
-      }
+       if teensy.readtimervalid() == true
+       {
+       //print("PCB readtimer valid vor")
+       
+       }
+       else 
+       {
+       //print("PCB readtimer not valid vor")
+       
+       var start_read_USB_erfolg = teensy.start_read_USB(true)
+       }
+       */
+      /*
+      let url = NSURL(string: "https://ruediheimlicher.ch")
+      
+      var req = NSURLRequest(url:url! as URL)
+ //     self.webView!.load(req as URLRequest)
 */
+      
+      /*
+      let task = NSURLSession.sharedSession().dataTask(with:url!) {(data, response, error) in
+         print(NSString(data: data!, encoding: NSUTF8StringEncoding.rawValue))
+      }    
+      task!.resume()
+ */66
    }
+   
    
    @nonobjc  func windowShouldClose(_ sender: Any) 
    {

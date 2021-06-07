@@ -114,6 +114,10 @@ class rTSP_NN:NSObject
       var s:Int = 0
       var i = 0
       weg.append(0)
+      if anzahl == 0
+      {
+         return
+      }
       for i in 0..<anzahl-1
       {
          plan[s].inTour = true

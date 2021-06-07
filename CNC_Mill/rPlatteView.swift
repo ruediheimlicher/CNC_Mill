@@ -508,7 +508,7 @@ class rPlatteView: NSView
           */
          wegindex += 1
       }
-      print("setfloatWeg markfeldarray: \(markfeldarray) ")
+      //print("setfloatWeg markfeldarray: \(markfeldarray) ")
       needsDisplay = true
       return Int(fahrtweg)
    }

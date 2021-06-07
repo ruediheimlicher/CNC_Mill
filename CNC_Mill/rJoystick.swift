@@ -191,7 +191,6 @@ class rJoystick: rViewController
    let delayzC = 26
    let delayzD = 27
 */
-   
    override func viewDidAppear() 
    {
       print ("Joystick viewDidAppear selectedDevice: \(selectedDevice)")
@@ -200,6 +199,9 @@ class rJoystick: rViewController
    override func viewDidLoad() 
     {
         super.viewDidLoad()
+      
+      
+       
         // Do view setup here.
       self.view.window?.acceptsMouseMovedEvents = true
       //let view = view[0] as! NSView
