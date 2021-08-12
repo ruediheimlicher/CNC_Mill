@@ -444,10 +444,6 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
       _ = Hello()
       
       
-      
-      
-      
-      
       let g = ggt(m:200,n:1096)
       let b2 = kgv(m:200,n:1096)
       print("kgv: \(b2)")

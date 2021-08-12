@@ -2388,7 +2388,7 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
  */
       print("Joystick newDataAktion")
       var data:[UInt8] = notification.userInfo?["data"] as! [UInt8]
-//      print("von teensy: data: \(String(describing: data)) ") // data: Optional([0, 9, 51, 0,....
+      print("von teensy: data: \(String(describing: data)) ") // data: Optional([0, 9, 51, 0,....
       var i = 0
             
       let taskcode = data[0]

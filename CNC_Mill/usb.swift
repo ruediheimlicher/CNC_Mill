@@ -81,8 +81,12 @@ open class usb_teensy: NSObject
       {
          NSLog("USBOpen: found rawhid device hid_usbstatus: %d",hid_usbstatus)
          let manu   = get_manu()
-         let manustr:String = String(cString: manu!)
-         
+         var manustr:String = "--"
+         if (manu != nil)
+         {
+            manustr = String(cString: manu!)
+            
+         }
          if (manustr == nil)
          {
             manustring = "-"
