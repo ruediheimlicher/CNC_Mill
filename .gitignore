@@ -6,9 +6,8 @@ build/*
 *.lst
 *.map
 *.sym
-/CNC_Mill.xcodeproj/*
 *.hex
 *.o
 .dep/
-*.xcodeproj/
 DerivedData/
+*xcdebugger*

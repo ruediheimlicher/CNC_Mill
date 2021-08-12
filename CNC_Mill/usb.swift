@@ -87,13 +87,13 @@ open class usb_teensy: NSObject
             manustr = String(cString: manu!)
             
          }
-         if (manustr == nil)
+         if (manustr.isEmpty)
          {
             manustring = "-"
          }
          else
          {
-            manustring = String(cString: UnsafePointer<CChar>(manustr))
+            manustring = manustr //String(cString: UnsafePointer<CChar>(manustr))
          }
          
          let prod = get_prod();
