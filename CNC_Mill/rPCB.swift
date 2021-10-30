@@ -2518,7 +2518,7 @@ class rPCB: rViewController
       }
       print("homewegarray")
       print("\(homewegarray)")
-      teensy.write_byteArray[24] = 0xBC
+      teensy.write_byteArray[24] = 0xDC
       teensy.write_byteArray[25] = 3
       
       
@@ -3171,7 +3171,7 @@ class rPCB: rViewController
          var pfeilwegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
          
          pfeilwegarray[32] = 1
-         pfeilwegarray[24] = 0xDC
+         pfeilwegarray[24] = 0xDE
          var mausstatus:UInt8 = 0
          if (mousedownindex == 1)
          {
@@ -3899,7 +3899,7 @@ class rPCB: rViewController
             
             
             
-         case 0xBC: 
+         case 0xDC: 
             print("\n                      newDataAktion  BC Drill ")
             let stepperpos = stepperpositionFeld.integerValue 
             let datacount = Schnittdatenarray.count
@@ -4195,7 +4195,7 @@ class rPCB: rViewController
       var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
       wegarray[32] = DEVICE_MILL
       wegarray[25] = 3 // nur 1 Abschnitt
-      wegarray[24] = 0xBC 
+      wegarray[24] = 0xDC 
 
       Schnittdatenarray.removeAll(keepingCapacity: true)
       cncstepperposition = 0
@@ -4262,7 +4262,7 @@ class rPCB: rViewController
       }
       
       wegarray[25] = 3 // nur 1 Abschnitt
-      wegarray[24] = 0xBC
+      wegarray[24] = 0xDC
       
       var zeilenposition:UInt8 = 0
       Schnittdatenarray.append(wegarray)
