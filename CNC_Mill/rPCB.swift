@@ -2518,7 +2518,7 @@ class rPCB: rViewController
       }
       print("homewegarray")
       print("\(homewegarray)")
-      teensy.write_byteArray[24] = 0xA5
+      teensy.write_byteArray[24] = 0xBC
       teensy.write_byteArray[25] = 3
       
       
@@ -2549,6 +2549,8 @@ class rPCB: rViewController
    func schrittdatenvektor(sxInt:Int,syInt:Int,szInt:Int, zeit:Double) -> [UInt8]
    {
       //      print("+++++++++++                               schrittdatenvektor sxInt: \(sxInt) syInt: \(syInt) szInt: \(szInt) zeit: \(zeit)")
+      // Vorzeichenbit auskomm:
+      
       let sxInt_raw = (sxInt & 0x0FFFFFFF)
       let syInt_raw = (syInt & 0x0FFFFFFF)
       let szInt_raw = (szInt & 0x0FFFFFFF)
@@ -2556,9 +2558,11 @@ class rPCB: rViewController
       
       let stepwert = stepsFeld.integerValue
       var kgvx = kgv3(m:stepwert,n:sxInt_raw,o: syInt_raw)
+      var ggt = ggt2(x:sxInt_raw, y:syInt_raw)
       
-      print("schrittdatenvektor sxInt_raw: \(sxInt_raw)  kgvx: \(kgvx)")
+      print("schrittdatenvektor sxInt_raw: \(sxInt_raw) syInt_raw: \(syInt_raw)  kgvx: \(kgvx) ggt: \(ggt)")
 
+      var ggtt = ggt2(x:48,y:56)
  //     homeX += sxInt_raw
  //     homeY += syInt_raw
       
@@ -2575,7 +2579,7 @@ class rPCB: rViewController
       vektor.append(sxC)
       vektor.append(sxD)
       
-      let dx:Double = (zeit / Double((sxInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
+      let dx:Double = (zeit / Double((sxInt & 0x0FFFFFFF))) // Zeit pro schritt , Vorzeichen-Bit weg
       
       let dxIntround = round(dx)
       var dxInt = 0
@@ -2591,6 +2595,9 @@ class rPCB: rViewController
       
       //      print("Fehlerkorrektur X")
       var korrekturintervallx:Int = 0
+      
+      var istzeitx:Double = 0
+      var kontrolleintx = 0;
       if sxInt != 0
       {
          let vorzeichenx = (sxInt & 0x80000000)
@@ -2598,16 +2605,17 @@ class rPCB: rViewController
          //         print("vorzeichenx: \(vorzeichenx)") // Richtung der Bewegung
          
          //         print("sxInt_raw: \(sxInt_raw) dx: \(dx) dxInt: \(dxInt)")
-         let kontrolledoublex = Int(Double(sxInt_raw) * dx) //  Kontrolle mit Double-Wert von dx
+         let kontrolledoublex = Int(Double(sxInt_raw) * dx) //  Kontrolle mit Double-Wert von dx: Sollwert Fahrzeit
          
-         let kontrolleintx = sxInt_raw * dxInt //               Kontrolle mit Int-Wert von dx
+         kontrolleintx = sxInt_raw * dxInt //               Kontrolle mit Int-Wert von dx : Istwert Fahrzeit, tatsächliche Zeit
+         istzeitx = Double(kontrolleintx)
          var diffx = Int(kontrolledoublex) - kontrolleintx // differenz, Rundungsfehler
-         //         print("kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
+         print("zeit: \(zeit) kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
          if diffx == 0
          {
-            diffx = 1
+            diffx = 1 // keine div /0
          }
-         let intervallx = Double(kontrolleintx / diffx)
+         let intervallx = Double(kontrolleintx / diffx) // 
          
          let controlx = Double(sxInt_raw) / intervallx
          korrekturintervallx = Int(round(intervallx)) // Rundungsfehler aufteilen ueber Abschnitt: 
@@ -2622,6 +2630,7 @@ class rPCB: rViewController
          }
          //         print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) controlx: \(controlx)\n")
       }
+      korrekturintervallx = 0;
       vektor.append(UInt8(korrekturintervallx & 0x00FF))
       vektor.append(UInt8((korrekturintervallx & 0xFF00)>>8))
       
@@ -2636,7 +2645,8 @@ class rPCB: rViewController
       vektor.append(syC)
       vektor.append(syD)
       
-      let dy:Double = (zeit / Double((syInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
+      //let dy:Double = (zeit / Double((syInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
+      let dy:Double = (istzeitx / Double((syInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
       
       let dyIntround = round(dy)
       var dyInt = 0
@@ -2652,39 +2662,70 @@ class rPCB: rViewController
       
       //      print("Fehlerkorr Y")
       var korrekturintervally:Int = 0
+      var korrekturintervall_xy:Int = 0
       if syInt != 0
       {
          let vorzeicheny = (syInt & 0x80000000)
          
          //print("vorzeicheny: \(vorzeicheny)")
          
-         //         print("syInt_raw: \(syInt_raw) dy: \(dy) dyInt: \(dyInt)")
-         let kontrolledoubley = Int(Double(syInt_raw) * dy)
-         let kontrolleinty = syInt_raw * dyInt
-         var diffy = (kontrolledoubley) - kontrolleinty
-         //         print("kontrolledoubley: \(kontrolledoubley) kontrolleinty: \(kontrolleinty) diffy: \(diffy) vorzeicheny: \(vorzeicheny)")
+         //print("syInt_raw: \(syInt_raw) dy: \(dy) dyInt: \(dyInt)")
+         
+         let kontrolledoubley = Int(Double(syInt_raw) * dy)       // Sollzeit y
+         let kontrolleinty = syInt_raw * dyInt                    // Istzeit y mit integer
+         
+         var istdiffxy = kontrolleintx - kontrolleinty // Zeitfehler: Korrektur in delayY
+         if istdiffxy == 0
+         {
+            istdiffxy = 1
+         }
+         print("kontrolleintx(istzeitx): \(kontrolleintx) kontrolleinty: \(kontrolleinty) istdiffxy: \(istdiffxy) vorzeicheny: \(vorzeicheny)")
+         
+         
+         var diffy = (kontrolledoubley) - kontrolleinty            
+         //         print("kontrolledoubley: \(kontrolledoubley) kontrolleinty: \(kontrolleinty) diffxy: \(diffxy) vorzeicheny: \(vorzeicheny)")
          if diffy == 0
          {
             diffy = 1
          }
-         let intervally = Double(kontrolleinty / diffy)
+         let intervally = Double(kontrolleinty / diffy) // Intervall für Einschub der Korrekturzeit
+         
+
+         //let intervall_xy:Double = Double(kontrolleinty / istdiffxy) // Abstand der Einschübe
+         
+         let intervall_xy:Double = Double(syInt_raw / istdiffxy) // Abstand der Einschübe
          
          let controly = Double(syInt_raw) / intervally
-         korrekturintervally = Int(round(intervally))
          
+         let controlxy = Double(syInt_raw) / intervall_xy 
+         
+         
+         korrekturintervally = (Int(round(intervally)))
          //        print("korrekturintervally: \(korrekturintervally) \n")
-         
-         
-         if korrekturintervally < 0 // negative korrektur
+         if korrekturintervally < 0 // negative korrektur, Korrekturwert ist negativ
          {
             //           print("korrekturintervally negativ")
             korrekturintervally *= -1
             korrekturintervally |= 0x8000
          }
+         
+         korrekturintervall_xy = (Int(round(intervall_xy)))
+         //        print("korrekturintervall_xy: \(korrekturintervall_xy) \n")
+         if korrekturintervall_xy < 0 // negative korrektur, Korrekturwert ist negativ
+         {
+            //           print("korrekturintervallxy negativ")
+            korrekturintervall_xy *= -1
+            korrekturintervall_xy |= 0x8000
+            
+         }
+
+         
+         
+         
          //        print("korrekturintervally mit Vorzeichenkorr: \(korrekturintervally)  controly: \(controly)\n")
       }
-      vektor.append(UInt8(korrekturintervally & 0x00FF))
-      vektor.append(UInt8((korrekturintervally & 0xFF00)>>8))
+      vektor.append(UInt8(korrekturintervall_xy & 0x00FF))
+      vektor.append(UInt8((korrekturintervall_xy & 0xFF00)>>8))
       
       // Motor C Schritte
       if szInt == 0
@@ -2799,6 +2840,7 @@ class rPCB: rViewController
 
  //     print("schrittdatenvektor count: \(vektor.count)")
       //     print("schrittdatenvektor sxInt: \(sxInt) dxInt: \(dxInt) syInt: \(syInt) dyInt: \(dyInt) zeit: \(zeit)")
+      print("schrittdatenvektor: \(vektor)")
       return vektor
    }
    
@@ -2806,7 +2848,7 @@ class rPCB: rViewController
    {
       
       zoomfaktor = zoomFeld.doubleValue
-      //     print("PCB wegArrayMitWegXY wegX: \(wegx) wegY: \(wegy) propfaktor: \(propfaktor)")
+           print("PCB wegArrayMitWegXY wegX: \(wegx) wegY: \(wegy) propfaktor: \(propfaktor)")
       var maxsteps:Double = 0
       var weg = [Double]()
       
@@ -2818,7 +2860,7 @@ class rPCB: rViewController
       let wegX = distanzX * zoomfaktor 
       let wegY = distanzY * zoomfaktor 
       let distanz = (wegX*wegX + wegY*wegY).squareRoot()
-      //      print("++++          wegArrayMitWegXY  distanzX: \(distanzX)  distanzY: \(distanzY)  distanz: \(distanz)")
+            print("++++          wegArrayMitWegXY  distanzX: \(distanzX)  distanzY: \(distanzY)  distanz: \(distanz)")
       var speed = speedFeld.intValue
       
       if ramp_OK_Check.state == NSControl.StateValue.on
@@ -2833,12 +2875,13 @@ class rPCB: rViewController
        
        */
       
-      let propfaktor = 2834645.67 // 72 dpi > 25.4mm
+      let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
       let dpi2mmfaktor = propfaktor / INTEGERFAKTOR
       
       let start = [0,0]
       let ziel = [wegX,wegY]
       
+      // Fahrzeit
       let zeit:Double = Double(distanz)/Double(speed) //   Schnittzeit für Distanz
       
       // print("********           wegArrayMitWegXY zeit: \(zeit) ")
@@ -2849,7 +2892,7 @@ class rPCB: rViewController
       
       schrittex /= propfaktor // Umrechnung in mm
       let schrittexmm = schrittex/stepsFeld.doubleValue
-      //     print("wegArrayMitWegXY schrittex mm: \(schrittexmm)")
+      print("wegArrayMitWegXY schrittex mm: \(schrittexmm) mm")
       
       var schrittexRound = round(schrittex)
       var schrittexInt:Int = 0
@@ -2860,7 +2903,7 @@ class rPCB: rViewController
          //  print("wegArrayMitWegXY schritteXInt OK: \(schrittexInt)")
          if schrittexInt < 0 // negativer Weg
          {
-            //           print("schrittexInt negativ")
+            print("schrittexInt negativ")
             schrittexInt *= -1
             schrittexInt |= 0x80000000
          }
@@ -2886,7 +2929,7 @@ class rPCB: rViewController
          //         print("wegArrayMitWegXY schritteyInt OK: \(schritteyInt)")
          if schritteyInt < 0 // negativer Weg
          {
-            //           print("schritteyInt negativ")
+            print("schritteyInt negativ")
             schritteyInt *= -1
             schritteyInt |= 0x80000000
          }
@@ -2907,105 +2950,18 @@ class rPCB: rViewController
    }
    
    
-   
-   @IBAction func report_goXY(_ sender: NSButton) // 
-   {
-      // left: 1, right: 2, up: 3, down: 4
-      print("PCB report_goXY tag: \(sender.tag) propfaktor: \(propfaktor)")
-      var dx = 0
-      var dy = 0
-      let schrittweite = 10
-      switch sender.tag
-      {
-      case 1: // right
-         dx = schrittweite
-         break
-      case 2: // up
-         dy = schrittweite
-         break
-      case 3: // left
-         dx = schrittweite * -1
-         break
-      case 4: // down
-         dy = schrittweite * -1
-         break
-      case 13: // test
-         dy = 20
-         dx = 20
-         break
-         
-      default:
-         break
-      }
-      lastklickposition.x = 0
-      lastklickposition.y = 0
-      
-      var wegarray = wegArrayMitWegXY(wegx: Double(dx),wegy:Double(dy))
-      
-      
-      //     var wegarray = wegArrayMitWegXY(wegx:dx, wegy:dy)
-      
-      wegarray[32] = DEVICE_MILL
-      Schnittdatenarray.removeAll(keepingCapacity: true)
-      cncstepperposition = 0
-      if Schnittdatenarray.count == 0 // Array im Teensy loeschen
-      {
-         wegarray[25] = 1 //erstes Element
-         //teensy.write_byteArray[24] = 0xE0 // Stopp
-         if teensy.dev_present() > 0
-         {
-            let senderfolg = teensy.send_USB()
-            print("report_goXY report_goXY senderfolg: \(senderfolg)")
-         }
-         
-      }
-      
-      var zeilenposition:UInt8 = 0
-      Schnittdatenarray.append(wegarray)
-      /*
-       for zeilenindex in stride(from: 0, to: Schnittdatenarray.count-1, by: 1)
-       {
-       zeilenposition = 0
-       if zeilenindex == 0
-       {
-       
-       zeilenposition |= (1<<FIRST_BIT); // Erstes Element, Start
-       }
-       if zeilenindex == Schnittdatenarray.count - 1
-       {
-       zeilenposition |= (1<<LAST_BIT);
-       }
-       
-       Schnittdatenarray[zeilenindex][25] = zeilenposition // innere Elemente
-       
-       }
-       */
-      print("wegarray: \t\(wegarray)")
-      
-      if Schnittdatenarray.count == 1
-      {
-         print("report_goXY start CNC")
-         write_CNC_Abschnitt()   
-         
-         
-         if teensy.readtimervalid() == true
-         {
-            //print("PCB readtimer valid vor")
-         }
-         else 
-         {
-            //print("PCB readtimer not valid vor")
-            var start_read_USB_erfolg = teensy.start_read_USB(true)
-         }
-      }
-      
-   }
+
    
    func write_CNC_Abschnitt()
    {
  //     print("+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
       stepperpositionFeld.integerValue = cncstepperposition
-      
+ /*
+      for i in 0..<Schnittdatenarray.count
+      {
+         print("i \(i) \(Schnittdatenarray[i])")
+      }
+  */    
       if cncstepperposition == Schnittdatenarray.count
       {
          print("write_CNC_Abschnitt cncstepperposition ist Schnittdatenarray.count")
@@ -3171,21 +3127,27 @@ class rPCB: rViewController
       datatabletask(zeile: index)
    }
    
+   
+   // MARK: ***       MAUSSTATUSAKTION  
+   
    @objc  override func mausstatusAktion(_ notification:Notification)
    {
       let info = notification.userInfo
   //    print("PCB mausstatusAktion:\t \(String(describing: info))")
       let devtag = info?["devtag"] as! Int
+      let mousedownindex = info?["mousedown"] as! Int
       if devtag == 1
       {
          let pfeiltag = info?["tag"] as! Int
          var schrittweite = info?["schrittweite"] as! Int
          schrittweite = pfeilschrittweite
+         schrittweite = 200
          var dx:Int = 0
          var dy:Int = 0
          var vorzeichenx = 0;
          var vorzeicheny = 0;
-   //      print("PCB mausstatusAktion devtag:\t \(devtag ) pfeiltag:\t \(pfeiltag ) schrittweite: \(schrittweite)\t")
+         print("PCB mausstatusAktion devtag:\t \(devtag ) pfeiltag:\t \(pfeiltag ) schrittweite: \(schrittweite) mousedownindex: \(mousedownindex)\t")
+         
          switch pfeiltag
          {
          case 1: // right
@@ -3196,38 +3158,42 @@ class rPCB: rViewController
             break
          case 3: // left
             dx = schrittweite * (-1)
-            //dx |= 0x80000000
             vorzeichenx = 1
             break
          case 4: // down
             dy = schrittweite * (-1)
-            //dy |= 0x80000000
             vorzeicheny = 1
             break
          default:
             break
-            
-            
          }
          print("mausstatusAktion dx: \(dx) dy: \(dy)")
          var pfeilwegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
          
          pfeilwegarray[32] = 1
-         pfeilwegarray[24] = 0xB3
-         
-         
-         
+         pfeilwegarray[24] = 0xDC
+         var mausstatus:UInt8 = 0
+         if (mousedownindex == 1)
+         {
+            mausstatus |= (1<<1)
+         }
+         else
+         {
+            mausstatus &= ~(1<<1)
+         }
+         pfeilwegarray[37] = mausstatus
+           
          for z in 0 ... pfeilwegarray.count-1
          {
             teensy.write_byteArray[z] = pfeilwegarray[z]
-            //         print("\(z) \(pfeilwegarray[z])")
+            //print("\(z) \(pfeilwegarray[z])")
          }
- //        print("mausstatusAktion pfeilwegarray")
+         print("mausstatusAktion pfeilwegarray 37: \(teensy.write_byteArray[37])")
  //        print("\(pfeilwegarray)")
          
          
          
-         teensy.write_byteArray[24] = 0xB3
+  //       teensy.write_byteArray[24] = 0xB3
          
          
          //      homeX += Int(dx)
@@ -3235,6 +3201,8 @@ class rPCB: rViewController
          // print("mausstatusaktion homeX: \(homeX) homeY: \(homeY)")
          //     homexFeld.integerValue = homeX
          //     homeyFeld.integerValue = homeY
+         
+        
          if teensy.readtimervalid() == true
          {
             //print("PCB readtimer valid vor")
@@ -3246,8 +3214,10 @@ class rPCB: rViewController
             
             var start_read_USB_erfolg = teensy.start_read_USB(true)
          }
-         
-         write_CNC_Zeile(zeilenarray: pfeilwegarray)   
+        // if ((mausstatus & (1<<1)) > 0 )
+        // {
+            write_CNC_Zeile(zeilenarray: pfeilwegarray)   
+        // }
 //         let senderfolg = teensy.send_USB()
       }
    }
@@ -3423,7 +3393,7 @@ class rPCB: rViewController
       return drillschnittdatenarray
    }
    
-   @IBAction func report_move_Drill(_ sender: NSButton) // Pfeiltasten up/down
+   @IBAction func report_move_Drill(_ sender: NSButton) // Drill-Pfeiltasten up/down
    {
       print("\n+++++++     report_move_Drill tag: \(sender.tag)")
       var drillweg = 10
@@ -3831,6 +3801,8 @@ class rPCB: rViewController
             
             break
             
+            
+            
          case 0xB6:
             print("newDataAktion  B6 Abschnitt 0 abschnitte: \(Schnittdatenarray.count)")
             // Data angekommen
@@ -4002,6 +3974,13 @@ class rPCB: rViewController
              }
              */
             break
+            
+         case 0xBD: // teensystep
+            print("newDataAktion  BD teensystep")
+            
+            
+            break
+            
             
          case 0xCB: 
             
@@ -4204,6 +4183,107 @@ class rPCB: rViewController
       print("kreuzarray: \(kreuzarray)")
       
       return kreuzarray
+   }
+   
+   func move(dx: Int, dy: Int)
+   {
+      print("move dx: \(dx) dy: \(dy)")
+      lastklickposition.x = 0
+      lastklickposition.y = 0
+
+      let punkt:NSPoint = NSMakePoint(CGFloat(dx), CGFloat(dy))
+      var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
+      wegarray[32] = DEVICE_MILL
+      wegarray[25] = 3 // nur 1 Abschnitt
+      wegarray[24] = 0xBC 
+
+      Schnittdatenarray.removeAll(keepingCapacity: true)
+      cncstepperposition = 0
+      var zeilenposition:UInt8 = 0
+      Schnittdatenarray.append(wegarray)
+      stepperschritteFeld.integerValue = Schnittdatenarray.count
+      print("move Schnittdatenarray: \(Schnittdatenarray)")
+
+      if Schnittdatenarray.count == 1
+      {
+         print("report_send_TextDaten start CNC")
+         write_CNC_Abschnitt()   
+         if teensy.readtimervalid() == true
+         {
+            //print("PCB readtimer valid vor")
+         }
+         else 
+         {
+            //print("PCB readtimer not valid vor")
+            var start_read_USB_erfolg = teensy.start_read_USB(true)
+            print("report_send_Movestart_read_USB_erfolg: \(start_read_USB_erfolg)")
+         }
+      }
+   }
+   
+   @IBAction func report_send_Figur(_ sender: NSButton)
+   {
+      let dx = dxFeld.doubleValue
+      let dy = dyFeld.doubleValue
+      
+      
+      
+      
+   }
+   @IBAction func report_send_Move(_ sender: NSButton)
+   {
+      print("report_send_Move")
+      //    clearteensy()
+      let dx = dxFeld.doubleValue
+      let dy = dyFeld.doubleValue
+      
+      print("report_send_Move dx: \(dx) dy: \(dy)")
+      lastklickposition.x = 0
+      lastklickposition.y = 0
+      let punkt:NSPoint = NSMakePoint(CGFloat(dx), CGFloat(dy))
+     // print("report_send_Move lastklickposition x: \(lastklickposition.x) dy: \(lastklickposition.y)")
+      // lastKlickposition ist (0,0)
+      var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
+      //     var wegarray = wegArrayMitWegXY(wegx:dx, wegy:dy)
+      
+      wegarray[32] = DEVICE_MILL
+      Schnittdatenarray.removeAll(keepingCapacity: true)
+      cncstepperposition = 0
+      if Schnittdatenarray.count == 0 // Array im Teensy loeschen
+      {
+         teensy.write_byteArray[25] = 1 //erstes Element
+         //teensy.write_byteArray[24] = 0xE0 // Stopp
+         if teensy.dev_present() > 0
+         {
+            //           let senderfolg = teensy.send_USB()
+            //           print("PCB report_send_TextDaten clear senderfolg: \(senderfolg)")
+         }
+         
+      }
+      
+      wegarray[25] = 3 // nur 1 Abschnitt
+      wegarray[24] = 0xBC
+      
+      var zeilenposition:UInt8 = 0
+      Schnittdatenarray.append(wegarray)
+      stepperschritteFeld.integerValue = Schnittdatenarray.count
+      print("sendTextdaten Schnittdatenarray: \(Schnittdatenarray)")
+      
+      if Schnittdatenarray.count == 1
+      {
+         print("report_send_TextDaten start CNC")
+         write_CNC_Abschnitt()   
+         if teensy.readtimervalid() == true
+         {
+            //print("PCB readtimer valid vor")
+         }
+         else 
+         {
+            //print("PCB readtimer not valid vor")
+            var start_read_USB_erfolg = teensy.start_read_USB(true)
+            print("report_send_Movestart_read_USB_erfolg: \(start_read_USB_erfolg)")
+         }
+      }
    }
    
    @IBAction func report_send_TextDaten(_ sender: NSButton)
@@ -4446,6 +4526,84 @@ class rPCB: rViewController
       
    }
    // MARK:goto  
+   
+   
+   @IBAction func report_goXY(_ sender: NSButton) // nicht benutzt, in mousedown bearbeitet
+   {
+      // 
+      // left: 1, right: 2, up: 3, down: 4
+      print("PCB report_goXY tag: \(sender.tag) propfaktor: \(propfaktor)")
+      var dx = 0
+      var dy = 0
+      let schrittweite = 25
+      switch sender.tag
+      {
+      case 1: // right
+         dx = schrittweite
+         break
+      case 2: // up
+         dy = schrittweite
+         break
+      case 3: // left
+         dx = schrittweite * -1
+         break
+      case 4: // down
+         dy = schrittweite * -1
+         break
+      case 13: // test
+         dy = 20
+         dx = 20
+         break
+         
+      default:
+         break
+      }
+      lastklickposition.x = 0
+      lastklickposition.y = 0
+      
+      var wegarray = wegArrayMitWegXY(wegx: Double(dx),wegy:Double(dy))
+      
+      
+      //     var wegarray = wegArrayMitWegXY(wegx:dx, wegy:dy)
+      
+      wegarray[32] = DEVICE_MILL
+      Schnittdatenarray.removeAll(keepingCapacity: true)
+      cncstepperposition = 0
+      if Schnittdatenarray.count == 0 // Array im Teensy loeschen
+      {
+         wegarray[25] = 1 //erstes Element
+         //teensy.write_byteArray[24] = 0xE0 // Stopp
+         if teensy.dev_present() > 0
+         {
+            let senderfolg = teensy.send_USB()
+            print("report_goXY report_goXY Array loeschen senderfolg: \(senderfolg)")
+         }
+         
+      }
+      
+      var zeilenposition:UInt8 = 0
+      Schnittdatenarray.append(wegarray)
+       print("wegarray: \t\(wegarray)")
+      
+      if Schnittdatenarray.count == 1
+      {
+         print("report_goXY start CNC")
+         write_CNC_Abschnitt()   
+         
+         
+         if teensy.readtimervalid() == true
+         {
+            //print("PCB readtimer valid vor")
+         }
+         else 
+         {
+            //print("PCB readtimer not valid vor")
+            var start_read_USB_erfolg = teensy.start_read_USB(true)
+         }
+      }
+      
+   }
+   
    @IBAction override func report_goto_0(_ sender: NSButton)
    {
       print("report_goto_0")

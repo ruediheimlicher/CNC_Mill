@@ -79,7 +79,7 @@ const int BufferSize(void)
 
 int rawhid_recv(int num, void *buf, int len, int timeout)
 {
-   fprintf(stderr,"rawhid_recv start len: %d\n",len);
+   //fprintf(stderr,"rawhid_recv start len: %d\n",len);
    //fprintf(stderr,"rawhid_recv start \n");
    hid_t *hid;
    buffer_t *b;

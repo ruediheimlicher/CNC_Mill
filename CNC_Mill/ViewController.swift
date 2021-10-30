@@ -19,6 +19,8 @@ public var lastDataRead = Data.init(count:64)
 
 var globalusbstatus = 0
 
+var mausstatus:UInt8 = 0
+
 // 
 
 class  rPfeiltaste  : NSButton
@@ -82,7 +84,8 @@ class  rPfeiltaste  : NSButton
       
       let pfeiltag = self.tag
       let sw = self.schrittweite
-      print("rPfeiltaste mousedown tag: \(pfeiltag) schrittweite: \(sw)") 
+      print("rPfeiltaste mousedown tag: \(pfeiltag)") 
+      mausstatus |= (1<<1)
       var dx = 0
       var dy = 0
       //let schrittweite:Int = 6
@@ -105,10 +108,13 @@ class  rPfeiltaste  : NSButton
          break
       }
       
-      var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag]
+      print("rPfeiltaste mousedown tag: \(pfeiltag) schrittweite: \(sw)") 
+      
+      var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag, "mousedown":1]
       pfeiltimer = Timer.scheduledTimer(timeInterval: 0.3 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
       
       let nc = NotificationCenter.default
+      
       nc.post(name:Notification.Name(rawValue:"maus_status"),
               object: nil,
               userInfo: notificationDic)        
@@ -118,14 +124,37 @@ class  rPfeiltaste  : NSButton
    override  func mouseUp(with theEvent: NSEvent) 
    {
       super.mouseUp(with: theEvent)
-      //     print("rPfeiltaste mouseup")  
+      print("rPfeiltaste mouseup")  
       pfeiltimer?.invalidate()
       // let pfeiltag = self.tag
+      mausstatus &= ~(1<<1)
+      let dev:String = (superview?.identifier)!.rawValue
+      var devtag = 0
+      let pfeiltag = self.tag
+      switch dev
+      {
+      case "pcb":
+         devtag = 1
+         break
+      case "joystick":
+         devtag = 2
+         break;
+      default:
+         break
+      }
+      print("rPfeiltaste mouseup end")
+      var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag, "mousedown":0]
+      
+      let nc = NotificationCenter.default
+      
+      nc.post(name:Notification.Name(rawValue:"maus_status"),
+              object: nil,
+              userInfo: notificationDic)  
+ 
    }
    
    @objc   func pfeiltastenstimeraktion()
    {
-      
       let notificationDic = pfeiltimer?.userInfo
       print("pfeiltastenstimeraktion userinfo: \(notificationDic)")
       let nc = NotificationCenter.default
@@ -356,7 +385,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
     100 p > 35.28mm
    */
    
-   let INTEGERFAKTOR:Double = 1000000 // Multiplikatorfuer DAten aus Textfeldern und svg: Vergroesserung der Integer fuer bessere Genauigkeit
+   let INTEGERFAKTOR:Double = 1000000 // Multiplikatorfuer Daten aus Textfeldern und svg: Vergroesserung der Integer fuer bessere Genauigkeit
    
    var cncstepperposition:Int = 0
    var cnchalt = 0
@@ -424,6 +453,32 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
          return 1
       }
    }
+   
+  
+   // https://www.math.uni-bielefeld.de/~rehmann/CC++/01/ggt.c
+   func ggt2(x:Int, y:Int)-> Int
+   { /* gibt ggt(x,y) zurueck, falls x oder y nicht 0 */
+   var xx = x
+      var yy = y
+    var   c:Int;                /* und gibt 0 zurueck fuer x=y=0.   */
+     if  x < 0  
+     {
+      xx = -x; 
+     }
+     if  y < 0  
+     {
+      yy = -y
+     }
+     while ( yy != 0 ) 
+     {          /* solange y != 0 */
+      c = xx % yy; 
+      xx = yy; 
+      yy = c;  /* ersetze x durch y und
+                y durch den Rest von x modulo y */
+     }
+     return xx;
+   }
+
 
    func kgv3(m:Int, n: Int, o: Int)->Int
    {
