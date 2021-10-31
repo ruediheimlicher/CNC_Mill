@@ -1210,7 +1210,7 @@ class rPCB: rViewController
           ii += 1
           }
           
-          print("report_readSVG circlefloatarray count: \(circlefloatarray.count)")
+          print("report_readSVG circlefloatarray A count: \(circlefloatarray.count)")
           var  iii = 0
           for el in circlefloatarray
           {
@@ -1274,7 +1274,7 @@ class rPCB: rViewController
           iii += 1
           }
           */
-         /*
+         
           print("report_readSVG sortedfloatarray")
           var aa = 0
           for el in sortedfloatarray
@@ -1282,7 +1282,7 @@ class rPCB: rViewController
           print("\(aa) \(el)")
           aa += 1
           }
-          */
+          
          
          
          //let sortedarray = sorted(circledicarray, key=lambda k: k['cx'])
@@ -1364,13 +1364,13 @@ class rPCB: rViewController
             zeilendicindex += 1
          }
          
-         /*
-          print("report_readSVG circlefloatarray vor.  count: \(circlefloatarray.count)")
+         
+          print("report_readSVG circlefloatarray B vor.  count: \(circlefloatarray.count)")
           for el in circlefloatarray
           {
           print("\(el[0] )\t \(el[1] ) \(el[2])")
           }
-          */
+          
          
          
          //  var 
@@ -1423,22 +1423,24 @@ class rPCB: rViewController
           
           }
           */
-         /*
-          print("report_readSVG circlefloatarray nach. count: \(circlefloatarray.count)")
+         
+          print("report_readSVG circlefloatarray nach, vor flip. count: \(circlefloatarray.count)")
           for el in circlefloatarray
           {
-          
           print("\(el[0] )\t \(el[1] )\t \(el[2])")
           }
-          */
+          
          circlefloatarray = flipSVG(svgarray: circlefloatarray)
-         /*
+         
+         print("report_readSVG circlefloatarray nach flip. count: \(circlefloatarray.count)")
+
+         
           for el in circlefloatarray
           {
           
           print("\(el[0] )\t \(el[1] )\t \(el[2])")
           }
-          */
+          
          
          tsp_nn.setkoordinaten(koord: circlefloatarray)
          tsp_nn.firstrun()
@@ -1483,14 +1485,14 @@ class rPCB: rViewController
           //     iii += 1
           }
           */
-         /*
+         
           print("mill_floatarray A")
           for el in mill_floatarray
           {
           print("\(el)")
           //     iii += 1
           }
-          */
+          
          setPCB_Output(floatarray: mill_floatarray, scale: 5, transform: transformfaktor)
          /*
           print("mill_floatarray B")
@@ -1627,14 +1629,14 @@ class rPCB: rViewController
        //     iii += 1
        }
        */
-      /*
+      
        print("mill_floatarray")
        for el in mill_floatarray
        {
        print("\(el)")
        //     iii += 1
        }
-       */
+       
       return mill_floatarray
       
    }
@@ -1642,7 +1644,7 @@ class rPCB: rViewController
    func setPCB_Output(floatarray: [[Double]], scale: Int, transform: Double)
    {
       print("setPCB_Output Start")
-      /*
+      
        print("circlearray: \(circlearray.count)")
        for el in circlearray
        {
@@ -1655,7 +1657,7 @@ class rPCB: rViewController
        {
        print("\(el[0] )\t \(el[1] )\t \(el[2])")
        }
-       */
+       
       //     Plattefeld.setStepperposition(pos: 0)
       let l = Plattefeld.setfloatWeg(newWeg: floatarray, scalefaktor: scale, transform:  transform)
       fahrtweg.integerValue = l
@@ -1707,6 +1709,7 @@ class rPCB: rViewController
    
    func PCB_Daten(floatarray:[[Double]])->[[UInt8]]
    {
+      print("PCB_Daten\n")
       //  var speed = speedFeld.intValue
       var PCB_Datenarray = [[UInt8]]()
       Schnittdatenarray.removeAll()
@@ -1780,7 +1783,7 @@ class rPCB: rViewController
          wegArray[25] = UInt8(zeilenposition)
          wegArray[26] = UInt8((zeilenindex & 0xFF00)<<8)
          wegArray[27] = UInt8((zeilenindex & 0x00FF))
-         
+         wegArray[30] = UInt8(Int(zoomFeld.doubleValue * 10))
          wegArray[36] = 0 // default H fuer tabledataZeile
          wegArray[37] = 0xFF // default L fuer tabledataZeile
          
@@ -2367,7 +2370,7 @@ class rPCB: rViewController
        }
        let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
        */
-      
+      PCB_Test = 1
       if (PCB_Test == 0)
       {
          let alert = NSAlert()
@@ -2441,7 +2444,9 @@ class rPCB: rViewController
       
       
       Plattefeld.setStepperposition(pos: 0) // Ersten Punkt markieren
-      Schnittdatenarray[0][24] = 0xB5 //
+      //Schnittdatenarray[0][24] = 0xB5 //
+      Schnittdatenarray[0][24] = 0xD5 //
+      
       write_CNC_Abschnitt()
       
          
@@ -2954,14 +2959,14 @@ class rPCB: rViewController
    
    func write_CNC_Abschnitt()
    {
- //     print("+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
+      print("+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
       stepperpositionFeld.integerValue = cncstepperposition
- /*
+ 
       for i in 0..<Schnittdatenarray.count
       {
          print("i \(i) \(Schnittdatenarray[i])")
       }
-  */    
+      
       if cncstepperposition == Schnittdatenarray.count
       {
          print("write_CNC_Abschnitt cncstepperposition ist Schnittdatenarray.count")
@@ -2989,6 +2994,7 @@ class rPCB: rViewController
             {
                teensy.write_byteArray.append(element)
             }
+            
             print("write_CNCcncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
             print("    write_byteArray24: \(teensy.write_byteArray[24])")
             
@@ -3053,6 +3059,7 @@ class rPCB: rViewController
          {
             teensy.write_byteArray.append(element)
          }
+         
   //       print("write_CNC_Zeile  write_byteArray: \(teensy.write_byteArray)")
   //       print("    write_byteArray24: \(teensy.write_byteArray[24])")
   //       print("write_CNC_Zeile    write_byteArray38: \(teensy.write_byteArray[38])")
@@ -3169,7 +3176,7 @@ class rPCB: rViewController
          }
          print("mausstatusAktion dx: \(dx) dy: \(dy)")
          var pfeilwegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
-         
+         pfeilwegarray[25] = 2 // nur ein Abschnitt
          pfeilwegarray[32] = 1
          pfeilwegarray[24] = 0xDE
          var mausstatus:UInt8 = 0
@@ -3181,14 +3188,14 @@ class rPCB: rViewController
          {
             mausstatus &= ~(1<<1)
          }
-         pfeilwegarray[37] = mausstatus
+         pfeilwegarray[40] = mausstatus
            
          for z in 0 ... pfeilwegarray.count-1
          {
             teensy.write_byteArray[z] = pfeilwegarray[z]
             //print("\(z) \(pfeilwegarray[z])")
          }
-         print("mausstatusAktion pfeilwegarray 37: \(teensy.write_byteArray[37])")
+         print("mausstatusAktion pfeilwegarray 37: \(teensy.write_byteArray[40])")
  //        print("\(pfeilwegarray)")
          
          
@@ -3729,8 +3736,9 @@ class rPCB: rViewController
          switch taskcode
          {
          case 0xA1:
-            print("PCB newDataAktion  A1 abschnitte: \(Schnittdatenarray.count)") // mehrere Schritte
-            let ladepos =  Int(data[8] )
+            print("\n*********    PCB newDataAktion  A1 abschnitte: \(Schnittdatenarray.count)") // mehrere Schritte
+            let ladepos =  Int(data[8])
+            print("PCB newDataAktion  ladepos: \(ladepos)")
             Plattefeld.setStepperposition(pos:ladepos)
             
             let state = steppercontKnopf.state
@@ -3739,13 +3747,9 @@ class rPCB: rViewController
             {
                print("PCB newDataAktion  A1 return");
                
-               
-               return;
+               return
             }
-            
-            
-            
-            break;
+            break
             
          case 0xAD:
             print("PCB newDataAktion  AD TASK END ")
@@ -4012,6 +4016,13 @@ class rPCB: rViewController
                     userInfo: notificationDic)
             break
             
+            
+         case 0xD6:
+            print("newDataAktion  D6")
+            
+            break
+
+            
          case 0xC5:
             let motor = data[1]
             let anschlagstatus = data[12]
@@ -4020,9 +4031,9 @@ class rPCB: rViewController
             let anschlagcode = data[14]
             print("newDataAktion  C5 Anschlag")
             print("  motor: \(motor)  \nanschlagstatus: \(anschlagstatus)  \nrichtung: \(richtung) \ncncstatus: \(cncstatus) \nanschlagcode: \(anschlagcode)")
+            break
             
-            
-            
+             
             
          default:
             print("newDataAktion default abschnittnummer: \(abschnittnummer)")
@@ -4041,6 +4052,7 @@ class rPCB: rViewController
             
             return
          }
+         //state = .on
          if state == .on
          {
   //          print("newDataAktion writecncabschnitt go cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
