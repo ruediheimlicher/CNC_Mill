@@ -1201,7 +1201,7 @@ class rPCB: rViewController
             
             
          }
-        
+         print("report_readSVG end:")
           print("report_readSVG circlearray count: \(circlearray.count)")
           var ii = 0
           for el in circlearray
@@ -1217,7 +1217,15 @@ class rPCB: rViewController
           print("\(iii)\t\(el[1])\t \(el[2])")
           iii += 1
           }
-         
+ 
+         print("report_readSVG circlefloatdicdicarray  count: \(circlefloatdicarray.count)")
+        iii = 0
+         for el in circlefloatdicarray
+         {
+         print("\(iii)\t\(el)")
+         iii += 1
+         }
+
          
          /*     
           print("report_readSVG circledicarray")
@@ -1429,7 +1437,17 @@ class rPCB: rViewController
           {
           print("\(el[0] )\t \(el[1] )\t \(el[2])")
           }
-          
+         z = 0
+         
+         for z in 0..<circlefloatarray.count
+         {
+            var el1 = 2 * circlefloatarray[z][1]
+            circlefloatarray[z][1] = el1
+            var el2 = 2 * circlefloatarray[z][2]
+            circlefloatarray[z][2] = el2
+         }
+
+         
          circlefloatarray = flipSVG(svgarray: circlefloatarray)
          
          print("report_readSVG circlefloatarray nach flip. count: \(circlefloatarray.count)")
@@ -1469,7 +1487,12 @@ class rPCB: rViewController
           */
          var mill_floatarray = mill_floatArray(circarray: circlefloatarray) //
          
+         // Figur schliessen
          mill_floatarray.append(mill_floatarray[0])
+         circlefloatarray.append(circlefloatarray[0])
+         circlearray.append(circlearray[0])
+         dataTable.reloadData()    
+         
          
          /*
           for ii in nn_array
@@ -1700,6 +1723,7 @@ class rPCB: rViewController
          lasttabledataindex = 0 // Zeile 0 in circlearray
          
       }
+      
       let zeile:IndexSet = [0]
       dataTable.reloadData()
       dataTable.selectRowIndexes(zeile, byExtendingSelection: false)
@@ -2353,6 +2377,46 @@ class rPCB: rViewController
       Schnittdatenarray.append(contentsOf:PCBDaten)
    }
    
+   @IBAction override func report_HALT(_ sender: NSButton)
+   {
+      print("report_HALT")
+      /*
+ [CNC_Preparetaste setEnabled:![sender state]];
+ [CNC_Starttaste setEnabled:[sender state]];
+ [CNC_Stoptaste setEnabled:![sender state]];
+ [CNC_Sendtaste setEnabled:![sender state]];
+ [CNC_Terminatetaste setEnabled:![sender state]];
+ [DC_Taste setState:0];
+ [self setStepperstrom:1];
+ [self setBusy:0];
+ [PositionFeld setIntValue:0];
+ [PositionFeld setStringValue:@""];
+ 
+ */
+      var notdic = [String:Any]()
+      notdic["haltstatus"] = CNC_HALT_Knopf.state
+      notdic["push"] = 0
+      print("haltstatus: \(CNC_HALT_Knopf.state)")    
+      if CNC_HALT_Knopf.state == .on
+      {
+         teensy.write_byteArray[24] = 0xE0 // code
+         teensy.write_byteArray[26] = 0 // indexh
+         teensy.write_byteArray[27] = 0 // indexl
+ //        var timerdic:[String:Int] = ["haltstatus":1, "home":0]
+ //        var timer : Timer? = nil
+  //       timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(USB_read(timer:)), userInfo: timerdic, repeats: true)
+//         if (usbstatus > 0)
+//         {
+            let senderfolg = teensy.send_USB()
+            print("report_HALT senderfolg: \(senderfolg)")
+ //        }
+
+         CNC_HALT_Knopf.state = .off
+      }
+  
+      
+   }
+
    @IBAction func report_send_Daten(_ sender: NSButton)
    {
       print("report_send_Daten")
@@ -2446,7 +2510,13 @@ class rPCB: rViewController
       Plattefeld.setStepperposition(pos: 0) // Ersten Punkt markieren
       //Schnittdatenarray[0][24] = 0xB5 //
       Schnittdatenarray[0][24] = 0xD5 //
-      
+      for i in 1..<Schnittdatenarray.count
+      {
+     //    Schnittdatenarray[i][24] = 0xD5 //
+     // Schnittdatenarray[1][24] = 0xD5 //
+    //  Schnittdatenarray[2][24] = 0xD5 //
+    //  Schnittdatenarray[3][24] = 0xD5 //
+      }
       write_CNC_Abschnitt()
       
          
@@ -3751,7 +3821,7 @@ class rPCB: rViewController
             }
             break
             
-         case 0xAD:
+         case 0xAD: // End Task
             print("PCB newDataAktion  AD TASK END ")
             let abschnittnum = Int((data[5] << 8) | data[6])
             print("newDataAktion  AD tabledatastatus 23: \(data[23])")
@@ -4019,7 +4089,7 @@ class rPCB: rViewController
             
          case 0xD6:
             print("newDataAktion  D6")
-            
+            // Rueckmeldung von SendData
             break
 
             

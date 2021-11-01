@@ -221,7 +221,7 @@ open class usb_teensy: NSObject
          {
             readtimer?.invalidate()
          }
-         readtimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
+         readtimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
       }
       
       return Int(result) //
@@ -306,7 +306,7 @@ open class usb_teensy: NSObject
          //read_byteArray[0]  = 0
         // var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
          
-         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 100)
+         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 10)
          if (result == 0)
          {
             return;

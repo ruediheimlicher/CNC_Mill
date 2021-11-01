@@ -900,6 +900,11 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
  //        var timerdic:[String:Int] = ["haltstatus":1, "home":0]
  //        var timer : Timer? = nil
   //       timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(USB_read(timer:)), userInfo: timerdic, repeats: true)
+         if (usbstatus > 0)
+         {
+            let senderfolg = teensy.send_USB()
+            print("report_HALT senderfolg: \(senderfolg)")
+         }
 
          
       }
