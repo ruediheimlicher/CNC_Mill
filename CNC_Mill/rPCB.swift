@@ -3658,7 +3658,7 @@ class rPCB: rViewController
    {
       print("\n+++++++     report_Drill tag: \(sender.tag) ")
       
-      drilltask(weg:100)
+      drilltask(weg:-25)
    }
    
    @objc func drilltask(weg:Int)
@@ -4026,14 +4026,14 @@ class rPCB: rViewController
             let datacount = Schnittdatenarray.count
         //    print("newDataAktion  B8 stepperpos: \(stepperpos) datacount: \(datacount)")
             let drillstatus:UInt8 = data[22]
-        //    print("newDataAktion  B8 drillstatus: \(drillstatus)")
+            print("newDataAktion  B8 drillstatus: \(drillstatus)")
             if drillstatus > 1 // kein rueckweg
             {
-               //print("newDataAktion  B8 drillstatus > 1 break")
+               print("newDataAktion  B8 drillstatus > 1 break")
                break
             }
             // Rueckweg schicken
-            var drillweg = -100
+            var drillweg = 25
             var drillWegArray = drillMoveArray(wegz: Double(drillweg))
             drillWegArray[24] = 0xBA
             
@@ -4063,8 +4063,8 @@ class rPCB: rViewController
             print("*********************************************************\n")
             
              // https://stackoverflow.com/questions/27517632/how-to-create-a-delay-in-swift
-            let seconds = 4.0
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) 
+            let seconds = 1.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
             {
                // Put your code which should be executed with a delay here
                
