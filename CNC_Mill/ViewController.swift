@@ -74,7 +74,7 @@ class  rPfeiltaste  : NSButton
       default:
          break
       }
-      //  print("rPfeiltaste mousedown tabview ident: \(dev) devtag: \(devtag)")  
+      print("rPfeiltaste mousedown tabview ident: \(dev) devtag: \(devtag)")  
       let location = theEvent.locationInWindow
       //    Swift.print(location)
       //    NSPoint lokalpunkt = [self convertPoint: [anEvent locationInWindow] fromView: nil];
@@ -104,6 +104,17 @@ class  rPfeiltaste  : NSButton
       case 4: // down
          dy = schrittweite * -1
          break
+         
+      case 22: // Drill down
+         dy = schrittweite * -1
+         break
+
+      case 24: // Drill up
+         dy = schrittweite
+         break
+
+
+
       default:
          break
       }

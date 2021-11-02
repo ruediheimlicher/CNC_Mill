@@ -1354,7 +1354,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="222" translatesAutoresizingMaskIntoConstraints="NO" id="w83-Jj-H3P">
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="22" translatesAutoresizingMaskIntoConstraints="NO" id="w83-Jj-H3P" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
                                 <rect key="frame" x="1028" y="368" width="26" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up_mini" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GS0-6e-QTa">
@@ -1362,10 +1362,10 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="report_move_Drill:" target="wFL-7s-Z8p" id="iRi-fg-C1b"/>
+                                    <action selector="report_move_Drill:" target="wFL-7s-Z8p" id="lEv-lq-TOG"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="444" translatesAutoresizingMaskIntoConstraints="NO" id="Bcx-Ll-Ia9">
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="24" translatesAutoresizingMaskIntoConstraints="NO" id="Bcx-Ll-Ia9" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
                                 <rect key="frame" x="1028" y="331" width="26" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_down_mini" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pIP-mp-Skx">
@@ -1507,6 +1507,24 @@
                                     <action selector="report_PCB_Daten:" target="wFL-7s-Z8p" id="xVt-RI-eZR"/>
                                 </connections>
                             </button>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gy8-1q-4ni">
+                                <rect key="frame" x="625" y="669" width="47" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="200" drawsBackground="YES" id="koo-H0-o7J">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ny9-dc-ATA">
+                                <rect key="frame" x="549" y="672" width="70" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Steps Z" id="pPf-3c-PO6">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1540,6 +1558,7 @@
                         <outlet property="stepperpositionFeld" destination="VAm-bK-VzE" id="EHi-fX-jEH"/>
                         <outlet property="stepperschritteFeld" destination="vdU-AX-dON" id="5LC-uK-0K0"/>
                         <outlet property="stepsFeld" destination="PLB-nE-fdB" id="AIg-mj-66E"/>
+                        <outlet property="stepsZFeld" destination="gy8-1q-4ni" id="8iX-I3-fW8"/>
                         <outlet property="timerintervallFeld" destination="crK-He-vSS" id="tEN-Nx-PHG"/>
                         <outlet property="zoomFeld" destination="FjA-sx-RCl" id="nKE-x6-duc"/>
                     </connections>
