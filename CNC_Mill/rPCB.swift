@@ -778,7 +778,7 @@ class rPCB: rViewController
    
    @IBAction func report_testPCB(_ sender: NSButton)
    {
-      let URLString = "file:///Users/ruediheimlicher/Desktop/CNC_SVG/BBB.svg"
+      let URLString = "file:///Users/ruediheimlicher/Desktop/CNC_SVG/BBBB.svg"
       
       let path = Bundle.main.path(forResource: "AAA.txt", ofType: nil)!
       
@@ -2327,19 +2327,19 @@ class rPCB: rViewController
       
       
       print("report_PCBDaten Schnittdatenarray count: \(Schnittdatenarray.count)")
-      /*
+      
        var i = 0
        for el in Schnittdatenarray
        {
        let iH = (i & 0xFF00) >> 8
        let iL = i & 0x00FF
        let index = (Int(el[26]) * 256) + Int(el[27])
-       //      print("\(iH) \(iL) index: \(index)")
+             print("\(iH) \(iL) index: \(index)")
        
        //       print("\(i) \(el)")
        i += 1
        }
-       */
+       
       /* 
        for el in SchritteArray
        {
@@ -3025,21 +3025,21 @@ class rPCB: rViewController
    }
    
    
-
+   // MARK: ***       write_CNC_Abschnitt  
    
    func write_CNC_Abschnitt()
    {
       print("+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
       stepperpositionFeld.integerValue = cncstepperposition
- 
+ /*
       for i in 0..<Schnittdatenarray.count
       {
          print("i \(i) \(Schnittdatenarray[i])")
       }
-      
+  */    
       if cncstepperposition == Schnittdatenarray.count
       {
-         print("write_CNC_Abschnitt cncstepperposition ist Schnittdatenarray.count")
+         print("write_CNC_Abschnitt cncstepperposition ist Schnittdatenarray.count, END")
          return
       }
       if cncstepperposition < Schnittdatenarray.count
@@ -3047,11 +3047,11 @@ class rPCB: rViewController
          if CNC_HALT_Knopf.state == .on
          {
             // alles OFF
-            print("write_CNC_Abschnitt HALT")
+            print("\t\t\twrite_CNC_Abschnitt HALT")
          }
          else
          {
-            
+            print("\t\t\twrite_CNC_Abschnitt NEXT")
             teensy.write_byteArray.removeAll()
             var tempSchnittdatenArray:[UInt8] = Schnittdatenarray[cncstepperposition]
             var schritteAX:UInt32 = UInt32(tempSchnittdatenArray[0]) | UInt32(tempSchnittdatenArray[1])<<8 | UInt32(tempSchnittdatenArray[2])<<16 | UInt32((tempSchnittdatenArray[3] & 0x7F))<<24;
@@ -3065,7 +3065,7 @@ class rPCB: rViewController
                teensy.write_byteArray.append(element)
             }
             
-            print("write_CNCcncstepperposition: \(cncstepperposition) write_byteArray: \(teensy.write_byteArray)")
+            print("write_CNCcncstepperposition: \(cncstepperposition) next write_byteArray: \(teensy.write_byteArray)")
             print("    write_byteArray24: \(teensy.write_byteArray[24])")
             
   //          if teensy.dev_present() > 0
@@ -3805,11 +3805,15 @@ class rPCB: rViewController
          
          switch taskcode
          {
+         // MARK: *** DEVICE_MILL    A1
          case 0xA1:
-            print("\n*********    PCB newDataAktion  A1 abschnitte: \(Schnittdatenarray.count)") // mehrere Schritte
+            print("*********    PCB newDataAktion  A1 abschnitte: \(Schnittdatenarray.count)") // mehrere Schritte
+            
             let ladepos =  Int(data[8])
-            print("PCB newDataAktion  ladepos: \(ladepos)")
             Plattefeld.setStepperposition(pos:ladepos)
+            let abschnittnum = Int((data[5] << 8) | data[6])
+            print("A1 \t ladeposition: \(ladeposition) abschnittnum: \(abschnittnum)")
+            //Plattefeld.setStepperposition(pos:ladepos)
             
             let state = steppercontKnopf.state
             
@@ -3823,8 +3827,10 @@ class rPCB: rViewController
             
          case 0xAD: // End Task
             print("PCB newDataAktion  AD TASK END ")
+            let ladepos =  Int(data[8])
             let abschnittnum = Int((data[5] << 8) | data[6])
-            print("newDataAktion  AD tabledatastatus 23: \(data[23])")
+            print("AD \t ladeposition: \(ladeposition) abschnittnum: \(abschnittnum)")
+            print("newDataAktion  AD tabledatastatus 23: \(data[23]) data (13): \(data[13])")
             let ZEILENSTATUS:UInt8 = 0
             if (data[23] < 0xFF) && ((data[23] & (1<<ZEILENSTATUS)) > 0 )
             {
@@ -3845,17 +3851,12 @@ class rPCB: rViewController
                // Drillstatus wird in abschnittnummer==endposition von Motor C incrementiert, wenn abgelaufen. Signalisiert Rueckweg bei report_Drill A0 > A1
             {
                print("newDataAktion  AD code 22 ist A0: \(data[22])")
-               break
+       //        break
             }
-            
-            
-            
-            
-            
-            let ladepos =  Int((data[7] << 8) | data[8] )
+             
             print("newDataAktion  AD ladepos: \(ladepos)")
             
-            Plattefeld.setStepperposition(pos:ladepos+1)
+            Plattefeld.setStepperposition(pos:ladepos)
             print("newDataAktion  AD abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
             
              
@@ -3869,9 +3870,9 @@ class rPCB: rViewController
          case 0xAF:
             
             print("newDataAktion  AF next ")
-            let abschnittnum = Int((data[5] << 8) | data[6])
-            let ladepos =  Int(data[8] )
-            print("newDataAktion  AF abschnittnum: \(abschnittnum) ladepos: \(ladepos)")
+    //        let abschnittnum = Int((data[5] << 8) | data[6])
+    //        let ladepos =  Int(data[8] )
+    //        print("newDataAktion  AF abschnittnum: \(abschnittnum) ladepos: \(ladepos)")
             
             break
             
@@ -3911,7 +3912,8 @@ class rPCB: rViewController
             
             
             
-         case 0xBB: // Motor C abgelaufen, abschnittnummer = endposition
+         case 0xBB: // NOT
+            // Motor C abgelaufen, abschnittnummer = endposition
             //print("newDataAktion  B8 Drill ")
             let stepperpos = stepperpositionFeld.integerValue 
             let datacount = Schnittdatenarray.count
@@ -3973,7 +3975,7 @@ class rPCB: rViewController
             
             
             
-         case 0xDC: 
+         case 0xDC:  // Pfeiltaste
             print("\n                      newDataAktion  BC Drill ")
             let stepperpos = stepperpositionFeld.integerValue 
             let datacount = Schnittdatenarray.count
@@ -4076,8 +4078,8 @@ class rPCB: rViewController
          case 0xEA:
             print("newDataAktion  home gemeldet")
             break
-         case 0xD0:
-            print("newDataAktion  letzter Abschnitt abschnittnummer: \(abschnittnummer)")
+         case 0xD0: // not
+            print("newDataAktion D0 letzter Abschnitt abschnittnummer: \(abschnittnummer)")
             Plattefeld.setStepperposition(pos:abschnittnummer)
             let ladepos =  Int(data[8] )
             notificationDic["taskcode"] = taskcode
@@ -4107,11 +4109,11 @@ class rPCB: rViewController
             
          default:
             print("newDataAktion default abschnittnummer: \(abschnittnummer)")
-            Plattefeld.setStepperposition(pos:abschnittnummer)
+            //Plattefeld.setStepperposition(pos:abschnittnummer)
             break
          }// switch taskcode
                   
-         print("newDataAktion writecncabschnitt taskcode: \(taskcode)")
+         
          
          // **************************************
          let state = steppercontKnopf.state
@@ -4125,9 +4127,11 @@ class rPCB: rViewController
          //state = .on
          if state == .on
          {
+            
   //          print("newDataAktion writecncabschnitt go cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
             if cncstepperposition < Schnittdatenarray.count
             { 
+               print("cncstepperposition < Schnittdatenarray.count: newDataAktion taskcode: \(taskcode)")
                write_CNC_Abschnitt()
             }
          }

@@ -142,10 +142,15 @@ class rPlatteView: NSView
            
             let lokalpunkt = NSMakePoint(CGFloat(zeile[0]),CGFloat(zeile[1]))
             //Swift.print("lokalpunkt: \(lokalpunkt) stepperposition: \(stepperposition)" )
-            
+            //Swift.print("wegindex: \(wegindex) lokalpunkt: \(lokalpunkt) stepperposition: \(stepperposition)" )
             // Marke setzen
-            let tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-4.1, lokalpunkt.y-4.1, 8.1, 8.1);
-            // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
+            var tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-3.1, lokalpunkt.y-3.1, 6.1, 6.1);
+
+            if (wegindex == 0)
+            {
+               tempMarkRect = NSMakeRect(lokalpunkt.x-5.1, lokalpunkt.y-5.1, 10.1, 10.1);
+            }
+             // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
             // Nummer setzen
             //          var tempNumRect:NSRect = NSMakeRect(lokalpunkt.x-12.1, lokalpunkt.y+4.1, 24.1, 8.1);
             var localkreis:NSBezierPath =  NSBezierPath()
@@ -176,9 +181,12 @@ class rPlatteView: NSView
                //              var fillcolor:NSColor = NSColor.blue
                //              fillcolor.setFill()
                markarray.append(localkreis)
- */
+                */
                kreisfillfarbe.set() // choose color
-               localkreis.fill()
+               if (wegindex > 0)
+               {
+                  localkreis.fill()
+               }
                kreislinienfarbe.set() // choose color
                localkreis.lineWidth = 1.0
                localkreis.stroke()
@@ -610,7 +618,8 @@ class rPlatteView: NSView
       //redfaktor = 200.0
       redfaktor = 1
       klickmarkindex = 0
-
+      wegindex=0;
+      stepperposition = 0;
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
