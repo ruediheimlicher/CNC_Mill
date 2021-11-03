@@ -3681,8 +3681,22 @@ class rPCB: rViewController
          }
          else 
          {
-            datatabletask(zeile:zielzeile)
+            var dataTableWeg = wegArrayMitWegXY(wegx:wegx, wegy:wegy)
+            dataTableWeg[32] = DEVICE_MILL
             
+            dataTableWeg[24] = 0xCA
+            dataTableWeg[25] = 3 // lage
+            dataTableWeg[26] = 0
+            dataTableWeg[27] = 0
+            dataTableWeg[36] = UInt8((zielzeile & 0xFF00)>>8)
+            dataTableWeg[37] = UInt8(zielzeile & 0x00FF)
+
+            print("datatabletask start CNC ")
+            write_CNC_Zeile(zeilenarray: dataTableWeg)   
+
+            //datatabletask(zeile:zielzeile)
+            
+            lasttabledataindex = zielzeile
             
          }
       }
