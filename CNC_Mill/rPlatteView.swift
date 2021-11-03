@@ -433,7 +433,7 @@ class rPlatteView: NSView
  
    func setfloatWeg(newWeg:[[Double]], scalefaktor:Int , transform:Double)-> Int
    {
-      //print("\t ******   PlatteView setfloatWeg newWeg: \(newWeg)")
+      print("\t ******   PlatteView setfloatWeg newWeg: \(newWeg)")
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
