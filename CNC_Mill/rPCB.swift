@@ -355,10 +355,10 @@ class rPCB: rViewController
    {
       //     print("tableView  tableViewSelectionDidChange notification: \(notification)")
       let selectedRow = (notification.object as! NSTableView).selectedRow
-            print("tableView  tableViewSelectionDidChange selectedRow: \(selectedRow)")
+      print("tableView  tableViewSelectionDidChange selectedRow: \(selectedRow)")
       
       
-      datatabletask(zeile:selectedRow)
+    //  datatabletask(zeile:selectedRow)
       
       let nc = NotificationCenter.default
       var notificationDic = [String:Any]()
@@ -1492,6 +1492,7 @@ class rPCB: rViewController
          mill_floatarray.append(mill_floatarray[0])
          circlefloatarray.append(circlefloatarray[0])
          circlearray.append(circlearray[0])
+         
          dataTable.reloadData()    
          
          
@@ -1575,6 +1576,8 @@ class rPCB: rViewController
          //     report_PCB_Daten(DataSendTaste)
          stepperschritteFeld.integerValue = Schnittdatenarray.count
          Zeilen_Stepper.maxValue = Double(Schnittdatenarray.count - 1)
+         Zeilen_Stepper.intValue = 1
+         stepperpositionFeld.intValue = 1
 //         homexFeld.integerValue = homeX
  //        homeyFeld.integerValue = homeY
          let formater = NumberFormatter()
@@ -1605,6 +1608,9 @@ class rPCB: rViewController
          /* error handling here */
          return
       }
+      
+       
+      lasttabledataindex = 0
       print("report_readSVG Schnittdatenarray")
       for el in Schnittdatenarray
       {
@@ -3462,34 +3468,55 @@ class rPCB: rViewController
       {
          return
       }
-      let datazeile = circlearray[zeile]
-      print("datatabletask zeile: \(zeile) datazeile: \(datazeile) lasttabledataindex: \(lasttabledataindex)")
+ //     let datazeile = circlearray[zeile]
+      let datazeile = circlefloatarray[zeile]
+     // print("datatabletask zeile: \(zeile) datazeile: \(datazeile) datafloatzeile: \(datafloatzeile)")
+ 
+      let lastdatazeile = circlearray[lasttabledataindex]
+      let lastdatafloatzeile = circlefloatarray[lasttabledataindex]
+      print("datatabletask lastzeile: \(lasttabledataindex) lastdatazeile: \(lastdatazeile) lastdatafloatzeile: \(lastdatafloatzeile)")
+ 
+      
+//      print("datatabletask zeile: \(zeile) datazeile: \(datazeile) lasttabledataindex: \(lasttabledataindex)")
       if zeile == lasttabledataindex
       {
          print("zeile = lasttabledataindex")
          return
       }
-      let lastX = circlearray[lasttabledataindex][1]
-      let lastY = circlearray[lasttabledataindex][2]
-      let aktX = datazeile[1]
+//      let lastX = circlearray[lasttabledataindex][1]
+//      let lastY = circlearray[lasttabledataindex][2]
+
+      let lastX = circlefloatarray[lasttabledataindex][1]
+      let lastY = circlefloatarray[lasttabledataindex][2]
+
+
+      let aktX = (datazeile[1])
       let aktY = datazeile[2]
       var maxsteps:Double = 0
       var zeilendic:[String:Any] = [:]
       var position:UInt8 = 0
       
       //  print("dataTableAktion zoomfaktor: \(zoomfaktor)")
-      let diffX:Double = (Double(aktX - lastX)) * zoomfaktor
-      let diffY:Double = (Double(aktY - lastY)) * zoomfaktor
+//      let diffX:Double = (Double(aktX - lastX)) * zoomfaktor
+ //     let diffY:Double = (Double(aktY - lastY)) * zoomfaktor
       
       
-      let distanzX = Double(aktX - lastX)  * zoomfaktor  
-      let distanzY = Double(aktY - lastY)  * zoomfaktor  
+ //     let distanzX = Double(aktX - lastX)  * zoomfaktor  
+ //     let distanzY = Double(aktY - lastY)  * zoomfaktor  
       
-      let dx = (Double(aktX - lastX))/propfaktor
-      let dy = (Double(aktY - lastY))/propfaktor
+    //  let dx = (Double(aktX - lastX))/propfaktor
+    //  let dy = (Double(aktY - lastY))/propfaktor
+
+      let dx = (Double(aktX - lastX))
+      let dy = (Double(aktY - lastY))
+
       
       tabledatastatus |= 1<<0
       tabledatastatus = 126
+      
+      
+      print("datatabletask zeile: \(zeile) wegx: \(dx) wegy: \(dy)")
+
       var dataTableWeg = wegArrayMitWegXY(wegx:dx, wegy:dy)
       dataTableWeg[32] = DEVICE_MILL
       
@@ -3632,7 +3659,20 @@ class rPCB: rViewController
       
       let zielzeile = stepperpositionFeld.integerValue
       
-      print("zielzeile: \(zielzeile)  lasttabledataindex: \(lasttabledataindex)") 
+      print("zielzeile: \(zielzeile)  lasttabledataindex: \(lasttabledataindex)")
+      
+      print("zielzeile in circlefloatarray: \(circlefloatarray[zielzeile])")
+      
+      print("quellzeile in circlefloatarray: \(circlefloatarray[lasttabledataindex])")
+  
+      print("zielzeile in CNC_DatendicArray: \(CNC_DatendicArray[zielzeile])")
+      print("quellzeile in CNC_DatendicArray: \(CNC_DatendicArray[lasttabledataindex])")
+ 
+      
+      let wegx = circlefloatarray[zielzeile][1] - circlefloatarray[lasttabledataindex][1]
+      let wegy = circlefloatarray[zielzeile][2] - circlefloatarray[lasttabledataindex][2]
+
+      
       if circlearray.count > zielzeile
       {
          if zielzeile == lasttabledataindex
@@ -4169,7 +4209,7 @@ class rPCB: rViewController
          case 0xCB: 
             
             let x = 0
-            print("newDataAktion  CB tabledataaktion")
+            print("newDataAktion  CB Antwort tabledataaktion")
             
             break;
             
