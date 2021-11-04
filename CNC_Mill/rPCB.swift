@@ -4328,31 +4328,35 @@ class rPCB: rViewController
       {
       case .off:
          print("horizontal_checkbox: off")
-         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: false)
+         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: true)
       case .on:
          print("horizontal_checkbox: on")
-         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: true)
+         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: false)
          
       default:
          break
       }
+      // Anpassen an microstep
+      let microstepindex = schritteweitepop.indexOfSelectedItem
+      let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
+
       var tempcirclearray = [[Double]]()
       var zeilendicindex:Double = 0
       for zeilendic in sortedarray
       {
-         let cx:Double = (zeilendic["cx"]!) * 2
-         let cy:Double = (zeilendic["cy"]!) * 2
-         let cz:Double = (zeilendic["cz"]!) * 2
+         let cx:Double = (zeilendic["cx"]!) * (microstep ?? 1)
+         let cy:Double = (zeilendic["cy"]!) * (microstep ?? 1)
+         let cz:Double = (zeilendic["cz"]!) * (microstep ?? 1)
          
          print("\(zeilendicindex) \(cx) \(cy)  \(cz)")
          let zeilendicarray = [zeilendicindex,cx,cy,cz] 
          tempcirclearray.append(zeilendicarray)
          zeilendicindex += 1
       }
-      
+      tempcirclearray = flipSVG(svgarray: tempcirclearray)
       let l = Plattefeld.setfloatWeg(newWeg: tempcirclearray, scalefaktor: 5 , transform:  transformfaktor)
       
-      self.fahrtweg.integerValue = 0
+      self.fahrtweg.integerValue = l
      /*
       var sortedarray = [[String:Int]]()
       switch sender.state
