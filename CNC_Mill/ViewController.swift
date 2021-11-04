@@ -420,6 +420,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    @IBOutlet weak var pop: NSPopUpButton!
    
     @IBOutlet weak var schritteweitepop: NSPopUpButton!
+ //  @IBOutlet weak var microsteppop: NSPopUpButton!
    
    @IBOutlet weak var USB_OK_Feld: NSImageView!
    
@@ -547,7 +548,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
       NotificationCenter.default.addObserver(self, selector:#selector(mausstatusAktion(_:)),name:NSNotification.Name(rawValue: "maus_status"),object:nil)
       
       // Do any additional setup after loading the view.
-   
+ 
      // USB_OK_Feld.image = notokimage
    
    }

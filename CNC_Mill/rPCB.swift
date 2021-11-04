@@ -329,7 +329,7 @@ class rPCB: rViewController
       var schritteweitearray:[String] = ["1","2","4","8","16"]
       schritteweitepop.removeAllItems()
       schritteweitepop.addItems(withTitles: schritteweitearray)
-      schritteweitepop.selectItem(withTitle: schritteweitearray[2])
+      schritteweitepop.selectItem(withTitle: schritteweitearray[1])
       
    }
    func updatePfeilschrittweite(sw:Int)
@@ -1213,7 +1213,7 @@ class rPCB: rViewController
           var ii = 0
           for el in circlearray
           {
-          print("\(ii)\t\(el[1])\t \(el[2])\t \(el[3])")
+          print("\(ii)\t\(el[1])\t \(el[2])\t ")
           ii += 1
           }
           
@@ -1446,12 +1446,16 @@ class rPCB: rViewController
           }
          z = 0
          
+         let microstepindex = schritteweitepop.indexOfSelectedItem
+         let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
+         
          for z in 0..<circlefloatarray.count
          {
-            var el1 = 2 * circlefloatarray[z][1]
+            let el1 = circlefloatarray[z][1] * (microstep ?? 1)
             circlefloatarray[z][1] = el1
-            var el2 = 2 * circlefloatarray[z][2]
+            let el2 = circlefloatarray[z][2] * (microstep ?? 1) 
             circlefloatarray[z][2] = el2
+         
          }
 
          
