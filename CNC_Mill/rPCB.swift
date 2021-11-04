@@ -984,11 +984,14 @@ class rPCB: rViewController
             // print("cx: \(cx)")
             let cy = formater.string(from: NSNumber(value: Double(zeilendaten[2])/INTEGERFAKTOR))
             //print("cy: \(cy)")
+            let cz = formater.string(from: NSNumber(value: Double(zeilendaten[3])/INTEGERFAKTOR))
+            //print("cy: \(cy)")
             
             var zeilendic = [String:String]()
             zeilendic["ind"] = String(zeilendaten[0])
             zeilendic["X"] = cx
             zeilendic["Y"] = cy
+            zeilendic["Z"] = cz
             /*
              var zeilendic = [String:Double]()
              zeilendic["ind"] = Double(zeilendaten[0])
@@ -1690,7 +1693,7 @@ class rPCB: rViewController
        
       //     Plattefeld.setStepperposition(pos: 0)
       let l = Plattefeld.setfloatWeg(newWeg: floatarray, scalefaktor: scale, transform:  transform)
-      fahrtweg.integerValue = l
+      fahrtweg.integerValue = 0
       //      let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: scale, transform:  transform)
       //      fahrtweg.integerValue = l
       
@@ -1709,11 +1712,14 @@ class rPCB: rViewController
          //print("cx: \(cx)")
          let cy = formater.string(from: NSNumber(value: Double(zeilendaten[2])))// /INTEGERFAKTOR))
          //print("cy: \(cy)")
+         let cz = formater.string(from: NSNumber(value: Double(zeilendaten[2])))// /INTEGERFAKTOR))
+         //print("cy: \(cy)")
          
          var zeilendic = [String:String]()
          zeilendic["ind"] = String(Int(zeilendaten[0]))
          zeilendic["X"] = cx
          zeilendic["Y"] = cy
+         zeilendic["Z"] = cz
          //cx: Optional("3.985") cy: Optional("26.298")
          //      print("zeilendic: \(zeilendic)")
          CNC_DatendicArray.append(zeilendic)
@@ -3369,6 +3375,7 @@ class rPCB: rViewController
          }
          else
          {
+            print("mouseup")
             mausstatus &= ~(1<<1)
          }
          pfeilwegarray[40] = mausstatus
@@ -3404,10 +3411,10 @@ class rPCB: rViewController
             
             var start_read_USB_erfolg = teensy.start_read_USB(true)
          }
-         // if ((mausstatus & (1<<1)) > 0 )
-         // {
-         write_CNC_Zeile(zeilenarray: pfeilwegarray)   
-         // }
+        // if (mausstatus & (1<<1) > 0 )
+        // {
+            write_CNC_Zeile(zeilenarray: pfeilwegarray)   
+        // }
          //         let senderfolg = teensy.send_USB()
       }
    }

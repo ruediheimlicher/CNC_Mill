@@ -154,14 +154,15 @@ class  rPfeiltaste  : NSButton
          break
       }
       print("rPfeiltaste mouseup end")
-      var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag, "mousedown":0]
+      let notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag, "mousedown":0]
       
       let nc = NotificationCenter.default
       
       nc.post(name:Notification.Name(rawValue:"maus_status"),
               object: nil,
               userInfo: notificationDic)  
- 
+      pfeiltimer?.invalidate()
+      
    }
    
    @objc   func pfeiltastenstimeraktion()
