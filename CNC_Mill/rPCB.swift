@@ -1169,7 +1169,9 @@ class rPCB: rViewController
                         }
                         //print("partB: \(partB) partfloat: \(partfloat) partint: \(partint)")
                         circleelementarray.append(partint)
+                        //circleelementarray.append(0) // z-component
                      }
+                     
                      zeilenindex += 1
                   }
                } // circle < 5
@@ -1185,13 +1187,14 @@ class rPCB: rViewController
                      circleelementdic["index"] = i
                      circleelementdic["cx"] = circleelementarray[1]
                      circleelementdic["cy"] = circleelementarray[2]
-                     
+                     circleelementdic["cz"] = 0
+                  
                      circledicarray.append(circleelementdic) // [[String:Int]]
                      
                      circlefloatelementdic["index"] = Double(i)
                      circlefloatelementdic["cx"] = circlefloatelementarray[1]
                      circlefloatelementdic["cy"] = circlefloatelementarray[2]
-                     
+                     circlefloatelementdic["cz"] = 0
                      circlefloatdicarray.append(circlefloatelementdic)
                      circlefloatarray.append(circlefloatelementarray)
                   }
@@ -1210,7 +1213,7 @@ class rPCB: rViewController
           var ii = 0
           for el in circlearray
           {
-          print("\(ii)\t\(el[1])\t \(el[2])")
+          print("\(ii)\t\(el[1])\t \(el[2])\t \(el[3])")
           ii += 1
           }
           
@@ -1830,6 +1833,7 @@ class rPCB: rViewController
       return PCB_Datenarray
    }
    
+   // NOT
    @IBAction func report_PCB_Daten(_ sender: NSButton)
    {
       // s SteuerdatenVonDic in CNC.m
@@ -4315,6 +4319,37 @@ class rPCB: rViewController
    @IBAction  func report_horizontalCheckbox(_ sender: NSButton)
    {
       print("report_horizontalCheckbox IntVal: \(sender.intValue)")
+      var sortedarray = [[String:Double]]()
+      switch sender.state
+      {
+      case .off:
+         print("horizontal_checkbox: off")
+         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: false)
+      case .on:
+         print("horizontal_checkbox: on")
+         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: true)
+         
+      default:
+         break
+      }
+      var tempcirclearray = [[Double]]()
+      var zeilendicindex:Double = 0
+      for zeilendic in sortedarray
+      {
+         let cx:Double = (zeilendic["cx"]!) * 2
+         let cy:Double = (zeilendic["cy"]!) * 2
+         let cz:Double = (zeilendic["cz"]!) * 2
+         
+         print("\(zeilendicindex) \(cx) \(cy)  \(cz)")
+         let zeilendicarray = [zeilendicindex,cx,cy,cz] 
+         tempcirclearray.append(zeilendicarray)
+         zeilendicindex += 1
+      }
+      
+      let l = Plattefeld.setfloatWeg(newWeg: tempcirclearray, scalefaktor: 5 , transform:  transformfaktor)
+      
+      self.fahrtweg.integerValue = 0
+     /*
       var sortedarray = [[String:Int]]()
       switch sender.state
       {
@@ -4328,21 +4363,24 @@ class rPCB: rViewController
       default:
          break
       }
-      var circlearray = [[Int]]()
+      var tempcirclearray = [[Int]]()
       var zeilendicindex:Int = 0
       for zeilendic in sortedarray
       {
          let cx:Int = (zeilendic["cx"]!)
          let cy:Int = (zeilendic["cy"]!)
+         let cz:Int = (zeilendic["cz"]!)
          
-         //print("\(zeilendicindex) \(cx) \(cy)")
-         let zeilendicarray = [zeilendicindex,cx,cy]
-         circlearray.append(zeilendicarray)
+         print("\(zeilendicindex) \(cx) \(cy)  \(cz)")
+         let zeilendicarray = [zeilendicindex,cx,cy,cz]
+         tempcirclearray.append(zeilendicarray)
          zeilendicindex += 1
       }
       
-      let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 400 , transform:  transformfaktor)
+      let l = Plattefeld.setWeg(newWeg: tempcirclearray, scalefaktor: 400 , transform:  transformfaktor)
+ 
       self.fahrtweg.integerValue = l
+       */   
    }
    
    @IBAction  func report_linearCheckbox(_ sender: NSButton)
