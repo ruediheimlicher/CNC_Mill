@@ -1228,7 +1228,7 @@ class rPCB: rViewController
             
             
          }
-        
+      /*  
           print("report_readSVG circlearray count: \(circlearray.count)")
           var ii = 0
           for el in circlearray
@@ -1236,7 +1236,8 @@ class rPCB: rViewController
           print("\(ii)\t\(el[1])\t \(el[2])\t ")
           ii += 1
           }
-          
+ */
+          /*
          print("report_readSVG circledicarray")
          var iii = 0
          for el in circledicarray
@@ -1244,7 +1245,8 @@ class rPCB: rViewController
          print("\(iii) \(el)")
          iii += 1
          }
-
+*/
+         /*
           print("report_readSVG circlefloatarray A count: \(circlefloatarray.count)")
           iii = 0
           for el in circlefloatarray
@@ -1252,7 +1254,8 @@ class rPCB: rViewController
           print("\(iii)\t\(el[1])\t \(el[2])")
           iii += 1
           }
- 
+ */
+         /*
          print("report_readSVG circlefloatdicdicarray count: \(circlefloatdicarray.count)")
         iii = 0
          for el in circlefloatdicarray
@@ -1260,7 +1263,7 @@ class rPCB: rViewController
          print("\(iii)\t\(el)")
          iii += 1
          }
-             
+ */            
            
          
          
@@ -1274,9 +1277,7 @@ class rPCB: rViewController
          // Doppelte Punkte suchen
          var doppelarray = [[String:Int]]()
          
-         
          print("vor sort circlefloatdicarray count: \(circlefloatdicarray.count)")
-         
          
          switch horizontal_checkbox.state
          {
@@ -1328,9 +1329,10 @@ class rPCB: rViewController
          {
             let cx:Int = (zeilendic["cx"]!) 
             let cy:Int = (zeilendic["cy"]!) 
+            let cz:Int = (zeilendic["cz"]!) 
             
             //print("\(zeilendicindex) \(cx) \(cy)")
-            let zeilendicarray = [zeilendicindex,cx,cy]
+            let zeilendicarray = [zeilendicindex,cx,cy,cz]
             circlearray.append(zeilendicarray)
             zeilendicindex += 1
          }
@@ -1391,7 +1393,7 @@ class rPCB: rViewController
          {
             let cx:Double = (zeilendic["cx"]!) 
             let cy:Double = (zeilendic["cy"]!) 
-            let cz:Double = 0
+            let cz:Double = (zeilendic["cz"]!)
             // print("\(zeilendicindex) \(cx) \(cy)")
             let zeilendicarray:[Double] = [Double(zeilendicindex),cx,cy,cz]
             circlefloatarray.append(zeilendicarray)
@@ -1402,7 +1404,7 @@ class rPCB: rViewController
           print("report_readSVG circlefloatarray B vor.  count: \(circlefloatarray.count)")
           for el in circlefloatarray
           {
-          print("\(el[0] )\t \(el[1] ) \(el[2])")
+          print("\(el[0] )\t \(el[1] ) \(el[2]) \(el[3])")
           }
           
          
@@ -1511,7 +1513,7 @@ class rPCB: rViewController
             break
          }
          circlefloatarray_raw.removeAll()
-         circlefloatarray_raw = circlefloatarray // Eingabe sichern
+         circlefloatarray_raw = circlefloatarray // Eingabe sichern, uhne schliessen, ohne NN
          
          print("report_readSVG circlefloatarray nach new sort. count: \(circlefloatarray.count)")         
           for el in circlefloatarray
@@ -1519,22 +1521,13 @@ class rPCB: rViewController
             print("\(el[0] )\t \(el[1] )\t \(el[2])")
           }
 
-         
-/*
-         switch horizontal_checkbox.state
-         {
-         case .off:
-            print("horizontal_checkbox: off")
-            sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:1, order:false)
-         //sortedfloatarray = 
-         case .on:
-            print("horizontal_checkbox: on")
-             sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:2, order:false)
-         default:
-            break
-         }
+         print("report_readSVG circlefloatarray_raw. count: \(circlefloatarray_raw.count)")         
+          for el in circlefloatarray_raw
+          {
+            print("\(el[0] )\t \(el[1] )\t \(el[2])")
+          }
 
-     */    
+         
          
          // nearest neighbour stuff
       //   tsp_nn.setkoordinaten(koord: circlefloatarray)
@@ -1560,25 +1553,6 @@ class rPCB: rViewController
           //  circlefloatarray.append(circlefloatarray[0])
             //circlearray.append(circlearray[0])
          }
-         
-         //circlefloatdicarray.removeAll()
-         /*
-         for z in 0..<mill_floatarray.count
-         {
-            
-            circlefloatarray[z][0] = Double(z)
-            let el1 = circlefloatarray[z][1] * (microstep ?? 1)
-            circlefloatarray[z][1] = el1
-            let el2 = circlefloatarray[z][2] * (microstep ?? 1) 
-            circlefloatarray[z][2] = el2         
-            let el3 = circlefloatarray[z][3] * (microstep ?? 1) 
-            circlefloatarray[z][3] = el3         
-            //var tempdic:[String:Double][X]
-         }         
- 
-         */
-         
-         dataTable.reloadData()    
          
          
          /*
@@ -1615,8 +1589,9 @@ class rPCB: rViewController
          
 /*         
          let zeile:IndexSet = [0]
-         dataTable.selectRowIndexes(zeile, byExtendingSelection: false)
          dataTable.reloadData()
+         dataTable.selectRowIndexes(zeile, byExtendingSelection: false)
+         
 */
          //         lasttabledataindex = 0 // Zeile 0 in circlearray
          
@@ -4415,7 +4390,7 @@ class rPCB: rViewController
    @IBAction  func report_horizontalCheckbox(_ sender: NSButton)
    {
       
-      print("report_horizontalCheckbox IntVal: \(sender.intValue)")
+      //print("report_horizontalCheckbox IntVal: \(sender.intValue)")
       var sortedarray = [[String:Double]]()
       var sortedfloatarray = [[Double]]()
       /*
@@ -4426,7 +4401,7 @@ class rPCB: rViewController
       print("\(iii) \(el)")
       iii += 1
       }
- */
+       */
       /*
       print("report_horizontal_checkbo vor sort circlefloatarray_raw")
       var k = 0
@@ -4450,6 +4425,7 @@ class rPCB: rViewController
       default:
          break
       }
+      
 /*      
       print("report_horizontal_checkbox nach sort sortedfloatarray")
       var iiii = 0
