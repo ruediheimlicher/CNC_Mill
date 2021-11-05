@@ -61,6 +61,7 @@ class rPCB: rViewController
    @IBOutlet weak var ClearPCBTaste: NSButton!
    @IBOutlet weak var linear_checkbox: NSButton!
    @IBOutlet weak var horizontal_checkbox:NSButton!
+   @IBOutlet weak var figurschliessen_checkbox:NSButton!
    
    @IBOutlet weak var zoomFeld: NSTextField!
    
@@ -710,6 +711,25 @@ class rPCB: rViewController
       return returnDicArray
    }
    
+   func sortArrayofArrays(origArray:[[Double]], index:Int, order:Bool) -> [[Double]]
+   {
+      if order == true
+      {
+      let sortedarray:[[Double]] = origArray.sorted(by: {
+                                                   ($0[index]) > ($1[index])})
+         return sortedarray
+      }
+      else
+      {
+         let sortedarray:[[Double]] = origArray.sorted(by: {
+                                                      ($0[index]) < ($1[index])})
+            return sortedarray
+         
+      }
+         
+  //    let sortedarray:[[Double]] = origArray.sort { ($0.1 as? Double ?? 1.0) < ($1.1 as? Double ?? 1.0) }
+   //return sortedarray
+   }
    
    func sortDicArray(origDicArray:[[String:Int]], key0:String, key1: String, order:Bool) -> [[String:Int]]
    {
@@ -1048,6 +1068,7 @@ class rPCB: rViewController
       }
       return fliparray
    }
+   // MARK: ***      ***  report_readSVG
    
    @IBAction func report_readSVG(_ sender: NSButton)
    {
@@ -1105,7 +1126,7 @@ class rPCB: rViewController
                {
                   //print("SVGdata width: \(zeilenarray[1]) string: \(zeilenarray[1] as NSString)")
                   widthfloat = ((zeilenarray[1].replacingOccurrences(of: "\"", with: ""))as NSString).doubleValue
-                  print("SVGdata widthfloat: \(widthfloat)")
+               //   print("SVGdata widthfloat: \(widthfloat)")
                }
             }  
             if trimmzeile.contains("height") && (height_ok == 0)
@@ -1117,7 +1138,7 @@ class rPCB: rViewController
                {
                   //print("SVGdata width: \(zeilenarray[1]) string: \(zeilenarray[1] as NSString)")
                   heightfloat = ((zeilenarray[1].replacingOccurrences(of: "\"", with: ""))as NSString).doubleValue
-                  print("SVGdata heightfloat: \(heightfloat)")
+                //  print("SVGdata heightfloat: \(heightfloat)")
                }
             }  
             
@@ -1135,8 +1156,7 @@ class rPCB: rViewController
             if circle > 0
             {
                if circle < 5
-               {
-                  
+               {            
                   //print("\t i: \(i) \tdata: \(trimmzeile)")
                   let zeilenarray = trimmzeile.split(separator: "=")
                   var zeilenindex = 0
@@ -1169,7 +1189,6 @@ class rPCB: rViewController
                         }
                         //print("partB: \(partB) partfloat: \(partfloat) partint: \(partint)")
                         circleelementarray.append(partint)
-                        //circleelementarray.append(0) // z-component
                      }
                      
                      zeilenindex += 1
@@ -1178,8 +1197,7 @@ class rPCB: rViewController
                
                if circle == 1
                {
-                  
-                  //print("i: \(i) circleelementarray: \(circleelementarray)")
+               //print("i: \(i) circleelementarray: \(circleelementarray)")
                   if circleelementarray.count > 0
                   {
                      circlearray.append(circleelementarray)
@@ -1208,7 +1226,7 @@ class rPCB: rViewController
             
             
          }
-         print("report_readSVG end:")
+        
           print("report_readSVG circlearray count: \(circlearray.count)")
           var ii = 0
           for el in circlearray
@@ -1217,48 +1235,45 @@ class rPCB: rViewController
           ii += 1
           }
           
+         print("report_readSVG circledicarray")
+         var iii = 0
+         for el in circledicarray
+         {
+         print("\(iii) \(el)")
+         iii += 1
+         }
+
           print("report_readSVG circlefloatarray A count: \(circlefloatarray.count)")
-          var  iii = 0
+          iii = 0
           for el in circlefloatarray
           {
           print("\(iii)\t\(el[1])\t \(el[2])")
           iii += 1
           }
  
-         print("report_readSVG circlefloatdicdicarray  count: \(circlefloatdicarray.count)")
+         print("report_readSVG circlefloatdicdicarray count: \(circlefloatdicarray.count)")
         iii = 0
          for el in circlefloatdicarray
          {
          print("\(iii)\t\(el)")
          iii += 1
          }
-
-         
-         /*     
-          print("report_readSVG circledicarray")
-          var iii = 0
-          for el in circledicarray
-          {
-          print("\(iii) \(el)")
-          iii += 1
-          }
-          */
+             
+           
          
          
          // https://useyourloaf.com/blog/sorting-an-array-of-dictionaries/
-         var sortedarray = [[String:Int]]()
-         var sortedfloatarray = [[String:Double]]()
+         var sortedarray = [[String:Int]]()  // mit circledicarray
+         var sortedfloatarray = [[String:Double]]() // mit irclefloatdicarray
          
-         var sortedarray_opt = [[String:Int]]()
+       //  var sortedarray_opt = [[String:Int]]()
          //    sortedarray_opt = sortDicArray_opt(origDicArray: circledicarray,key0:"cx", key1:"cy", order: false)
          
          // Doppelte Punkte suchen
-         
          var doppelarray = [[String:Int]]()
          
          
          print("vor sort circlefloatdicarray count: \(circlefloatdicarray.count)")
-         print("nach sort sortedfloatarray count: \(sortedfloatarray.count)")
          switch horizontal_checkbox.state
          {
          case .off:
@@ -1279,16 +1294,18 @@ class rPCB: rViewController
          //print(circledicarray)
          print("nach sort circlefloatdicarray count: \(circlefloatdicarray.count)")
          print("nach sort sortedfloatarray count: \(sortedfloatarray.count)")
-         /*
+         
+         
+        
           print("report_readSVG sortedarray")
-          var iii = 0
-          iii = 0
+          var iiii = 0
+          iiii = 0
           for el in sortedarray
           {
-          print("\(iii) \(el)")
-          iii += 1
+          print("\(iiii) \(el)")
+          iiii += 1
           }
-          */
+         
          
           print("report_readSVG sortedfloatarray")
           var aa = 0
@@ -1299,13 +1316,11 @@ class rPCB: rViewController
           }
           
          
-         
-         //let sortedarray = sorted(circledicarray, key=lambda k: k['cx'])
          //print("PCB sortedarray")
          //print(sortedarray)
          circlearray.removeAll()
          var zeilendicindex:Int = 0
-         for zeilendic in sortedarray
+         for zeilendic in sortedarray // aus circledicarray
          {
             let cx:Int = (zeilendic["cx"]!) 
             let cy:Int = (zeilendic["cy"]!) 
@@ -1339,13 +1354,13 @@ class rPCB: rViewController
                while doppelindex + n < circlearray.count // naechste Zeilen absuchen
                {
                   next = circlearray[doppelindex+n]
-                  var diffX:Double = (Double((next[1] - akt[1]))) 
+                  let diffX:Double = (Double((next[1] - akt[1]))) 
                   //print(" zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
                   
                   if fabs(diffX) < maxdiff
                   {
                      //print("diffX < maxdiff  zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
-                     var diffY:Double = (Double((next[2] - akt[2])))
+                     let diffY:Double = (Double((next[2] - akt[2])))
                      
                      if fabs(diffY) < maxdiff
                      {
@@ -1372,9 +1387,9 @@ class rPCB: rViewController
          {
             let cx:Double = (zeilendic["cx"]!) 
             let cy:Double = (zeilendic["cy"]!) 
-            
+            let cz:Double = 0
             // print("\(zeilendicindex) \(cx) \(cy)")
-            let zeilendicarray:[Double] = [Double(zeilendicindex),cx,cy]
+            let zeilendicarray:[Double] = [Double(zeilendicindex),cx,cy,cz]
             circlefloatarray.append(zeilendicarray)
             zeilendicindex += 1
          }
@@ -1451,57 +1466,60 @@ class rPCB: rViewController
          
          for z in 0..<circlefloatarray.count
          {
+            circlefloatarray[z][0] = Double(z)
             let el1 = circlefloatarray[z][1] * (microstep ?? 1)
             circlefloatarray[z][1] = el1
             let el2 = circlefloatarray[z][2] * (microstep ?? 1) 
-            circlefloatarray[z][2] = el2
+            circlefloatarray[z][2] = el2         
+            let el3 = circlefloatarray[z][3] * (microstep ?? 1) 
+            circlefloatarray[z][3] = el3         
          
-         }
-
-         
-         circlefloatarray = flipSVG(svgarray: circlefloatarray)
-         
-         print("report_readSVG circlefloatarray nach flip. count: \(circlefloatarray.count)")
-
-         
+         }         
+         circlefloatarray = flipSVG(svgarray: circlefloatarray)         
+         print("report_readSVG circlefloatarray nach flip. count: \(circlefloatarray.count)")         
           for el in circlefloatarray
           {
-          
-          print("\(el[0] )\t \(el[1] )\t \(el[2])")
+            print("\(el[0] )\t \(el[1] )\t \(el[2])")
           }
-          
-         
-         tsp_nn.setkoordinaten(koord: circlefloatarray)
-         tsp_nn.firstrun()
-         tsp_nn.nearestneighbour()
-         let nn_array = tsp_nn.weg
-         //print("nn_array: \(nn_array)")
-         
-         //      var nn_floatarray = [[Double]]() // array fuer nn-punkte
-         
-         /*
-          var mill_floatarray = [[Double]]() //
-          
-          for zeilenindex in stride(from: 0, to: circlefloatarray.count, by: 1)
+         let newsortedarray:[[Double]] = circlefloatarray.sorted(by: {
+                                                      ($0[2]) < ($1[2])})
+         print("report_readSVG newsortedarray nach new sort. count: \(newsortedarray.count)")         
+          for el in newsortedarray
           {
-          //print("zeilenindex: \(zeilenindex) data: \(circlefloatarray[zeilenindex])")
-          if  NN_OK_Check.state == NSControl.StateValue.on // nearest neighbour
-          {
-          let millindex = nn_array[zeilenindex]
-          mill_floatarray.append(circlefloatarray[millindex])
+            print("\(el[0] )\t \(el[1] )\t \(el[2])")
           }
-          else
-          {
-          mill_floatarray.append(circlefloatarray[zeilenindex])
-          }
-          }
-          */
+
+         // nearest neighbour stuff
+      //   tsp_nn.setkoordinaten(koord: circlefloatarray)
+      //   tsp_nn.firstrun()
+      //   tsp_nn.nearestneighbour()
+      //   let nn_array = tsp_nn.weg
+         //print("nn_array: \(nn_array)")   
+         
+        // Figur schliessen
+         
+         // Ordnen nach x,y oder nn
          var mill_floatarray = mill_floatArray(circarray: circlefloatarray) //
          
          // Figur schliessen
-         mill_floatarray.append(mill_floatarray[0])
-         circlefloatarray.append(circlefloatarray[0])
-         circlearray.append(circlearray[0])
+         if figurschliessen_checkbox.state == .on
+         {
+            mill_floatarray.append(mill_floatarray[0])
+            //circlefloatarray.append(circlefloatarray[0])
+            //circlearray.append(circlearray[0])
+         }
+         for z in 0..<mill_floatarray.count
+         {
+            circlefloatarray[z][0] = Double(z)
+            let el1 = circlefloatarray[z][1] * (microstep ?? 1)
+            circlefloatarray[z][1] = el1
+            let el2 = circlefloatarray[z][2] * (microstep ?? 1) 
+            circlefloatarray[z][2] = el2         
+            let el3 = circlefloatarray[z][3] * (microstep ?? 1) 
+            circlefloatarray[z][3] = el3         
+         
+         }         
+ 
          
          dataTable.reloadData()    
          
@@ -1553,11 +1571,12 @@ class rPCB: rViewController
           //     iii += 1
           }
           */
+         // 
+         // Schnittdaten erzeugen
+         Schnittdatenarray.removeAll() // Array leeren
          var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
          
-         
-         
-         /*
+          /*
           print("mill_floatarray C")
           for el in mill_floatarray
           {
@@ -1583,6 +1602,8 @@ class rPCB: rViewController
           */
          
          Schnittdatenarray.append(contentsOf:PCBDaten)
+         
+         
          //     report_PCB_Daten(DataSendTaste)
          stepperschritteFeld.integerValue = Schnittdatenarray.count
          Zeilen_Stepper.maxValue = Double(Schnittdatenarray.count - 1)
@@ -1631,6 +1652,7 @@ class rPCB: rViewController
    
    func mill_floatArray(circarray:[[Double]])->[[Double]]
    {
+      
       tsp_nn.setkoordinaten(koord: circlefloatarray)
       tsp_nn.firstrun()
       tsp_nn.nearestneighbour()
@@ -1647,7 +1669,12 @@ class rPCB: rViewController
          if  NN_OK_Check.state == NSControl.StateValue.on // nearest neighbour
          {
             let millindex = nn_array[zeilenindex]
-            mill_floatarray.append(circlefloatarray[millindex])
+            var tempfloatarray:[Double] = circlefloatarray[millindex]
+            print("zeilenindex: \(zeilenindex) tempfloatarray: \(tempfloatarray)")
+            // index neu einsetzen
+            tempfloatarray[0] = Double(zeilenindex)
+            //mill_floatarray.append(circlefloatarray[millindex])  
+            mill_floatarray.append(tempfloatarray)
          }
          else
          {
@@ -1670,7 +1697,7 @@ class rPCB: rViewController
        }
        */
       
-       print("mill_floatarray")
+       print("func mill_floatarray")
        for el in mill_floatarray
        {
        print("\(el)")
@@ -1756,7 +1783,7 @@ class rPCB: rViewController
       print("PCB_Daten\n")
       //  var speed = speedFeld.intValue
       var PCB_Datenarray = [[UInt8]]()
-      Schnittdatenarray.removeAll()
+      //Schnittdatenarray.removeAll()
       Schnittdatenarray_n.removeAll()
       
       //      var SchritteArray:[[String:Any]] = [[:]]
@@ -2390,6 +2417,10 @@ class rPCB: rViewController
       Schnittdatenarray.removeAll()
       print("report_NN circlefloatarray.count: \(circlefloatarray.count)")
       var mill_floatarray = mill_floatArray(circarray: circlefloatarray) //
+      if figurschliessen_checkbox.state == .on
+      {   
+         mill_floatarray.append(mill_floatarray[0])
+      }
       print("report_readSVG mill_floatarray: \(mill_floatarray)")
       setPCB_Output(floatarray: mill_floatarray, scale: 5, transform: transformfaktor)
       var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
@@ -4151,7 +4182,7 @@ class rPCB: rViewController
             break
             
             
-         // MARK: *** Pfeiltaste DC    
+         // MARK: ***     Pfeiltaste DC    
          case 0xDC:  // Pfeiltaste
             print("\n                      newDataAktion  DC Drill ")
             let stepperpos = stepperpositionFeld.integerValue 
@@ -4320,28 +4351,62 @@ class rPCB: rViewController
       print("                       newDataAktion  end\n\n")
    } // newDataAktion
    
+   // MARK: ***      report_horizontalCheckbox  
    @IBAction  func report_horizontalCheckbox(_ sender: NSButton)
    {
+      
       print("report_horizontalCheckbox IntVal: \(sender.intValue)")
       var sortedarray = [[String:Double]]()
+      var sortedfloatarray = [[Double]]()
+      
+      print("report_horizontal_checkbox circlefloatdicarray")
+      var iii = 0
+      for el in circlefloatdicarray
+      {
+      print("\(iii) \(el)")
+      iii += 1
+      }
+
       switch sender.state
       {
       case .off:
          print("horizontal_checkbox: off")
-         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: true)
+         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: false)
+         sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:1, order:false)
+      //sortedfloatarray = 
       case .on:
          print("horizontal_checkbox: on")
-         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: false)
-         
+         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: true)
+         sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:2, order:false)
       default:
          break
       }
+      
+      print("report_horizontal_checkbox sortedfloatarray")
+      var iiii = 0
+      for el in sortedfloatarray
+      {
+      print("\(iiii) \(el)")
+      iiii += 1
+      }
+ 
+      print("report_horizontal_checkbox sortedarray")
+      iii = 0
+      for el in sortedarray
+      {
+      print("\(iii) \(el)")
+      iii += 1
+      }
+
+      
+      
       // Anpassen an microstep
       let microstepindex = schritteweitepop.indexOfSelectedItem
       let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
 
       var tempcirclearray = [[Double]]()
       var zeilendicindex:Double = 0
+      /*
       for zeilendic in sortedarray
       {
          let cx:Double = (zeilendic["cx"]!) * (microstep ?? 1)
@@ -4353,43 +4418,37 @@ class rPCB: rViewController
          tempcirclearray.append(zeilendicarray)
          zeilendicindex += 1
       }
-      tempcirclearray = flipSVG(svgarray: tempcirclearray)
+*/
+      for zeilendic in sortedfloatarray
+      {
+         let cx:Double = (zeilendic[1]) // * (microstep ?? 1)
+         let cy:Double = (zeilendic[2]) // * (microstep ?? 1)
+         let cz:Double = (zeilendic[3]) // * (microstep ?? 1)
+         
+         print("\(zeilendicindex) \(cx) \(cy)  \(cz)")
+         let zeilendicarray = [zeilendicindex,cx,cy,cz] 
+         tempcirclearray.append(zeilendicarray)
+         zeilendicindex += 1
+      }      
+      
+  //    tempcirclearray = flipSVG(svgarray: tempcirclearray)
+      tempcirclearray.append(tempcirclearray[0])
+      
+      print("report_horizontal_checkbox tempcirclearray")
+      iii = 0
+      for el in tempcirclearray
+      {
+      print("\(iii) \(el)")
+      iii += 1
+      }
+    
+      
+      
+      //Plattefeld.clearNum()
       let l = Plattefeld.setfloatWeg(newWeg: tempcirclearray, scalefaktor: 5 , transform:  transformfaktor)
       
       self.fahrtweg.integerValue = l
-     /*
-      var sortedarray = [[String:Int]]()
-      switch sender.state
-      {
-      case .off:
-         print("horizontal_checkbox: off")
-         sortedarray = sortDicArray_opt(origDicArray: circledicarray,key0:"cx", key1:"cy", order: false)
-      case .on:
-         print("horizontal_checkbox: on")
-         sortedarray = sortDicArray_opt(origDicArray: circledicarray,key0:"cx", key1:"cy", order: true)
-         
-      default:
-         break
-      }
-      var tempcirclearray = [[Int]]()
-      var zeilendicindex:Int = 0
-      for zeilendic in sortedarray
-      {
-         let cx:Int = (zeilendic["cx"]!)
-         let cy:Int = (zeilendic["cy"]!)
-         let cz:Int = (zeilendic["cz"]!)
-         
-         print("\(zeilendicindex) \(cx) \(cy)  \(cz)")
-         let zeilendicarray = [zeilendicindex,cx,cy,cz]
-         tempcirclearray.append(zeilendicarray)
-         zeilendicindex += 1
-      }
-      
-      let l = Plattefeld.setWeg(newWeg: tempcirclearray, scalefaktor: 400 , transform:  transformfaktor)
- 
-      self.fahrtweg.integerValue = l
-       */   
-   }
+    }
    
    @IBAction  func report_linearCheckbox(_ sender: NSButton)
    {

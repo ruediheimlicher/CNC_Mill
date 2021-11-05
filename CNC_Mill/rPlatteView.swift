@@ -24,6 +24,7 @@ class rPlatteView: NSView
    var blau:CGFloat=50
    
    var markarray:[NSBezierPath] = [NSBezierPath]()
+   var numarray:[NSBezierPath] = [NSBezierPath]()
    
    var redfaktor:CGFloat = 1
    var transformfaktor:CGFloat = 0 // px to mm
@@ -45,7 +46,7 @@ class rPlatteView: NSView
    var kreisfillfarbe:NSColor = NSColor()
    
    var drawstatus = 0 // 0: setweg zeichnet den Weg  1: draw zeichnet den Weg nach setstepperposition
-   
+
    required init?(coder  aDecoder : NSCoder) 
    {
       super.init(coder: aDecoder)
@@ -102,15 +103,15 @@ class rPlatteView: NSView
    override func draw(_ dirtyRect: NSRect) 
    {
       // https://stackoverflow.com/questions/36596545/how-to-draw-a-dash-line-border-for-nsview
+      //self.layer?.backgroundColor = NSColor.white.cgColor
       super.draw(dirtyRect)
-      
-      
-      // dash customization parameters
+       // dash customization parameters
       let dashHeight: CGFloat = 1
       let dashColor: NSColor = .gray
       
       // setup the context
       let currentContext = NSGraphicsContext.current!.cgContext
+     // NSGraphicsContext.current!.CGContextClearRect(currentContext,self.bounds)
  //     currentContext.setLineWidth(dashHeight)
 //    currentContext.setLineDash(phase: 0, lengths: [dashLength])
  //     currentContext.setStrokeColor(dashColor.cgColor)
@@ -134,6 +135,8 @@ class rPlatteView: NSView
          wegindex = 0
    //      let korr:CGFloat = 31.15
          let korr:CGFloat = 1
+         markarray.removeAll()
+         numarray.removeAll()
          for zeile in wegfloatarray
          {
             elcount += 1
@@ -163,7 +166,24 @@ class rPlatteView: NSView
             //    kreis.appendOval(in: tempMarkRect)
             
             linienfarbe.set() 
-            var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
+            
+ //           var localnumfeld:NSBezierPath =  NSBezierPath()
+ //           var numrect:NSRect  = NSMakeRect(tempNumPunkt.x-1, lokalpunkt.y+3, 12, 10);
+//            localnumfeld.appendRect(numrect)
+            //numarray.append(localnumfeld)
+            NSColor.white.set()
+            //localnumfeld.fill()
+            kreislinienfarbe.set() 
+            localkreis.stroke()
+            var tempNumPunkt:NSPoint = NSMakePoint(0, 0)
+            if wegindex == wegfloatarray.count - 1
+            {
+               tempNumPunkt = NSMakePoint(lokalpunkt.x - 12, lokalpunkt.y - 12)
+            }
+            else
+            {
+               tempNumPunkt = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
+            }
             let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
             let numstring = String(wegindex)
             numstring.draw(
@@ -234,7 +254,7 @@ class rPlatteView: NSView
                */
                
             }
-            
+            //localnumfeld.stroke()
              wegindex += 1
          }
          //print("draw fahrtweg: \(fahrtweg) element count: \(elcount)")
@@ -265,7 +285,7 @@ class rPlatteView: NSView
       //   kreis.lineWidth = 1.5
       //    kreis.fill()
       //    kreis.stroke()
-      
+      //Swift.print( "draw markarray: \(markarray.count)" )
    }
    
    override func mouseDown(with theEvent: NSEvent) 
@@ -433,7 +453,7 @@ class rPlatteView: NSView
  
    func setfloatWeg(newWeg:[[Double]], scalefaktor:Int , transform:Double)-> Int
    {
-      print("\t ******   PlatteView setfloatWeg newWeg: \(newWeg)")
+      //print("\t ******   PlatteView setfloatWeg newWeg: \(newWeg)")
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
@@ -598,11 +618,23 @@ class rPlatteView: NSView
       return Int(fahrtweg)
    }
    */
-   
+   func clearNum()
+   {
+      Swift.print( "clearNum numarray: \(numarray.count)" )
+      return
+      for num in numarray
+      {
+         num.fill()
+      }
+      needsDisplay = true
+   }
    
    func clearWeg()
    {
       Swift.print( "clearWeg" )
+      Swift.print( "clearNum markarray: \(markarray.count)" )
+      let clearColor: NSColor = .clear
+      self.layer?.backgroundColor = .clear
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
@@ -613,6 +645,11 @@ class rPlatteView: NSView
          mark.removeAllPoints()
       }
       markarray.removeAll()
+      for num in numarray
+      {
+         num.fill()
+      }
+
       drawstatus = 1
       fahrtweg = 0
       //redfaktor = 200.0
@@ -624,14 +661,8 @@ class rPlatteView: NSView
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
       klickmarkIndexset.removeAll()
-      let clearColor: NSColor = .clear
-      for mark in markarray
-      {
- //        clearColor.set()
- //        mark.stroke()
- //        mark.removeAllPoints()
-      }
- //     markarray.removeAll()
+      
+       //markarray.removeAll()
       needsDisplay = true
       
    }
