@@ -1545,14 +1545,8 @@ class rPCB: rViewController
          // Figur schliessen
          if figurschliessen_checkbox.state == .on
          {
-            let lastindex:Double = Double(mill_floatarray.count)
-            var tempzeile = mill_floatarray[0]
-            tempzeile[0] = lastindex + 1
-            mill_floatarray.append(mill_floatarray[0])
-            
-          //  circlefloatarray.append(circlefloatarray[0])
-            //circlearray.append(circlearray[0])
-         }
+              mill_floatarray.append(mill_floatarray[0])
+          }
          
          
          /*
