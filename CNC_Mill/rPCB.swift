@@ -22,7 +22,9 @@ class rPCB: rViewController
    
    var circlearray = [[Int]]() // Koordinaten der Punkte
    
-   var circlefloatarray = [[Double]]() // Koordinaten der Punkteals double
+   var circlefloatarray = [[Double]]() // Koordinaten der Punkte als double 
+   
+   var circlefloatarray_raw = [[Double]]() // Koordinaten der Punkte aus input
    
    var maxdiff:Double = 100 // maximale differenz fuer doppelte Punkte
    var maxfloatdiff:Double = 5 // maximale differenz fuer doppelte Float-Punkte
@@ -1274,6 +1276,8 @@ class rPCB: rViewController
          
          
          print("vor sort circlefloatdicarray count: \(circlefloatdicarray.count)")
+         
+         
          switch horizontal_checkbox.state
          {
          case .off:
@@ -1454,7 +1458,7 @@ class rPCB: rViewController
           }
           */
          
-          print("report_readSVG circlefloatarray nach, vor flip. count: \(circlefloatarray.count)")
+          print("report_readSVG circlefloatarray nach doppel, vor flip. count: \(circlefloatarray.count)")
           for el in circlefloatarray
           {
           print("\(el[0] )\t \(el[1] )\t \(el[2])")
@@ -1481,14 +1485,57 @@ class rPCB: rViewController
           {
             print("\(el[0] )\t \(el[1] )\t \(el[2])")
           }
+         /*
          let newsortedarray:[[Double]] = circlefloatarray.sorted(by: {
                                                       ($0[2]) < ($1[2])})
+         
          print("report_readSVG newsortedarray nach new sort. count: \(newsortedarray.count)")         
           for el in newsortedarray
           {
             print("\(el[0] )\t \(el[1] )\t \(el[2])")
           }
+         */
+         
+    
+         switch horizontal_checkbox.state
+         {
+         case .off:
+            print("horizontal_checkbox: off")
+            circlefloatarray = circlefloatarray.sorted(by: {
+                                                         ($0[1]) < ($1[1])})
+         case .on:
+            print("horizontal_checkbox: on")
+            circlefloatarray = circlefloatarray.sorted(by: {
+                                                         ($0[2]) < ($1[2])})
+         default:
+            break
+         }
+         circlefloatarray_raw.removeAll()
+         circlefloatarray_raw = circlefloatarray // Eingabe sichern
+         
+         print("report_readSVG circlefloatarray nach new sort. count: \(circlefloatarray.count)")         
+          for el in circlefloatarray
+          {
+            print("\(el[0] )\t \(el[1] )\t \(el[2])")
+          }
 
+         
+/*
+         switch horizontal_checkbox.state
+         {
+         case .off:
+            print("horizontal_checkbox: off")
+            sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:1, order:false)
+         //sortedfloatarray = 
+         case .on:
+            print("horizontal_checkbox: on")
+             sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:2, order:false)
+         default:
+            break
+         }
+
+     */    
+         
          // nearest neighbour stuff
       //   tsp_nn.setkoordinaten(koord: circlefloatarray)
       //   tsp_nn.firstrun()
@@ -1499,17 +1546,26 @@ class rPCB: rViewController
         // Figur schliessen
          
          // Ordnen nach x,y oder nn
+         
          var mill_floatarray = mill_floatArray(circarray: circlefloatarray) //
          
          // Figur schliessen
          if figurschliessen_checkbox.state == .on
          {
+            let lastindex:Double = Double(mill_floatarray.count)
+            var tempzeile = mill_floatarray[0]
+            tempzeile[0] = lastindex + 1
             mill_floatarray.append(mill_floatarray[0])
-            //circlefloatarray.append(circlefloatarray[0])
+            
+          //  circlefloatarray.append(circlefloatarray[0])
             //circlearray.append(circlearray[0])
          }
+         
+         //circlefloatdicarray.removeAll()
+         /*
          for z in 0..<mill_floatarray.count
          {
+            
             circlefloatarray[z][0] = Double(z)
             let el1 = circlefloatarray[z][1] * (microstep ?? 1)
             circlefloatarray[z][1] = el1
@@ -1517,9 +1573,10 @@ class rPCB: rViewController
             circlefloatarray[z][2] = el2         
             let el3 = circlefloatarray[z][3] * (microstep ?? 1) 
             circlefloatarray[z][3] = el3         
-         
+            //var tempdic:[String:Double][X]
          }         
  
+         */
          
          dataTable.reloadData()    
          
@@ -1776,7 +1833,7 @@ class rPCB: rViewController
       dataTable.selectRowIndexes(zeile, byExtendingSelection: false)
 
       print("setPCB_Output End")
-   } // setPCB_Outpu
+   } // setPCB_Output
    
    func PCB_Daten(floatarray:[[Double]])->[[UInt8]]
    {
@@ -2417,16 +2474,19 @@ class rPCB: rViewController
       Schnittdatenarray.removeAll()
       print("report_NN circlefloatarray.count: \(circlefloatarray.count)")
       var mill_floatarray = mill_floatArray(circarray: circlefloatarray) //
+      
       if figurschliessen_checkbox.state == .on
       {   
          mill_floatarray.append(mill_floatarray[0])
       }
       print("report_readSVG mill_floatarray: \(mill_floatarray)")
+      
       setPCB_Output(floatarray: mill_floatarray, scale: 5, transform: transformfaktor)
       var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
       
       print("report_readSVG PCBDaten")
       Schnittdatenarray.append(contentsOf:PCBDaten)
+   
    }
    
    @IBAction override func report_HALT(_ sender: NSButton)
@@ -4358,13 +4418,21 @@ class rPCB: rViewController
       print("report_horizontalCheckbox IntVal: \(sender.intValue)")
       var sortedarray = [[String:Double]]()
       var sortedfloatarray = [[Double]]()
-      
-      print("report_horizontal_checkbox circlefloatdicarray")
+      /*
+      print("report_horizontal_checkbo vor sort circlefloatdicarray")
       var iii = 0
       for el in circlefloatdicarray
       {
       print("\(iii) \(el)")
       iii += 1
+      }
+ */
+      print("report_horizontal_checkbo vor sort circlefloatarray_raw")
+      var k = 0
+      for el in circlefloatarray_raw
+      {
+      print("\(k) \(el)")
+      k += 1
       }
 
       switch sender.state
@@ -4372,25 +4440,25 @@ class rPCB: rViewController
       case .off:
          print("horizontal_checkbox: off")
          sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: false)
-         sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:1, order:false)
+         sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray_raw, index:1, order:false)
       //sortedfloatarray = 
       case .on:
          print("horizontal_checkbox: on")
          sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: true)
-         sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:2, order:false)
+         sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray_raw, index:2, order:false)
       default:
          break
       }
       
-      print("report_horizontal_checkbox sortedfloatarray")
+      print("report_horizontal_checkbox nach sort sortedfloatarray")
       var iiii = 0
       for el in sortedfloatarray
       {
       print("\(iiii) \(el)")
       iiii += 1
       }
- 
-      print("report_horizontal_checkbox sortedarray")
+ /*
+      print("report_horizontal_checkbox nach sort sortedarray")
       iii = 0
       for el in sortedarray
       {
@@ -4398,14 +4466,14 @@ class rPCB: rViewController
       iii += 1
       }
 
-      
+   */   
       
       // Anpassen an microstep
       let microstepindex = schritteweitepop.indexOfSelectedItem
       let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
 
       var tempcirclearray = [[Double]]()
-      var zeilendicindex:Double = 0
+      var zeilenindex:Double = 0
       /*
       for zeilendic in sortedarray
       {
@@ -4419,29 +4487,44 @@ class rPCB: rViewController
          zeilendicindex += 1
       }
 */
-      for zeilendic in sortedfloatarray
+      
+      print("report_horizontal_checkbox sortedfloatarray")
+      zeilenindex = 0
+      for zeile in sortedfloatarray
       {
-         let cx:Double = (zeilendic[1]) // * (microstep ?? 1)
-         let cy:Double = (zeilendic[2]) // * (microstep ?? 1)
-         let cz:Double = (zeilendic[3]) // * (microstep ?? 1)
+         let cx:Double = (zeile[1]) // * (microstep ?? 1)
+         let cy:Double = (zeile[2]) // * (microstep ?? 1)
+         let cz:Double = (zeile[3]) // * (microstep ?? 1)
          
-         print("\(zeilendicindex) \(cx) \(cy)  \(cz)")
-         let zeilendicarray = [zeilendicindex,cx,cy,cz] 
-         tempcirclearray.append(zeilendicarray)
-         zeilendicindex += 1
+         print("\(zeilenindex) \(cx) \(cy)  \(cz)")
+         let zeilenarray = [zeilenindex,cx,cy,cz] 
+         tempcirclearray.append(zeilenarray)
+         zeilenindex += 1
       }      
       
   //    tempcirclearray = flipSVG(svgarray: tempcirclearray)
-      tempcirclearray.append(tempcirclearray[0])
+ 
+      if figurschliessen_checkbox.state == .on
+      {
+         tempcirclearray.append(tempcirclearray[0])
+         //circlefloatarray.append(circlefloatarray[0])
+         //circlearray.append(circlearray[0])
+      }
+
       
       print("report_horizontal_checkbox tempcirclearray")
-      iii = 0
+      var iii = 0
       for el in tempcirclearray
       {
       print("\(iii) \(el)")
       iii += 1
       }
     
+      setPCB_Output(floatarray: tempcirclearray, scale: 5, transform: transformfaktor)
+      var PCBDaten = PCB_Daten(floatarray: tempcirclearray)
+      Schnittdatenarray.removeAll()
+      Schnittdatenarray.append(contentsOf:PCBDaten)
+      return
       
       
       //Plattefeld.clearNum()
