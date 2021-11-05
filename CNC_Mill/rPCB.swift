@@ -4427,6 +4427,7 @@ class rPCB: rViewController
       iii += 1
       }
  */
+      /*
       print("report_horizontal_checkbo vor sort circlefloatarray_raw")
       var k = 0
       for el in circlefloatarray_raw
@@ -4434,22 +4435,22 @@ class rPCB: rViewController
       print("\(k) \(el)")
       k += 1
       }
-
+*/
       switch sender.state
       {
       case .off:
          print("horizontal_checkbox: off")
-         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: false)
+//         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: false)
          sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray_raw, index:1, order:false)
       //sortedfloatarray = 
       case .on:
          print("horizontal_checkbox: on")
-         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: true)
+//         sortedarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: true)
          sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray_raw, index:2, order:false)
       default:
          break
       }
-      
+/*      
       print("report_horizontal_checkbox nach sort sortedfloatarray")
       var iiii = 0
       for el in sortedfloatarray
@@ -4457,6 +4458,7 @@ class rPCB: rViewController
       print("\(iiii) \(el)")
       iiii += 1
       }
+ */
  /*
       print("report_horizontal_checkbox nach sort sortedarray")
       iii = 0
@@ -4474,21 +4476,10 @@ class rPCB: rViewController
 
       var tempcirclearray = [[Double]]()
       var zeilenindex:Double = 0
-      /*
-      for zeilendic in sortedarray
-      {
-         let cx:Double = (zeilendic["cx"]!) * (microstep ?? 1)
-         let cy:Double = (zeilendic["cy"]!) * (microstep ?? 1)
-         let cz:Double = (zeilendic["cz"]!) * (microstep ?? 1)
-         
-         print("\(zeilendicindex) \(cx) \(cy)  \(cz)")
-         let zeilendicarray = [zeilendicindex,cx,cy,cz] 
-         tempcirclearray.append(zeilendicarray)
-         zeilendicindex += 1
-      }
-*/
       
       print("report_horizontal_checkbox sortedfloatarray")
+      
+      // zeilen neu indexieren
       zeilenindex = 0
       for zeile in sortedfloatarray
       {
@@ -4502,16 +4493,13 @@ class rPCB: rViewController
          zeilenindex += 1
       }      
       
-  //    tempcirclearray = flipSVG(svgarray: tempcirclearray)
  
       if figurschliessen_checkbox.state == .on
       {
          tempcirclearray.append(tempcirclearray[0])
-         //circlefloatarray.append(circlefloatarray[0])
-         //circlearray.append(circlearray[0])
       }
 
-      
+ /*     
       print("report_horizontal_checkbox tempcirclearray")
       var iii = 0
       for el in tempcirclearray
@@ -4519,19 +4507,14 @@ class rPCB: rViewController
       print("\(iii) \(el)")
       iii += 1
       }
-    
+  */  
       setPCB_Output(floatarray: tempcirclearray, scale: 5, transform: transformfaktor)
       var PCBDaten = PCB_Daten(floatarray: tempcirclearray)
       Schnittdatenarray.removeAll()
       Schnittdatenarray.append(contentsOf:PCBDaten)
       return
       
-      
-      //Plattefeld.clearNum()
-      let l = Plattefeld.setfloatWeg(newWeg: tempcirclearray, scalefaktor: 5 , transform:  transformfaktor)
-      
-      self.fahrtweg.integerValue = l
-    }
+     }
    
    @IBAction  func report_linearCheckbox(_ sender: NSButton)
    {
