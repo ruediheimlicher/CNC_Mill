@@ -935,7 +935,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q4r-pV-zV0">
-                                <rect key="frame" x="472" y="529" width="57" height="18"/>
+                                <rect key="frame" x="449" y="529" width="57" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Ramp" bezelStyle="regularSquare" imagePosition="left" inset="2" id="W1Y-i8-Adj">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -946,7 +946,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cvX-mA-Yas">
-                                <rect key="frame" x="419" y="529" width="42" height="18"/>
+                                <rect key="frame" x="401" y="529" width="42" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="NN" bezelStyle="regularSquare" imagePosition="left" inset="2" id="GsS-wx-awe">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1482,7 +1482,7 @@
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="izn-CQ-bEp">
-                                <rect key="frame" x="547" y="540" width="60" height="17"/>
+                                <rect key="frame" x="559" y="542" width="60" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="next step" id="H44-v0-HZQ">
                                     <font key="font" metaFont="system"/>
@@ -1565,6 +1565,14 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FMp-8K-kag">
+                                <rect key="frame" x="949" y="310" width="57" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Drill" bezelStyle="regularSquare" imagePosition="left" inset="2" id="L2a-FX-G7g">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1578,6 +1586,7 @@
                         <outlet property="Zeilen_Stepper" destination="3Nd-UJ-9iO" id="N74-yG-IUG"/>
                         <outlet property="dataTable" destination="9Dc-YS-HYC" id="ajU-AM-GdF"/>
                         <outlet property="drillKnopf" destination="DDO-zf-c2L" id="CoA-IC-xNw"/>
+                        <outlet property="drillOKKnopf" destination="FMp-8K-kag" id="Ssm-Cr-zpD"/>
                         <outlet property="dxFeld" destination="i8B-q7-HKP" id="lI7-4A-MQ0"/>
                         <outlet property="dx_Stepper" destination="ZZR-de-pHe" id="qtl-Zi-wxS"/>
                         <outlet property="dyFeld" destination="Emd-2U-atJ" id="w7v-5v-aBV"/>

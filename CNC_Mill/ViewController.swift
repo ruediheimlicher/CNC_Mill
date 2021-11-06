@@ -22,6 +22,10 @@ var globalusbstatus = 0
 var mausstatus:UInt8 = 0
 
 // 
+func phex(_ data:UInt8)->String
+{
+   return String(format:"%02X", data)
+}
 
 class  rPfeiltaste  : NSButton
 {
