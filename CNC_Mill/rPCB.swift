@@ -4296,7 +4296,7 @@ class rPCB: rViewController
             
             // verzoegert abschicken
              // https://stackoverflow.com/questions/27517632/how-to-create-a-delay-in-swift
-            let seconds = 1.0
+            let seconds = 0.4
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
             {
                // Put your code which should be executed with a delay here
