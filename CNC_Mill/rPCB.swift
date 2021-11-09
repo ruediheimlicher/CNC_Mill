@@ -39,6 +39,8 @@ class rPCB: rViewController
    
    var ablaufstatus:UInt8 = 0
    let DRILL_OK = 1
+ 
+   var anschlagstatus = 0;
    
    var CNC_DatendicArray = [[String:String]]()
    
