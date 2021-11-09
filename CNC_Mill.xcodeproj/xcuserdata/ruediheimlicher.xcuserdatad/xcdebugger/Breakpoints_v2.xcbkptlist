@@ -15,8 +15,8 @@
             timestampString = "620738269.060933"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "684"
-            endingLineNumber = "684">
+            startingLineNumber = "689"
+            endingLineNumber = "689">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -47,8 +47,8 @@
             timestampString = "620738269.0610909"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "684"
-            endingLineNumber = "684">
+            startingLineNumber = "689"
+            endingLineNumber = "689">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -620,8 +620,8 @@
             timestampString = "620738269.061761"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "493"
-            endingLineNumber = "493"
+            startingLineNumber = "498"
+            endingLineNumber = "498"
             landmarkName = "setfloatWeg(newWeg:scalefaktor:transform:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -637,8 +637,8 @@
             timestampString = "620738269.061813"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "466"
-            endingLineNumber = "466"
+            startingLineNumber = "471"
+            endingLineNumber = "471"
             landmarkName = "setfloatWeg(newWeg:scalefaktor:transform:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -654,8 +654,8 @@
             timestampString = "620738269.06186"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "660"
-            endingLineNumber = "660"
+            startingLineNumber = "665"
+            endingLineNumber = "665"
             landmarkName = "clearWeg()"
             landmarkType = "7">
          </BreakpointContent>
@@ -909,8 +909,8 @@
             timestampString = "620738269.081735"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "664"
-            endingLineNumber = "664"
+            startingLineNumber = "669"
+            endingLineNumber = "669"
             landmarkName = "clearWeg()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2244,8 +2244,8 @@
             filePath = "CNC_Mill/rPlatteView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "625"
-            endingLineNumber = "625"
+            startingLineNumber = "630"
+            endingLineNumber = "630"
             landmarkName = "clearNum()"
             landmarkType = "7">
          </BreakpointContent>

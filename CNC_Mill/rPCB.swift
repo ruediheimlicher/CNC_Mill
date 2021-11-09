@@ -1165,7 +1165,7 @@ class rPCB: rViewController
             {
                if circle < 5
                {            
-                  //print("\t i: \(i) \tdata: \(trimmzeile)")
+                  print("\t i: \(i) \tdata: \(trimmzeile)")
                   let zeilenarray = trimmzeile.split(separator: "=")
                   var zeilenindex = 0
                   for element in zeilenarray
@@ -1188,8 +1188,12 @@ class rPCB: rViewController
                         //                      print("i: \(i) \tz:\t \(z)\tpartB: \t\(partB)")
                         
                         z += 1
+                        
+                        // Floatwerte
                         let partfloat = (partB as NSString).doubleValue  
                         circlefloatelementarray.append(partfloat)
+                        
+                        // Integerwerte
                         let partint = Int(partfloat * INTEGERFAKTOR)// Vorbereitung Int
                         if partint > 0xFFFFFFFF
                         {
@@ -1198,9 +1202,10 @@ class rPCB: rViewController
                         //print("partB: \(partB) partfloat: \(partfloat) partint: \(partint)")
                         circleelementarray.append(partint)
                      }
-                     
+                    // circleelementarray.append(0) // z-wert setzen
                      zeilenindex += 1
                   }
+                  //
                } // circle < 5
                
                if circle == 1
@@ -1208,6 +1213,18 @@ class rPCB: rViewController
                //print("i: \(i) circleelementarray: \(circleelementarray)")
                   if circleelementarray.count > 0
                   {
+                     // radius ersetzen
+                     if (circleelementarray.count == 4)
+                     {
+                        circleelementarray[3] = 0
+                     }
+
+                     // radius ersetzen
+                     if (circlefloatelementarray.count == 4)
+                     {
+                        circlefloatelementarray[3] = 0
+                     }
+                     
                      circlearray.append(circleelementarray)
                      //   circleelementdic["id"] = circleelementarray[0]  // nirgends verwendet
                      circleelementdic["index"] = i
@@ -1221,7 +1238,8 @@ class rPCB: rViewController
                      circlefloatelementdic["cx"] = circlefloatelementarray[1]
                      circlefloatelementdic["cy"] = circlefloatelementarray[2]
                      circlefloatelementdic["cz"] = 0
-                     circlefloatdicarray.append(circlefloatelementdic)
+                     circlefloatdicarray.append(circlefloatelementdic) 
+                     
                      circlefloatarray.append(circlefloatelementarray)
                   }
                   
@@ -1234,15 +1252,15 @@ class rPCB: rViewController
             
             
          }
-      /*  
+        
           print("report_readSVG circlearray count: \(circlearray.count)")
           var ii = 0
           for el in circlearray
           {
-          print("\(ii)\t\(el[1])\t \(el[2])\t ")
+          print("\(ii)\t\(el[1])\t \(el[2])\t \(el[3])")
           ii += 1
           }
- */
+ 
           /*
          print("report_readSVG circledicarray")
          var iii = 0
@@ -1252,15 +1270,15 @@ class rPCB: rViewController
          iii += 1
          }
 */
-         /*
+         
           print("report_readSVG circlefloatarray A count: \(circlefloatarray.count)")
-          iii = 0
+          var iii = 0
           for el in circlefloatarray
           {
-          print("\(iii)\t\(el[1])\t \(el[2])")
+          print("\(iii)\t\(el[1])\t \(el[2])  \(el[3])")
           iii += 1
           }
- */
+ 
          /*
          print("report_readSVG circlefloatdicdicarray count: \(circlefloatdicarray.count)")
         iii = 0
@@ -1275,11 +1293,9 @@ class rPCB: rViewController
          
          // https://useyourloaf.com/blog/sorting-an-array-of-dictionaries/
          var sortedarray = [[String:Int]]()  // mit circledicarray
-         var sortedfloatarray = [[String:Double]]() // mit irclefloatdicarray
-         
-       //  var sortedarray_opt = [[String:Int]]()
-         //    sortedarray_opt = sortDicArray_opt(origDicArray: circledicarray,key0:"cx", key1:"cy", order: false)
-         
+         var sortedfloatdicarray = [[String:Double]]() // mit irclefloatdicarray
+         var sortedfloatarray = [[Double]]()
+          
          // Doppelte Punkte suchen
          var doppelarray = [[String:Int]]()
          
@@ -1291,20 +1307,21 @@ class rPCB: rViewController
             print("horizontal_checkbox: off")
             sortedarray = sortDicArray_opt(origDicArray: circledicarray,key0:"cx", key1:"cy", order: false)
             
-            sortedfloatarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: false)
-            
+            sortedfloatdicarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: false)
+            sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:1, order:false)
          case .on:
             print("horizontal_checkbox: on")
             sortedarray = sortDicArray_opt(origDicArray: circledicarray,key0:"cx", key1:"cy", order: true)
             
-            sortedfloatarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: true)
+            sortedfloatdicarray = sortDicArray_float(origDicArray: circlefloatdicarray,key0:"cx", key1:"cy", order: true)
+            sortedfloatarray =  sortArrayofArrays(origArray:circlefloatarray, index:2, order:false)
             
          default:
             break
          }
          //print(circledicarray)
          print("nach sort circlefloatdicarray count: \(circlefloatdicarray.count)")
-         print("nach sort sortedfloatarray count: \(sortedfloatarray.count)")
+         print("nach sort sortedfloatdicarray count: \(sortedfloatdicarray.count)")
          
          
         
@@ -1318,14 +1335,22 @@ class rPCB: rViewController
           }
          
          
-          print("report_readSVG sortedfloatarray")
+          print("report_readSVG sortedfloatdicarray")
           var aa = 0
-          for el in sortedfloatarray
+          for el in sortedfloatdicarray
           {
           print("\(aa) \(el)")
           aa += 1
           }
-          
+
+         print("report_readSVG sortedfloatarray")
+         var ab = 0
+         for el in sortedfloatarray
+         {
+         print("\(ab) \(el)")
+         ab += 1
+         }
+
          
          //print("PCB sortedarray")
          //print(sortedarray)
@@ -1338,8 +1363,8 @@ class rPCB: rViewController
             let cz:Int = (zeilendic["cz"]!) 
             
             //print("\(zeilendicindex) \(cx) \(cy)")
-            let zeilendicarray = [zeilendicindex,cx,cy,cz]
-            circlearray.append(zeilendicarray)
+            let zeilenarray = [zeilendicindex,cx,cy,cz]
+            circlearray.append(zeilenarray)
             zeilendicindex += 1
          }
          /*
@@ -1356,7 +1381,7 @@ class rPCB: rViewController
          // Integer
          var doppelindex:Int = 0
          
-         for datazeile in circlearray
+         for datazeile in circlearray // Integer
          {
             if doppelindex < circlearray.count
             {
@@ -1395,22 +1420,35 @@ class rPCB: rViewController
          circlefloatarray.removeAll()
          //      var zeilendicindex:Int = 0
          zeilendicindex = 0
-         for zeilendic in sortedfloatarray
+         for zeilendic in sortedfloatdicarray // Floatzahlen
          {
             let cx:Double = (zeilendic["cx"]!) 
             let cy:Double = (zeilendic["cy"]!) 
             let cz:Double = (zeilendic["cz"]!)
             // print("\(zeilendicindex) \(cx) \(cy)")
             let zeilendicarray:[Double] = [Double(zeilendicindex),cx,cy,cz]
-            circlefloatarray.append(zeilendicarray)
+     //       circlefloatarray.append(zeilendicarray)
             zeilendicindex += 1
          }
+  
+         zeilendicindex = 0
+         for zeilendic in sortedfloatarray // Floatzahlen neu
+         {
+            let cx:Double = (zeilendic[1]) 
+            let cy:Double = (zeilendic[2]) 
+            let cz:Double = (zeilendic[3])
+            // print("\(zeilendicindex) \(cx) \(cy)")
+            let zeilenarray:[Double] = [Double(zeilendicindex),cx,cy,cz]
+            circlefloatarray.append(zeilenarray)
+            zeilendicindex += 1
+         }
+
          
          
           print("report_readSVG circlefloatarray B vor.  count: \(circlefloatarray.count)")
           for el in circlefloatarray
           {
-          print("\(el[0] )\t \(el[1] ) \(el[2]) \(el[3])")
+            print("\(el[0] )\t \(el[1] ) \(el[2]) \(el[3])")
           }
           
          
@@ -1469,13 +1507,15 @@ class rPCB: rViewController
           print("report_readSVG circlefloatarray nach doppel, vor flip. count: \(circlefloatarray.count)")
           for el in circlefloatarray
           {
-          print("\(el[0] )\t \(el[1] )\t \(el[2])")
+          print("\(el[0] )\t \(el[1] )\t \(el[2]) \(el[3])")
           }
          z = 0
          
          let microstepindex = schritteweitepop.indexOfSelectedItem
          let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
          
+         // umnummerieren und microstep
+          
          for z in 0..<circlefloatarray.count
          {
             circlefloatarray[z][0] = Double(z)
@@ -1491,7 +1531,7 @@ class rPCB: rViewController
          print("report_readSVG circlefloatarray nach flip. count: \(circlefloatarray.count)")         
           for el in circlefloatarray
           {
-            print("\(el[0] )\t \(el[1] )\t \(el[2])")
+            print("\(el[0] )\t \(el[1] )\t \(el[2])  \(el[3])")
           }
          /*
          let newsortedarray:[[Double]] = circlefloatarray.sorted(by: {
@@ -1524,13 +1564,13 @@ class rPCB: rViewController
          print("report_readSVG circlefloatarray nach new sort. count: \(circlefloatarray.count)")         
           for el in circlefloatarray
           {
-            print("\(el[0] )\t \(el[1] )\t \(el[2])")
+            print("\(el[0] )\t \(el[1] )\t \(el[2]) \(el[3])")
           }
 
          print("report_readSVG circlefloatarray_raw. count: \(circlefloatarray_raw.count)")         
           for el in circlefloatarray_raw
           {
-            print("\(el[0] )\t \(el[1] )\t \(el[2])")
+            print("\(el[0] )\t \(el[1] )\t \(el[2]) \(el[3])")
           }
 
          
@@ -1795,7 +1835,7 @@ class rPCB: rViewController
          //print("cx: \(cx)")
          let cy = formater.string(from: NSNumber(value: Double(zeilendaten[2])))// /INTEGERFAKTOR))
          //print("cy: \(cy)")
-         let cz = formater.string(from: NSNumber(value: Double(zeilendaten[2])))// /INTEGERFAKTOR))
+         let cz = formater.string(from: NSNumber(value: Double(zeilendaten[3])))// /INTEGERFAKTOR))
          //print("cy: \(cy)")
          
          var zeilendic = [String:String]()

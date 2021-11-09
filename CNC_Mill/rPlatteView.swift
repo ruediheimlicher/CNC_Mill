@@ -321,7 +321,7 @@ class rPlatteView: NSView
       
  //     https://stackoverflow.com/questions/3051760/how-to-get-a-list-of-points-from-a-uibezierpath
       var klickindex = 0
-      
+      var infeld = 0 // klick in Feld
       var userinformation:[String : Any]
       
       for feld in markfeldarray
@@ -337,6 +337,9 @@ class rPlatteView: NSView
                     userInfo: userinformation)
             klickmarkindex = klickindex
             klickmarkIndexset.insert(klickindex)
+            
+            infeld = 1
+            
             break
           }
           klickindex += 1
@@ -346,17 +349,18 @@ class rPlatteView: NSView
       // https://stackoverflow.com/questions/47738822/simple-drawing-with-mouse-on-cocoa-swift
       //clearWeg()
       
-      if kreuz.isEmpty
+   //   if kreuz.isEmpty
+      if infeld == 1
       {
          kreuz.move(to: lokalpunkt)
          // kreuz zeichnen
-         kreuz.line(to: NSMakePoint(lokalpunkt.x, lokalpunkt.y+5))
+         kreuz.line(to: NSMakePoint(lokalpunkt.x, lokalpunkt.y+8))
          kreuz.line(to: lokalpunkt)
-         kreuz.line(to: NSMakePoint(lokalpunkt.x+5, lokalpunkt.y))
+         kreuz.line(to: NSMakePoint(lokalpunkt.x+8, lokalpunkt.y))
          kreuz.line(to: lokalpunkt)
-         kreuz.line(to: NSMakePoint(lokalpunkt.x, lokalpunkt.y-5))
+         kreuz.line(to: NSMakePoint(lokalpunkt.x, lokalpunkt.y-8))
          kreuz.line(to: lokalpunkt)
-         kreuz.line(to: NSMakePoint(lokalpunkt.x-5, lokalpunkt.y))
+         kreuz.line(to: NSMakePoint(lokalpunkt.x-8, lokalpunkt.y))
          kreuz.line(to: lokalpunkt)
          
          // zurueck zu localpunkt
@@ -365,14 +369,15 @@ class rPlatteView: NSView
          userinformation = ["message":"mousedown", "punkt": lokalpunkt, "index": weg.elementCount, "first": 1, "ident" :identstring] as [String : Any]
          //userinformation["ident"] = self.identifier
       }
-      else
+      
+     else
       {
-         weg.line(to: lokalpunkt)
+         weg.move(to: lokalpunkt)
          
          userinformation = ["message":"mousedown", "punkt": lokalpunkt, "index": weg.elementCount, "first": 0, "ident" :identstring] as [String : Any]
          //userinformation["ident"] = self.identifier
       }
-      
+     
       
       nc.post(name:Notification.Name(rawValue:"joystick"),
               object: nil,
@@ -416,7 +421,7 @@ class rPlatteView: NSView
          lokalpunkt.y = 0
       }     
       
-      weg.line(to: lokalpunkt)
+ //     weg.line(to: lokalpunkt)
       
       
       
