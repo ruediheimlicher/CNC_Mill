@@ -3366,11 +3366,13 @@ class rPCB: rViewController
             //print(" code    write_byteArray24: \(teensy.write_byteArray[24])")
             
   //          if teensy.dev_present() > 0
-  //          {
-               
-               let senderfolg = teensy.send_USB()
+            // https://stackoverflow.com/questions/27517632/how-to-create-a-delay-in-swift
+            let seconds = 1.0
+     //       DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
+     //       {
+               let senderfolg = self.teensy.send_USB()
                print("write_CNC_Abschnitt senderfolg: \(senderfolg)")
-  //          }
+     //       }
             /*
              
              print("0: \(tempSchnittdatenArray[0]) ")
@@ -4206,6 +4208,15 @@ class rPCB: rViewController
                
                return
             }
+            if teensy.readtimervalid() == true
+            {
+               print("A1 PCB readtimer valid vor")
+            }
+            else 
+            {
+               var start_read_USB_erfolg = teensy.start_read_USB(true)
+            }
+ 
             break
             
          case 0xA2:
@@ -4524,7 +4535,11 @@ class rPCB: rViewController
             if cncstepperposition < Schnittdatenarray.count
             { 
                print("cncstepperposition < Schnittdatenarray.count: newDataAktion taskcode: \(taskcode)")
-               write_CNC_Abschnitt()
+    //           let seconds = 1.0
+    //           DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
+     //          {
+                  self.write_CNC_Abschnitt()
+     //          }
             }
          }
          
