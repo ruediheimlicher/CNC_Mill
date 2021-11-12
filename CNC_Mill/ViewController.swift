@@ -518,13 +518,13 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
       
       let g = ggt(m:200,n:1096)
       let b2 = kgv(m:200,n:1096)
-      print("kgv: \(b2)")
+ //     print("kgv: \(b2)")
       
       let b3 = kgv3(m: 200, n: 1096, o: 222)
       
       // https://forum.zerspanungsbude.net/viewtopic.php?t=13460&start=20
       // kgV(a,b,c) = kgV(a,kgV(b,c))
-      print("kgv3: \(b3)")
+ //     print("kgv3: \(b3)")
       
       self.view.wantsLayer = true
       self.view.superview?.wantsLayer = true
@@ -781,7 +781,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    @objc func usbattachAktion(_ notification:Notification) 
    {
       let info = notification.userInfo
-     // print("PCB usbattachAktion:\t \(info)")
+     print("PCB usbattachAktion:\t \(info)")
       let status:Int = info!["attach"] as! Int // 
       print("viewController usbattachAktion:\t \(status)")
      
@@ -793,6 +793,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
      else if status == USBATTACHED
       {
          USB_OK_Feld.image = okimage
+         //let erfolg = teensy.USBOpen()
       }
       
    }
@@ -958,6 +959,31 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
          //print("report_Slider0 senderfolg: \(senderfolg)")
       }
    }
+   
+   @IBAction func report_PWM_Slider(_ sender: NSSlider)
+   {
+      teensy.write_byteArray[0] = SET_0 // Code 
+      //print("report_Slider0 IntVal: \(sender.intValue)")
+      
+      let pos = sender.doubleValue
+      
+      let intpos = UInt16(pos)
+      let Ustring = formatter.string(from: NSNumber(value: intpos))
+      
+      
+      print("report_PWM_Slider pos: \(pos) intpos: \(intpos)  Ustring: \(Ustring ?? "0")")
+      // Pot0_Feld.stringValue  = Ustring!
+      PWM_Feld.integerValue  = Int(intpos)
+       
+      teensy.write_byteArray[PWM_BIT] = UInt8((intpos & 0x00FF)) // 
+      
+      if (usbstatus > 0)
+      {
+         let senderfolg = teensy.send_USB()
+         //print("report_Slider0 senderfolg: \(senderfolg)")
+      }
+   }
+
 
    @IBAction func report_goto_0(_ sender: NSButton)
    {
@@ -1410,7 +1436,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    let code = 24
    let lage = 0
    
-   
+   let PWM_BIT = 29
    
    
    
@@ -1484,6 +1510,9 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    @IBOutlet weak var Pot3_Stepper_L_Feld: NSTextField!
    @IBOutlet weak var Pot3_Stepper_H_Feld: NSTextField!
    @IBOutlet weak var Pot3_Inverse_Check: NSButton!
+   
+   @IBOutlet weak var PWM_Slider: NSSlider!
+   @IBOutlet weak var PWM_Feld: NSTextField!
    
  //  @IBOutlet weak var Joystickfeld: rPlatteView!
    

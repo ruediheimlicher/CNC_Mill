@@ -677,6 +677,7 @@ static void detach_callback(void *context, IOReturn r, void *hid_mgr, IOHIDDevic
    NSNotificationCenter *nc=[NSNotificationCenter defaultCenter];
 
    fprintf(stderr,"detach callback\n");
+   
    hid_usbstatus=0;
    for (p = first_hid; p; p = p->next) {
       if (p->ref == dev) 
@@ -701,7 +702,7 @@ static void attach_callback(void *context, IOReturn r, void *hid_mgr, IOHIDDevic
    //
    if (attach_called)
    {
-      fprintf(stderr,"attach callback schon vorbei\n");
+      fprintf(stderr,"attach callback repeat: %d\n",attach_called);
       //return;
    }
    
@@ -710,11 +711,20 @@ static void attach_callback(void *context, IOReturn r, void *hid_mgr, IOHIDDevic
       fprintf(stderr,"attach callback not kIOReturnSuccess\n");
     //  return;
    }
+   else 
+   {
+      fprintf(stderr,"attach kIOReturnSuccess ist OK\n");
+   }
+
    h = (hid_t *)malloc(sizeof(hid_t));
    if (!h) 
    {
       fprintf(stderr,"attach callback not h\n");
       return;
+   }
+   else 
+   {
+      fprintf(stderr,"attach callback hid_t ist OK\n");
    }
    memset(h, 0, sizeof(hid_t));
    
@@ -769,6 +779,7 @@ int usb_present()
    // iterate 
    while ((device = IOIteratorNext(iter)))
    {
+      //fprintf(stderr,"usb device: %d\n",device);
       // do something with device, eg. check properties 
       // ... 
       // And free the reference taken before continuing to the next item 
@@ -777,6 +788,6 @@ int usb_present()
    }
    
    // Done, release the iterator 
-   //   IOObjectRelase(iter);
+   //IOObjectRelase(iter);
    return anzahl;
 }

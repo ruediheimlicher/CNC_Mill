@@ -1682,6 +1682,8 @@ class rPCB: rViewController
           */
          
          // Bohrzeilen einfuegen
+         
+         print("report_readSVG PCBDaten")
          for el in PCBDaten
          {
          print("\(el)")
@@ -1971,13 +1973,17 @@ class rPCB: rViewController
          
          
       } // for zeilenindex
+      
+      // Zeilennummern kontrollieren
+      /*
       var z=0
       for z in 0..<PCB_Datenarray.count
       {
          PCB_Datenarray[z][27] = UInt8(z)
-         print("z: \(z) \(PCB_Datenarray[z][27])")
+         print("PCBzeile: \(z) \(PCB_Datenarray[z][27])")
          
       }
+ */
       return PCB_Datenarray
    }
    
@@ -3506,6 +3512,9 @@ class rPCB: rViewController
    {
       let info = notification.userInfo
   //    print("PCB mausstatusAktion:\t \(String(describing: info))")
+      let usb_ok = teensy.dev_present()
+      print("PCB mausstatusAktion usb_ok: \(usb_ok)")
+      
       let devtag = info?["devtag"] as! Int
       let mousedownindex = info?["mousedown"] as! Int
       if devtag == 1
@@ -4931,6 +4940,33 @@ class rPCB: rViewController
       //   updatePfeilschrittweite(sw: <#T##Int#>)
       
    }
+   
+   @IBAction override func report_PWM_Slider(_ sender: NSSlider)
+   {
+      teensy.write_byteArray[24] = 0xD8 // Code 
+      print("report_PWM_Slider: \(sender.intValue)")
+      
+      let pos = sender.integerValue
+      
+      let int8pos = UInt8(pos)
+      let Ustring = formatter.string(from: NSNumber(value: int8pos))
+      
+      
+      print("report_PWM_Slider pos: \(pos) intpos: \(int8pos)  Ustring: \(Ustring ?? "0")")
+      // Pot0_Feld.stringValue  = Ustring!
+      PWM_Feld.integerValue  = Int(int8pos)
+       
+      teensy.write_byteArray[PWM_BIT] = 0xFF - int8pos
+      
+ //     if (usbstatus > 0)
+ //     {
+         let senderfolg = teensy.send_USB()
+         print("report_PWM_Slider senderfolg: \(senderfolg)")
+ //     }
+   }
+   
+   
+   
    //MARK: Slider 0
    @IBAction override func report_Slider0(_ sender: NSSlider)
    {
