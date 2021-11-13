@@ -3461,7 +3461,7 @@ class rPCB: rViewController
         
          
          print("write_CNC_Zeile   code: \(phex(zeilenarray[24]))  schritteAX: \(schritteAX) schritteAY: \(schritteAY) schritteAZ: \(schritteAZ)")
-         
+         print("write_CNC_Zeile  zeilenarray: \(zeilenarray)")
          for element in zeilenarray
          {
             teensy.write_byteArray.append(element)
@@ -3964,10 +3964,10 @@ class rPCB: rViewController
    {
       print("\n+++++++     report_Drill tag: \(sender.tag) ")
       
-      drilltask(weg:-25)
+      drilltask(weg:-25,status:1)
    }
    
-   @objc func drilltask(weg:Int)
+   @objc func drilltask(weg:Int, status:UInt8)
    {
       print("\n+++++++     drill weg: \(weg)")
       let count = Schnittdatenarray.count
@@ -3980,9 +3980,9 @@ class rPCB: rViewController
       drillWegArray[26] = 0
       drillWegArray[27] = 0
       drillWegArray[29] = 99 // PWM
-      drillWegArray[25] = 3 // lage
+      drillWegArray[25] = 2 // lage
       drillWegArray[32] = DEVICE_MILL
-      drillWegArray[33] = 0 // drillstatus beginn
+      drillWegArray[33] = status // drillstatus beginn
       drillWegArray[38] = 24 // pfeiltag down
       /*
       print("\n*********************************************************")
@@ -4354,14 +4354,18 @@ class rPCB: rViewController
             //let stepperpos = stepperpositionFeld.integerValue 
             //let datacount = Schnittdatenarray.count
         //    print("newDataAktion  BB stepperpos: \(stepperpos) datacount: \(datacount)")
+            
             let drillstatus:UInt8 = data[22]
             print("newDataAktion  BB drillstatus: \(drillstatus)")
             if drillstatus > 1 // kein rueckweg
             {
                print("newDataAktion  BB drillstatus > 1 break")
-               break
+               //break
             }
             // Rueckweg schicken
+            drilltask(weg:25, status:2)
+            
+            break
             var drillweg = 25
             var drillWegArray = drillMoveArray(wegz: Double(drillweg))
             drillWegArray[24] = 0xBA
@@ -4564,12 +4568,12 @@ class rPCB: rViewController
          }// switch taskcode
                   
          
-         print("switch taskcode end")
+         print("switch taskcode end taskcode: \(taskcode)")
          // **************************************
          let state = steppercontKnopf.state
          
          // print("newDataAktion writecncabschnitt steppercontKnopf state: \(state)")
-         if taskcode == 0xAD 
+         if (taskcode == 0xAD ) ||  (taskcode == 0xBB ) // Drill
          {
             
             return
@@ -4582,11 +4586,14 @@ class rPCB: rViewController
             if cncstepperposition < Schnittdatenarray.count
             { 
                print("cncstepperposition < Schnittdatenarray.count: newDataAktion taskcode: \(taskcode)")
+               self.write_CNC_Abschnitt()
+               /*
                let seconds = 0.1
                DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
                {
                   self.write_CNC_Abschnitt()
                }
+ */
             }
          }
          
