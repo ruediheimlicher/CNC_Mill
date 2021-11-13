@@ -1080,6 +1080,8 @@ class rPCB: rViewController
    
    @IBAction func report_readSVG(_ sender: NSButton)
    {
+      
+      let drillarray = DrillDaten(tiefe: 20)
       let SVG_URL = openFile()
       // https://stackoverflow.com/questions/10016475/create-nsscrollview-programmatically-in-an-nsview-cocoa
       guard let fileURL = SVG_URL else { return  }
@@ -1869,6 +1871,37 @@ class rPCB: rViewController
       print("setPCB_Output End")
    } // setPCB_Output
    
+   func DrillDaten(tiefe:Int) ->[[UInt8]]
+   {
+      var DrillDatenarray = [[UInt8]]()
+      var drillArray:[[UInt8]] = [drillvektor(szInt: -tiefe),drillvektor(szInt: (tiefe))]
+      
+      var zhome = 0
+      drillArray[0][24] = 0xBA
+     
+      drillArray[0][25] = 1 // erster Abschnitt
+      drillArray[1][25] = 2 // letzter Abschnitt
+      drillArray[0][27] = 0 // index
+      drillArray[1][27] = 1 // index
+      
+      // PWM
+      drillArray[0][29] = 128 // PWM down
+      drillArray[1][29] = 64 // PWM up
+ 
+      drillArray[0][32] = DEVICE_MILL
+      drillArray[1][32] = DEVICE_MILL
+      drillArray[0][33] = 0 // Drillstatus begin
+      
+      drillArray[0][36] = 0 // default H fuer tabledataZeile
+      drillArray[0][37] = 0xFF // default L fuer tabledataZeile
+      print("DrillDaten count: \(drillArray.count) drillArray: \(drillArray)")
+      
+      
+      
+      return DrillDatenarray
+   }
+   
+   
    func PCB_Daten(floatarray:[[Double]])->[[UInt8]]
    {
       print("PCB_Daten\n")
@@ -1974,8 +2007,9 @@ class rPCB: rViewController
          
       } // for zeilenindex
       
+      
       // Zeilennummern kontrollieren
-      /*
+      
       var z=0
       for z in 0..<PCB_Datenarray.count
       {
@@ -1983,7 +2017,7 @@ class rPCB: rViewController
          print("PCBzeile: \(z) \(PCB_Datenarray[z][27])")
          
       }
- */
+  
       return PCB_Datenarray
    }
    
@@ -4359,12 +4393,13 @@ class rPCB: rViewController
             // verzoegert abschicken
              // https://stackoverflow.com/questions/27517632/how-to-create-a-delay-in-swift
             let seconds = 0.4
-            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
-            {
+  //          DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
+   //         {
                // Put your code which should be executed with a delay here
                
                //print(" Schnittdatenarray nach insert: \(Schnittdatenarray)")
                self.write_CNC_Zeile(zeilenarray: drillWegArray)
+   //         }
                if self.teensy.readtimervalid() == true
                {
                   //print("PCB readtimer valid vor")
@@ -4373,7 +4408,7 @@ class rPCB: rViewController
                {
                   self.teensy.start_read_USB(true)
                }
-            }
+            
             break
             
             
@@ -4491,10 +4526,22 @@ class rPCB: rViewController
                     userInfo: notificationDic)
             break
             
-            
+         // MARK: ***     ***   D6        
          case 0xD6:
             print("newDataAktion  D6")
             // Rueckmeldung von SendData
+            var abschnittnummer = data[5]<<8 + data[6]
+            let ladepos =  Int(data[8] )
+            print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
+            
+            
+            Plattefeld.setStepperposition(pos:Int(abschnittnummer))
+         /*
+            if cncstepperposition < Schnittdatenarray.count
+            {
+               write_CNC_Abschnitt()
+            }
+           */
             break
 
             
@@ -4509,7 +4556,7 @@ class rPCB: rViewController
             break
             
              
-            
+         // MARK: ***     default        
          default:
             print("newDataAktion default abschnittnummer: \(abschnittnummer)")
             //Plattefeld.setStepperposition(pos:abschnittnummer)
@@ -4517,7 +4564,7 @@ class rPCB: rViewController
          }// switch taskcode
                   
          
-         
+         print("switch taskcode end")
          // **************************************
          let state = steppercontKnopf.state
          
@@ -4531,15 +4578,15 @@ class rPCB: rViewController
          if state == .on
          {
             
-  //          print("newDataAktion writecncabschnitt go cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
+            //print("newDataAktion writecncabschnitt go cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
             if cncstepperposition < Schnittdatenarray.count
             { 
                print("cncstepperposition < Schnittdatenarray.count: newDataAktion taskcode: \(taskcode)")
-    //           let seconds = 1.0
-    //           DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
-     //          {
+               let seconds = 0.1
+               DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
+               {
                   self.write_CNC_Abschnitt()
-     //          }
+               }
             }
          }
          
