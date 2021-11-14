@@ -1190,8 +1190,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "4866"
             endingLineNumber = "4866"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "report_send_Move(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1332,10 +1332,10 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5235"
-            endingLineNumber = "5235"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "5163"
+            endingLineNumber = "5163"
+            landmarkName = "report_goXY(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1494,24 +1494,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "4815"
             endingLineNumber = "4815"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "25397E7E-BFAF-467B-AF0E-A094B815B8C0"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CNC_Mill/rPCB.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4920"
-            endingLineNumber = "4920"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "move(dx:dy:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1524,10 +1508,10 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5211"
-            endingLineNumber = "5211"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "5139"
+            endingLineNumber = "5139"
+            landmarkName = "report_goXY(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1592,22 +1576,6 @@
             endingLineNumber = "4238"
             landmarkName = "newDataAktion(_:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "8957E3B1-659E-48E4-A3FD-49CAF3E37FE1"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CNC_Mill/rPCB.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4940"
-            endingLineNumber = "4940"
-            landmarkName = "unknown"
-            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2198,8 +2166,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "4668"
             endingLineNumber = "4668"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "report_horizontalCheckbox(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2214,8 +2182,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "4667"
             endingLineNumber = "4667"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "report_horizontalCheckbox(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2230,8 +2198,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "4666"
             endingLineNumber = "4666"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "report_horizontalCheckbox(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2904,22 +2872,6 @@
             endingLineNumber = "1219"
             landmarkName = "report_readSVG(_:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F7D4323E-CFA4-4A94-BFC4-89613E18B7FD"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CNC_Mill/rPCB.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5024"
-            endingLineNumber = "5024"
-            landmarkName = "unknown"
-            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

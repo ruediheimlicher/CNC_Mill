@@ -2723,7 +2723,7 @@ class rPCB: rViewController
       
       Plattefeld.setStepperposition(pos: 0) // Ersten Punkt markieren
       //Schnittdatenarray[0][24] = 0xB5 //
-      Schnittdatenarray[0][24] = 0xD5 //
+      Schnittdatenarray[0][24] = 0xD5     // start neue serie
       for i in 1..<Schnittdatenarray.count
       {
      //    Schnittdatenarray[i][24] = 0xD5 //
@@ -3423,7 +3423,7 @@ class rPCB: rViewController
          } // else
          
       }// if count
-      print("\n                                             write_CNC END\n")
+      print("ttwrite_CNC END\n")
    }
    
    func write_CNC_Zeile(zeilenarray:[UInt8])
@@ -4161,7 +4161,7 @@ class rPCB: rViewController
       // analog readUSB() in USB_Stepper
       
       
-      print("                                      newDataAktion  start\n")
+      print("                       newDataAktion  start\n")
       //    let lastData = teensy.getlastDataRead()
       
       // print("lastData:\t \(lastData[1])\t\(lastData[2])   ")
@@ -4601,7 +4601,7 @@ class rPCB: rViewController
          
    
       } // if DEVICE
-      print("                       newDataAktion  end\n\n")
+      print("                       newDataAktion  end\n")
    } // newDataAktion
    
    // MARK: ***      report_horizontalCheckbox  
@@ -4909,79 +4909,7 @@ class rPCB: rViewController
    @IBAction func report_send_TextDaten(_ sender: NSButton)
    {
       print("report_send_TextDaten")
-      //    clearteensy()
-      let dx = dxFeld.doubleValue
-      let dy = dyFeld.doubleValue
       
-      print("report_send_TextDaten dx: \(dx) dy: \(dy)")
-      lastklickposition.x = 0
-      lastklickposition.y = 0
-      let punkt:NSPoint = NSMakePoint(CGFloat(dx), CGFloat(dy))
-      var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
-      //     var wegarray = wegArrayMitWegXY(wegx:dx, wegy:dy)
-      
-      wegarray[32] = DEVICE_MILL
-      Schnittdatenarray.removeAll(keepingCapacity: true)
-      cncstepperposition = 0
-      if Schnittdatenarray.count == 0 // Array im Teensy loeschen
-      {
-         teensy.write_byteArray[25] = 1 //erstes Element
-         //teensy.write_byteArray[24] = 0xE0 // Stopp
-         if teensy.dev_present() > 0
-         {
-            //           let senderfolg = teensy.send_USB()
-            //           print("PCB report_send_TextDaten clear senderfolg: \(senderfolg)")
-         }
-         
-      }
-      
-      wegarray[25] = 3 // nur 1 Abschnitt
-      
-      wegarray[24] = 0xB3
-      
-      var zeilenposition:UInt8 = 0
-      Schnittdatenarray.append(wegarray)
-      stepperschritteFeld.integerValue = Schnittdatenarray.count
-      /*
-       for zeilenindex in stride(from: 0, to: Schnittdatenarray.count-1, by: 1)
-       {
-       zeilenposition = 0
-       if zeilenindex == 0
-       {
-       
-       zeilenposition |= (1<<FIRST_BIT); // Erstes Element, Start
-       }
-       if zeilenindex == Schnittdatenarray.count - 1
-       {
-       zeilenposition |= (1<<LAST_BIT);
-       }
-       
-       Schnittdatenarray[zeilenindex][25] = zeilenposition // innere Elemente
-       
-       }
-       */
-      print("sendTextdaten Schnittdatenarray: \(Schnittdatenarray)")
-      
-      if Schnittdatenarray.count == 1
-      {
-         print("report_send_TextDaten start CNC")
-         write_CNC_Abschnitt()   
-         if teensy.readtimervalid() == true
-         {
-            //print("PCB readtimer valid vor")
-            
-         }
-         else 
-         {
-            //print("PCB readtimer not valid vor")
-            
-            var start_read_USB_erfolg = teensy.start_read_USB(true)
-            print("PCB report home start_read_USB_erfolg: \(start_read_USB_erfolg)")
-         }
-         
-         
-         
-      }
    }// report_send_TextDaten
    
    @IBAction func report_flip_TextDaten(_ sender: NSButton)
