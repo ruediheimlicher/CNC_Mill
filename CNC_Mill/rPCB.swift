@@ -39,6 +39,10 @@ class rPCB: rViewController
    
    var ablaufstatus:UInt8 = 0
    let DRILL_OK = 1
+   var dpi2mmfaktor:Double = 0
+   var mmFormatter = NumberFormatter()
+
+   var drillweg = 25
  
    var anschlagstatus = 0;
    
@@ -99,8 +103,16 @@ class rPCB: rViewController
    
    @IBOutlet weak var drillKnopf: NSButton!
    @IBOutlet weak var drillOKKnopf: NSButton!
+   @IBOutlet weak var drillUPKnopf: NSButton!
    
-    @IBOutlet weak var Zeilen_Stepper: NSStepper!
+   @IBOutlet weak var drillStepUPKnopf: NSButton!
+   @IBOutlet weak var drillStepDOWNKnopf: NSButton!
+   
+   @IBOutlet weak var drillwegFeld: NSTextField!
+   @IBOutlet weak var drillwegmmFeld: NSTextField!
+    
+   
+   @IBOutlet weak var Zeilen_Stepper: NSStepper!
    
    
    
@@ -228,6 +240,10 @@ class rPCB: rViewController
       print ("PCB viewDidAppear selectedDevice: \(selectedDevice)")
    }
    
+   @objc func printSomething() {
+           print("Hello")
+       }
+   
    override func viewDidLoad() 
    {
       super.viewDidLoad()
@@ -253,6 +269,12 @@ class rPCB: rViewController
       //formatter.roundingMode = .down
       
       transformfaktor = INTEGERFAKTOR/10/propfaktor
+      dpi2mmfaktor = propfaktor / INTEGERFAKTOR
+      //mmFormatter.usesGroupingSeparator = false
+      //mmFormatter.numberStyle = .currency
+      // localize to your grouping and decimal separator
+      //mmFormatter.locale = Locale.current
+      mmFormatter.minimumFractionDigits = 2
       
       print("transformfaktor: \(transformfaktor)")
       let sup = self.view.superview
@@ -269,6 +291,38 @@ class rPCB: rViewController
       NotificationCenter.default.addObserver(self, selector:#selector(dataTableAktion(_:)),name:NSNotification.Name(rawValue: "datatable"),object:nil)
 
       NotificationCenter.default.addObserver(self, selector:#selector(klickpunktAktion(_:)),name:NSNotification.Name(rawValue: "klickpunkt"),object:nil)
+      //mmFormatter.string(from: NSNumber(Double(drillweg) * dpi2mmfaktor))
+      let drillwegmm = Double(drillweg) * dpi2mmfaktor
+      let mmString = String(format: "%0.2f",drillwegmm)
+      drillwegmmFeld.stringValue = mmString
+      
+      drillwegFeld.integerValue = drillweg
+      
+      let stepUpKnopf = NSButton()
+      stepUpKnopf.frame = NSMakeRect(1060,310, 25, 25) 
+      stepUpKnopf.title = "UP"
+      stepUpKnopf.setButtonType(NSButton.ButtonType.momentaryPushIn)
+      stepUpKnopf.bezelStyle = NSButton.BezelStyle.shadowlessSquare
+      stepUpKnopf.imageScaling = .scaleProportionallyUpOrDown
+      stepUpKnopf.image = NSImage(named: NSImage.Name(rawValue: "pfeilup"))
+    //  stepUpKnopf.sendActionOn(NSEvent.NSEventMaskLeftMouseDown)
+
+      stepUpKnopf.tag = 100
+      stepUpKnopf.target = self
+      stepUpKnopf.action = #selector(self.drill_up) 
+      self.view.addSubview(stepUpKnopf)
+
+      let stepDownKnopf = NSButton()
+      stepDownKnopf.frame = NSMakeRect(1060,285, 25, 25) 
+      stepDownKnopf.title = "UP"
+      stepDownKnopf.setButtonType(NSButton.ButtonType.momentaryPushIn)
+      stepDownKnopf.bezelStyle = NSButton.BezelStyle.shadowlessSquare
+      stepDownKnopf.imageScaling = .scaleProportionallyUpOrDown
+      stepDownKnopf.image = NSImage(named: NSImage.Name(rawValue: "pfeilup2"))
+      stepDownKnopf.tag = 101
+      stepDownKnopf.target = self
+      stepDownKnopf.action = #selector(self.drill_down) 
+      self.view.addSubview(stepDownKnopf)
       
       
       // schnittPfad
@@ -1081,7 +1135,7 @@ class rPCB: rViewController
    @IBAction func report_readSVG(_ sender: NSButton)
    {
       
-      let drillarray = DrillDaten(tiefe: 20)
+      let drillarray = DrillDaten(tiefe: drillweg)
       let SVG_URL = openFile()
       // https://stackoverflow.com/questions/10016475/create-nsscrollview-programmatically-in-an-nsview-cocoa
       guard let fileURL = SVG_URL else { return  }
@@ -1155,7 +1209,7 @@ class rPCB: rViewController
             
             if (trimmzeile.contains("circle") || trimmzeile.contains("ellipse"))
             {
-               // print("i: \(i) trimmzeile: \(trimmzeile)")
+                print("i: \(i) trimmzeile: \(trimmzeile)")
                circle = 6
                circlenummer = i
                circleelementarray.removeAll()
@@ -1163,16 +1217,17 @@ class rPCB: rViewController
                circleelementdic = [:]
                circlefloatelementdic = [:]
             }
+            
             if circle > 0
             {
                if circle < 5
                {            
                   print("\t i: \(i) \tdata: \(trimmzeile)")
                   let zeilenarray = trimmzeile.split(separator: "=")
+                  print("\t\t i: \(i) \tzeilenarray: \(zeilenarray)")
                   var zeilenindex = 0
                   for element in zeilenarray
                   {
-                     
                      if element == "id" // 
                      {
                         circleelementarray.append(Int(circlenummer))
@@ -1896,8 +1951,6 @@ class rPCB: rViewController
       drillArray[0][37] = 0xFF // default L fuer tabledataZeile
       print("DrillDaten count: \(drillArray.count) drillArray: \(drillArray)")
       
-      
-      
       return DrillDatenarray
    }
    
@@ -1907,8 +1960,8 @@ class rPCB: rViewController
       print("PCB_Daten\n")
       //  var speed = speedFeld.intValue
       var PCB_Datenarray = [[UInt8]]()
-      
-      var drillArray:[[UInt8]] = [drillvektor(szInt: -20),drillvektor(szInt: (20))]
+      let tempweg = drillwegFeld.integerValue
+      var drillArray:[[UInt8]] = [drillvektor(szInt: -drillweg),drillvektor(szInt: (drillweg))]
       
       //Schnittdatenarray.removeAll()
       Schnittdatenarray_n.removeAll()
@@ -2688,8 +2741,8 @@ class rPCB: rViewController
       //     Plattefeld.setStepperposition(pos:cncstepperposition)
       let anzabschnitte = Schnittdatenarray.count
       
-      //      Schnittdatenarray[0][26] = UInt8((anzabschnitte & 0xFF00) >> 8)
-      //     Schnittdatenarray[0][27] = UInt8(anzabschnitte & 0x00FF)
+         Schnittdatenarray[0][33] = UInt8((anzabschnitte & 0xFF00) >> 8)
+         Schnittdatenarray[0][34] = UInt8(anzabschnitte & 0x00FF)
       if Schnittdatenarray.count == 0 // Array im Teensy loeschen
       {
          teensy.write_byteArray[25] = 1 //erstes Element
@@ -3201,7 +3254,7 @@ class rPCB: rViewController
        */
       
       let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
-      let dpi2mmfaktor = propfaktor / INTEGERFAKTOR
+      
       
       let start = [0,0]
       //let ziel = [wegZ]
@@ -3547,7 +3600,7 @@ class rPCB: rViewController
    @objc  override func mausstatusAktion(_ notification:Notification)
    {
       let info = notification.userInfo
-  //    print("PCB mausstatusAktion:\t \(String(describing: info))")
+     print("PCB mausstatusAktion:\t \(String(describing: info))")
       let usb_ok = teensy.dev_present()
       print("PCB mausstatusAktion usb_ok: \(usb_ok)")
       
@@ -3556,15 +3609,28 @@ class rPCB: rViewController
       if devtag == 1
       {
          let pfeiltag = info?["tag"] as! Int
-         var schrittweite = info?["schrittweite"] as! Int
-         schrittweite = pfeilschrittweite
-         schrittweite = 200
+         var mausschrittweite = info?["schrittweite"] as! Int
+         var schrittweite = 0
+         schrittweite = 500
          var dx:Int = 0
          var dy:Int = 0
          var dz:Int = 0
          var vorzeichenx = 0;
          var vorzeicheny = 0;
          var vorzeichenz = 0;
+         var mausstatus:UInt8 = 0
+         
+         if (mousedownindex == 1)
+         {
+            
+            mausstatus |= (1<<1)
+         }
+         else
+         {
+            print("mouseup")
+            mausstatus &= ~(1<<1)
+         }
+
          print("PCB mausstatusAktion devtag:\t \(devtag ) pfeiltag:\t \(pfeiltag ) schrittweite: \(schrittweite) mousedownindex: \(mousedownindex)\t")
          
          switch pfeiltag
@@ -3594,11 +3660,26 @@ class rPCB: rViewController
             dz = schrittweite * (-1)
             vorzeichenz = 1
             break   
+         
+             
+         case 26: // Drill StepDOWN
+            print("mausstatusAktion  Drill STEP UP")
+            dz = drillwegFeld.integerValue
+            vorzeichenz = 1
+            mausstatus |= (1<<2)
+            break   
+         
+         case 28: // Drill StepUP
+            print("mausstatusAktion  Drill STEP DOWN")
+            dz = drillwegFeld.integerValue * (-1)
+            mausstatus |= (1<<2)
+            break
+
             
          default:
             break
          }
-         print("mausstatusAktion dx: \(dx) dy: \(dy)")
+         print("mausstatusAktion dx: \(dx) dy: \(dy) dz: \(dz)")
          var pfeilwegarray = [UInt8]()
          if (pfeiltag > 20)
          {
@@ -3612,7 +3693,7 @@ class rPCB: rViewController
          pfeilwegarray[32] = 1
          pfeilwegarray[24] = 0xDE
          pfeilwegarray[38] = UInt8(pfeiltag)
-         var mausstatus:UInt8 = 0
+         /*
          if (mousedownindex == 1)
          {
             mausstatus |= (1<<1)
@@ -3622,6 +3703,8 @@ class rPCB: rViewController
             print("mouseup")
             mausstatus &= ~(1<<1)
          }
+         */
+         print("mausstatusAktion mausstatus: \(mausstatus)")
          pfeilwegarray[40] = mausstatus
          
          for z in 0 ... pfeilwegarray.count-1
@@ -3850,7 +3933,7 @@ class rPCB: rViewController
          print("schritteZround zu gross")
       }
       //     motorstatus = (1<<MOTOR_C)
-      var drillschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:0, syInt:0, szInt:schrittezInt, zeit:zeit  )// Array mit Daten fuer USB
+      let drillschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:0, syInt:0, szInt:schrittezInt, zeit:zeit  )// Array mit Daten fuer USB
       
 //      print("drillschnittdatenarray: \(drillschnittdatenarray)")
       return drillschnittdatenarray
@@ -3963,8 +4046,72 @@ class rPCB: rViewController
    @IBAction func report_Drill(_ sender: NSButton)
    {
       print("\n+++++++     report_Drill tag: \(sender.tag) ")
+      let tempweg:Int = drillwegFeld.integerValue
+      drilltask(weg:-tempweg,status:1)
+   }
+   
+   @IBAction func report_Drill_up(_ sender: NSButton)
+   {
+      print("\n+++++++     report_Drill_up tag: \(sender.tag) ")
       
-      drilltask(weg:-25,status:1)
+      var drillWegArray = drillMoveArray(wegz: Double(drillwegFeld.integerValue))
+      drillWegArray[24] = 0xB7
+      drillWegArray[26] = 0
+      drillWegArray[27] = 0
+      drillWegArray[29] = 99 // PWM
+      drillWegArray[25] = 2 // lage
+      drillWegArray[32] = DEVICE_MILL
+      drillWegArray[33] = 0 // drillstatus beginn
+
+      write_CNC_Zeile(zeilenarray: drillWegArray)
+   }
+   
+   @objc func drill_up()
+   {
+      print("\n+++++++     drill_up  ")
+      
+      var drillWegArray = drillMoveArray(wegz: Double(drillwegFeld.integerValue))
+      drillWegArray[24] = 0xB7
+      drillWegArray[26] = 0
+      drillWegArray[27] = 0
+      drillWegArray[29] = 99 // PWM
+      drillWegArray[25] = 2 // lage
+      drillWegArray[32] = DEVICE_MILL
+      drillWegArray[33] = 0 // drillstatus beginn
+      drillWegArray[25] = 3
+      write_CNC_Zeile(zeilenarray: drillWegArray)
+   }
+
+   @objc func drill_down()
+   {
+      print("\n+++++++     drill_down  ")
+      
+      var drillWegArray = drillMoveArray(wegz: Double((drillwegFeld.integerValue) * -1) )
+      drillWegArray[24] = 0xB7
+      drillWegArray[26] = 0
+      drillWegArray[27] = 0
+      drillWegArray[29] = 99 // PWM
+      drillWegArray[25] = 2 // lage
+      drillWegArray[32] = DEVICE_MILL
+      drillWegArray[33] = 0 // drillstatus beginn
+      drillWegArray[25] = 3
+      write_CNC_Zeile(zeilenarray: drillWegArray)
+   }
+
+   @IBAction func report_Drill_down(_ sender: NSButton)
+   {
+      print("\n+++++++     report_Drill_down tag: \(sender.tag) ")
+      
+      var drillWegArray = drillMoveArray(wegz: (Double(drillwegFeld.integerValue)) * -1)
+      drillWegArray[24] = 0xB7
+      drillWegArray[26] = 0
+      drillWegArray[27] = 0
+      drillWegArray[29] = 99 // PWM
+      drillWegArray[25] = 2 // lage
+      drillWegArray[32] = DEVICE_MILL
+      drillWegArray[33] = 0 // drillstatus beginn
+
+      write_CNC_Zeile(zeilenarray: drillWegArray)
    }
    
    @objc func drilltask(weg:Int, status:UInt8)
@@ -3974,8 +4121,8 @@ class rPCB: rViewController
       print("drill Schnittdatenarray.count: \(count)");
       let stepperpos = stepperpositionFeld.integerValue
       print("drill stepperpos: \(stepperpos)");
-      var drillweg = weg
-      var drillWegArray = drillMoveArray(wegz: Double(drillweg))
+      var tempdrillweg = weg
+      var drillWegArray = drillMoveArray(wegz: Double(tempdrillweg))
       drillWegArray[24] = 0xBA
       drillWegArray[26] = 0
       drillWegArray[27] = 0
@@ -4363,7 +4510,7 @@ class rPCB: rViewController
                //break
             }
             // Rueckweg schicken
-            drilltask(weg:25, status:2)
+            drilltask(weg:drillwegFeld.integerValue, status:2)
             
             break
             var drillweg = 25

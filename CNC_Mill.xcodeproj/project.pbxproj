@@ -18,6 +18,8 @@
 		BD33758A249604A00087C9FF /* CNC_Eingabe.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD337589249604A00087C9FF /* CNC_Eingabe.xib */; };
 		BD337591249604F40087C9FF /* rEinstellungen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD337590249604F40087C9FF /* rEinstellungen.swift */; };
 		BD337593249606240087C9FF /* rJoystickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD337592249606230087C9FF /* rJoystickView.swift */; };
+		BD52CE412743B35A00956AEB /* pfeilup.png in Resources */ = {isa = PBXBuildFile; fileRef = BD52CE402743B35900956AEB /* pfeilup.png */; };
+		BD52CE472743B8A700956AEB /* pfeilup2.png in Resources */ = {isa = PBXBuildFile; fileRef = BD52CE462743B8A700956AEB /* pfeilup2.png */; };
 		BDC357EE24BB2DF4003F20F8 /* pfeil_links_mini.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E524BB2DF2003F20F8 /* pfeil_links_mini.jpg */; };
 		BDC357EF24BB2DF4003F20F8 /* pfeil_up_mini.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E624BB2DF2003F20F8 /* pfeil_up_mini.jpg */; };
 		BDC357F024BB2DF4003F20F8 /* pfeil_rechts.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E724BB2DF2003F20F8 /* pfeil_rechts.jpg */; };
@@ -59,6 +61,8 @@
 		BD33758C249604B60087C9FF /* CNC_Mill-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CNC_Mill-Bridging-Header.h"; sourceTree = "<group>"; };
 		BD337590249604F40087C9FF /* rEinstellungen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rEinstellungen.swift; sourceTree = "<group>"; };
 		BD337592249606230087C9FF /* rJoystickView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = rJoystickView.swift; path = CNC_Mill/rJoystickView.swift; sourceTree = SOURCE_ROOT; };
+		BD52CE402743B35900956AEB /* pfeilup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pfeilup.png; sourceTree = "<group>"; };
+		BD52CE462743B8A700956AEB /* pfeilup2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pfeilup2.png; sourceTree = "<group>"; };
 		BDC357E524BB2DF2003F20F8 /* pfeil_links_mini.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_links_mini.jpg; sourceTree = "<group>"; };
 		BDC357E624BB2DF2003F20F8 /* pfeil_up_mini.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_up_mini.jpg; sourceTree = "<group>"; };
 		BDC357E724BB2DF2003F20F8 /* pfeil_rechts.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_rechts.jpg; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 		BD33757E248D71E10087C9FF /* Bilder */ = {
 			isa = PBXGroup;
 			children = (
+				BD52CE462743B8A700956AEB /* pfeilup2.png */,
+				BD52CE402743B35900956AEB /* pfeilup.png */,
 				BDC357ED24BB2DF4003F20F8 /* home.jpg */,
 				BDC357EA24BB2DF3003F20F8 /* pfeil_down_mini.jpg */,
 				BDC357EB24BB2DF3003F20F8 /* pfeil_down.jpg */,
@@ -255,6 +261,7 @@
 				BDC357F424BB2DF4003F20F8 /* pfeil_down.jpg in Resources */,
 				BDC357EF24BB2DF4003F20F8 /* pfeil_up_mini.jpg in Resources */,
 				BDC357F324BB2DF4003F20F8 /* pfeil_down_mini.jpg in Resources */,
+				BD52CE472743B8A700956AEB /* pfeilup2.png in Resources */,
 				BDC357F224BB2DF4003F20F8 /* pfeil_rechts_mini.jpg in Resources */,
 				BD337585248D71F30087C9FF /* ok.png in Resources */,
 				BD337583248D71F30087C9FF /* notok.png in Resources */,
@@ -263,6 +270,7 @@
 				BDC357F824C099C2003F20F8 /* BBB.txt in Resources */,
 				BDC357FA24C83C24003F20F8 /* CCC.txt in Resources */,
 				BDF659302482E2DD009F2E67 /* Assets.xcassets in Resources */,
+				BD52CE412743B35A00956AEB /* pfeilup.png in Resources */,
 				BDF6323E24D9524D00F654D9 /* AAA.txt in Resources */,
 				BDF659332482E2DD009F2E67 /* Main.storyboard in Resources */,
 				BD337588248E52BF0087C9FF /* Halt.jpg in Resources */,
@@ -345,7 +353,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -407,7 +415,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;

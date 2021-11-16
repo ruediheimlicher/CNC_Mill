@@ -14,6 +14,8 @@
 
 //import WebKit
 import Cocoa
+import Foundation
+import IOKit.hid
 
 public var lastDataRead = Data.init(count:64)
 
@@ -93,27 +95,43 @@ class  rPfeiltaste  : NSButton
       var dx = 0
       var dy = 0
       //let schrittweite:Int = 6
-      
+      var pfeiltimerOK = 0;
       switch pfeiltag 
       {
       case 1: // right
+         pfeiltimerOK = 1
          dx = schrittweite
          break
       case 2: // up
+         pfeiltimerOK = 1
          dy = schrittweite
          break
       case 3: // left
+         pfeiltimerOK = 1
          dx = schrittweite * -1
          break
       case 4: // down
+         pfeiltimerOK = 1
          dy = schrittweite * -1
          break
          
       case 22: // Drill down
+         pfeiltimerOK = 1
          dy = schrittweite * -1
          break
 
       case 24: // Drill up
+         pfeiltimerOK = 1
+         dy = schrittweite
+         break
+
+      case 26: // Drill up
+         
+         dy = schrittweite
+         break
+
+      case 28: // Drill up
+        
          dy = schrittweite
          break
 
@@ -126,8 +144,11 @@ class  rPfeiltaste  : NSButton
       print("rPfeiltaste mousedown tag: \(pfeiltag) schrittweite: \(sw)") 
       
       var notificationDic = ["tag": pfeiltag, "schrittweite":schrittweite, "devtag":devtag, "mousedown":1]
-      pfeiltimer = Timer.scheduledTimer(timeInterval: 0.3 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
       
+  if pfeiltimerOK == 1
+  {
+   pfeiltimer = Timer.scheduledTimer(timeInterval: 1.0 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
+  }   
       let nc = NotificationCenter.default
       
       nc.post(name:Notification.Name(rawValue:"maus_status"),
@@ -139,7 +160,7 @@ class  rPfeiltaste  : NSButton
    override  func mouseUp(with theEvent: NSEvent) 
    {
       super.mouseUp(with: theEvent)
-      print("rPfeiltaste mouseup")  
+      print("\n*****    ****    rPfeiltaste mouseup\n")  
       pfeiltimer?.invalidate()
       // let pfeiltag = self.tag
       mausstatus &= ~(1<<1)
@@ -887,7 +908,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
  
    @objc  func mausstatusAktion(_ notification:Notification)
    {
-       //print("ViewController mausstatusAktion")
+       print("ViewController mausstatusAktion")
    }
    
    @IBAction func report_HALT(_ sender: NSButton)

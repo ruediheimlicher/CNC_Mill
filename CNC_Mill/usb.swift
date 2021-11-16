@@ -42,11 +42,40 @@ open class usb_teensy: NSObject
    
    var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
    
+ //  var manager: IOHIDManager
+   var deviceList = NSArray()                  // Used in multiple matching dictionary
+
+   
    override init()
    {
+      /*
+      manager = IOHIDManagerCreate(kCFAllocatorDefault, IOOptionBits(kIOHIDOptionsTypeNone))
+      
+      
+      manager = IOHIDManagerCreate(kCFAllocatorDefault, IOOptionBits(kIOHIDOptionsTypeNone))
+      if (CFGetTypeID(manager) != IOHIDManagerGetTypeID())
+      {
+          print("Can't create manager")
+          exit(1);
+      }
+      else 
+      {
+         print("Manager OK")
+      }
+      deviceList = deviceList.adding(CreateDeviceMatchingDictionary(inUsagePage: kHIDPage_GenericDesktop, inUsage: kHIDUsage_GD_Keyboard)) as NSArray
+      */
       super.init()
    }
    
+   func CreateDeviceMatchingDictionary(inUsagePage: Int ,inUsage: Int ) -> CFMutableDictionary
+   {
+       /* // note: the usage is only valid if the usage page is also defined */
+       
+       let resultAsSwiftDic = [kIOHIDDeviceUsagePageKey: inUsagePage, kIOHIDDeviceUsageKey : inUsage]
+       let resultAsCFDic: CFMutableDictionary = resultAsSwiftDic as! CFMutableDictionary
+       return resultAsCFDic
+   }
+
    
    open func USBOpen()->Int32
    {
@@ -221,7 +250,7 @@ open class usb_teensy: NSObject
          {
             readtimer?.invalidate()
          }
-         readtimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
+         readtimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
       }
       
       return Int(result) //
