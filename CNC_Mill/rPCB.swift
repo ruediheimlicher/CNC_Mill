@@ -897,15 +897,16 @@ class rPCB: rViewController
             let trimmzeile = zeile.trimmingCharacters(in: .whitespaces)
             if (trimmzeile.contains("circle") || trimmzeile.contains("ellipse"))
             {
-               // print("i: \(i) trimmzeile: \(trimmzeile)")
-               circle = 6
+               print("i: \(i) relevante zeile mit circle oder ellipse: \(trimmzeile)")
+               circle = 7
                circlenummer = i
                circleelementarray.removeAll()
                circleelementdic = [:]
             }
-            if circle > 0
+         
+            if circle > 0 // relevante zeile ist detektiert, nächste 6 zeilen abarbeiten, circle wird decrementiert
             {
-               if circle < 5
+               if circle < 6
                {
                   
                   //print("\t i: \(i) \tdata: \(trimmzeile)")
@@ -1130,11 +1131,212 @@ class rPCB: rViewController
       }
       return fliparray
    }
+   
+   func punktarrayvonSGV(sgvarray: [String])->[[Double]]
+   {
+      var i=0
+      var circle = 0
+      var circlenummer = 0
+      circlearray = [[Int]]()
+      var circleelementarray = [Int]()
+      var circlefloatelementarray = [Double]()
+      var circleelementdic = [String:Int]()
+      var punktarray = [[Double]]()
+      var circlefloatelementdic = [String:Double]()
+      var circleorellipsefloatelementdic = [String:Double]() // direkt aufgebaut, mit transform
+      
+      var circleorellipsefloatelementarray = [Double]()
+      
+      var transformdoublearray = [Double]()
+      var transformok = 0 //1: transform ist vorhanden
+      // transform: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform
+      let labelarray:[String] = ["cx","cy","transform"] // relevante daten
+      let lastlabel:String = String(labelarray.last ?? "") // label "transform"
+      var zeilenindex:Double = 0
+      for zeile in sgvarray
+      {
+         //print("i: \(i) zeile: \(zeile)")
+         let trimmzeile = zeile.trimmingCharacters(in: .whitespaces)
+         
+         
+         if (trimmzeile.contains("circle") || trimmzeile.contains("ellipse")) // relevante zeile mit circle oder ellipse, start data-Block
+         {
+            print("\ncircle oder ellipse\ti: \(i) trimmzeile: \(trimmzeile)")
+            circle = 9
+            circlenummer = i
+            circleelementarray.removeAll()
+            circlefloatelementarray.removeAll()
+            transformdoublearray.removeAll() // koeff array leeren
+            circleelementdic = [:]
+            circlefloatelementdic = [:]
+            circleorellipsefloatelementdic = [:]
+            circleorellipsefloatelementarray.removeAll()
+           // circleorellipsefloatelementarray.append(zeilenindex)
+            transformok = 0 // wer weiss?
+         }
+
+         // circle detektiert. Anzahl ist max 7 
+         // trenner: </g>
+         if circle > 0 // circle oder ellipse detektiert
+         {
+            
+            
+            if circle < 9 // circle wird mit jeder zeile decrementiert, 
+            {     
+               
+               print("\nneue Zeile i: \(i)\t circle: \(circle)  \ttrimmzeile: \(trimmzeile)")
+               let zeilenarray = trimmzeile.split(separator: "=") // aufteilen in label und data
+               print("\t\t i: \(i) \t zeilenarray: \(zeilenarray)")
+               
+               
+               
+               
+               // neu mit labelarray
+               
+               if (zeilenarray.count > 1)  // = ist vorhanden, Daten
+               {
+                  let firstelement:String = String(zeilenarray[0]) // label
+                  print("i: \(i) \t firstelement: \t*\(firstelement)*")
+                  
+                  let contains = labelarray.contains(where:{$0 == firstelement})
+                  
+                  if contains == true // zeile ist relevant
+                  {
+                     
+                     var partB = zeilenarray[1].replacingOccurrences(of: "\"", with: "")
+                     partB = partB.replacingOccurrences(of: "/>", with: "")
+                     print("i: \(i) \t firstelement: \t \(firstelement) \t partB neu: \t\(partB)")
+                     if lastlabel == firstelement // transform lesen
+                     {
+                        transformok = 1
+                        print("transform: partB raw: \(partB)")
+                        partB = partB.replacingOccurrences(of: "matrix(", with: "")
+                        partB = partB.replacingOccurrences(of: ")", with: "")
+                        print("transform: partB sauber: \(partB)")
+                        let transformarray = partB.split(separator: ",")
+                        
+                        print("transformarray: \(transformarray[0]) \t \(transformarray[1]) \t \(transformarray[2])\t\(transformarray[3])")
+                        guard let koeff_a:Double = Double(transformarray[0]) else { return punktarray} 
+                        guard let koeff_b:Double = Double(transformarray[1]) else { return punktarray}
+                        guard let koeff_c:Double = Double(transformarray[2]) else { return punktarray}
+                        guard let koeff_d:Double = Double(transformarray[3]) else { return punktarray}
+                        guard let koeff_e:Double = Double(transformarray[4]) else { return punktarray} 
+                        guard let koeff_f:Double = Double(transformarray[5]) else { return punktarray}
+                        
+                        // transform-matrix bereitstellen
+                        transformdoublearray = [koeff_a,koeff_b,koeff_c,koeff_d,koeff_e,koeff_f]
+                        print("i: \(i) \t firstelement: \(firstelement) transformdoublearray: \(transformdoublearray)")
+                        
+                        
+                     }
+                     
+                     else
+                     {
+                        let partfloat = (partB as NSString).doubleValue  
+                        print("i: \(i) \t firstelement: \(firstelement) partfloat: \(partfloat)")
+                        
+                        circleorellipsefloatelementdic[firstelement] = partfloat
+                        circleorellipsefloatelementarray.append(partfloat)
+                        
+                     }
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     // Floatwerte
+                  }
+               } // if zeilenarray.count > 1
+               else  
+               {
+                  // arrays aufbauen
+                  let firstelement:String = String(zeilenarray[0]) // label
+                  var element0 = String(zeilenarray[0])
+                  element0 = element0.replacingOccurrences(of: "<", with: "") // "erste zeile detekteren
+                  let contains = labelarray.contains(where:{$0 == firstelement})
+                  if contains == true // zeile ist relevant
+                  {
+                     // erste zeile, ueberspringen
+                  }
+                  else
+                  {
+                  circle = 1 // serie end, 
+                     zeilenindex += 1
+                  }
+               }
+               
+               
+               // end labelarray
+
+
+            } // circle < 9
+            print("\n*** *** *** *** ende circle: circle: \(circle)")
+            if circle == 1 // Zeilen des Blocks sind abgearbeitet
+            {
+               print("\n*** *** *** *** circle ist 1   \ni: \(i) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
+               if (transformok == 1)
+               {
+                  
+                  print("transform circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
+                 print(" transformdoublearray: \(transformdoublearray)")
+                  let a = transformdoublearray[0]
+                  let b = transformdoublearray[1]
+                  
+                  let c = transformdoublearray[2]
+                  let d = transformdoublearray[3]
+                  
+                  let e = transformdoublearray[4]
+                  let f = transformdoublearray[5]
+                  
+                  let ax_raw = circleorellipsefloatelementarray[0] // x
+                  let ay_raw = circleorellipsefloatelementarray[1] // y
+                  
+                  let ax_transform = a * ax_raw + c * ay_raw + e
+                  let ay_transform = b * ax_raw + d * ay_raw + f
+                  
+                  print("ax_raw: \(ax_raw) ay_raw: \(ay_raw)")
+                  print("ax_transform: \(ax_transform) ay_transform: \(ay_transform)")
+                  circleorellipsefloatelementarray[0] = ax_transform
+                  circleorellipsefloatelementarray[1] = ay_transform
+                  
+                  transformok = 0
+               }
+               
+               if circleorellipsefloatelementarray.count > 0
+               {
+                  print("i: \(i) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
+                  circleorellipsefloatelementarray.append(0.0)
+                  
+                  
+                  punktarray.append(circleorellipsefloatelementarray)
+               }
+               else
+               {
+                  print("i: \(i) circleorellipsefloatelementarray ist leer")
+               }
+               
+               circle = 0
+            }// if circle = 1
+            
+            circle -= 1
+            
+         }// circle > 0
+         i += 1
+      } // for zeile
+      
+      
+      
+      return punktarray
+   }
+   
    // MARK: ***      ***  report_readSVG
    
    @IBAction func report_readSVG(_ sender: NSButton)
    {
-      
+      // transform: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform
+      let labelarray:[String] = ["id","cx","cy","transform"] // relevante daten
       let drillarray = DrillDaten(tiefe: drillweg)
       let SVG_URL = openFile()
       // https://stackoverflow.com/questions/10016475/create-nsscrollview-programmatically-in-an-nsview-cocoa
@@ -1171,83 +1373,146 @@ class rPCB: rViewController
          var circleelementdic = [String:Int]()
          
          var circlefloatelementdic = [String:Double]()
+         var circleorellipsefloatelementdic = [String:Double]() // direkt aufgebaut, mit transform
+         
+         var circleorellipsefloatelementarray = [Double]()
+         
+         var transformdoublearray = [Double]()
+         
          var width_ok = 0
          var widthfloat:Double = 0
          var height_ok = 0
          var heightfloat:Double = 0
          var z = 0
+         let lastlabel:String = String(labelarray.last ?? "") // label "transform"
+         
+         var punktarray = punktarrayvonSGV(sgvarray:SVG_array)
+         print("punktarray: \(punktarray)")
+         
+         /*
          for zeile in SVG_array
          {
-            //     print("i: \(i) zeile: \(zeile)")
+            //print("i: \(i) zeile: \(zeile)")
             let trimmzeile = zeile.trimmingCharacters(in: .whitespaces)
             
-            if trimmzeile.contains("width") && (width_ok == 0)
-            {
-               width_ok = 1
-               //print("SVGdata widthzeile: \(trimmzeile)")
-               let zeilenarray = trimmzeile.split(separator: "=")
-               if zeilenarray.count == 2
-               {
-                  //print("SVGdata width: \(zeilenarray[1]) string: \(zeilenarray[1] as NSString)")
-                  widthfloat = ((zeilenarray[1].replacingOccurrences(of: "\"", with: ""))as NSString).doubleValue
-               //   print("SVGdata widthfloat: \(widthfloat)")
-               }
-            }  
-            if trimmzeile.contains("height") && (height_ok == 0)
-            {
-               height_ok = 1
-               //print("SVGdata heightzeile: \(trimmzeile)")
-               let zeilenarray = trimmzeile.split(separator: "=")
-               if zeilenarray.count == 2
-               {
-                  //print("SVGdata width: \(zeilenarray[1]) string: \(zeilenarray[1] as NSString)")
-                  heightfloat = ((zeilenarray[1].replacingOccurrences(of: "\"", with: ""))as NSString).doubleValue
-                //  print("SVGdata heightfloat: \(heightfloat)")
-               }
-            }  
             
-            
-            if (trimmzeile.contains("circle") || trimmzeile.contains("ellipse"))
+            if (trimmzeile.contains("circle") || trimmzeile.contains("ellipse")) // relevante zeile mit circle oder ellipse, start data-Block
             {
-                print("i: \(i) trimmzeile: \(trimmzeile)")
-               circle = 6
+               print("\ncircle oder ellipse\ti: \(i) trimmzeile: \(trimmzeile)")
+               circle = 9
                circlenummer = i
                circleelementarray.removeAll()
                circlefloatelementarray.removeAll()
+               transformdoublearray.removeAll() // koeff array leeren
                circleelementdic = [:]
                circlefloatelementdic = [:]
+               circleorellipsefloatelementdic = [:]
+               circleorellipsefloatelementarray.removeAll()
+               
             }
             
-            if circle > 0
+            if circle > 0 // circle oder ellipse detektiert
             {
-               if circle < 5
-               {            
-                  print("\t i: \(i) \tdata: \(trimmzeile)")
-                  let zeilenarray = trimmzeile.split(separator: "=")
-                  print("\t\t i: \(i) \tzeilenarray: \(zeilenarray)")
+               if circle < 7 // circle wird mit jeder zeile decrementiert, 
+               {     
+                  
+                  print("\nneue Zeile i: \(i)\t circle: \(circle)  \ttrimmzeile: \(trimmzeile)")
+                  let zeilenarray = trimmzeile.split(separator: "=") // aufteilen in label und data
+                  print("\t\t i: \(i) \t zeilenarray: \(zeilenarray)")
+                  
+                  
                   var zeilenindex = 0
-                  for element in zeilenarray
+                  
+                  // neu mit labelarray
+                  
+                  if (zeilenarray.count > 1)
                   {
-                     if element == "id" // 
+                     let firstelement:String = String(zeilenarray[0]) // label
+                     print("i: \(i) \t firstelement: \t*\(firstelement)*")
+                     
+                     let contains = labelarray.contains(where:{$0 == firstelement})
+                     
+                     if contains == true // zeile ist relevant
                      {
-                        circleelementarray.append(Int(circlenummer))
+                        
+                        var partB = zeilenarray[1].replacingOccurrences(of: "\"", with: "")
+                        partB = partB.replacingOccurrences(of: "/>", with: "")
+                        print("i: \(i) \t firstelement: \t \(firstelement) \t partB neu: \t\(partB)")
+                        if lastlabel == firstelement // transform
+                        {
+                           print("transform: partB raw: \(partB)")
+                           partB = partB.replacingOccurrences(of: "matrix(", with: "")
+                           partB = partB.replacingOccurrences(of: ")", with: "")
+                           print("transform: partB sauber: \(partB)")
+                           let transformarray = partB.split(separator: ",")
+                           
+                           print("transformarray: \(transformarray[0]) \t \(transformarray[1]) \t \(transformarray[2])\t\(transformarray[3])")
+                           guard let koeff_a:Double = Double(transformarray[0]) else { return } 
+                           guard let koeff_b:Double = Double(transformarray[1]) else { return }
+                           guard let koeff_c:Double = Double(transformarray[2]) else { return }
+                           guard let koeff_d:Double = Double(transformarray[3]) else { return }
+                           guard let koeff_e:Double = Double(transformarray[4]) else { return } 
+                           guard let koeff_f:Double = Double(transformarray[5]) else { return }
+                           
+                           // transform-matrix bereitstellen
+                           transformdoublearray = [koeff_a,koeff_b,koeff_c,koeff_d,koeff_e,koeff_f]
+                           print("i: \(i) \t firstelement: \(firstelement) transformdoublearray: \(transformdoublearray)")
+                           
+                           
+                        }
+                        
+                        else
+                        {
+                           let partfloat = (partB as NSString).doubleValue  
+                           print("i: \(i) \t firstelement: \(firstelement) partfloat: \(partfloat)")
+                           circleorellipsefloatelementdic[firstelement] = partfloat
+                           circleorellipsefloatelementarray.append(partfloat)
+                        }
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        // Floatwerte
+                     }
+                  } // if zeilenarray.count > 1
+                  else  
+                  {
+                     
+                  }
+                  
+                  
+                  // end labelarray
+                  
+                  
+                  for element in zeilenarray // zeile abarbeiten
+                  {
+                     
+                     
+                     if element == "id" // ID , circlenummer einsetzen
+                     {
+                        circleelementarray.append(Int(circlenummer)) 
                         circlefloatelementarray.append(Double(circlenummer))
                         continue
                      }
-                     else if zeilenindex == 1
+                     else if zeilenindex == 1 
                      { 
                         //var partAraw = element.split(separator:"=")
                         //print("partAraw: \(partAraw)")
                         //var partA =  String(element.split(separator:"=")[1])
                         
+                        // " und > weg
                         var partB = element.replacingOccurrences(of: "\"", with: "")
                         partB = partB.replacingOccurrences(of: "/>", with: "")
-                        //                      print("i: \(i) \tz:\t \(z)\tpartB: \t\(partB)")
+                        //print("i: \(i) \t z:\t \(z)\t partB: \t\(partB)")
                         
                         z += 1
                         
                         // Floatwerte
                         let partfloat = (partB as NSString).doubleValue  
+                        //print("i: \(i) \t partB: \t\(partB) partfloat: \(partfloat)")
                         circlefloatelementarray.append(partfloat)
                         
                         // Integerwerte
@@ -1256,39 +1521,52 @@ class rPCB: rViewController
                         {
                            print("partint zu  gross*** partfloat: \(partfloat) partint: \(partint)")
                         }
-                        //print("partB: \(partB) partfloat: \(partfloat) partint: \(partint)")
+                        print("i: \(i) \t partB: \(partB) partfloat: \(partfloat) partint: \(partint)")
                         circleelementarray.append(partint)
                      }
-                    // circleelementarray.append(0) // z-wert setzen
                      zeilenindex += 1
-                  }
+                  } // for element in zeilenarray
                   //
-               } // circle < 5
+               } // circle < 7
                
-               if circle == 1
+               print("\n*** *** *** *** circle: \(circle)")
+               
+               if circle == 1 // Zeilen des Blocks sind abgearbeitet
                {
-               //print("i: \(i) circleelementarray: \(circleelementarray)")
+                  print("\n*** *** *** *** circle ist 1   \ni: \(i) circlefloatelementarray: \(circlefloatelementarray)")
+                  
+                  if circleorellipsefloatelementarray.count > 0
+                  {
+                     print("i: \(i) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
+                  }
+                  else
+                  {
+                     print("i: \(i) circleorellipsefloatelementarray ist leer")
+                  }
+                  
+                  
                   if circleelementarray.count > 0
                   {
-                     // radius ersetzen
-                     if (circleelementarray.count == 4)
-                     {
-                        circleelementarray[3] = 0
-                     }
-
-                     // radius ersetzen
-                     if (circlefloatelementarray.count == 4)
-                     {
-                        circlefloatelementarray[3] = 0
-                     }
-                     
+                     /*
+                      // radius ersetzen
+                      if (circleelementarray.count == 4)
+                      {
+                      circleelementarray[3] = 0
+                      }
+                      
+                      // radius ersetzen
+                      if (circlefloatelementarray.count == 4)
+                      {
+                      circlefloatelementarray[3] = 0
+                      }
+                      */
                      circlearray.append(circleelementarray)
                      //   circleelementdic["id"] = circleelementarray[0]  // nirgends verwendet
                      circleelementdic["index"] = i
                      circleelementdic["cx"] = circleelementarray[1]
                      circleelementdic["cy"] = circleelementarray[2]
                      circleelementdic["cz"] = 0
-                  
+                     
                      circledicarray.append(circleelementdic) // [[String:Int]]
                      
                      circlefloatelementdic["index"] = Double(i)
@@ -1298,23 +1576,32 @@ class rPCB: rViewController
                      circlefloatdicarray.append(circlefloatelementdic) 
                      
                      circlefloatarray.append(circlefloatelementarray)
-                  }
+                     
+                     print("******************************************")
+                     print("circleorellipsefloatelementdic: \(circleorellipsefloatelementdic) )")
+                     print("circleorellipsefloatelementarray: \(circleorellipsefloatelementarray) )")
+                     print("circlefloatelementdic: \(circlefloatelementdic) )")
+                     print("******************************************")
+                  } // if circleelementarray.count > 0
                   
-               }
+               } // if circle == 1
                
                circle -= 1
-            }
+            } // if circle > 0
             i = i+1
             
             
             
-         }
-        
-          print("report_readSVG circlearray count: \(circlearray.count)")
+         }// for zeile in SVG_array
+        */
+         //print("report_readSVG circlefloatarray; \(circlefloatarray)")
+         print("report_readSVG punktarray; \(punktarray)")
+         circlefloatarray = punktarray
+          print("report_readSVG circlearray.  count: \(circlearray.count)")
           var ii = 0
           for el in circlearray
           {
-          print("\(ii)\t\(el[1])\t \(el[2])\t \(el[3])")
+          print("\(ii)\t\(el[1])\t \(el[2])\t ")
           ii += 1
           }
  
@@ -1332,7 +1619,7 @@ class rPCB: rViewController
           var iii = 0
           for el in circlefloatarray
           {
-          print("\(iii)\t\(el[1])\t \(el[2])  \(el[3])")
+          print("\(iii)\t\(el[1])\t \(el[2])  ")
           iii += 1
           }
  
@@ -1491,9 +1778,9 @@ class rPCB: rViewController
          zeilendicindex = 0
          for zeilendic in sortedfloatarray // Floatzahlen neu
          {
-            let cx:Double = (zeilendic[1]) 
-            let cy:Double = (zeilendic[2]) 
-            let cz:Double = (zeilendic[3])
+            let cx:Double = (zeilendic[0]) 
+            let cy:Double = (zeilendic[1]) 
+            let cz:Double = (zeilendic[2])
             // print("\(zeilendicindex) \(cx) \(cy)")
             let zeilenarray:[Double] = [Double(zeilendicindex),cx,cy,cz]
             circlefloatarray.append(zeilenarray)
@@ -1615,15 +1902,25 @@ class rPCB: rViewController
          default:
             break
          }
+         
+         for z in 0..<circlefloatarray.count
+         {
+            circlefloatarray[z][0] = Double(z)
+         }
+
          circlefloatarray_raw.removeAll()
+         
+         
          circlefloatarray_raw = circlefloatarray // Eingabe sichern, ohne schliessen, ohne NN
          
          print("report_readSVG circlefloatarray nach new sort. count: \(circlefloatarray.count)")         
-          for el in circlefloatarray
+          
+         for el in circlefloatarray
           {
             print("\(el[0] )\t \(el[1] )\t \(el[2]) \(el[3])")
+            
           }
-
+            
          print("report_readSVG circlefloatarray_raw. count: \(circlefloatarray_raw.count)")         
           for el in circlefloatarray_raw
           {
@@ -1649,7 +1946,7 @@ class rPCB: rViewController
          if figurschliessen_checkbox.state == .on
          {
               mill_floatarray.append(mill_floatarray[0])
-          }
+         }
          
          
          /*
@@ -1867,7 +2164,7 @@ class rPCB: rViewController
        print("\(el[0] )\t \(el[1] )\t \(el[2])")
        }
        
-       print("floatarray: \(floatarray.count)")
+       print("setPCB_Output floatarray: \(floatarray.count)")
        for el in floatarray
        {
        print("\(el[0] )\t \(el[1] )\t \(el[2])")
@@ -1886,6 +2183,8 @@ class rPCB: rViewController
       formater.minimumFractionDigits = 3
       formater.numberStyle = .decimal
       CNC_DatendicArray.removeAll()
+      
+      //Dicarray fuer tableView
       for zeilendaten in floatarray
       {
          //         print("zeilendaten: \(zeilendaten)")
@@ -2067,7 +2366,7 @@ class rPCB: rViewController
       for z in 0..<PCB_Datenarray.count
       {
          PCB_Datenarray[z][27] = UInt8(z)
-         print("PCBzeile: \(z) \(PCB_Datenarray[z][27])")
+         //print("PCBzeile: \(z) \(PCB_Datenarray[z][27])")
          
       }
   
@@ -2899,7 +3198,7 @@ class rPCB: rViewController
       
       let xx = -20
       let xx_raw = (xx & 0x0FFFFFFF)
-      print("\tschrittdatenvektor sxInt_raw: \(sxInt_raw) syInt_raw: \(syInt_raw) szInt_raw: \(szInt_raw) zeit: \(Int(zeit))")
+      //print("\tschrittdatenvektor sxInt_raw: \(sxInt_raw) syInt_raw: \(syInt_raw) szInt_raw: \(szInt_raw) zeit: \(Int(zeit))")
       
       let stepwert = stepsFeld.integerValue
    //   var kgvx = kgv3(m:stepwert,n:sxInt_raw,o: syInt_raw)
@@ -2955,7 +3254,7 @@ class rPCB: rViewController
          kontrolleintx = sxInt_raw * dxInt //               Kontrolle mit Int-Wert von dx : Istwert Fahrzeit, tatsächliche Zeit
          istzeitx = Double(kontrolleintx)
          var diffx = Int(kontrolledoublex) - kontrolleintx // differenz, Rundungsfehler
-         print("zeit: \(zeit) kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
+         //print("zeit: \(zeit) kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
          if diffx == 0
          {
             diffx = 1 // keine div /0
@@ -3307,7 +3606,7 @@ class rPCB: rViewController
    {
       
       zoomfaktor = zoomFeld.doubleValue
-           print("PCB wegArrayMitWegXY wegX: \(wegx) wegY: \(wegy) propfaktor: \(propfaktor)")
+      //print("PCB wegArrayMitWegXY wegX: \(wegx) wegY: \(wegy) propfaktor: \(propfaktor)")
       var maxsteps:Double = 0
       var weg = [Double]()
       
@@ -3351,7 +3650,7 @@ class rPCB: rViewController
       
       schrittex /= propfaktor // Umrechnung in mm
       let schrittexmm = schrittex/stepsFeld.doubleValue
-      print("wegArrayMitWegXY schrittex mm: \(schrittexmm) mm")
+      //print("wegArrayMitWegXY schrittex mm: \(schrittexmm) mm")
       
       var schrittexRound = round(schrittex)
       var schrittexInt:Int = 0
@@ -3362,7 +3661,7 @@ class rPCB: rViewController
          //  print("wegArrayMitWegXY schritteXInt OK: \(schrittexInt)")
          if schrittexInt < 0 // negativer Weg
          {
-            print("schrittexInt negativ")
+            //print("schrittexInt negativ")
             schrittexInt *= -1
             schrittexInt |= 0x80000000
          }
@@ -3388,7 +3687,7 @@ class rPCB: rViewController
          //         print("wegArrayMitWegXY schritteyInt OK: \(schritteyInt)")
          if schritteyInt < 0 // negativer Weg
          {
-            print("schritteyInt negativ")
+            //print("schritteyInt negativ")
             schritteyInt *= -1
             schritteyInt |= 0x80000000
          }

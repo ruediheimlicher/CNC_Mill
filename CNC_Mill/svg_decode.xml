@@ -1,0 +1,64 @@
+               <rect
+                   style="fill:#F6F8FF;stroke-linejoin:round;stroke-width:3.82"
+                   id="48673457"
+                   x="119.362971934"
+                   y="-10.9802651075"
+                   width="2.16"
+                   height="2.16"
+                   transform="matrix(0.866025403784,0.5,-0.5,0.866025403784,0,0)"/>
+               <circle
+                   style="fill:#F6F8FF;stroke-linecap:butt;stroke-width:0.25"
+                   id="B8673457"
+                   cx="109.256888311"
+                   cy="51.6479122353"
+                   r="1.01822501771"/>
+
+
+               <rect
+                   style="fill:#F6F8FF;stroke-linejoin:round;stroke-width:3.82"
+                   id="7530FF2C"
+                   x="65.4199990102"
+                   y="20.2742018351"
+                   width="2.16"
+                   height="2.16"
+                   transform="matrix(0.996194698092,0.087155742748,-0.087155742748,0.996194698092,0,0)"/>
+               <ellipse
+                   style="fill:#F6F8FF;stroke-linecap:butt;stroke-width:0.25"
+                   id="9530FF2C"
+                   cx="66.5002240099"
+                   cy="21.3539768345"
+                   rx="1.018225306365"
+                   ry="1.018225329867"
+                   transform="matrix(0.996194698092,0.087155742748,-0.087155742748,0.996194698092,0,0)"/>
+
+
+               <rect
+                   style="fill:#F6F8FF;stroke-linejoin:round;stroke-width:3.82"
+                   id="7D4DF157"
+                   x="8.05136209926"
+                   y="31.4331495436"
+                   width="2.160034"
+                   height="4.320068"/>
+               <ellipse
+                   style="fill:#F6F8FF;stroke-linecap:butt;stroke-width:0.25"
+                   id="8D4DF157"
+                   cx="9.13135209926"
+                   cy="33.5932175436"
+                   rx="0.719985"
+                   ry="0.719985"/>
+
+
+        <rect
+             style="fill:#F6F8FF;stroke-linejoin:round;stroke-width:3.82"
+             id="4D4DF157"
+             x="2.663029574369"
+             y="1.91"
+             width="2.160034"
+             height="4.320068"/>
+         <ellipse
+             style="fill:#F6F8FF;stroke-linecap:butt;stroke-width:0.25"
+             id="5D4DF157"
+             cx="3.743098574369"
+             cy="4.070068"
+             rx="0.719985"
+             ry="0.719985"/>
