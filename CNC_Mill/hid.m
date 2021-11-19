@@ -79,8 +79,6 @@ const int BufferSize(void)
 
 int rawhid_recv(int num, void *buf, int len, int timeout)
 {
-   //fprintf(stderr,"rawhid_recv start len: %d\n",len);
-   //fprintf(stderr,"rawhid_recv start \n");
    hid_t *hid;
    buffer_t *b;
    CFRunLoopTimerRef timer=NULL;
@@ -96,32 +94,36 @@ int rawhid_recv(int num, void *buf, int len, int timeout)
       memcpy(buf, b->buf, len);
       hid->first_buffer = b->next;
       free(b);
-      // fprintf(stderr,"rawhid_recv A len: %d\n\n",len);
       return len;
    }
    memset(&context, 0, sizeof(context));
    context.info = &timeout_occurred;
-   timer = CFRunLoopTimerCreate(NULL, CFAbsoluteTimeGetCurrent() +(double)timeout / 1000.0, 0, 0, 0, timeout_callback, &context);
-   CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopDefaultMode);
-   while (1) {
-      CFRunLoopRun();
-      if ((b = hid->first_buffer) != NULL) {
-         if (len > b->len) len = b->len;
-         memcpy(buf, b->buf, len);
-         hid->first_buffer = b->next;
-         free(b);
-         ret = len;
-         break;
+   if (timeout > 0)
+   {
+      timer = CFRunLoopTimerCreate(NULL, CFAbsoluteTimeGetCurrent() +(double)timeout / 1000.0, 0, 0, 0, timeout_callback, &context);
+      CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopDefaultMode);
+      while (1) {
+         CFRunLoopRun();
+         if ((b = hid->first_buffer) != NULL) 
+         {
+            if (len > b->len) len = b->len;
+            memcpy(buf, b->buf, len);
+            hid->first_buffer = b->next;
+            free(b);
+            ret = len;
+            fprintf(stderr,"rawhid_recv runloop\n");
+            break;
+         }
+         if (!hid->open) {
+            //printf("rawhid_recv, device not open\n");
+            ret = -1;
+            break;
+         }
+         if (timeout_occurred) break;
       }
-      if (!hid->open) {
-         //printf("rawhid_recv, device not open\n");
-         ret = -1;
-         break;
-      }
-      if (timeout_occurred) break;
+      CFRunLoopTimerInvalidate(timer);
+      CFRelease(timer);
    }
-   CFRunLoopTimerInvalidate(timer);
-   CFRelease(timer);
    //fprintf(stderr,"rawhid_recv ret: %d\n",ret);
    return ret;
    
@@ -185,7 +187,7 @@ static void free_all_hid(void)
    first_hid = last_hid = NULL;
 }
 
-const char* get_manu()
+const char* get_manu(void)
 {
    
    hid_t * cnc = get_hid(0);
@@ -206,7 +208,7 @@ const char* get_manu()
 }
 
 
-const char* get_prod()
+const char* get_prod(void)
 {
    hid_t * cnc = get_hid(0);
    if (cnc)
@@ -224,7 +226,7 @@ const char* get_prod()
    }
 }
 
-int getX()
+int getX(void)
 {
    return 13;
 }

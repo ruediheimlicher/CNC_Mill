@@ -948,7 +948,7 @@
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cvX-mA-Yas">
                                 <rect key="frame" x="401" y="529" width="42" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="NN" bezelStyle="regularSquare" imagePosition="left" inset="2" id="GsS-wx-awe">
+                                <buttonCell key="cell" type="check" title="NN" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="GsS-wx-awe">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -1459,7 +1459,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up_mini" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZhK-AN-kaK">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system" size="12"/>
+                                    <font key="font" metaFont="cellTitle"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="report_Drill_up:" target="wFL-7s-Z8p" id="QSZ-9v-NEs"/>
@@ -1641,7 +1641,7 @@
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FMp-8K-kag">
                                 <rect key="frame" x="894" y="300" width="57" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Drill" bezelStyle="regularSquare" imagePosition="left" inset="2" id="L2a-FX-G7g">
+                                <buttonCell key="cell" type="check" title="Drill" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="L2a-FX-G7g">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -1651,7 +1651,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_down_mini" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="33i-4L-vui">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system" size="12"/>
+                                    <font key="font" metaFont="cellTitle"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="report_Drill_down:" target="wFL-7s-Z8p" id="hhR-Gc-PK2"/>

@@ -250,7 +250,7 @@ open class usb_teensy: NSObject
          {
             readtimer?.invalidate()
          }
-         readtimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
+         readtimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
       }
       
       return Int(result) //
@@ -325,7 +325,7 @@ open class usb_teensy: NSObject
    
    @objc open func cont_read_USB(_ timer: Timer)
    {
-      //print("*                               cont_read_USB start")
+      //print("*                               cont_read_USB")
       // entspricht readUSB in USB_Stepper
       
       //print("*cont_read_USB read_OK: \(read_OK)")
@@ -333,9 +333,9 @@ open class usb_teensy: NSObject
       {
          //var tempbyteArray = [UInt8](count: 32, repeatedValue: 0x00)
          //read_byteArray[0]  = 0
-        // var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
+         //var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
          
-         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 10)
+         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 20)
          if (result == 0)
          {
             return;
@@ -390,6 +390,7 @@ open class usb_teensy: NSObject
              }
              print("\n")
              */   
+            /*
             var home:Int = 0 // HALT-Anweisung
             if timer.isValid == true
             {
@@ -398,7 +399,7 @@ open class usb_teensy: NSObject
                   home = timerdic["count"] as! Int 
                }
             }
-            
+            */
             
             // http://dev.iachieved.it/iachievedit/notifications-and-userinfo-with-swift-3-0/
             let nc = NotificationCenter.default           
