@@ -36,6 +36,7 @@ class rPCB: rViewController
    
    var Schnittdatenarray = [[UInt8]]()
    var Schnittdatenarray_n = [[UInt8]]()
+   var nextdatenarray = [UInt8]()
    
    var ablaufstatus:UInt8 = 0
    let DRILL_OK = 1
@@ -56,6 +57,14 @@ class rPCB: rViewController
    
    var selectetDataTableRow = 0
    
+   var tasktime:CFAbsoluteTime = 0
+   var usbtime:CFAbsoluteTime = 0
+   var waittime:CFAbsoluteTime?
+   var responsetime:CFAbsoluteTime = 0
+   
+   var taskzeit:Double = 0
+   var usbzeit:Double = 0
+   var responsezeit:Double = 0
    //   var pfeilschrittweite:Int = 0
    var tsp_nn = rTSP_NN()
    // var schnittPfad = rSchnittPfad()
@@ -64,6 +73,8 @@ class rPCB: rViewController
    //  var teensy = usb_teensy()
    
    @IBOutlet weak var readSVG_Knopf: NSButton!
+   @IBOutlet weak var SVG_Pfad: NSTextField!
+   @IBOutlet weak var SVG_Testfeld: NSTextField!
    
    @IBOutlet weak var PCB_Data_Knopf: NSButton!
    
@@ -1341,8 +1352,10 @@ class rPCB: rViewController
       let SVG_URL = openFile()
       // https://stackoverflow.com/questions/10016475/create-nsscrollview-programmatically-in-an-nsview-cocoa
       guard let fileURL = SVG_URL else { return  }
-      
+      let urlstring = SVG_URL?.absoluteString
+      let dateiname:String = urlstring?.components(separatedBy: "/").last ?? "-"
       //     print("report_readSVG fileURL: \(fileURL)")
+      SVG_Pfad.stringValue = dateiname
       circledicarray.removeAll()
       circlefloatarray.removeAll()
       circlefloatdicarray.removeAll()
@@ -1355,7 +1368,7 @@ class rPCB: rViewController
 
       //reading
       do {
-         print("readSVG")
+         print("readSVG URL: \(fileURL)")
          
          let SVG_data = try String(contentsOf: fileURL, encoding: .utf8)
          //print("SVGdata: \(SVG_data)")
@@ -3041,9 +3054,7 @@ class rPCB: rViewController
       //     Plattefeld.setStepperposition(pos:cncstepperposition)
       let anzabschnitte = Schnittdatenarray.count
       
-      Schnittdatenarray[0][33] = UInt8((anzabschnitte & 0xFF00) >> 8)
-      Schnittdatenarray[0][34] = UInt8(anzabschnitte & 0x00FF)
-      
+       
       if Schnittdatenarray.count == 0 // Array im Teensy loeschen
       {
          teensy.write_byteArray[25] = 1 //erstes Element
@@ -3055,7 +3066,9 @@ class rPCB: rViewController
  //        }
          return
       }
-      
+      Schnittdatenarray[0][33] = UInt8((anzabschnitte & 0xFF00) >> 8)
+      Schnittdatenarray[0][34] = UInt8(anzabschnitte & 0x00FF)
+
       /*
        var i = 0
        for linie in Schnittdatenarray
@@ -3173,12 +3186,12 @@ class rPCB: rViewController
       
       if teensy.readtimervalid() == true
       {
-         print("PCB readtimer valid vor")
+         //print("PCB readtimer valid vor")
          
       }
       else 
       {
-         //print("PCB readtimer not valid vor")
+         print("PCB readtimer not valid vor")
          
          var start_read_USB_erfolg = teensy.start_read_USB(true)
       }
@@ -3620,7 +3633,7 @@ class rPCB: rViewController
       let wegX = distanzX * zoomfaktor 
       let wegY = distanzY * zoomfaktor 
       let distanz = (wegX*wegX + wegY*wegY).squareRoot()
-            print("++++          wegArrayMitWegXY  distanzX: \(distanzX)  distanzY: \(distanzY)  distanz: \(distanz)")
+      print("++++          wegArrayMitWegXY  distanzX: \(distanzX)  distanzY: \(distanzY)  distanz: \(distanz)")
       var speed = speedFeld.intValue
       
       if ramp_OK_Check.state == NSControl.StateValue.on
@@ -3715,6 +3728,7 @@ class rPCB: rViewController
    func write_CNC_Abschnitt()
    {
       //print("+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
+      //print("\n+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition)")
       stepperpositionFeld.integerValue = cncstepperposition
  /*
       for i in 0..<Schnittdatenarray.count
@@ -3727,6 +3741,10 @@ class rPCB: rViewController
          print("write_CNC_Abschnitt cncstepperposition ist Schnittdatenarray.count, END")
          return
       }
+      if (cncstepperposition == 0)
+      {
+         nextdatenarray = Schnittdatenarray[0]
+      }
       if cncstepperposition < Schnittdatenarray.count
       {
          if CNC_HALT_Knopf.state == .on
@@ -3738,22 +3756,42 @@ class rPCB: rViewController
          {
             //print("\t\t\twrite_CNC_Abschnitt NEXT")
            // teensy.write_byteArray.removeAll()
-            let tempSchnittdatenArray:[UInt8] = Schnittdatenarray[cncstepperposition]
+         //   let tempSchnittdatenArray:[UInt8] = Schnittdatenarray[cncstepperposition]
   //          var schritteAX:UInt32 = UInt32(tempSchnittdatenArray[0]) | UInt32(tempSchnittdatenArray[1])<<8 | UInt32(tempSchnittdatenArray[2])<<16 | UInt32((tempSchnittdatenArray[3] & 0x7F))<<24;
             //      print("schritteAX: \(schritteAX) ")
 //            var schritteAY:UInt32 = UInt32(tempSchnittdatenArray[8]) | UInt32(tempSchnittdatenArray[9])<<8 | UInt32(tempSchnittdatenArray[10])<<16 | UInt32((tempSchnittdatenArray[11] & 0x7F))<<24;
             //    print("schritteAY: \(schritteAY) ")
   //          print("write_CNC     schritteAX: \(schritteAX) schritteAY: \(schritteAY)")
-            for zeile in 0..<tempSchnittdatenArray.count
-            {
-               teensy.write_byteArray[zeile] = tempSchnittdatenArray[zeile]
-            }
+               
+            teensy.write_byteArray = Schnittdatenarray[cncstepperposition]
+            
             /*
-            for element in tempSchnittdatenArray
+            var cncdata:[UInt8] =  [20, 0, 0, 128, 111, 10, 0, 0, 20, 0, 0, 0, 57, 0, 3, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2, 77, 10, 128, 1, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            
+            let teststeps:UInt16 = UInt16(SVG_Testfeld.integerValue)
+            
+            cncdata[0] = UInt8(teststeps & (1<<0x00FF))
+            cncdata[1] = UInt8(teststeps & ((1<<0xFF00) >> 8))
+            cncdata[8] = UInt8(teststeps & (1<<0x00FF))
+            cncdata[9] = UInt8(teststeps & ((1<<0xFF00) >> 8))
+            cncdata[26] = UInt8((cncstepperposition & 0xFF00) >> 8)
+            cncdata[27] = UInt8(cncstepperposition & 0x00FF)
+            if cncstepperposition == 0
             {
-               teensy.write_byteArray.append(element)
+               print("start")
+               cncdata[25] = 1
+               cncdata[24] = 0xD5
             }
+            if (cncstepperposition == Schnittdatenarray.count - 1)
+            {
+              // print("endpos an cncstepperposition \(cncstepperposition)")
+               cncdata[25] = 2
+            }
+            //cncdata[24] = 0xD5
+            //teensy.write_byteArray = cncdata
             */
+            
+            usbtime = CFAbsoluteTimeGetCurrent()
        //     print("write_CNCcncstepperposition: \(cncstepperposition) code:  \(teensy.write_byteArray[24]) next write_byteArray: \(teensy.write_byteArray)")
             //print(" code    write_byteArray24: \(teensy.write_byteArray[24])")
             
@@ -3762,8 +3800,11 @@ class rPCB: rViewController
      //       let seconds = 1.0
      //       DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
      //       {
+            responsetime = CFAbsoluteTimeGetCurrent()
                let senderfolg = self.teensy.send_USB()
-               //print("write_CNC_Abschnitt senderfolg: \(senderfolg)")
+            responsezeit = CFAbsoluteTimeGetCurrent() - responsetime 
+            //print("write_CNC_Abschnitt senderfolg: \(senderfolg) responsezeit: \(responsezeit)")
+            
      //       }
             /*
              
@@ -3775,7 +3816,7 @@ class rPCB: rViewController
             
             
             cncstepperposition += 1
-            
+   //         nextdatenarray = Schnittdatenarray[cncstepperposition]
             
             
          } // else
@@ -4039,7 +4080,7 @@ class rPCB: rViewController
          }
          else 
          {
-            //print("PCB readtimer not valid vor")
+            print("PCB readtimer not valid vor")
             
             var start_read_USB_erfolg = teensy.start_read_USB(true)
          }
@@ -4276,7 +4317,7 @@ class rPCB: rViewController
          }
          else 
          {
-            //print("PCB readtimer not valid vor")
+            print("PCB readtimer not valid vor")
             var start_read_USB_erfolg = teensy.start_read_USB(true)
          }
       write_CNC_Zeile(zeilenarray: drillWegArray)
@@ -4460,6 +4501,7 @@ class rPCB: rViewController
       }
       else 
       {
+         print("PCB readtimer not valid bevor")
          var start_read_USB_erfolg = teensy.start_read_USB(true)
       }
       /*
@@ -4654,8 +4696,8 @@ class rPCB: rViewController
       let ladeposition = data[8]
       
       //     Plattefeld.setStepperposition(pos:abschnittnummer)
-      
-      //     print("PCB newDataAktion  taskcode: \(taskcode) hex: \(codehex) abschnittnummer: \(abschnittnummer) ladeposition: \(ladeposition)")
+      //print("PCB newDataAktion  taskcode: \(taskcode)") 
+      //print("PCB newDataAktion  taskcode: \(taskcode) hex: \(codehex) abschnittnummer: \(abschnittnummer) ladeposition: \(ladeposition)")
       let timeintervall =  Int((data[14] << 8) | data[15])
       
       var AnschlagSet:IndexSet = IndexSet()
@@ -4696,10 +4738,11 @@ class rPCB: rViewController
             }
             if teensy.readtimervalid() == true
             {
-               print("PCB newDataAktion readtimer valid vor")
+               //print("PCB newDataAktion readtimer valid vor")
             }
             else 
             {
+               print("PCB newDataAktion readtimer not valid vor")
                var start_read_USB_erfolg = teensy.start_read_USB(true)
             }
  
@@ -4764,9 +4807,12 @@ class rPCB: rViewController
             break
             
             
-            
+         // MARK: ***     B6  
          case 0xB6:
-            print("newDataAktion  B6 Abschnitt 0 abschnitte: \(Schnittdatenarray.count)")
+            //print("newDataAktion  B6 Abschnitt 0 abschnitte: \(Schnittdatenarray.count)")
+            usbzeit = CFAbsoluteTimeGetCurrent() - usbtime
+            tasktime = CFAbsoluteTimeGetCurrent() 
+            //print("newDataAktion B6 usbzeit: \(pd3(usbzeit))")
             // Data angekommen
             /*
              let state = steppercontKnopf.state
@@ -4778,7 +4824,7 @@ class rPCB: rViewController
              }
              */
             
-            
+            return
             break
             
          case 0xB9:
@@ -4862,9 +4908,17 @@ class rPCB: rViewController
                }
                else 
                {
+                  print("PCB readtimer not valid bevor")
                   self.teensy.start_read_USB(true)
                }
             
+            break
+         // MARK: ***     D1        
+         case 0xD1:
+            print("                      newDataAktion  D1 Response ")
+            print("\t usb: \t task: ")
+
+            return
             break
             
             
@@ -4923,10 +4977,11 @@ class rPCB: rViewController
             //print(" Schnittdatenarray nach insert: \(Schnittdatenarray)")
             if teensy.readtimervalid() == true
             {
-               print("PCB readtimer valid vor")
+               print("PCB newDataAktion valid vor")
             }
             else 
             {
+               print("PCB newDataAktion not valid vor")
                var start_read_USB_erfolg = teensy.start_read_USB(true)
             }
             
@@ -4984,11 +5039,24 @@ class rPCB: rViewController
             
          // MARK: ***     ***   D6        
          case 0xD6:
-            //print("newDataAktion  D6")
-            // Rueckmeldung von SendData
-            var abschnittnummer = data[5]<<8 + data[6]
+            
+            
+            taskzeit = CFAbsoluteTimeGetCurrent() - tasktime
+            
+            // Rueckmeldung von motorfinished
+            var abschnittnummer:Int = Int((data[5] << 8) | data[6])
             let ladepos =  Int(data[8] )
             //print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
+
+            //print("\(abschnittnummer)\tresp: \t \(pd4(responsezeit))\t usb: \t\(pd3(usbzeit)) \ttask: \t\(pd3(taskzeit))")
+            
+           //print("\(abschnittnummer)\tresp: \t \(pd4(responsezeit))\t usb: \t\(pd3(usbzeit)) \ttask: \t\(pd3(taskzeit))")
+
+            //print("\(abschnittnummer)\t\(pd4(responsezeit))\t \(pd3(usbzeit)) \t\(pd3(taskzeit))")
+            
+            print("\(abschnittnummer)\t\(pd3(usbzeit)) \t\(pd3(taskzeit))")
+
+            
             
             
             Plattefeld.setStepperposition(pos:Int(abschnittnummer))
@@ -5286,7 +5354,7 @@ class rPCB: rViewController
          }
          else 
          {
-            //print("PCB readtimer not valid vor")
+            print("PCB move not valid vor")
             var start_read_USB_erfolg = teensy.start_read_USB(true)
             print("report_send_Movestart_read_USB_erfolg: \(start_read_USB_erfolg)")
          }
@@ -5351,7 +5419,7 @@ class rPCB: rViewController
          }
          else 
          {
-            //print("PCB readtimer not valid vor")
+            print("PCB report send Move not valid vor")
             var start_read_USB_erfolg = teensy.start_read_USB(true)
             print("report_send_Movestart_read_USB_erfolg: \(start_read_USB_erfolg)")
          }
@@ -5624,7 +5692,7 @@ class rPCB: rViewController
          }
          else 
          {
-            //print("PCB readtimer not valid vor")
+            print("PCB goto_XY not valid vor")
             var start_read_USB_erfolg = teensy.start_read_USB(true)
          }
       }

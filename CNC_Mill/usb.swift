@@ -24,6 +24,9 @@ open class usb_teensy: NSObject
 {
    var hid_usbstatus: Int32 = 0
    
+   var dataRead = Data()
+   var lastdataRead = Data()
+   
    var read_byteArray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
    var last_read_byteArray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
    var write_byteArray: Array<UInt8> = Array(repeating: 0x00, count: BUFFER_SIZE)
@@ -250,7 +253,7 @@ open class usb_teensy: NSObject
          {
             readtimer?.invalidate()
          }
-         readtimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
+         readtimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(usb_teensy.cont_read_USB(_:)), userInfo: timerDic, repeats: true)
       }
       
       return Int(result) //
@@ -335,11 +338,30 @@ open class usb_teensy: NSObject
          //read_byteArray[0]  = 0
          //var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
          
-         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 20)
+         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 150)
          if (result == 0)
          {
             return;
          }
+         
+         //https://stackoverflow.com/questions/24196820/nsdata-from-byte-array-in-swift
+         dataRead = Data(bytes: readarray)
+         
+         
+         
+         if !(lastdataRead == dataRead)
+         {
+            print("new data")
+            
+            lastdataRead = dataRead
+            let byteArray:[UInt8] = [UInt8](dataRead)
+         
+         }
+         else 
+         {
+            print("same data")
+         }
+         //     NSData* dataRead = [NSData dataWithBytes:buffer length:reportSize];
          // read_byteArray puffern
          read_byteArray = readarray
           
@@ -464,7 +486,7 @@ open class usb_teensy: NSObject
       var result:Int32  = 0;
       var reportSize:Int = 64;   
       var buffer = [UInt8]();
-      result = rawhid_recv(0, &buffer, 64, 50);
+      result = rawhid_recv(0, &buffer, 64, 200);
       
       var dataRead:Data = Data(bytes:buffer)
       if (dataRead != lastDataRead)

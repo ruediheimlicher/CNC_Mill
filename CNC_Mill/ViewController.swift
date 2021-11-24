@@ -17,6 +17,7 @@ import Cocoa
 import Foundation
 import IOKit.hid
 
+
 public var lastDataRead = Data.init(count:64)
 
 var globalusbstatus = 0
@@ -28,6 +29,20 @@ func phex(_ data:UInt8)->String
 {
    return String(format:"%02X", data)
 }
+
+func pd2(_ data:Double)->String
+{
+   return String(format:"%2.2f", data)
+}
+func pd3(_ data:Double)->String
+{
+   return String(format:"%2.3f", data)
+}
+func pd4(_ data:Double)->String
+{
+   return String(format:"%2.4f", data)
+}
+
 
 class  rPfeiltaste  : NSButton
 {
@@ -584,6 +599,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
       print("viewDidAppear")
       self.view.window?.delegate = self as? NSWindowDelegate 
       
+     let d =  0.19993603229522705
+      let pd = pd3(d)
       //return
       let erfolg = teensy.USBOpen()
       if erfolg == 1

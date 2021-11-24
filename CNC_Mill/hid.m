@@ -111,7 +111,7 @@ int rawhid_recv(int num, void *buf, int len, int timeout)
             hid->first_buffer = b->next;
             free(b);
             ret = len;
-            fprintf(stderr,"rawhid_recv runloop\n");
+            //fprintf(stderr,"rawhid_recv runloop\n");
             break;
          }
          if (!hid->open) {

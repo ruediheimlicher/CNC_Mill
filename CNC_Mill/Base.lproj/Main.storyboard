@@ -1657,6 +1657,33 @@
                                     <action selector="report_Drill_down:" target="wFL-7s-Z8p" id="hhR-Gc-PK2"/>
                                 </connections>
                             </button>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ukl-fa-02Y">
+                                <rect key="frame" x="885" y="638" width="235" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="100" drawsBackground="YES" id="jAT-w9-MCM">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPk-aw-4kX">
+                                <rect key="frame" x="825" y="641" width="45" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Pfad" id="Dkj-X2-rof">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P5o-cM-N2O">
+                                <rect key="frame" x="1055" y="584" width="65" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="100" drawsBackground="YES" id="S5J-3e-9ht">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1669,6 +1696,8 @@
                         <outlet property="PWM_Slider" destination="Yvu-r7-qT2" id="aXz-Ag-cav"/>
                         <outlet property="PlatteScroller" destination="EQG-jy-Qht" id="dS1-G5-ggE"/>
                         <outlet property="Plattefeld" destination="XUX-V5-xCg" id="5lZ-Hg-XVD"/>
+                        <outlet property="SVG_Pfad" destination="Ukl-fa-02Y" id="wZc-uz-gHU"/>
+                        <outlet property="SVG_Testfeld" destination="P5o-cM-N2O" id="Kd0-KS-VLz"/>
                         <outlet property="Zeilen_Stepper" destination="3Nd-UJ-9iO" id="N74-yG-IUG"/>
                         <outlet property="dataTable" destination="9Dc-YS-HYC" id="ajU-AM-GdF"/>
                         <outlet property="drillKnopf" destination="DDO-zf-c2L" id="CoA-IC-xNw"/>

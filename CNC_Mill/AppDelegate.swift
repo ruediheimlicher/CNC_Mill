@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-
+import CoreFoundation
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
