@@ -26,9 +26,14 @@ open class usb_teensy: NSObject
    
    var dataRead = Data()
    var lastdataRead = Data()
+   var oldchecksum:UInt8 = 0
    
    var read_byteArray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
    var last_read_byteArray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
+  
+   var lastreadarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
+
+   
    var write_byteArray: Array<UInt8> = Array(repeating: 0x00, count: BUFFER_SIZE)
    // var testArray = [UInt8]()
    var testArray: Array<UInt8>  = [0xAB,0xDC,0x69,0x66,0x74,0x73,0x6f,0x64,0x61]
@@ -259,73 +264,7 @@ open class usb_teensy: NSObject
       return Int(result) //
    }
    
-   /*   
-    open func cont_read_USB(_ timer: Timer)
-    {
-    if (read_OK).boolValue
-    {
-    var tempbyteArray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
-    var result = rawhid_recv(0, &last_read_byteArray, 32, 50)
-    //println("tempbyteArray in Timer: *\(tempbyteArray)*")
-    // var timerdic: [String: Int]
     
-    
-    // http://dev.iachieved.it/iachievedit/notifications-and-userinfo-with-swift-3-0/
-    let nc = NotificationCenter.default
-    nc.post(name:Notification.Name(rawValue:"newdata"),
-    object: nil,
-    userInfo: ["message":"neue Daten", "data":read_byteArray])
-    
-    if  let dic = timer.userInfo as? NSMutableDictionary
-    {
-    if var count:Int = timer.userInfo?["count"] as? Int
-    {
-    count = count + 1
-    dic["count"] = count
-    //dic["nr"] = count+2
-    //println(dic)
-    }
-    }
-    
-    let timerdic:Dictionary<String,Int?> = timer.userInfo as! Dictionary<String,Int?>
-    //let messageString = userInfo["message"]
-    var tempcount = timerdic["count"]!
-    
-    //timer.userInfo["count"] = tempcount + 1
-    
-    
-    
-    
-    
-    //timerdic["count"] = 2
-    
-    // var count:Int = timerdic["count"]
-    
-    //timer.userInfo["count"] = count+1
-    if !(last_read_byteArray == read_byteArray)
-    {
-    read_byteArray = last_read_byteArray
-    
-    print("+++ new read_byteArray in Timer:", terminator: "")
-    for  i in 0...4
-    {
-    print(" \(read_byteArray[i])", terminator: "")
-    }
-    print("")
-    
-    }
-    //println("*read_USB in Timer result: \(result)")
-    
-    //let theStringToPrint = timer.userInfo as String
-    //println(theStringToPrint)
-    }
-    else
-    {
-    timer.invalidate()
-    }
-    }
-    */
-   
    @objc open func cont_read_USB(_ timer: Timer)
    {
       //print("*                               cont_read_USB")
@@ -336,72 +275,45 @@ open class usb_teensy: NSObject
       {
          //var tempbyteArray = [UInt8](count: 32, repeatedValue: 0x00)
          //read_byteArray[0]  = 0
-         //var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
-         var buffer = [Int8](repeating:0, count:64)
-         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 0)
+         var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
+         //var buffer = [Int8](repeating:0, count:64)
+
+        let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 0)
+        // let result = rawhid_recv(0, &buffer, Int32(BUFFER_SIZE), 0)
          if (result == 0)
          {
             return;
          }
          
-         
-         
-         //https://stackoverflow.com/questions/24196820/nsdata-from-byte-array-in-swift
-         dataRead = Data(bytes: readarray)
-         
-         /*
-         if !(lastdataRead == dataRead)
-         {
-            //print("new data")
-            
-            lastdataRead = dataRead
-            let byteArray:[UInt8] = [UInt8](dataRead)
-         
+        //https://developer.apple.com/forums/thread/110356 
+        let checksum = readarray.reduce(0) { (soFar, byte) in
+             soFar &+ byte
          }
-         else 
-         {
-            print("same data")
-         }
- */
-         //     NSData* dataRead = [NSData dataWithBytes:buffer length:reportSize];
-         // read_byteArray puffern
-      //   read_byteArray = readarray
+         //print("oldchecksum: \(oldchecksum) checksum: \(checksum)")
           
-         //let messageString = userInfo["message"]
-         //var tempcount = timerdic["count"]!
+         //https://stackoverflow.com/questions/24196820/nsdata-from-byte-array-in-swift
+      //   dataRead = Data(bytes: readarray)
          
-         
-  //       if !(last_read_byteArray == read_byteArray)
-         if !(lastdataRead == dataRead)
+         if !(oldchecksum == checksum)
+   //    if !(lastreadarray == readarray)
          {
-            lastdataRead = dataRead
-            // read_byteArray puffern
-            read_byteArray = readarray
-     
-            let timerdic:Dictionary<String,Int?> = timer.userInfo as! Dictionary<String,Int?>
-   
-            last_read_byteArray = read_byteArray
-            //lastDataRead = Data(bytes:read_byteArray)
+            oldchecksum = checksum
+   //       dataRead = Data(bytes: readarray)
+   //       lastdataRead = dataRead
             
-           // let usbData = Data(bytes:read_byteArray)
-            new_Data = true
+            // read_byteArray puffern
+            lastreadarray = readarray
+     
+ //           let timerdic:Dictionary<String,Int?> = timer.userInfo as! Dictionary<String,Int?>
+   
+              new_Data = true
             datatruecounter += 1
             //var codehex = String(format:"%02X", read_byteArray[0])
             
             //var taskcode = read_byteArray[0]
             //print("\n+++                               cont_read_USB in Timer codehex: \(codehex)")
             
-            /*
-             if taskcode == 0xD0
-             {
-             if timer.isValid == true
-             {
-             print("+++ cont_read_USB Timer invalidate")
-             timer.invalidate()
-             }
-             }
-             */           
-            /*
+                /*
              for  i in 0...16
              {
              print(" \(read_byteArray[i])")
@@ -423,7 +335,7 @@ open class usb_teensy: NSObject
             let nc = NotificationCenter.default           
             nc.post(name:Notification.Name(rawValue:"newdata"),
                     object: nil,
-                    userInfo: ["message":"neue Daten", "data":read_byteArray])
+                    userInfo: ["message":"neue Daten", "data":lastreadarray])
          }
          else
          {
