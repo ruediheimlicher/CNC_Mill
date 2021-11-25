@@ -24,6 +24,7 @@ var globalusbstatus = 0
 
 var mausstatus:UInt8 = 0
 
+var nextdatatime:CFAbsoluteTime = 0
 // 
 func phex(_ data:UInt8)->String
 {

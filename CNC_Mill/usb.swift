@@ -337,21 +337,22 @@ open class usb_teensy: NSObject
          //var tempbyteArray = [UInt8](count: 32, repeatedValue: 0x00)
          //read_byteArray[0]  = 0
          //var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
-         
-         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 150)
+         var buffer = [Int8](repeating:0, count:64)
+         let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 0)
          if (result == 0)
          {
             return;
          }
          
+         
+         
          //https://stackoverflow.com/questions/24196820/nsdata-from-byte-array-in-swift
          dataRead = Data(bytes: readarray)
          
-         
-         
+         /*
          if !(lastdataRead == dataRead)
          {
-            print("new data")
+            //print("new data")
             
             lastdataRead = dataRead
             let byteArray:[UInt8] = [UInt8](dataRead)
@@ -361,29 +362,24 @@ open class usb_teensy: NSObject
          {
             print("same data")
          }
+ */
          //     NSData* dataRead = [NSData dataWithBytes:buffer length:reportSize];
          // read_byteArray puffern
-         read_byteArray = readarray
+      //   read_byteArray = readarray
           
- /*        
-         if  var dic = timer.userInfo as? NSMutableDictionary
-         {
-            if var count:Int = dic["count"] as? Int 
-            {
-               //             print("*cont_read_USB usb-count von timer: \(count)")
-               count = count + 1
-               dic["count"] = count
-               
-            }
-         }
- */        
-         let timerdic:Dictionary<String,Int?> = timer.userInfo as! Dictionary<String,Int?>
          //let messageString = userInfo["message"]
          //var tempcount = timerdic["count"]!
          
          
-         if !(last_read_byteArray == read_byteArray)
+  //       if !(last_read_byteArray == read_byteArray)
+         if !(lastdataRead == dataRead)
          {
+            lastdataRead = dataRead
+            // read_byteArray puffern
+            read_byteArray = readarray
+     
+            let timerdic:Dictionary<String,Int?> = timer.userInfo as! Dictionary<String,Int?>
+   
             last_read_byteArray = read_byteArray
             //lastDataRead = Data(bytes:read_byteArray)
             

@@ -62,9 +62,15 @@ class rPCB: rViewController
    var waittime:CFAbsoluteTime?
    var responsetime:CFAbsoluteTime = 0
    
+   
+   
    var taskzeit:Double = 0
    var usbzeit:Double = 0
    var responsezeit:Double = 0
+   
+   var nextdatazeit:Double = 0
+   
+   
    //   var pfeilschrittweite:Int = 0
    var tsp_nn = rTSP_NN()
    // var schnittPfad = rSchnittPfad()
@@ -3790,8 +3796,7 @@ class rPCB: rViewController
             //cncdata[24] = 0xD5
             //teensy.write_byteArray = cncdata
             */
-            
-            usbtime = CFAbsoluteTimeGetCurrent()
+             usbtime = CFAbsoluteTimeGetCurrent()
        //     print("write_CNCcncstepperposition: \(cncstepperposition) code:  \(teensy.write_byteArray[24]) next write_byteArray: \(teensy.write_byteArray)")
             //print(" code    write_byteArray24: \(teensy.write_byteArray[24])")
             
@@ -3800,6 +3805,7 @@ class rPCB: rViewController
      //       let seconds = 1.0
      //       DispatchQueue.main.asyncAfter(deadline: .now() + seconds) 
      //       {
+            nextdatazeit = CFAbsoluteTimeGetCurrent() - nextdatatime
             responsetime = CFAbsoluteTimeGetCurrent()
                let senderfolg = self.teensy.send_USB()
             responsezeit = CFAbsoluteTimeGetCurrent() - responsetime 
@@ -5042,9 +5048,13 @@ class rPCB: rViewController
             
             
             taskzeit = CFAbsoluteTimeGetCurrent() - tasktime
-            
+            nextdatatime = CFAbsoluteTimeGetCurrent()
+     
             // Rueckmeldung von motorfinished
-            var abschnittnummer:Int = Int((data[5] << 8) | data[6])
+            let d5 = UInt16(data[5])
+            let d6 =  UInt16(data[6])
+            
+            var abschnittnummer:Int = Int(((d5 << 8) | (d6 )))
             let ladepos =  Int(data[8] )
             //print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
 
@@ -5054,7 +5064,7 @@ class rPCB: rViewController
 
             //print("\(abschnittnummer)\t\(pd4(responsezeit))\t \(pd3(usbzeit)) \t\(pd3(taskzeit))")
             
-            print("\(abschnittnummer)\t\(pd3(usbzeit)) \t\(pd3(taskzeit))")
+            print("\(abschnittnummer)\t\(pd3(usbzeit)) \t\(pd3(taskzeit)) ")
 
             
             
