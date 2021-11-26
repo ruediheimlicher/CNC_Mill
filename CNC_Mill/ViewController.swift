@@ -163,6 +163,7 @@ class  rPfeiltaste  : NSButton
       
   if pfeiltimerOK == 1
   {
+   //print("rPfeiltaste mousedown pfeiltimerOK == 1")
    pfeiltimer = Timer.scheduledTimer(timeInterval: 1.0 , target: self, selector: "pfeiltastenstimeraktion", userInfo: notificationDic, repeats: true)     
   }   
       let nc = NotificationCenter.default
