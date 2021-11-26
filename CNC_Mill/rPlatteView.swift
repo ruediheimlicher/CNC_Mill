@@ -452,13 +452,19 @@ class rPlatteView: NSView
          print("\t ******   PlatteView setStepperposition pos: \(pos) wegfloatarray: \(wegfloatarray) \nwegfloatarray: \(wegfloatarray)")
       }
  */
-      needsDisplay = true
+      //print("\t ******   PlatteView setStepperposition pos: \(pos) markrect: \(markfeldarray[stepperposition])")
+      if(markfeldarray.count > stepperposition)
+      {
+      self.setNeedsDisplay(markfeldarray[stepperposition])
+      //needsDisplay = true
+      self.displayIfNeeded()
+      }
    }
    
  
    func setfloatWeg(newWeg:[[Double]], scalefaktor:Int , transform:Double)-> Int
    {
-      //print("\t ******   PlatteView setfloatWeg newWeg: \(newWeg)")
+      print("\t ******   PlatteView setfloatWeg newWeg: \(newWeg)")
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
@@ -486,7 +492,18 @@ class rPlatteView: NSView
       
       for pos in 0..<newWeg.count
       {
+         /*
+         let nummerH = UInt16(newWeg[pos][39])
+         let nummerL =  UInt16(newWeg[pos][40])
+         
+         var anzeigezeile:Int = Int(((nummerH << 8) | (nummerL )))
+         if(newWeg[pos][41] == 0xFF) // keine Drillzeile
+         {
+            wegfloatarray.append([newWeg[pos][1] * Double(faktor * transformfaktor),newWeg[pos][2] * Double(faktor * transformfaktor)])
+         }
+         */
          wegfloatarray.append([newWeg[pos][1] * Double(faktor * transformfaktor),newWeg[pos][2] * Double(faktor * transformfaktor)])
+
       }
       
       
@@ -541,7 +558,8 @@ class rPlatteView: NSView
           */
          wegindex += 1
       }
-      //print("setfloatWeg markfeldarray: \(markfeldarray) ")
+      
+      print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
       needsDisplay = true
       return Int(fahrtweg)
    }

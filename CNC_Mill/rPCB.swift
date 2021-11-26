@@ -1201,9 +1201,9 @@ class rPCB: rViewController
             if circle < 9 // circle wird mit jeder zeile decrementiert, 
             {     
                
-               print("\nneue Zeile i: \(i)\t circle: \(circle)  \ttrimmzeile: \(trimmzeile)")
+              // print("\nneue Zeile i: \(i)\t circle: \(circle)  \ttrimmzeile: \(trimmzeile)")
                let zeilenarray = trimmzeile.split(separator: "=") // aufteilen in label und data
-               print("\t\t i: \(i) \t zeilenarray: \(zeilenarray)")
+              // print("\t\t i: \(i) \t zeilenarray: \(zeilenarray)")
                
                
                
@@ -1213,7 +1213,7 @@ class rPCB: rViewController
                if (zeilenarray.count > 1)  // = ist vorhanden, Daten
                {
                   let firstelement:String = String(zeilenarray[0]) // label
-                  print("i: \(i) \t firstelement: \t*\(firstelement)*")
+                 // print("i: \(i) \t firstelement: \t*\(firstelement)*")
                   
                   let contains = labelarray.contains(where:{$0 == firstelement})
                   
@@ -1222,7 +1222,7 @@ class rPCB: rViewController
                      
                      var partB = zeilenarray[1].replacingOccurrences(of: "\"", with: "")
                      partB = partB.replacingOccurrences(of: "/>", with: "")
-                     print("i: \(i) \t firstelement: \t \(firstelement) \t partB neu: \t\(partB)")
+                     //print("i: \(i) \t firstelement: \t \(firstelement) \t partB neu: \t\(partB)")
                      if lastlabel == firstelement // transform lesen
                      {
                         transformok = 1
@@ -1242,7 +1242,7 @@ class rPCB: rViewController
                         
                         // transform-matrix bereitstellen
                         transformdoublearray = [koeff_a,koeff_b,koeff_c,koeff_d,koeff_e,koeff_f]
-                        print("i: \(i) \t firstelement: \(firstelement) transformdoublearray: \(transformdoublearray)")
+                        //print("i: \(i) \t firstelement: \(firstelement) transformdoublearray: \(transformdoublearray)")
                         
                         
                      }
@@ -1250,7 +1250,7 @@ class rPCB: rViewController
                      else
                      {
                         let partfloat = (partB as NSString).doubleValue  
-                        print("i: \(i) \t firstelement: \(firstelement) partfloat: \(partfloat)")
+                        //print("i: \(i) \t firstelement: \(firstelement) partfloat: \(partfloat)")
                         
                         circleorellipsefloatelementdic[firstelement] = partfloat
                         circleorellipsefloatelementarray.append(partfloat)
@@ -1289,15 +1289,15 @@ class rPCB: rViewController
 
 
             } // circle < 9
-            print("\n*** *** *** *** ende circle: circle: \(circle)")
+            //print("\n*** *** *** *** ende circle: circle: \(circle)")
             if circle == 1 // Zeilen des Blocks sind abgearbeitet
             {
-               print("\n*** *** *** *** circle ist 1   \ni: \(i) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
+               //print("\n*** *** *** *** circle ist 1   \ni: \(i) //circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
                if (transformok == 1)
                {
                   
-                  print("transform circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
-                 print(" transformdoublearray: \(transformdoublearray)")
+                 // print("transform circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
+                 //print(" transformdoublearray: \(transformdoublearray)")
                   let a = transformdoublearray[0]
                   let b = transformdoublearray[1]
                   
@@ -1323,7 +1323,7 @@ class rPCB: rViewController
                
                if circleorellipsefloatelementarray.count > 0
                {
-                  print("i: \(i) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
+                  //print("i: \(i) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
                   circleorellipsefloatelementarray.append(0.0)
                   
                   
@@ -1406,7 +1406,7 @@ class rPCB: rViewController
          let lastlabel:String = String(labelarray.last ?? "") // label "transform"
          
          var punktarray = punktarrayvonSGV(sgvarray:SVG_array)
-         print("punktarray: \(punktarray)")
+         //print("punktarray: \(punktarray)")
          
          /*
          for zeile in SVG_array
@@ -1447,7 +1447,7 @@ class rPCB: rViewController
                   if (zeilenarray.count > 1)
                   {
                      let firstelement:String = String(zeilenarray[0]) // label
-                     print("i: \(i) \t firstelement: \t*\(firstelement)*")
+                     //print("i: \(i) \t firstelement: \t*\(firstelement)*")
                      
                      let contains = labelarray.contains(where:{$0 == firstelement})
                      
@@ -1456,7 +1456,7 @@ class rPCB: rViewController
                         
                         var partB = zeilenarray[1].replacingOccurrences(of: "\"", with: "")
                         partB = partB.replacingOccurrences(of: "/>", with: "")
-                        print("i: \(i) \t firstelement: \t \(firstelement) \t partB neu: \t\(partB)")
+                        //print("i: \(i) \t firstelement: \t \(firstelement) \t partB neu: \t\(partB)")
                         if lastlabel == firstelement // transform
                         {
                            print("transform: partB raw: \(partB)")
@@ -1465,7 +1465,7 @@ class rPCB: rViewController
                            print("transform: partB sauber: \(partB)")
                            let transformarray = partB.split(separator: ",")
                            
-                           print("transformarray: \(transformarray[0]) \t \(transformarray[1]) \t \(transformarray[2])\t\(transformarray[3])")
+                           //print("transformarray: \(transformarray[0]) \t \(transformarray[1]) \t \(transformarray[2])\t\(transformarray[3])")
                            guard let koeff_a:Double = Double(transformarray[0]) else { return } 
                            guard let koeff_b:Double = Double(transformarray[1]) else { return }
                            guard let koeff_c:Double = Double(transformarray[2]) else { return }
@@ -1475,7 +1475,7 @@ class rPCB: rViewController
                            
                            // transform-matrix bereitstellen
                            transformdoublearray = [koeff_a,koeff_b,koeff_c,koeff_d,koeff_e,koeff_f]
-                           print("i: \(i) \t firstelement: \(firstelement) transformdoublearray: \(transformdoublearray)")
+                           //print("i: \(i) \t firstelement: \(firstelement) transformdoublearray: \(transformdoublearray)")
                            
                            
                         }
@@ -1483,7 +1483,7 @@ class rPCB: rViewController
                         else
                         {
                            let partfloat = (partB as NSString).doubleValue  
-                           print("i: \(i) \t firstelement: \(firstelement) partfloat: \(partfloat)")
+                           //print("i: \(i) \t firstelement: \(firstelement) partfloat: \(partfloat)")
                            circleorellipsefloatelementdic[firstelement] = partfloat
                            circleorellipsefloatelementarray.append(partfloat)
                         }
@@ -1614,9 +1614,9 @@ class rPCB: rViewController
          }// for zeile in SVG_array
         */
          //print("report_readSVG circlefloatarray; \(circlefloatarray)")
-         print("report_readSVG punktarray; \(punktarray)")
+         //print("report_readSVG punktarray; \(punktarray)")
          circlefloatarray = punktarray
-          print("report_readSVG circlearray.  count: \(circlearray.count)")
+          //print("report_readSVG circlearray.  count: \(circlearray.count)")
           var ii = 0
           for el in circlearray
           {
@@ -2056,13 +2056,14 @@ class rPCB: rViewController
          
          // Bohrzeilen einfuegen
          
+         /*
          print("report_readSVG PCBDaten")
          for el in PCBDaten
          {
          print("\(el)")
          //     iii += 1
          }
-        
+        */
          
          
          Schnittdatenarray.append(contentsOf:PCBDaten)
@@ -2106,12 +2107,13 @@ class rPCB: rViewController
       
        
       lasttabledataindex = 0
+      /*
       print("report_readSVG Schnittdatenarray")
       for el in Schnittdatenarray
       {
          print("\(el)")
       }
-      
+      */
    }
    
    func mill_floatArray(circarray:[[Double]])->[[Double]]
@@ -2191,6 +2193,7 @@ class rPCB: rViewController
        
       //     Plattefeld.setStepperposition(pos: 0)
       let l = Plattefeld.setfloatWeg(newWeg: floatarray, scalefaktor: scale, transform:  transform)
+      
       fahrtweg.integerValue = 0
       //      let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: scale, transform:  transform)
       //      fahrtweg.integerValue = l
@@ -2298,6 +2301,8 @@ class rPCB: rViewController
       var yhome = 0
       
       //      for zeilenindex in stride(from: 0, to: circlefloatarray.count-1, by: 1)
+      var anzeigezeile = 0 //zeilennumer fuer PlatteView
+      var drillzeile = 0 //zeilennumer fuer drillarray
       
       
       for zeilenindex in stride(from: 0, to: floatarray.count-1, by: 1)
@@ -2354,10 +2359,17 @@ class rPCB: rViewController
          wegArray[30] = UInt8(Int(zoomFeld.doubleValue * 10))
          wegArray[36] = 0 // default H fuer tabledataZeile
          wegArray[37] = 0xFF // default L fuer tabledataZeile
-         print("code: \(wegArray[24]) ablaufstatus: \(ablaufstatus)")
+         
+         wegArray[39] =  UInt8((anzeigezeile & 0xFF00)>>8)
+         wegArray[40] =  UInt8(anzeigezeile & 0x00FF)
+         // drillzeile ausschliessen
+         wegArray[41] = 0xFF
+         wegArray[42] = 0xFF
+         
+         //print("code: \(wegArray[24]) ablaufstatus: \(ablaufstatus)")
          PCB_Datenarray.append(wegArray)
          //ablaufstatus |= (1<<DRILL_OK)
-         print("ablaufstatus: \(ablaufstatus)")
+         //print("ablaufstatus: \(ablaufstatus)")
          if (drillOKKnopf.state == NSControl.StateValue.on)
          {
             ablaufstatus |= (1<<DRILL_OK)
@@ -2369,11 +2381,22 @@ class rPCB: rViewController
          
          if ((ablaufstatus & (1<<DRILL_OK) > 0) && (zeilenindex < (circlefloatarray.count - 1)))
          {
-            print("drillArray: \(drillArray)")
+            //print("drillArray: \(drillArray)")
+            // anzeigezeile angeben
+            drillArray[0][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
+            drillArray[0][40] =  UInt8(anzeigezeile & 0x00FF)
+            drillArray[1][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
+            drillArray[1][40] =  UInt8(anzeigezeile & 0x00FF)
+           // drillzeile angeben
+            drillArray[0][41] = UInt8((drillzeile & 0xFF00)>>8)
+            drillArray[0][42] = UInt8(drillzeile & 0x00FF)
+            drillArray[1][41] = UInt8((drillzeile & 0xFF00)>>8)
+            drillArray[1][42] = UInt8(drillzeile & 0x00FF)
+            drillzeile += 1 
             PCB_Datenarray.append(drillArray[0])
             PCB_Datenarray.append(drillArray[1])
          }
-         
+         anzeigezeile += 1
          
          
       } // for zeilenindex
@@ -2385,7 +2408,7 @@ class rPCB: rViewController
       for z in 0..<PCB_Datenarray.count
       {
          PCB_Datenarray[z][27] = UInt8(z & 0x00FF)
-        PCB_Datenarray[z][26] = UInt8((z & 0xFF00) >> 8)
+         PCB_Datenarray[z][26] = UInt8((z & 0xFF00) >> 8)
          //print("PCBzeile: \(z) \(PCB_Datenarray[z][27])")
          
       }
@@ -2958,7 +2981,7 @@ class rPCB: rViewController
       setPCB_Output(floatarray: mill_floatarray, scale: 5, transform: transformfaktor)
       var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
       
-      print("report_readSVG PCBDaten")
+      //print("report_readSVG PCBDaten")
       Schnittdatenarray.append(contentsOf:PCBDaten)
    
    }
@@ -3344,7 +3367,7 @@ class rPCB: rViewController
          {
             istdiffxy = 1
          }
-         print("kontrolleintx(istzeitx): \(kontrolleintx) kontrolleinty: \(kontrolleinty) istdiffxy: \(istdiffxy) vorzeicheny: \(vorzeicheny)")
+         //print("kontrolleintx(istzeitx): \(kontrolleintx) kontrolleinty: \(kontrolleinty) istdiffxy: \(istdiffxy) vorzeicheny: \(vorzeicheny)")
          
          
          var diffy = (kontrolledoubley) - kontrolleinty            
@@ -3505,7 +3528,7 @@ class rPCB: rViewController
 
  //     print("schrittdatenvektor count: \(vektor.count)")
       //     print("schrittdatenvektor sxInt: \(sxInt) dxInt: \(dxInt) syInt: \(syInt) dyInt: \(dyInt) zeit: \(zeit)")
-      print("schrittdatenvektor: \(vektor)")
+      //print("schrittdatenvektor: \(vektor)")
       return vektor
    }
 
@@ -3523,7 +3546,7 @@ class rPCB: rViewController
       }
       var vektor:[UInt8] = wegArrayMitWegZ(wegz:Double(szInt))
       
-      print("drillvektor  szInt_raw: \(szInt_raw) )")
+      //print("drillvektor  szInt_raw: \(szInt_raw) )")
       
       let stepwert = stepsFeld.integerValue
        
@@ -3539,7 +3562,7 @@ class rPCB: rViewController
 
     
  //     print("drillvektor count: \(vektor.count)")
-      print("drillvektor count: \(vektor.count) vektor: \(vektor)")
+  //    print("drillvektor count: \(vektor.count) vektor: \(vektor)")
       
       return vektor
    }
@@ -3548,7 +3571,7 @@ class rPCB: rViewController
    {
       
       zoomfaktor = zoomFeld.doubleValue
-      print("PCB wegArrayMitWegZ wegZ: \(wegz) propfaktor: \(propfaktor)")
+      //print("PCB wegArrayMitWegZ wegZ: \(wegz) propfaktor: \(propfaktor)")
       var maxsteps:Double = 0
       var weg = [Double]()
       
@@ -3590,7 +3613,7 @@ class rPCB: rViewController
       
       schrittez /= propfaktor // Umrechnung in mm
       let schrittezmm = schrittez/stepsZFeld.doubleValue
-      print("wegArrayMitWegZ schrittez mm: \(schrittezmm) mm")
+      //print("wegArrayMitWegZ schrittez mm: \(schrittezmm) mm")
       
       var schrittezRound = round(schrittez)
       var schrittezInt:Int = 0
@@ -3601,7 +3624,7 @@ class rPCB: rViewController
          //  print("wegArrayMitWegXY schritteXInt OK: \(schrittexInt)")
          if schrittezInt < 0 // negativer Weg
          {
-            print("schrittezInt negativ")
+            //print("schrittezInt negativ")
             schrittezInt *= -1
             schrittezInt |= 0x80000000
          }
@@ -3639,7 +3662,7 @@ class rPCB: rViewController
       let wegX = distanzX * zoomfaktor 
       let wegY = distanzY * zoomfaktor 
       let distanz = (wegX*wegX + wegY*wegY).squareRoot()
-      print("++++          wegArrayMitWegXY  distanzX: \(distanzX)  distanzY: \(distanzY)  distanz: \(distanz)")
+      //print("++++          wegArrayMitWegXY  distanzX: \(distanzX)  distanzY: \(distanzY)  distanz: \(distanz)")
       var speed = speedFeld.intValue
       
       if ramp_OK_Check.state == NSControl.StateValue.on
@@ -4057,14 +4080,14 @@ class rPCB: rViewController
          }
          */
          print("mausstatusAktion mausstatus: \(mausstatus)")
-         pfeilwegarray[40] = mausstatus
+         pfeilwegarray[43] = mausstatus
          
          for z in 0 ... pfeilwegarray.count-1
          {
             teensy.write_byteArray[z] = pfeilwegarray[z]
             //print("\(z) \(pfeilwegarray[z])")
          }
-         print("mausstatusAktion pfeilwegarray 37: \(teensy.write_byteArray[40]) code: \(phex(pfeilwegarray[24])) ")
+         print("mausstatusAktion pfeilwegarray 37: \(teensy.write_byteArray[43]) code: \(phex(pfeilwegarray[24])) ")
          //        print("\(pfeilwegarray)")
          
          
@@ -4793,6 +4816,7 @@ class rPCB: rViewController
             print("newDataAktion  AD ladepos: \(ladepos)")
             
             Plattefeld.setStepperposition(pos:ladepos)
+            
             print("newDataAktion  AD abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
             
              
@@ -5045,8 +5069,7 @@ class rPCB: rViewController
             
          // MARK: ***     ***   D6        
          case 0xD6:
-            
-            
+            print("D6")
             taskzeit = CFAbsoluteTimeGetCurrent() - tasktime
             nextdatatime = CFAbsoluteTimeGetCurrent()
      
@@ -5057,20 +5080,41 @@ class rPCB: rViewController
             var abschnittnummer:Int = Int(((d5 << 8) | (d6 )))
             let ladepos =  Int(data[8] )
             //print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
-
-            //print("\(abschnittnummer)\tresp: \t \(pd4(responsezeit))\t usb: \t\(pd3(usbzeit)) \ttask: \t\(pd3(taskzeit))")
-            
-           //print("\(abschnittnummer)\tresp: \t \(pd4(responsezeit))\t usb: \t\(pd3(usbzeit)) \ttask: \t\(pd3(taskzeit))")
-
             //print("\(abschnittnummer)\t\(pd4(responsezeit))\t \(pd3(usbzeit)) \t\(pd3(taskzeit))")
+            //print("\(abschnittnummer)\t\(pd3(usbzeit)) \t\(pd3(taskzeit)) ")
+            print("\(abschnittnummer)")
+            if (abschnittnummer < Schnittdatenarray.count)
+            {
+               print("D6 abschnittnummer \(abschnittnummer) data: \(Schnittdatenarray[abschnittnummer][39]) \(Schnittdatenarray[abschnittnummer][40]) \(Schnittdatenarray[abschnittnummer][41]) \(Schnittdatenarray[abschnittnummer][42])")
+               let aH = UInt16(Schnittdatenarray[abschnittnummer][39])
+               let aL =  UInt16(Schnittdatenarray[abschnittnummer][40])
+               var anzeigezeile:Int = Int(((aH << 8) | (aL )))
+               
+               let dH = UInt16(Schnittdatenarray[abschnittnummer][41])
+               let dL = UInt16(Schnittdatenarray[abschnittnummer][42])
+               let drillzeile:Int = Int(((dH << 8) | (dL )))
+               
+               print("anzeigezeile: \(anzeigezeile) drillzeile: \(drillzeile)")
+               if (drillzeile < 0xFF)
+               {
+                  print("D6 mark")
+                  Plattefeld.setStepperposition(pos:Int(anzeigezeile + 1))
+               }
+            }
             
-            print("\(abschnittnummer)\t\(pd3(usbzeit)) \t\(pd3(taskzeit)) ")
-
+            else
+            {
+              
+               let aH = UInt16(Schnittdatenarray[abschnittnummer-1][39])
+               let aL =  UInt16(Schnittdatenarray[abschnittnummer-1][40])
+               var anzeigezeile:Int = Int(((aH << 8) | (aL )))
+               print("setStepperposition last anzeigezeile: \(anzeigezeile)")
+               Plattefeld.setStepperposition(pos:Int(anzeigezeile + 1))
+            }
+    //        Plattefeld.setStepperposition(pos:Int(abschnittnummer))
             
             
-            
-            Plattefeld.setStepperposition(pos:Int(abschnittnummer))
-         /*
+            /*
             if cncstepperposition < Schnittdatenarray.count
             {
                write_CNC_Abschnitt()
