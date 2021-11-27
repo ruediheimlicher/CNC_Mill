@@ -948,7 +948,7 @@
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cvX-mA-Yas">
                                 <rect key="frame" x="401" y="529" width="42" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="NN" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="GsS-wx-awe">
+                                <buttonCell key="cell" type="check" title="NN" bezelStyle="regularSquare" imagePosition="left" inset="2" id="GsS-wx-awe">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -1641,7 +1641,7 @@
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FMp-8K-kag">
                                 <rect key="frame" x="894" y="300" width="57" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Drill" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="L2a-FX-G7g">
+                                <buttonCell key="cell" type="check" title="Drill" bezelStyle="regularSquare" imagePosition="left" inset="2" id="L2a-FX-G7g">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>

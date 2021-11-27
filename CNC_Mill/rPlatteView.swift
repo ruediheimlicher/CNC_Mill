@@ -345,6 +345,7 @@ class rPlatteView: NSView
           klickindex += 1
       }
       
+      print("mouseDown klickmarkindex: \(klickmarkindex)")
       //    NSColor.blue.set() // choose color
       // https://stackoverflow.com/questions/47738822/simple-drawing-with-mouse-on-cocoa-swift
       //clearWeg()
@@ -374,14 +375,14 @@ class rPlatteView: NSView
       {
          weg.move(to: lokalpunkt)
          
-         userinformation = ["message":"mousedown", "punkt": lokalpunkt, "index": weg.elementCount, "first": 0, "ident" :identstring] as [String : Any]
+         userinformation = ["message":"mousedown", "punkt": lokalpunkt, "index": weg.elementCount, "first": 0]
          //userinformation["ident"] = self.identifier
       }
      
       
-      nc.post(name:Notification.Name(rawValue:"joystick"),
-              object: nil,
-              userInfo: userinformation)
+  //    nc.post(name:Notification.Name(rawValue:"joystick"),
+  //            object: nil,
+  //            userInfo: userinformation)
       needsDisplay = true   
    }
    
@@ -559,7 +560,7 @@ class rPlatteView: NSView
          wegindex += 1
       }
       
-      print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
+     //print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
       needsDisplay = true
       return Int(fahrtweg)
    }
