@@ -1769,7 +1769,7 @@ class rPCB: rViewController
          {
               mill_floatarray.append(mill_floatarray[0])
          }
-         
+         circlefloatarray = mill_floatarray
          
          /*
           for ii in nn_array
@@ -1826,7 +1826,7 @@ class rPCB: rViewController
          Schnittdatenarray.removeAll() // Array leeren
          
          var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
-         
+         //circlefloatarray = PCBDaten
           /*
           print("mill_floatarray C")
           for el in mill_floatarray
@@ -3687,7 +3687,7 @@ class rPCB: rViewController
              print("schritteAZ: \(schritteAZ) ")
         
          
-         print("write_CNC_Zeile   code: \(phex(zeilenarray[24]))  schritteAX: \(schritteAX) schritteAY: \(schritteAY) schritteAZ: \(schritteAZ)")
+         print("write_CNC_Zeile   code: \(phex(zeilenarray[24]))  schritteAX: \(schritteAX) schritteAY: \(schritteAY) schritteAZ: \(schritteAZ) lage: \(zeilenarray[25])")
          print("write_CNC_Zeile  zeilenarray: \(zeilenarray)")
          for element in zeilenarray
          {
@@ -4051,6 +4051,7 @@ class rPCB: rViewController
       lasttabledataindex = zeile
       
       print("dataTableAktion lasttabledataindex: \(lasttabledataindex)")
+      
       if Schnittdatenarray.count > zeile
       {
   //       print("datatabletask zeilenindex: \(zeile)\n Schnittdatenarray : \(Schnittdatenarray[zeile])")
@@ -4064,7 +4065,7 @@ class rPCB: rViewController
       
       // if Schnittdatenarray.count > 0
       //  {
-      print("datatabletask start CNC ")
+      print("datatabletask start CNC_Zeile ")
       write_CNC_Zeile(zeilenarray: dataTableWeg)   
       
       //teensy.start_read_USB(true)
