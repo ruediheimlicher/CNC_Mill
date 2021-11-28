@@ -935,7 +935,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q4r-pV-zV0">
-                                <rect key="frame" x="449" y="529" width="57" height="18"/>
+                                <rect key="frame" x="496" y="532" width="57" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Ramp" bezelStyle="regularSquare" imagePosition="left" inset="2" id="W1Y-i8-Adj">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -943,17 +943,6 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="report_linearCheckbox:" target="wFL-7s-Z8p" id="Mse-Uj-IQg"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cvX-mA-Yas">
-                                <rect key="frame" x="401" y="529" width="42" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="NN" bezelStyle="regularSquare" imagePosition="left" inset="2" id="GsS-wx-awe">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="report_NN:" target="wFL-7s-Z8p" id="79p-7d-qzX"/>
                                 </connections>
                             </button>
                             <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="s5Y-ip-nfy" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
@@ -1684,6 +1673,17 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rxh-NJ-6tV">
+                                <rect key="frame" x="419" y="529" width="57" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="NN" bezelStyle="regularSquare" imagePosition="left" inset="2" id="v5o-te-w6c">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="report_NN:" target="wFL-7s-Z8p" id="Mod-wc-pc0"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1691,7 +1691,7 @@
                         <outlet property="CNC_HALT_Knopf" destination="Wwq-u4-Kg2" id="wnv-7E-wxc"/>
                         <outlet property="ClearPCBTaste" destination="vua-Lc-4z0" id="nfX-4A-9VS"/>
                         <outlet property="DataSendTaste" destination="EBu-nO-PLk" id="u6H-AD-jDN"/>
-                        <outlet property="NN_OK_Check" destination="cvX-mA-Yas" id="f0c-ha-kDi"/>
+                        <outlet property="NN_OK_Check" destination="rxh-NJ-6tV" id="GJy-TN-Vny"/>
                         <outlet property="PWM_Feld" destination="NlK-9B-vfX" id="1Z1-HB-He7"/>
                         <outlet property="PWM_Slider" destination="Yvu-r7-qT2" id="aXz-Ag-cav"/>
                         <outlet property="PlatteScroller" destination="EQG-jy-Qht" id="dS1-G5-ggE"/>
