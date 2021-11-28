@@ -26,6 +26,8 @@ class rPlatteView: NSView
    var markarray:[NSBezierPath] = [NSBezierPath]()
    var numarray:[NSBezierPath] = [NSBezierPath]()
    
+   var punktarray:[NSPoint] = [NSPoint]()
+   
    var redfaktor:CGFloat = 1
    var transformfaktor:CGFloat = 0 // px to mm
    var wegindex=0;
@@ -308,7 +310,7 @@ class rPlatteView: NSView
       }
       
       let location = theEvent.locationInWindow
-      //    Swift.print(location)
+          Swift.print(location)
       //    NSPoint lokalpunkt = [self convertPoint: [anEvent locationInWindow] fromView: nil];
       let lokalpunkt = convert(theEvent.locationInWindow, from: nil)
       //    Swift.print(lokalpunkt)
@@ -353,6 +355,7 @@ class rPlatteView: NSView
    //   if kreuz.isEmpty
       if infeld == 1
       {
+         /*
          kreuz.move(to: lokalpunkt)
          // kreuz zeichnen
          kreuz.line(to: NSMakePoint(lokalpunkt.x, lokalpunkt.y+8))
@@ -366,6 +369,22 @@ class rPlatteView: NSView
          
          // zurueck zu localpunkt
          weg.move(to: lokalpunkt)
+         */
+         let kreuzpunkt = punktarray[klickmarkindex];
+         kreuz.move(to: kreuzpunkt)
+         // kreuz zeichnen
+         kreuz.line(to: NSMakePoint(kreuzpunkt.x+8, kreuzpunkt.y+8))
+         kreuz.line(to: kreuzpunkt)
+         kreuz.line(to: NSMakePoint(kreuzpunkt.x+8, kreuzpunkt.y-8))
+         kreuz.line(to: kreuzpunkt)
+         kreuz.line(to: NSMakePoint(kreuzpunkt.x-8, kreuzpunkt.y-8))
+         kreuz.line(to: kreuzpunkt)
+         kreuz.line(to: NSMakePoint(kreuzpunkt.x-8, kreuzpunkt.y+8))
+         kreuz.line(to: kreuzpunkt)
+         
+         // zurueck zu kreuzpunkt
+         weg.move(to: kreuzpunkt)
+       
          
          userinformation = ["message":"mousedown", "punkt": lokalpunkt, "index": weg.elementCount, "first": 1, "ident" :identstring] as [String : Any]
          //userinformation["ident"] = self.identifier
@@ -470,6 +489,7 @@ class rPlatteView: NSView
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
       markfeldarray.removeAll()
+      punktarray.removeAll()
       wegfloatarray.removeAll()
       for mark in markarray
       {
@@ -505,6 +525,7 @@ class rPlatteView: NSView
          */
          wegfloatarray.append([newWeg[pos][1] * Double(faktor * transformfaktor),newWeg[pos][2] * Double(faktor * transformfaktor)])
 
+         
       }
       
       
@@ -515,6 +536,7 @@ class rPlatteView: NSView
          elcount += 1
          //  let x = CGFloat(zeile[0])
          let lokalpunkt = NSMakePoint(CGFloat(zeile[0]),CGFloat(zeile[1]))
+         punktarray.append(lokalpunkt)
          //Swift.print("lokalpunkt: \(lokalpunkt) stepperposition: \(stepperposition)" )
          if wegindex == 0
          {
