@@ -44,6 +44,8 @@ class rPCB: rViewController
    var mmFormatter = NumberFormatter()
 
    var drillweg = 25
+   
+   var drillspeed = 3000
  
    var anschlagstatus = 0;
    
@@ -127,7 +129,8 @@ class rPCB: rViewController
    
    @IBOutlet weak var drillwegFeld: NSTextField!
    @IBOutlet weak var drillwegmmFeld: NSTextField!
-    
+   @IBOutlet weak var drillspeedSlider: NSSlider!
+   @IBOutlet weak var drillspeedFeld: NSTextField!
    
    @IBOutlet weak var Zeilen_Stepper: NSStepper!
    
@@ -315,6 +318,10 @@ class rPCB: rViewController
       
       drillwegFeld.integerValue = drillweg
       
+      drillspeedFeld.integerValue = drillspeed
+      drillspeedSlider.maxValue = 4000
+      drillspeedSlider.integerValue = drillspeed
+      
       let stepUpKnopf = NSButton()
       stepUpKnopf.frame = NSMakeRect(1060,310, 25, 25) 
       stepUpKnopf.title = "UP"
@@ -411,6 +418,8 @@ class rPCB: rViewController
       schritteweitepop.addItems(withTitles: schritteweitearray)
       schritteweitepop.selectItem(withTitle: schritteweitearray[1])
       
+   
+   
    }
    func updatePfeilschrittweite(sw:Int)
    {
@@ -2785,6 +2794,40 @@ class rPCB: rViewController
    
    }
    
+   @IBAction func report_drillOK(_ sender: NSButton)
+   {
+      print("report_Drill")
+      let state = sender.state
+      var drill = false
+      if state == .on
+      {
+         drill = true
+      }
+      print("report_Drill drill: \(drill)")
+      if circlefloatarray.count == 0
+      {
+         print("report_Drill circlefloatarray leer")
+         return
+      }
+      Schnittdatenarray.removeAll()
+      print("report_Drill circlefloatarray.count: \(circlefloatarray.count)")
+      var mill_floatarray = mill_floatArray(circarray: circlefloatarray) //
+      
+      if figurschliessen_checkbox.state == .on
+      {   
+         mill_floatarray.append(mill_floatarray[0])
+      }
+      print("report_Drill mill_floatarray: \(mill_floatarray)")
+      
+      setPCB_Output(floatarray: mill_floatarray, scale: 5, transform: transformfaktor)
+      var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
+      
+      //print("report_Drill PCBDaten")
+      Schnittdatenarray.append(contentsOf:PCBDaten)
+   
+   }
+   
+   
    @IBAction override func report_HALT(_ sender: NSButton)
    {
       print("report_HALT")
@@ -3475,8 +3518,8 @@ class rPCB: rViewController
        Multiplikator in readSVG: 1000000 (INTEGERFAKTOR)
        
        */
-      
-      let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
+      let propfaktor = 2.8024440952E6 // korr 211202
+      //let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
       let dpi2mmfaktor = propfaktor / INTEGERFAKTOR
       
       let start = [0,0]
@@ -3591,6 +3634,12 @@ class rPCB: rViewController
             //    print("schritteAY: \(schritteAY) ")
   //          print("write_CNC     schritteAX: \(schritteAX) schritteAY: \(schritteAY)")
                
+            */
+            Schnittdatenarray[cncstepperposition][4] = 0 
+            Schnittdatenarray[cncstepperposition][5] = 0
+            Schnittdatenarray[cncstepperposition][6] = 0
+            Schnittdatenarray[cncstepperposition][7] = 0
+            */
             teensy.write_byteArray = Schnittdatenarray[cncstepperposition]
             
             /*
@@ -3629,6 +3678,7 @@ class rPCB: rViewController
      //       {
             nextdatazeit = CFAbsoluteTimeGetCurrent() - nextdatatime
             responsetime = CFAbsoluteTimeGetCurrent()
+            
                let senderfolg = self.teensy.send_USB()
             responsezeit = CFAbsoluteTimeGetCurrent() - responsetime 
             //print("write_CNC_Abschnitt senderfolg: \(senderfolg) responsezeit: \(responsezeit)")
@@ -4229,6 +4279,11 @@ class rPCB: rViewController
       return
    }
 
+   @IBAction func report_DrillspeedSlider(_ sender: NSSlider)
+   {
+      print("report_DrillspeedSlider Val: \(sender.integerValue) ")
+      drillspeedFeld.integerValue = sender.integerValue
+   }
    
    @IBAction func report_Drill(_ sender: NSButton)
    {

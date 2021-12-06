@@ -1584,7 +1584,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NlK-9B-vfX">
-                                <rect key="frame" x="830" y="296" width="50" height="22"/>
+                                <rect key="frame" x="854" y="296" width="34" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="UPs-DO-8d6">
                                     <font key="font" metaFont="system"/>
@@ -1593,7 +1593,7 @@
                                 </textFieldCell>
                             </textField>
                             <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yvu-r7-qT2">
-                                <rect key="frame" x="845" y="320" width="24" height="96"/>
+                                <rect key="frame" x="1112" y="407" width="24" height="96"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" continuous="YES" alignment="left" maxValue="255" tickMarkPosition="right" sliderType="linear" id="5sh-fX-8mN"/>
                                 <connections>
@@ -1634,6 +1634,9 @@
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="report_drillOK:" target="wFL-7s-Z8p" id="MOW-AR-LQf"/>
+                                </connections>
                             </button>
                             <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" tag="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Uy-DJ-MQm" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
                                 <rect key="frame" x="1062" y="354" width="26" height="25"/>
@@ -1684,6 +1687,32 @@
                                     <action selector="report_NN:" target="wFL-7s-Z8p" id="Mod-wc-pc0"/>
                                 </connections>
                             </button>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HBk-Si-7Vo">
+                                <rect key="frame" x="1107" y="378" width="34" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="DUe-Di-837">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xUy-Qa-Iqr">
+                                <rect key="frame" x="790" y="296" width="66" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Drillspeed" id="ttZ-Bo-ckb">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f5P-2D-VFB">
+                                <rect key="frame" x="859" y="315" width="24" height="96"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" continuous="YES" alignment="left" maxValue="4000" tickMarkPosition="right" sliderType="linear" id="zmY-7t-xY1"/>
+                                <connections>
+                                    <action selector="report_DrillspeedSlider:" target="wFL-7s-Z8p" id="jrE-8M-dU7"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1692,7 +1721,7 @@
                         <outlet property="ClearPCBTaste" destination="vua-Lc-4z0" id="nfX-4A-9VS"/>
                         <outlet property="DataSendTaste" destination="EBu-nO-PLk" id="u6H-AD-jDN"/>
                         <outlet property="NN_OK_Check" destination="rxh-NJ-6tV" id="GJy-TN-Vny"/>
-                        <outlet property="PWM_Feld" destination="NlK-9B-vfX" id="1Z1-HB-He7"/>
+                        <outlet property="PWM_Feld" destination="HBk-Si-7Vo" id="3wL-cT-7H4"/>
                         <outlet property="PWM_Slider" destination="Yvu-r7-qT2" id="aXz-Ag-cav"/>
                         <outlet property="PlatteScroller" destination="EQG-jy-Qht" id="dS1-G5-ggE"/>
                         <outlet property="Plattefeld" destination="XUX-V5-xCg" id="5lZ-Hg-XVD"/>
@@ -1702,6 +1731,8 @@
                         <outlet property="dataTable" destination="9Dc-YS-HYC" id="ajU-AM-GdF"/>
                         <outlet property="drillKnopf" destination="DDO-zf-c2L" id="CoA-IC-xNw"/>
                         <outlet property="drillOKKnopf" destination="FMp-8K-kag" id="Ssm-Cr-zpD"/>
+                        <outlet property="drillspeedFeld" destination="NlK-9B-vfX" id="GSg-Tn-WTq"/>
+                        <outlet property="drillspeedSlider" destination="f5P-2D-VFB" id="p5d-ah-oyI"/>
                         <outlet property="drillwegFeld" destination="AmW-Vm-i59" id="12d-0y-hNv"/>
                         <outlet property="drillwegmmFeld" destination="vD4-oA-RFC" id="izL-jA-wGx"/>
                         <outlet property="dxFeld" destination="i8B-q7-HKP" id="lI7-4A-MQ0"/>

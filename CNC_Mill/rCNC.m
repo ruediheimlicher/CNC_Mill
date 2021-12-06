@@ -158,6 +158,7 @@ schrittex, schrittey: Schritte in x und y-Richtung
  
 delayx, delayy:	Zeit fuer einen Schritt in x/y-Richtung, Einheit 100us
 */
+/*
 - (NSDictionary*)SteuerdatenVonDic:(NSDictionary*)derDatenDic
 {
 
@@ -237,35 +238,6 @@ delayx, delayy:	Zeit fuer einen Schritt in x/y-Richtung, Einheit 100us
    float relevanteZeit = 0;
    
    int motorstatus=0;
-   /*
-   if (ZeitB > ZeitA)
-   {
-      relevanteZeit = ZeitB;
-      relevanteSeite=1; // Seite B
-      if (fabs(DistanzBY) > fabs(DistanzBX))
-      {
-         
-         motorstatus |= (1<<MOTOR_D);
-      }
-      else 
-      {
-         motorstatus |= (1<<MOTOR_C);
-      }
-   }
-   else 
-   {
-      relevanteZeit = ZeitA;
-      if (fabs(DistanzAY) > fabs(DistanzAX))
-      {
-          motorstatus |= (1<<MOTOR_B);
-      }
-      else 
-      {
-          motorstatus |= (1<<MOTOR_A);
-      }
-
-   }
-   */
    if (fabs(DistanzAY) > fabs(DistanzAX))
    {
       motorstatus |= (1<<MOTOR_B);
@@ -280,76 +252,7 @@ delayx, delayy:	Zeit fuer einen Schritt in x/y-Richtung, Einheit 100us
    //NSLog(@"motorstatus: DistanzAX:\t%2.2f\t DistanzAY:\t%2.2f\t DistanzBX:\t%2.2f\t DistanzBY:\t%2.2f\tmotorstatus: %d",DistanzAX,DistanzAY,DistanzBX,DistanzBY,motorstatus);
 
    //NSLog(@"SteuerdatenVonDic motorstatus: %d",motorstatus);
-   /*
-    Routine aus CNCSlave fuer Feststellung des rel Motors
-    if (StepCounterA > StepCounterB) 
-    {
-    if (StepCounterA > StepCounterC)
-    {
-    if (StepCounterA > StepCounterD) // A max
-    {
-    motorstatus |= (1<<COUNT_A);
-    //lcd_putc('A');
-    }
-    else //A>B A>C D>A
-    {
-    motorstatus |= (1<<COUNT_D);
-    //lcd_putc('D');
-    }
-    
-    }//A>C
-    else // A>B A<C: A weg, B weg
-    {
-    if (StepCounterC > StepCounterD)
-    {
-    motorstatus |= (1<<COUNT_C);
-    //lcd_putc('C');
-    }
-    else // A>B A<C D>C B weg, 
-    {
-    motorstatus |= (1<<COUNT_D);
-    //lcd_putc('D');
-    }
-    
-    
-    }
-    }// A>B
-    
-    else // B>A A weg
-    {
-    if (StepCounterB > StepCounterC) // C weg
-    {
-    if (StepCounterB > StepCounterD) // D weg
-    {
-    motorstatus |= (1<<COUNT_B);
-    //lcd_putc('B');
-    }
-    else
-    {
-    motorstatus |= (1<<COUNT_D);
-    //lcd_putc('D');
-    }
-    }
-    else // B<C B weg
-    {  
-    if (StepCounterC > StepCounterD) // D weg
-    {
-    motorstatus |= (1<<COUNT_C);
-    //lcd_putc('C');
-    }
-    else // D>C C weg
-    {
-    motorstatus |= (1<<COUNT_D);
-    //lcd_putc('D');
-    }
-    
-    }
-    }
-    // end relevanter Motor
-
-    
-    */
-   
+  
    float relZeit= fmaxf(ZeitA,ZeitB);                             // relevante Zeit: grössere Zeit gibt korrekte max Schnittgeschwindigkeit 
    
    [tempDatenDic setObject:[NSNumber numberWithFloat:relZeit] forKey: @"relevantezeit"];
@@ -359,18 +262,6 @@ delayx, delayy:	Zeit fuer einen Schritt in x/y-Richtung, Einheit 100us
 	int SchritteAX=steps*DistanzAX;													//	Schritte in X-Richtung A
 	int SchritteBX=steps*DistanzBX;													//	Schritte in X-Richtung B
   
-	/*
-    int  anzayplus=0;
-    int  anzayminus=0;
-    int  anzaxplus=0;
-    int  anzaxminus=0;
-    
-    int  anzbxplus=0;
-    int  anzbxminus=0;
-    int  anzbyplus=0;
-    int  anzbyminus=0;
- 
-    */
 
    [tempDatenDic setObject:[NSNumber numberWithInt:motorstatus] forKey: @"motorstatus"];
    
@@ -546,8 +437,9 @@ delayx, delayy:	Zeit fuer einen Schritt in x/y-Richtung, Einheit 100us
    //NSLog(@"SteuerdatenVonDic ZeitA: %1.5f  ZeitB: %1.5f relSeite: %d code: %d",ZeitA,ZeitB,relevanteSeite,code);
 	//NSLog(@"SteuerdatenVonDic tempDatenDic: %@",[tempDatenDic description]);
 	return tempDatenDic;
-}
 
+}
+*/
 
 
 

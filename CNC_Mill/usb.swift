@@ -56,23 +56,7 @@ open class usb_teensy: NSObject
    
    override init()
    {
-      /*
-      manager = IOHIDManagerCreate(kCFAllocatorDefault, IOOptionBits(kIOHIDOptionsTypeNone))
-      
-      
-      manager = IOHIDManagerCreate(kCFAllocatorDefault, IOOptionBits(kIOHIDOptionsTypeNone))
-      if (CFGetTypeID(manager) != IOHIDManagerGetTypeID())
-      {
-          print("Can't create manager")
-          exit(1);
-      }
-      else 
-      {
-         print("Manager OK")
-      }
-      deviceList = deviceList.adding(CreateDeviceMatchingDictionary(inUsagePage: kHIDPage_GenericDesktop, inUsage: kHIDUsage_GD_Keyboard)) as NSArray
-      */
-      super.init()
+       super.init()
    }
    
    func CreateDeviceMatchingDictionary(inUsagePage: Int ,inUsage: Int ) -> CFMutableDictionary
