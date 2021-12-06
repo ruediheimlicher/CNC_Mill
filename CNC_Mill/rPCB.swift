@@ -46,6 +46,11 @@ class rPCB: rViewController
    var drillweg = 25
    
    var drillspeed = 3000
+   
+   var speedA = 2400
+   var speedB = 2400;
+   var speedC = 2400;
+
  
    var anschlagstatus = 0;
    
@@ -131,6 +136,11 @@ class rPCB: rViewController
    @IBOutlet weak var drillwegmmFeld: NSTextField!
    @IBOutlet weak var drillspeedSlider: NSSlider!
    @IBOutlet weak var drillspeedFeld: NSTextField!
+   
+   @IBOutlet weak var drillNullpunktKnopf: NSButton!
+   @IBOutlet weak var drillMoveUPKnopf: NSButton!
+   @IBOutlet weak var drillMoveDOWNKnopf: NSButton!
+   @IBOutlet weak var drillAbsolutwegFeld: NSTextField!
    
    @IBOutlet weak var Zeilen_Stepper: NSStepper!
    
@@ -318,9 +328,9 @@ class rPCB: rViewController
       
       drillwegFeld.integerValue = drillweg
       
-      drillspeedFeld.integerValue = drillspeed
-      drillspeedSlider.maxValue = 4000
-      drillspeedSlider.integerValue = drillspeed
+      drillspeedFeld.integerValue = speedC
+      drillspeedSlider.maxValue = 3000
+      drillspeedSlider.integerValue = speedC
       
       let stepUpKnopf = NSButton()
       stepUpKnopf.frame = NSMakeRect(1060,310, 25, 25) 
@@ -2827,6 +2837,12 @@ class rPCB: rViewController
    
    }
    
+   @IBAction override func report_Nullpunkt(_ sender: NSButton)
+   {
+      print("report_Nullpunkt")
+   
+   
+   }
    
    @IBAction override func report_HALT(_ sender: NSButton)
    {
@@ -3634,12 +3650,12 @@ class rPCB: rViewController
             //    print("schritteAY: \(schritteAY) ")
   //          print("write_CNC     schritteAX: \(schritteAX) schritteAY: \(schritteAY)")
                
-            */
-            Schnittdatenarray[cncstepperposition][4] = 0 
-            Schnittdatenarray[cncstepperposition][5] = 0
-            Schnittdatenarray[cncstepperposition][6] = 0
-            Schnittdatenarray[cncstepperposition][7] = 0
-            */
+            
+            Schnittdatenarray[cncstepperposition][20] = 0 
+            Schnittdatenarray[cncstepperposition][21] = 0
+            Schnittdatenarray[cncstepperposition][22] = 0
+            Schnittdatenarray[cncstepperposition][23] = 0
+            
             teensy.write_byteArray = Schnittdatenarray[cncstepperposition]
             
             /*
@@ -3739,11 +3755,16 @@ class rPCB: rViewController
          
          print("write_CNC_Zeile   code: \(phex(zeilenarray[24]))  schritteAX: \(schritteAX) schritteAY: \(schritteAY) schritteAZ: \(schritteAZ) lage: \(zeilenarray[25])")
          print("write_CNC_Zeile  zeilenarray: \(zeilenarray)")
+         
          for element in zeilenarray
          {
             teensy.write_byteArray.append(element)
          }
-         
+  
+         //Drillspeed
+         teensy.write_byteArray[20] = UInt8(drillspeedFeld.integerValue & 0x000000FF)
+         teensy.write_byteArray[21] = UInt8((drillspeedFeld.integerValue & 0x0000FF00) >> 8)
+        
   //       print("write_CNC_Zeile  write_byteArray: \(teensy.write_byteArray)")
   //       print("    write_byteArray24: \(teensy.write_byteArray[24])")
   //       print("write_CNC_Zeile    write_byteArray38: \(teensy.write_byteArray[38])")
@@ -4283,6 +4304,17 @@ class rPCB: rViewController
    {
       print("report_DrillspeedSlider Val: \(sender.integerValue) ")
       drillspeedFeld.integerValue = sender.integerValue
+      teensy.write_byteArray[24] = 0xB9
+      teensy.write_byteArray[DRILLSPEEDH_BIT] = UInt8((sender.integerValue & 0xFF00)>>8)
+      teensy.write_byteArray[DRILLSPEEDL_BIT] = UInt8(sender.integerValue & 0x00FF)
+      
+ //     if (usbstatus > 0)
+ //     {
+         let senderfolg = teensy.send_USB()
+         print("report_DrillspeedSlider senderfolg: \(senderfolg)")
+ //     }
+
+      
    }
    
    @IBAction func report_Drill(_ sender: NSButton)

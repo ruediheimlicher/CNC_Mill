@@ -1213,7 +1213,7 @@
                                 </connections>
                             </stepper>
                             <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jht-l6-Kdl">
-                                <rect key="frame" x="830" y="29" width="282" height="254"/>
+                                <rect key="frame" x="796" y="26" width="282" height="254"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" id="A5d-4f-vZM">
                                     <rect key="frame" x="1" y="1" width="280" height="252"/>
@@ -1375,16 +1375,13 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="22" translatesAutoresizingMaskIntoConstraints="NO" id="w83-Jj-H3P" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="1108" y="322" width="26" height="27"/>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="222" translatesAutoresizingMaskIntoConstraints="NO" id="w83-Jj-H3P" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
+                                <rect key="frame" x="1107" y="117" width="26" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GS0-6e-QTa">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <connections>
-                                    <action selector="report_move_Drill:" target="wFL-7s-Z8p" id="lEv-lq-TOG"/>
-                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" tag="24" translatesAutoresizingMaskIntoConstraints="NO" id="Bcx-Ll-Ia9" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
                                 <rect key="frame" x="1108" y="291" width="26" height="27"/>
@@ -1433,7 +1430,7 @@
                                 </connections>
                             </stepper>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DDO-zf-c2L">
-                                <rect key="frame" x="1008" y="301" width="53" height="36"/>
+                                <rect key="frame" x="1015" y="301" width="53" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" title="Drill" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LCW-T5-c8w">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1584,7 +1581,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NlK-9B-vfX">
-                                <rect key="frame" x="854" y="296" width="34" height="22"/>
+                                <rect key="frame" x="854" y="296" width="43" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="UPs-DO-8d6">
                                     <font key="font" metaFont="system"/>
@@ -1601,7 +1598,7 @@
                                 </connections>
                             </slider>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AmW-Vm-i59">
-                                <rect key="frame" x="958" y="329" width="43" height="22"/>
+                                <rect key="frame" x="965" y="329" width="43" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="UXO-i5-FqI">
                                     <font key="font" metaFont="system"/>
@@ -1609,17 +1606,8 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vD4-oA-RFC">
-                                <rect key="frame" x="957" y="299" width="43" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="4dc-lG-nc5">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KJN-84-BYJ">
-                                <rect key="frame" x="892" y="334" width="58" height="17"/>
+                                <rect key="frame" x="899" y="334" width="58" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="drillweg" id="lQl-Aq-Yk4">
                                     <font key="font" metaFont="system"/>
@@ -1628,7 +1616,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FMp-8K-kag">
-                                <rect key="frame" x="894" y="300" width="57" height="18"/>
+                                <rect key="frame" x="901" y="300" width="57" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Drill" bezelStyle="regularSquare" imagePosition="left" inset="2" id="L2a-FX-G7g">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1696,6 +1684,14 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f5P-2D-VFB">
+                                <rect key="frame" x="863" y="315" width="24" height="96"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" continuous="YES" alignment="left" minValue="1000" maxValue="3000" doubleValue="1000" tickMarkPosition="right" numberOfTickMarks="11" allowsTickMarkValuesOnly="YES" sliderType="linear" id="zmY-7t-xY1"/>
+                                <connections>
+                                    <action selector="report_DrillspeedSlider:" target="wFL-7s-Z8p" id="jrE-8M-dU7"/>
+                                </connections>
+                            </slider>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xUy-Qa-Iqr">
                                 <rect key="frame" x="790" y="296" width="66" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1705,14 +1701,34 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f5P-2D-VFB">
-                                <rect key="frame" x="859" y="315" width="24" height="96"/>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="224" translatesAutoresizingMaskIntoConstraints="NO" id="own-q4-La7" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
+                                <rect key="frame" x="1107" y="61" width="26" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <sliderCell key="cell" continuous="YES" alignment="left" maxValue="4000" tickMarkPosition="right" sliderType="linear" id="zmY-7t-xY1"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_down" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cwW-zZ-mYl">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Od-E7-bVB">
+                                <rect key="frame" x="1092" y="157" width="58" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Null" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="edV-bV-iLq">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
                                 <connections>
-                                    <action selector="report_DrillspeedSlider:" target="wFL-7s-Z8p" id="jrE-8M-dU7"/>
+                                    <action selector="report_Nullpunkt:" target="wFL-7s-Z8p" id="mWv-K8-5kZ"/>
                                 </connections>
-                            </slider>
+                            </button>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vD4-oA-RFC">
+                                <rect key="frame" x="1099" y="96" width="43" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="4dc-lG-nc5">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1729,12 +1745,15 @@
                         <outlet property="SVG_Testfeld" destination="P5o-cM-N2O" id="Kd0-KS-VLz"/>
                         <outlet property="Zeilen_Stepper" destination="3Nd-UJ-9iO" id="N74-yG-IUG"/>
                         <outlet property="dataTable" destination="9Dc-YS-HYC" id="ajU-AM-GdF"/>
+                        <outlet property="drillAbsolutwegFeld" destination="vD4-oA-RFC" id="dhx-An-G9F"/>
                         <outlet property="drillKnopf" destination="DDO-zf-c2L" id="CoA-IC-xNw"/>
+                        <outlet property="drillMoveDOWNKnopf" destination="own-q4-La7" id="sJ9-b3-3ce"/>
+                        <outlet property="drillMoveUPKnopf" destination="w83-Jj-H3P" id="AB6-Sb-gYM"/>
+                        <outlet property="drillNullpunktKnopf" destination="9Od-E7-bVB" id="Jhm-zu-ACR"/>
                         <outlet property="drillOKKnopf" destination="FMp-8K-kag" id="Ssm-Cr-zpD"/>
                         <outlet property="drillspeedFeld" destination="NlK-9B-vfX" id="GSg-Tn-WTq"/>
                         <outlet property="drillspeedSlider" destination="f5P-2D-VFB" id="p5d-ah-oyI"/>
                         <outlet property="drillwegFeld" destination="AmW-Vm-i59" id="12d-0y-hNv"/>
-                        <outlet property="drillwegmmFeld" destination="vD4-oA-RFC" id="izL-jA-wGx"/>
                         <outlet property="dxFeld" destination="i8B-q7-HKP" id="lI7-4A-MQ0"/>
                         <outlet property="dx_Stepper" destination="ZZR-de-pHe" id="qtl-Zi-wxS"/>
                         <outlet property="dyFeld" destination="Emd-2U-atJ" id="w7v-5v-aBV"/>

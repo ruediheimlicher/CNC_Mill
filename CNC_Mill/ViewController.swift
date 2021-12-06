@@ -1478,6 +1478,8 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    
    let PWM_BIT = 29
    
+   let DRILLSPEEDH_BIT = 20
+   let DRILLSPEEDL_BIT = 21
    
    
    //MARK:      Outlets 
