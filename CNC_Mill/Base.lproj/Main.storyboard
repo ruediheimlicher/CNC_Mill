@@ -1429,17 +1429,6 @@
                                     <action selector="report_Zeilen_Stepper:" target="wFL-7s-Z8p" id="KZ6-OY-BDb"/>
                                 </connections>
                             </stepper>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DDO-zf-c2L">
-                                <rect key="frame" x="1015" y="301" width="53" height="36"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" title="Drill" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LCW-T5-c8w">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system" size="16"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="report_Drill:" target="wFL-7s-Z8p" id="h45-SV-Qq6"/>
-                                </connections>
-                            </button>
                             <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" tag="26" translatesAutoresizingMaskIntoConstraints="NO" id="lji-pv-GVN" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
                                 <rect key="frame" x="1062" y="378" width="26" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1606,6 +1595,15 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vD4-oA-RFC">
+                                <rect key="frame" x="1099" y="96" width="43" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="4dc-lG-nc5">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KJN-84-BYJ">
                                 <rect key="frame" x="899" y="334" width="58" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1618,7 +1616,7 @@
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FMp-8K-kag">
                                 <rect key="frame" x="901" y="300" width="57" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Drill" bezelStyle="regularSquare" imagePosition="left" inset="2" id="L2a-FX-G7g">
+                                <buttonCell key="cell" type="check" title="Drill" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="L2a-FX-G7g">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -1667,7 +1665,7 @@
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rxh-NJ-6tV">
                                 <rect key="frame" x="419" y="529" width="57" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="NN" bezelStyle="regularSquare" imagePosition="left" inset="2" id="v5o-te-w6c">
+                                <buttonCell key="cell" type="check" title="NN" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="v5o-te-w6c">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -1720,15 +1718,34 @@
                                     <action selector="report_Nullpunkt:" target="wFL-7s-Z8p" id="mWv-K8-5kZ"/>
                                 </connections>
                             </button>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vD4-oA-RFC">
-                                <rect key="frame" x="1099" y="96" width="43" height="22"/>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kRp-p2-DWd">
+                                <rect key="frame" x="1055" y="329" width="43" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="4dc-lG-nc5">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="9Jf-k5-5PD">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="22" translatesAutoresizingMaskIntoConstraints="NO" id="hbe-7j-aQb" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
+                                <rect key="frame" x="1108" y="324" width="26" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7Mp-Fa-joY">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DDO-zf-c2L">
+                                <rect key="frame" x="1023" y="286" width="53" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" title="Drill" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LCW-T5-c8w">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system" size="16"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="report_Drill:" target="wFL-7s-Z8p" id="h45-SV-Qq6"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1754,6 +1771,7 @@
                         <outlet property="drillspeedFeld" destination="NlK-9B-vfX" id="GSg-Tn-WTq"/>
                         <outlet property="drillspeedSlider" destination="f5P-2D-VFB" id="p5d-ah-oyI"/>
                         <outlet property="drillwegFeld" destination="AmW-Vm-i59" id="12d-0y-hNv"/>
+                        <outlet property="drillwegmmFeld" destination="kRp-p2-DWd" id="lUM-T2-cgT"/>
                         <outlet property="dxFeld" destination="i8B-q7-HKP" id="lI7-4A-MQ0"/>
                         <outlet property="dx_Stepper" destination="ZZR-de-pHe" id="qtl-Zi-wxS"/>
                         <outlet property="dyFeld" destination="Emd-2U-atJ" id="w7v-5v-aBV"/>

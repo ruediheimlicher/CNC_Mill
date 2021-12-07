@@ -1937,7 +1937,7 @@ class rPCB: rViewController
    func mill_floatArray(circarray:[[Double]])->[[Double]]
    {
       
-      tsp_nn.setkoordinaten(koord: circlefloatarray)
+      tsp_nn.setkoordinaten(koord: circarray)
       tsp_nn.firstrun()
       tsp_nn.nearestneighbour()
       let nn_array = tsp_nn.weg
@@ -1953,16 +1953,16 @@ class rPCB: rViewController
          if  NN_OK_Check.state == NSControl.StateValue.on // nearest neighbour
          {
             let millindex = nn_array[zeilenindex]
-            var tempfloatarray:[Double] = circlefloatarray[millindex]
+            var tempfloatarray:[Double] = circarray[millindex]
             print("zeilenindex: \(zeilenindex) tempfloatarray: \(tempfloatarray)")
             // index neu einsetzen
             tempfloatarray[0] = Double(zeilenindex)
-            //mill_floatarray.append(circlefloatarray[millindex])  
+            //mill_floatarray.append(circarray[millindex])  
             mill_floatarray.append(tempfloatarray)
          }
          else
          {
-            mill_floatarray.append(circlefloatarray[zeilenindex])
+            mill_floatarray.append(circarray[zeilenindex])
          }
       }
       
@@ -1996,13 +1996,7 @@ class rPCB: rViewController
    {
       print("setPCB_Output Start")
       
-       print("circlearray: \(circlearray.count)")
-       for el in circlearray
-       {
-       
-       print("\(el[0] )\t \(el[1] )\t \(el[2])")
-       }
-       
+         
        print("setPCB_Output floatarray: \(floatarray.count)")
        for el in floatarray
        {
@@ -2062,7 +2056,7 @@ class rPCB: rViewController
       dataTable.reloadData()
       dataTable.selectRowIndexes(zeile, byExtendingSelection: false)
 
-      print("setPCB_Output End")
+      print("setPCB_Output End  CNC_DatendicArray count: \( CNC_DatendicArray.count)")
    } // setPCB_Output
    
    func DrillDaten(tiefe:Int) ->[[UInt8]]
@@ -2093,10 +2087,9 @@ class rPCB: rViewController
       return DrillDatenarray
    }
    
-   
-   func PCB_Daten(floatarray:[[Double]])->[[UInt8]]
+   func PCB_Abs_Daten(floatarray:[[Double]])->[[UInt8]]
    {
-      print("PCB_Daten\n")
+      print("PCB_Abs_Daten\n")
       //  var speed = speedFeld.intValue
       var PCB_Datenarray = [[UInt8]]()
       let tempweg = drillwegFeld.integerValue
@@ -2144,11 +2137,12 @@ class rPCB: rViewController
          
          
          // Differenz X
-         let diffX:Double = ((next[1] - akt[1]))
+         let diffX:Double = next[1] //- akt[1]))
+         
          floathomeX += diffX
          
          // Differenz Y
-         let diffY:Double = ((next[2] - akt[2]))
+         let diffY:Double = next[2] //- akt[2]))
          floathomeY += diffY
          
          if diffX == 0 && diffY == 0
@@ -2231,6 +2225,147 @@ class rPCB: rViewController
          
       }
   
+      return PCB_Datenarray
+   } 
+   
+   func PCB_Daten(floatarray:[[Double]])->[[UInt8]]
+   {
+      print("PCB_Daten\n")
+      //  var speed = speedFeld.intValue
+      var PCB_Datenarray = [[UInt8]]()
+      let tempweg = drillwegFeld.integerValue
+      var drillArray:[[UInt8]] = [drillvektor(szInt: -drillweg),drillvektor(szInt: (drillweg))]
+      
+      //Schnittdatenarray.removeAll()
+      Schnittdatenarray_n.removeAll()
+      
+      //      var SchritteArray:[[String:Any]] = [[:]]
+      zoomfaktor = zoomFeld.doubleValue
+      //     let steps = stepsFeld.intValue // Schritte fuer 1mm
+      var code:UInt8 = 0
+      
+      var maxsteps:Double = 0
+      //var relevanteschritte
+      var zeilenposition = 0
+      //      var zeilenanzahl = circlefloatarray.count
+      
+      var xhome = 0
+      var yhome = 0
+      
+      //      for zeilenindex in stride(from: 0, to: circlefloatarray.count-1, by: 1)
+      var anzeigezeile = 0 //zeilennumer fuer PlatteView
+      var drillzeile = 0 //zeilennumer fuer drillarray
+      
+      print("PCB Daten floatarray count vor: \(floatarray.count) circlefloatarray count: \(circlefloatarray.count) ")
+      for zeilenindex in stride(from: 0, to: floatarray.count-1, by: 1)
+      {
+         //         print("vor: \t xhome: \(xhome) yhome: \(yhome)")
+         zeilenposition = 0
+         if zeilenindex == 0
+         {
+            zeilenposition |= (1<<FIRST_BIT); // Erstes Element, Start
+         }
+         if zeilenindex == floatarray.count - 2
+         {
+            zeilenposition |= (1<<LAST_BIT);
+         }
+         
+         //       let next = circlefloatarray[zeilenindex+1] // next punkt
+         //       let akt = circlefloatarray[zeilenindex] // aktueller punkt
+         
+         let next = floatarray[zeilenindex+1] // next punkt
+         let akt = floatarray[zeilenindex] // aktueller punkt
+         
+         
+         // Differenz X
+         let diffX:Double = ((next[1] - akt[1]))
+         
+         floathomeX += diffX
+         
+         // Differenz Y
+         let diffY:Double = ((next[2] - akt[2]))
+         floathomeY += diffY
+         
+         if diffX == 0 && diffY == 0
+         {
+            print(" stride *********    differenz null zeile: \(zeilenindex)")
+            continue
+         }
+         
+         // dic aufbauen
+         var position:UInt16 = 0
+         
+         var zeilendic:[String:Any] = [:]
+         
+         
+         let aktX = (akt[1]) //
+         let aktY = (akt[2]) //
+         let nextX = (next[1])
+         let nextY = (next[2])
+         //print("vor: \t diffX: \(diffX) diffY: \(diffY)")
+         var wegArray = wegArrayMitWegXY(wegx: diffX, wegy: diffY)
+         //         print("set_PCB_Daten wegArray\n\(wegArray)")
+         
+         wegArray[25] = UInt8(zeilenposition)
+         wegArray[26] = UInt8((zeilenindex & 0xFF00)<<8)
+         wegArray[27] = UInt8((zeilenindex & 0x00FF))
+         wegArray[30] = UInt8(Int(zoomFeld.doubleValue * 10))
+         wegArray[36] = 0 // default H fuer tabledataZeile
+         wegArray[37] = 0xFF // default L fuer tabledataZeile
+         
+         wegArray[39] =  UInt8((anzeigezeile & 0xFF00)>>8)
+         wegArray[40] =  UInt8(anzeigezeile & 0x00FF)
+         // drillzeile ausschliessen
+         wegArray[41] = 0xFF
+         wegArray[42] = 0xFF
+         
+        // print("code: \(wegArray[24]) ablaufstatus: \(ablaufstatus)")
+         PCB_Datenarray.append(wegArray)
+         //ablaufstatus |= (1<<DRILL_OK)
+         //print("ablaufstatus: \(ablaufstatus)")
+         if (drillOKKnopf.state == NSControl.StateValue.on)
+         {
+            ablaufstatus |= (1<<DRILL_OK)
+         }
+         else
+         {
+            ablaufstatus &= ~(1<<DRILL_OK)
+         }
+         print("ablaufstatus: \(ablaufstatus) zeilenindex: \(zeilenindex)")
+         if ((ablaufstatus & (1<<DRILL_OK) > 0) && (zeilenindex < (floatarray.count - 2)))
+         {
+            //print("drillArray anzeigezeile: \(anzeigezeile) drillzeile: \(drillzeile)")
+            // anzeigezeile angeben
+            drillArray[0][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
+            drillArray[0][40] =  UInt8(anzeigezeile & 0x00FF)
+            drillArray[1][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
+            drillArray[1][40] =  UInt8(anzeigezeile & 0x00FF)
+           // drillzeile angeben
+            drillArray[0][41] = UInt8((drillzeile & 0xFF00)>>8)
+            drillArray[0][42] = UInt8(drillzeile & 0x00FF)
+            drillArray[1][41] = UInt8((drillzeile & 0xFF00)>>8)
+            drillArray[1][42] = UInt8(drillzeile & 0x00FF)
+            drillzeile += 1 
+            PCB_Datenarray.append(drillArray[0])
+            PCB_Datenarray.append(drillArray[1])
+         }
+         anzeigezeile += 1
+         
+         
+      } // for zeilenindex
+      
+      
+      // Zeilennummern kontrollieren
+      
+      var z=0
+      for z in 0..<PCB_Datenarray.count
+      {
+         PCB_Datenarray[z][27] = UInt8(z & 0x00FF)
+         PCB_Datenarray[z][26] = UInt8((z & 0xFF00) >> 8)
+         print("PCBzeile: \(z) \(PCB_Datenarray[z][27])")
+         
+      }
+      print("PCB Daten PCB_Datenarray count nach: \(PCB_Datenarray.count)\n\(PCB_Datenarray)")
       return PCB_Datenarray
    }
    
@@ -2837,10 +2972,10 @@ class rPCB: rViewController
    
    }
    
-   @IBAction override func report_Nullpunkt(_ sender: NSButton)
+   @IBAction func report_Nullpunkt(_ sender: NSButton)
    {
       print("report_Nullpunkt")
-   
+      
    
    }
    
@@ -2956,14 +3091,14 @@ class rPCB: rViewController
       Schnittdatenarray[0][33] = UInt8((anzabschnitte & 0xFF00) >> 8)
       Schnittdatenarray[0][34] = UInt8(anzabschnitte & 0x00FF)
 
-      /*
+      
        var i = 0
        for linie in Schnittdatenarray
        {
        print("\(i) \(linie)")
        i += 1
        }
-       */
+       
       if teensy.readtimervalid() == true
       {
          print("PCB readtimer valid vor")
@@ -3454,8 +3589,8 @@ class rPCB: rViewController
        
        */
       
-      let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
-      
+      //let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
+      let propfaktor = 2.8024440952E6 // korr 211202
       
       let start = [0,0]
       //let ziel = [wegZ]
@@ -4691,14 +4826,14 @@ class rPCB: rViewController
             let ZEILENSTATUS:UInt8 = 0
             if (data[23] < 0xFF) && ((data[23] & (1<<ZEILENSTATUS)) > 0 )
             {
-               print("newDataAktion  AD lasttabledataindex: \(lasttabledataindex)")
+               print("A newDataAktion  AD lasttabledataindex: \(lasttabledataindex)")
                Plattefeld.setStepperposition(pos:lasttabledataindex)
                break
             }
            
             if data[23] == 13
             {
-               print("newDataAktion  AD code 23 ist 13: \(data[23])")
+               print("B newDataAktion  AD code 23 ist 13: \(data[23])")
                Plattefeld.setStepperposition(pos:lasttabledataindex)
             }
             
@@ -4931,7 +5066,7 @@ class rPCB: rViewController
             
          case 0xBD: // teensystep
             print("newDataAktion  BD teensystep")
-            
+            return;
             
             break
             
@@ -5314,7 +5449,7 @@ class rPCB: rViewController
          {
             print("PCB move not valid vor")
             var start_read_USB_erfolg = teensy.start_read_USB(true)
-            print("report_send_Movestart_read_USB_erfolg: \(start_read_USB_erfolg)")
+            print("move start_read_USB_erfolg: \(start_read_USB_erfolg)")
          }
       }
    }
@@ -5342,7 +5477,6 @@ class rPCB: rViewController
      // print("report_send_Move lastklickposition x: \(lastklickposition.x) dy: \(lastklickposition.y)")
       // lastKlickposition ist (0,0)
       var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
-      //     var wegarray = wegArrayMitWegXY(wegx:dx, wegy:dy)
       
       wegarray[32] = DEVICE_MILL
       Schnittdatenarray.removeAll(keepingCapacity: true)
@@ -5360,12 +5494,12 @@ class rPCB: rViewController
       }
       
       wegarray[25] = 3 // nur 1 Abschnitt
-      wegarray[24] = 0xDC
+      wegarray[24] = 0xD5
       
       var zeilenposition:UInt8 = 0
       Schnittdatenarray.append(wegarray)
       stepperschritteFeld.integerValue = Schnittdatenarray.count
-      print("sendTextdaten Schnittdatenarray: \(Schnittdatenarray)")
+      print("send_Move Schnittdatenarray: \(Schnittdatenarray)")
       
       if Schnittdatenarray.count == 1
       {
@@ -5373,7 +5507,7 @@ class rPCB: rViewController
          write_CNC_Abschnitt()   
          if teensy.readtimervalid() == true
          {
-            //print("PCB readtimer valid vor")
+            print("PCB readtimer valid vor")
          }
          else 
          {

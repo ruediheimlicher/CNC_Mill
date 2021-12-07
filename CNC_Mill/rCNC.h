@@ -32,7 +32,7 @@ float det(float v0[],float v1[]);
 
 
 - (void)setredpwm:(float)red_pwmwert;
-- (NSDictionary*)SteuerdatenVonDic:(NSDictionary*)derDatenDic;
+//- (NSDictionary*)SteuerdatenVonDic:(NSDictionary*)derDatenDic;
 //- (NSDictionary*)SteuerdatenVonDic:(NSDictionary*)derDatenDic mitAbbrand:(int)mitabbrand;
 
 - (NSArray*)SchnittdatenVonDic:(NSDictionary*)derDatenDic;

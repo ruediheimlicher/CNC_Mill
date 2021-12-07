@@ -158,7 +158,7 @@ schrittex, schrittey: Schritte in x und y-Richtung
  
 delayx, delayy:	Zeit fuer einen Schritt in x/y-Richtung, Einheit 100us
 */
-/*
+
 - (NSDictionary*)SteuerdatenVonDic:(NSDictionary*)derDatenDic
 {
 
@@ -439,7 +439,7 @@ delayx, delayy:	Zeit fuer einen Schritt in x/y-Richtung, Einheit 100us
 	return tempDatenDic;
 
 }
-*/
+
 
 
 

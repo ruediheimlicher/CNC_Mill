@@ -355,22 +355,7 @@ class rPlatteView: NSView
    //   if kreuz.isEmpty
       if infeld == 1
       {
-         /*
-         kreuz.move(to: lokalpunkt)
-         // kreuz zeichnen
-         kreuz.line(to: NSMakePoint(lokalpunkt.x, lokalpunkt.y+8))
-         kreuz.line(to: lokalpunkt)
-         kreuz.line(to: NSMakePoint(lokalpunkt.x+8, lokalpunkt.y))
-         kreuz.line(to: lokalpunkt)
-         kreuz.line(to: NSMakePoint(lokalpunkt.x, lokalpunkt.y-8))
-         kreuz.line(to: lokalpunkt)
-         kreuz.line(to: NSMakePoint(lokalpunkt.x-8, lokalpunkt.y))
-         kreuz.line(to: lokalpunkt)
-         
-         // zurueck zu localpunkt
-         weg.move(to: lokalpunkt)
-         */
-         let kreuzpunkt = punktarray[klickmarkindex];
+          let kreuzpunkt = punktarray[klickmarkindex];
          kreuz.move(to: kreuzpunkt)
          // kreuz zeichnen
          kreuz.line(to: NSMakePoint(kreuzpunkt.x+8, kreuzpunkt.y+8))
@@ -473,11 +458,12 @@ class rPlatteView: NSView
       }
  */
       //print("\t ******   PlatteView setStepperposition pos: \(pos) markrect: \(markfeldarray[stepperposition])")
-      if(markfeldarray.count > stepperposition)
+      if(markfeldarray.count > stepperposition) // 
       {
-      self.setNeedsDisplay(markfeldarray[stepperposition])
+         print("\t ******   PlatteView setStepperposition pos: \(pos) needs display")
+         self.setNeedsDisplay(markfeldarray[stepperposition])
       //needsDisplay = true
-      self.displayIfNeeded()
+         self.displayIfNeeded()
       }
    }
    
@@ -582,7 +568,7 @@ class rPlatteView: NSView
          wegindex += 1
       }
       
-     //print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
+     print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
       needsDisplay = true
       return Int(fahrtweg)
    }
