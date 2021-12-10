@@ -1340,6 +1340,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    {
       let notokimage :NSImage = NSImage(named:NSImage.Name(rawValue: "notok_image"))!
       let okimage :NSImage = NSImage(named:NSImage.Name(rawValue: "ok_image"))!
+      
       let erfolg = teensy.USBOpen()
       usbstatus = erfolg
       print("USBOpen erfolg: \(erfolg) usbstatus: \(usbstatus)")

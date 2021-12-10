@@ -46,13 +46,14 @@ class rPlatteView: NSView
    var linienfarbe:NSColor = NSColor()
    var kreislinienfarbe:NSColor = NSColor()
    var kreisfillfarbe:NSColor = NSColor()
+   var kreisclearfarbe:NSColor = NSColor()
    
    var drawstatus = 0 // 0: setweg zeichnet den Weg  1: draw zeichnet den Weg nach setstepperposition
 
    required init?(coder  aDecoder : NSCoder) 
    {
       super.init(coder: aDecoder)
-      Swift.print("JoystickView init")
+      //Swift.print("PlatteView init")
       //   NSColor.blue.set() // choose color
       // let achsen = NSBezierPath() // container for line(s)
       let w:CGFloat = bounds.size.width
@@ -85,7 +86,8 @@ class rPlatteView: NSView
       gruen=160
       blau=100
       kreisfillfarbe = NSColor(red: CGFloat(rot/255), green: CGFloat(gruen/255), blue: CGFloat(blau/255), alpha: 1.0)
-      
+      //kreisfillfarbe = NSColor(red: CGFloat(1), green: CGFloat(1), blue: CGFloat(1), alpha: 1.0)
+     
       //    Swift.print("rot: \(rot/255)\n")
       
       if let joystickident = self.identifier
@@ -112,7 +114,7 @@ class rPlatteView: NSView
       let dashColor: NSColor = .gray
       
       // setup the context
-      let currentContext = NSGraphicsContext.current!.cgContext
+//      let currentContext = NSGraphicsContext.current!.cgContext
      // NSGraphicsContext.current!.CGContextClearRect(currentContext,self.bounds)
  //     currentContext.setLineWidth(dashHeight)
 //    currentContext.setLineDash(phase: 0, lengths: [dashLength])
@@ -457,10 +459,11 @@ class rPlatteView: NSView
          print("\t ******   PlatteView setStepperposition pos: \(pos) wegfloatarray: \(wegfloatarray) \nwegfloatarray: \(wegfloatarray)")
       }
  */
-      //print("\t ******   PlatteView setStepperposition pos: \(pos) markrect: \(markfeldarray[stepperposition])")
-      if(markfeldarray.count > stepperposition) // 
+       if(markfeldarray.count > stepperposition) // 
       {
-         print("\t ******   PlatteView setStepperposition pos: \(pos) needs display")
+         //print("\t ******   PlatteView setStepperposition pos: \(pos) markfeldarray.count: \(markfeldarray.count) \nmarkrect: \(markfeldarray[stepperposition])")
+
+         //print("\t ******   PlatteView setStepperposition pos: \(pos) needs display")
          self.setNeedsDisplay(markfeldarray[stepperposition])
       //needsDisplay = true
          self.displayIfNeeded()
@@ -470,7 +473,7 @@ class rPlatteView: NSView
  
    func setfloatWeg(newWeg:[[Double]], scalefaktor:Int , transform:Double)-> Int
    {
-      print("\t ******   PlatteView setfloatWeg newWeg: \(newWeg)")
+      //print("\t ******   PlatteView setfloatWeg newWeg: \(newWeg)")
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
@@ -497,6 +500,7 @@ class rPlatteView: NSView
       var lastpunkt = NSMakePoint(0, 0)
       var elcount = 0
       
+      //print("transformfaktor: \(transformfaktor) faktor: \(faktor)")
       for pos in 0..<newWeg.count
       {
          /*
@@ -568,7 +572,9 @@ class rPlatteView: NSView
          wegindex += 1
       }
       
-     print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
+     
+      
+      //print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
       needsDisplay = true
       return Int(fahrtweg)
    }
@@ -660,22 +666,34 @@ class rPlatteView: NSView
       }
       needsDisplay = true
    }
+   func clearMark()
+   {
+
+      //Swift.print( "clearMark markfeldarray: \(markfeldarray)")
+      setStepperposition(pos: 0)
+      needsDisplay = true
+   }
+
    
    func clearWeg()
    {
       Swift.print( "clearWeg" )
-      Swift.print( "clearNum markarray: \(markarray.count)" )
-      let clearColor: NSColor = .clear
+      //Swift.print( "clearNum markarray: \(markarray.count)" )
+      let clearColor:NSColor
+         = .clear
       self.layer?.backgroundColor = .clear
+      
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
       markfeldarray.removeAll()
       wegfloatarray.removeAll()
+      
       for mark in markarray
       {
          mark.removeAllPoints()
       }
+ 
       markarray.removeAll()
       for num in numarray
       {
@@ -689,9 +707,10 @@ class rPlatteView: NSView
       klickmarkindex = 0
       wegindex=0;
       stepperposition = 0;
-      weg.removeAllPoints()
-      kreuz.removeAllPoints()
-      kreis.removeAllPoints()
+      weg.removeAllPoints() // linie weg
+      
+//      kreuz.removeAllPoints()
+ //     kreis.removeAllPoints()
       klickmarkIndexset.removeAll()
       
        //markarray.removeAll()

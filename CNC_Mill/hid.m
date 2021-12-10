@@ -141,13 +141,14 @@ static void add_hid(hid_t *h)
    
    CFTypeRef prod = IOHIDDeviceGetProperty(h->ref, CFSTR(kIOHIDProductKey));
    const char* prodstr = CFStringGetCStringPtr(prod, kCFStringEncodingMacRoman);
-   //   fprintf(stderr,"prodstr: %s\n",prodstr);
+      fprintf(stderr,"add_hid prodstr: %s\n",prodstr);
    
    
    CFTypeRef prop= IOHIDDeviceGetProperty(h->ref,CFSTR(kIOHIDManufacturerKey));
    //CFStringRef manu = (CFStringRef)prop;
-   const char* manustr = CFStringGetCStringPtr(prop, kCFStringEncodingMacRoman);
+  // const char* manustr = CFStringGetCStringPtr(prop, kCFStringEncodingMacRoman);
    //   fprintf(stderr,"manustr: %s\n",manustr);
+   
    
    if (!first_hid || !last_hid) 
    {
@@ -165,7 +166,27 @@ static void add_hid(hid_t *h)
 static hid_t * get_hid(int num)
 {
    hid_t *p;
+   for (p = first_hid; p; p = p->next) 
+   {
+      if (p->open)
+      {
+         CFTypeRef prod = IOHIDDeviceGetProperty(p->ref, CFSTR(kIOHIDProductKey));
+         const char* prodstr = CFStringGetCStringPtr(prod, kCFStringEncodingMacRoman);
+         //fprintf(stderr,"get_hid prodstr: %s\n",prodstr);
+         CFTypeRef vendorID = IOHIDDeviceGetProperty(p->ref, CFSTR(kIOHIDVendorIDKey));
+//        const char* vendorstr = CFStringGetCStringPtr(vendorID, kCFStringEncodingMacRoman);
+         //fprintf(stderr,"get_hid vendor: %d\n",vendorID);
+         
+         
+         
+         
+         
+         return p;
+      }
+   }
+
    for (p = first_hid; p && num > 0; p = p->next, num--) ;
+   
    return p;
 }
 
@@ -216,7 +237,7 @@ const char* get_prod(void)
       CFTypeRef prod= IOHIDDeviceGetProperty(cnc->ref,CFSTR(kIOHIDProductKey));
       //CFStringRef manu = (CFStringRef)prop;
       const char* prodstr = CFStringGetCStringPtr(prod, kCFStringEncodingMacRoman);
-      //fprintf(stderr,"prodstr: %s\n",prodstr);
+      fprintf(stderr,"get_prod prodstr: %s\n",prodstr);
       
       return  prodstr; 
    }
@@ -249,7 +270,17 @@ int rawhid_send(int num, uint8_t *buf, int len, int timeout)
    // fprintf(stderr,"rawhid_send a len: %d\n",len);
    // fprintf(stderr,"rawhid_send a buf 0: %d\n",(uint8_t)buf[0]);
    hid = get_hid(num);
+   
+   if (!hid)
+   {
+      fprintf(stderr,"rawhid_send: hid ist NULL\n");
+      return -1;
+   }
+   int isopen = hid->open;
+   
    if (!hid || !hid->open) return -1;
+   
+   
    //fprintf(stderr,"rawhid_send A\n");
    //#if 1
 #warning "Send timeout not implemented on MACOSX"
@@ -327,6 +358,35 @@ func deviceAdded(refCon: UnsafePointer<Void>, iterator: io_iterator_t) {
 void deviceAdded(void* refCon, io_iterator_t iterator )
 {
    fprintf(stderr,"hid.m deviceAdded\n");
+   CFMutableDictionaryRef matchingDict;
+   io_service_t device;
+   int anzahl=0;
+   io_iterator_t iter;
+   kern_return_t kr;
+   // Now we have a dictionary, get an iterator.
+   kr = IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &iter);
+   if (kr != KERN_SUCCESS)
+   {
+      return ;
+   }
+   // iterate 
+   while ((device = IOIteratorNext(iter)))
+   {
+      fprintf(stderr,"usb device: %d\n",device);
+      io_name_t name;
+      if (device != 0) {
+         char* key = "IOCalloutDevice";
+         IOObjectGetClass(device, name);
+         //fprintf(stderr,"deviceAdded device name: %s\n",name);
+      }
+      // do something with device, eg. check properties 
+      // ... 
+      // And free the reference taken before continuing to the next item 
+      IOObjectRelease(device);
+      anzahl++;
+   }
+
+   
 }
 
 int rawhid_open(int max, int vid, int pid, int usage_page, int usage)
@@ -597,7 +657,7 @@ static void attach_callback(void *context, IOReturn r, void *hid_mgr, IOHIDDevic
    }
    else 
    {
-      fprintf(stderr,"attach kIOReturnSuccess ist OK\n");
+      //fprintf(stderr,"attach kIOReturnSuccess ist OK\n");
    }
 
    h = (hid_t *)malloc(sizeof(hid_t));
@@ -608,7 +668,7 @@ static void attach_callback(void *context, IOReturn r, void *hid_mgr, IOHIDDevic
    }
    else 
    {
-      fprintf(stderr,"attach callback hid_t ist OK\n");
+      //fprintf(stderr,"attach callback hid_t ist OK\n");
    }
    memset(h, 0, sizeof(hid_t));
    
@@ -638,7 +698,7 @@ static void attach_callback(void *context, IOReturn r, void *hid_mgr, IOHIDDevic
 }
 
 
-int usb_present()
+int usb_present(void)
 {
    CFMutableDictionaryRef matchingDict;
    io_iterator_t iter;
@@ -663,7 +723,20 @@ int usb_present()
    // iterate 
    while ((device = IOIteratorNext(iter)))
    {
-      //fprintf(stderr,"usb device: %d\n",device);
+      fprintf(stderr,"usb_present device: %d\n",device);
+      io_name_t name;
+      if (device != 0) 
+      {
+         char* key = "IOCalloutDevice";
+         IOObjectGetClass(device, name);
+         //fprintf(stderr,"usb device name: %s\n",name);
+         NSInteger value = -65536;
+               CFNumberRef number = CFNumberCreate(kCFAllocatorDefault, kCFNumberNSIntegerType, &value);
+               CFMutableDictionaryRef propertyDict = CFDictionaryCreateMutable(kCFAllocatorDefault, 1, NULL, NULL);
+               CFDictionarySetValue(propertyDict, @"HIDMouseAcceleration", number);
+         
+         int res = IOConnectSetCFProperties(device, propertyDict);
+      }
       // do something with device, eg. check properties 
       // ... 
       // And free the reference taken before continuing to the next item 
