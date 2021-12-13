@@ -9,5 +9,9 @@ build/*
 *.hex
 *.o
 .dep/
+*.xlsx
+*.png
+*.jpg
+
 DerivedData/
 *xcdebugger*

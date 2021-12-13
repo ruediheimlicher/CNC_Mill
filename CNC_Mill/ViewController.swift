@@ -1003,7 +1003,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    @IBAction func report_PWM_Slider(_ sender: NSSlider)
    {
       teensy.write_byteArray[0] = SET_0 // Code 
-      //print("report_Slider0 IntVal: \(sender.intValue)")
+      //print("report_PWM_Slider IntVal: \(sender.intValue)")
       
       let pos = sender.doubleValue
       
@@ -1020,9 +1020,12 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
       if (usbstatus > 0)
       {
          let senderfolg = teensy.send_USB()
-         //print("report_Slider0 senderfolg: \(senderfolg)")
+         //print("report_PWM_Slider senderfolg: \(senderfolg)")
       }
    }
+
+ 
+   
 
 
    @IBAction func report_goto_0(_ sender: NSButton)
@@ -1477,6 +1480,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    let code = 24
    let lage = 0
    
+   let MOTOR_BIT = 28
    let PWM_BIT = 29
    
    let DRILLSPEEDH_BIT = 20
@@ -1557,8 +1561,9 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    @IBOutlet weak var PWM_Slider: NSSlider!
    @IBOutlet weak var PWM_Feld: NSTextField!
    
- //  @IBOutlet weak var Joystickfeld: rPlatteView!
-   
+   @IBOutlet weak var Motor_Slider: NSSlider!
+   @IBOutlet weak var Motor_Feld: NSTextField!
+  
 
 }
 

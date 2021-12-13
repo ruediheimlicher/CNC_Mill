@@ -455,7 +455,7 @@ class rPCB: rViewController
    {
       //     print("tableView  tableViewSelectionDidChange notification: \(notification)")
       let selectedRow = (notification.object as! NSTableView).selectedRow
-      print("tableView  tableViewSelectionDidChange selectedRow: \(selectedRow)")
+    //  print("tableView  tableViewSelectionDidChange selectedRow: \(selectedRow)")
       
       
     //  datatabletask(zeile:selectedRow)
@@ -653,7 +653,7 @@ class rPCB: rViewController
    
    func sortDicArray_opt(origDicArray:[[String:Int]], key0:String, key1: String, order:Bool) -> [[String:Int]]
    {
-      print("sortDicArray_opt anz: \(origDicArray.count) order: \(order)")
+      //print("sortDicArray_opt anz: \(origDicArray.count) order: \(order)")
       var returnDicArray:[[String:Int]] = [[String:Int]]()
       // https://useyourloaf.com/blog/sorting-an-array-of-dictionaries
       
@@ -1284,6 +1284,8 @@ class rPCB: rViewController
                   else if (firstelement == "r")
                   {
                      circle = 1
+                     print("circle ist 1 zeilenindex: \(zeilenindex) firstelement ist r circlecount: \(circlecount) circlecountB: \(circlecountB) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)\n")
+ 
                   }
                
                      
@@ -1311,7 +1313,7 @@ class rPCB: rViewController
                      }
                      
                      
-                     print("circle ist 1 zeilenindex: \(zeilenindex) circlecount: \(circlecount) circlecountB: \(circlecountB) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)\n")
+                     //print("circle ist 1 zeilenindex: \(zeilenindex) circlecount: \(circlecount) circlecountB: \(circlecountB) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)\n")
                      
                      zeilenindex += 1
                      
@@ -1327,7 +1329,7 @@ class rPCB: rViewController
             //print("\n*** *** *** *** ende circle: circle: \(circle)")
             if circle == 1 // Zeilen des Blocks sind abgearbeitet
             {
-               print("\n*** *** *** *** circle ist 1   \ni: \(i) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
+               //print("\n*** *** *** *** circle ist 1   \ni: \(i) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)")
                if (transformok == 1)
                {
                   
@@ -1692,7 +1694,7 @@ class rPCB: rViewController
             } // if < count
             doppelindex += 1
          } // for datazeile
-         //print("report_readSVG  doppelcount 2: \(doppelcount )")
+         print("report_readSVG  doppelcount 2: \(doppelcount )")
          
          /*
           print("report_readSVG circlearray nach. count: \(circlearray.count)")
@@ -1885,14 +1887,14 @@ class rPCB: rViewController
 */
          //         lasttabledataindex = 0 // Zeile 0 in circlearray
          
-         /*
+         
           print("mill_floatarray C")
           for el in mill_floatarray
           {
           print("\(el)")
           //     iii += 1
           }
-          */
+          
         
          
           
@@ -1918,9 +1920,6 @@ class rPCB: rViewController
             {
                
             }
-            
-            
-            
          }
 
          var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
@@ -2254,6 +2253,7 @@ class rPCB: rViewController
          wegArray[26] = UInt8((zeilenindex & 0xFF00)<<8)
          wegArray[27] = UInt8((zeilenindex & 0x00FF))
          wegArray[30] = UInt8(Int(zoomFeld.doubleValue * 10))
+         
          wegArray[36] = 0 // default H fuer tabledataZeile
          wegArray[37] = 0xFF // default L fuer tabledataZeile
          
@@ -2451,7 +2451,7 @@ class rPCB: rViewController
          //print("PCBzeile: \(z) \(PCB_Datenarray[z][27])")
          
       }
-      //print("PCB Daten PCB_Datenarray count nach: \(PCB_Datenarray.count)\n\(PCB_Datenarray)")
+      print("PCB Daten PCB_Datenarray count nach: \(PCB_Datenarray.count)\n\(PCB_Datenarray)")
       return PCB_Datenarray
    }
    
@@ -5677,6 +5677,32 @@ class rPCB: rViewController
       
    }
    
+   @IBAction func report_Motor_Slider(_ sender: NSSlider)
+   {
+      teensy.write_byteArray[0] = 0xDA // Code 
+      print("report_Motor_Slider IntVal: \(sender.intValue)")
+      
+      let pos = sender.doubleValue
+      
+      let int8pos = UInt8(pos)
+      let Ustring = formatter.string(from: NSNumber(value: int8pos))
+      
+      
+      print("report_Motor_Slider pos: \(pos) intpos: \(int8pos)  Ustring: \(Ustring ?? "0")")
+      // Pot0_Feld.stringValue  = Ustring!
+      Motor_Feld.integerValue  = Int(int8pos)
+       
+      teensy.write_byteArray[MOTOR_BIT] = 0xFF - int8pos// 0xFF ist speed 0
+      
+      if (usbstatus > 0)
+      {
+         let senderfolg = teensy.send_USB()
+         //print("report_Motor_Slider senderfolg: \(senderfolg)")
+      }
+   }
+   
+   
+   
    @IBAction override func report_PWM_Slider(_ sender: NSSlider)
    {
       teensy.write_byteArray[24] = 0xD8 // Code 
@@ -5686,7 +5712,6 @@ class rPCB: rViewController
       
       let int8pos = UInt8(pos)
       let Ustring = formatter.string(from: NSNumber(value: int8pos))
-      
       
       print("report_PWM_Slider pos: \(pos) intpos: \(int8pos)  Ustring: \(Ustring ?? "0")")
       // Pot0_Feld.stringValue  = Ustring!
@@ -5700,7 +5725,8 @@ class rPCB: rViewController
          print("report_PWM_Slider senderfolg: \(senderfolg)")
  //     }
    }
-   
+  
+ 
    
    
    //MARK: Slider 0
