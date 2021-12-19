@@ -213,7 +213,7 @@ class rPCB: rViewController
       //mmFormatter.string(from: NSNumber(Double(drillweg) * dpi2mmfaktor))
       let drillwegmm = Double(drillweg) * dpi2mmfaktor
       let mmString = String(format: "%0.2f",drillwegmm)
-      drillwegmmFeld.stringValue = mmString
+ //     drillwegmmFeld.stringValue = mmString
       
       drillwegFeld.integerValue = drillweg
       
@@ -3236,17 +3236,17 @@ class rPCB: rViewController
       let syInt_raw = (syInt & 0x0FFFFFFF)
       let szInt_raw = (szInt & 0x0FFFFFFF)
       
-      let xx = -20
-      let xx_raw = (xx & 0x0FFFFFFF)
+   //   let xx = -20
+  //    let xx_raw = (xx & 0x0FFFFFFF)
       //print("\tschrittdatenvektor sxInt_raw: \(sxInt_raw) syInt_raw: \(syInt_raw) szInt_raw: \(szInt_raw) zeit: \(Int(zeit))")
       
-      let stepwert = stepsFeld.integerValue
+   //   let stepwert = stepsFeld.integerValue
    //   var kgvx = kgv3(m:stepwert,n:sxInt_raw,o: syInt_raw)
    //   var ggt = ggt2(x:sxInt_raw, y:syInt_raw)
       
       //print("schrittdatenvektor sxInt_raw: \(sxInt_raw) syInt_raw: \(syInt_raw)  kgvx: \(kgvx) ggt: \(ggt)")
 
-      var ggtt = ggt2(x:48,y:56)
+  //    var ggtt = ggt2(x:48,y:56)
  //     homeX += sxInt_raw
  //     homeY += syInt_raw
       
@@ -3444,8 +3444,6 @@ class rPCB: rViewController
             // print("delayxInt OK")
             dzInt = Int(dzIntround)
          }
-         let dzA = UInt8(dzInt & 0x000000FF)
-         let dzB = UInt8((dzInt & 0x0000FF00) >> 8)
          vektor.append(0)
          vektor.append(0)
          
@@ -3584,14 +3582,7 @@ class rPCB: rViewController
       {
          speed *= 2
       }
-      /*
-       SVG: 72 dpi / inch
-       1 p > 0.3528mm
-       1mm > 2.8346p
-       Multiplikator in readSVG: 1000000 (INTEGERFAKTOR)
        
-       */
-      
       //let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
       //let propfaktor = 2802444.0952 // korr 211202
       let propfaktor = 2.8185448826E6 // M
@@ -4297,9 +4288,6 @@ class rPCB: rViewController
       zoomfaktor = zoomFeld.doubleValue
       print("PCB drillUpDown weg z: \(wegz) mm ")
       
- //     let distanzZ = wegz *  INTEGERFAKTOR
-      
-      //let wegZ = distanzZ * zoomfaktor 
       let wegZ = wegz * zoomfaktor 
       var speed = speedFeld.intValue
       
@@ -4310,11 +4298,6 @@ class rPCB: rViewController
       
       let distanz = abs(wegZ)
       print("distanz: \(distanz)")
-      //let propfaktor = 2834645.67 // 14173.23
-      //let propfaktor =  2802444.0952
-  //    let propfaktor = 2.8185448826E6 // M
- //     let zeit:Double = Double((distanz))/Double(speed) //   Schnittzeit für Distanz
-      
       
       var schrittez = Double(stepsFeld.integerValue) * distanz// * distanzZ 
 //      schrittez /= propfaktor
@@ -4513,8 +4496,14 @@ class rPCB: rViewController
    @objc func drill_up()
    {
       print("\n+++++++     drill_up  ")
+      var drillwegmod = Double(drillwegFeld.integerValue)
       
-      var drillWegArray = drillMoveArray(wegz: Double(drillwegFeld.integerValue))
+      // microstep einrechnen
+      let microstepindex = schritteweitepop.indexOfSelectedItem
+      let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
+      print("microstep: \(microstep)")
+      drillwegmod *= microstep ?? 1
+      var drillWegArray = drillMoveArray(wegz: drillwegmod)
       drillWegArray[24] = 0xB7
       drillWegArray[26] = 0
       drillWegArray[27] = 0
@@ -4523,14 +4512,21 @@ class rPCB: rViewController
       drillWegArray[32] = DEVICE_MILL
       drillWegArray[35] = 0 // drillstatus beginn
       drillWegArray[25] = 3
+      print("drill_up drillWegArray: \(drillWegArray)")
       write_CNC_Zeile(zeilenarray: drillWegArray)
    }
 
    @objc func drill_down()
    {
       print("\n+++++++     drill_down  ")
+      var drillwegmod = Double(drillwegFeld.integerValue) * -1
+      // microstep einrechnen
+      let microstepindex = schritteweitepop.indexOfSelectedItem
+      let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
+      print("microstep: \(microstep)")
+      drillwegmod *= microstep ?? 1
+      var drillWegArray = drillMoveArray(wegz: drillwegmod)
       
-      var drillWegArray = drillMoveArray(wegz: Double((drillwegFeld.integerValue) * -1) )
       drillWegArray[24] = 0xB7
       drillWegArray[26] = 0
       drillWegArray[27] = 0
@@ -4581,8 +4577,14 @@ class rPCB: rViewController
    @IBAction func report_dicke(_ sender: NSButton)
    {
       print("report_dicke")
-      let weg = dickeFeld.doubleValue 
+      var weg = dickeFeld.doubleValue 
      // var drillWegArray = drillMoveArray(wegz: (Double(dickeFeld.integerValue)) * -1)
+      // microstep einrechnen
+      let microstepindex = schritteweitepop.indexOfSelectedItem
+      let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
+      print("microstep: \(microstep)")
+      weg *= microstep ?? 1
+
       var drillWegArray = drillMoveArray(wegz: (weg * -1))
       drillWegArray[24] = 0xB7
       drillWegArray[26] = 0
