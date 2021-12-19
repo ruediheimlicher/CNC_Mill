@@ -1279,7 +1279,7 @@ class rPCB: rViewController
    {
       // transform: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform
       let labelarray:[String] = ["id","cx","cy","transform"] // relevante daten
-      let drillarray = DrillDaten(tiefe: drillweg)
+      //let drillarray = DrillDaten(tiefe: drillweg)
       let SVG_URL = openFile()
       // https://stackoverflow.com/questions/10016475/create-nsscrollview-programmatically-in-an-nsview-cocoa
       guard let fileURL = SVG_URL else { return  }
@@ -2206,8 +2206,18 @@ class rPCB: rViewController
       print("PCB_Daten\n")
       //  var speed = speedFeld.intValue
       var PCB_Datenarray = [[UInt8]]()
-      drillweg = drillwegFeld.integerValue
-      var drillArray:[[UInt8]] = [drillvektor(szInt: -drillweg),drillvektor(szInt: (drillweg))]
+      drillweg = drillwegFeld.integerValue 
+      var drillwegmod:Int = (drillwegFeld.integerValue)
+      
+      // microstep einrechnen
+      let microstepindex = schritteweitepop.indexOfSelectedItem
+      let microstep = Int(schritteweitepop.itemTitle(at: microstepindex))
+      
+      drillwegmod *= microstep ?? 1
+      print("microstep: \(microstep) drillwegmod: \(drillwegmod)")
+     // var drillWegArray = drillMoveArray(wegz: drillwegmod)
+
+      var drillArray:[[UInt8]] = [drillvektor(szInt: (-drillwegmod)),drillvektor(szInt: (drillwegmod))]
       
       //Schnittdatenarray.removeAll()
       Schnittdatenarray_n.removeAll()
@@ -2307,6 +2317,7 @@ class rPCB: rViewController
          //print("ablaufstatus: \(ablaufstatus) zeilenindex: \(zeilenindex)")
          if ((ablaufstatus & (1<<DRILL_OK) > 0) && (zeilenindex < (floatarray.count - 2)))
          {
+            
             //print("drillArray anzeigezeile: \(anzeigezeile) drillzeile: \(drillzeile)")
             // anzeigezeile angeben
             drillArray[0][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
@@ -3530,7 +3541,8 @@ class rPCB: rViewController
    {
       //      print("+++++++++++                               drillvektor szInt: \(szInt)")
       // Vorzeichenbit auskomm:
-      var szInt_raw = szInt
+ //     var szInt_raw = szInt
+      /*
       if szInt < 0
       {
          print("drill down")
@@ -3538,11 +3550,12 @@ class rPCB: rViewController
          szInt_raw *= -1
          szInt_raw |= 0x80000000
       }
-      var vektor:[UInt8] = wegArrayMitWegZ(wegz:Double(szInt))
+       */
       
+      var vektor:[UInt8] = wegArrayMitWegZ(wegz:Double(szInt))
+      //var vektor:[UInt8] = drillMoveArray(wegz:Double(szInt))
       //print("drillvektor  szInt_raw: \(szInt_raw) )")
       
-      let stepwert = stepsFeld.integerValue
        
       //var vektor = schrittdatenvektor(sxInt: 0, syInt: 0, szInt: szInt_raw, zeit: 1)
       
@@ -3566,16 +3579,16 @@ class rPCB: rViewController
       
       zoomfaktor = zoomFeld.doubleValue
       //print("PCB wegArrayMitWegZ wegZ: \(wegz) propfaktor: \(propfaktor)")
-      var maxsteps:Double = 0
-      var weg = [Double]()
+      //var maxsteps:Double = 0
+      //var weg = [Double]()
       
-      let distanzZ = wegz *  INTEGERFAKTOR
+    //  let distanzZ = wegz //*  INTEGERFAKTOR
       
       //     let distanzZ = wegz *  1000000
       
-      let wegZ = distanzZ * zoomfaktor 
-      let distanz = wegZ
- //           print("++++          wegArrayMitWegZ  distanz: \(distanzZ)  ")
+      let wegZ = wegz * zoomfaktor 
+      let distanz = abs(wegZ)
+   print("++++          wegArrayMitWegZ  distanz: \(distanz)  ")
       var speed = speedFeld.intValue
       
       if ramp_OK_Check.state == NSControl.StateValue.on
@@ -3594,12 +3607,13 @@ class rPCB: rViewController
       
       // print("********           wegArrayMitWegXY zeit: \(zeit) ")
       
-      var schrittez = Double(stepsZFeld.integerValue) * distanzZ  
+      
+      var schrittez = Double(stepsZFeld.integerValue) * distanz  
       //     var schrittex = Double(stepsFeld.integerValue) * wegX  
       
       
-      schrittez /= propfaktor // Umrechnung in mm
-      let schrittezmm = schrittez/stepsZFeld.doubleValue
+      //schrittez ///= propfaktor // Umrechnung in mm
+      //let schrittezmm = schrittez/stepsZFeld.doubleValue
       //print("wegArrayMitWegZ schrittez mm: \(schrittezmm) mm")
       
       var schrittezRound = round(schrittez)
@@ -3609,10 +3623,10 @@ class rPCB: rViewController
          
          schrittezInt = Int(schrittezRound)
          //  print("wegArrayMitWegXY schritteXInt OK: \(schrittexInt)")
-         if schrittezInt < 0 // negativer Weg
+         if wegz < 0 // negativer Weg
          {
             //print("schrittezInt negativ")
-            schrittezInt *= -1
+            //schrittezInt *= -1
             schrittezInt |= 0x80000000
          }
       }
@@ -3628,7 +3642,7 @@ class rPCB: rViewController
       
       // Schrittdaten berechnen
       
-      var wegschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:0,syInt:0, szInt:schrittezInt, zeit:zeit  )// Array mit Daten fuer USB
+      var wegschnittdatenarray:[UInt8] = schrittdatenvektor(sxInt:0,syInt:0, szInt:schrittezInt, zeit:0  )// Array mit Daten fuer USB
       
       return wegschnittdatenarray
    }
