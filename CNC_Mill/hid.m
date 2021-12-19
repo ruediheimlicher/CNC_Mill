@@ -170,6 +170,7 @@ static hid_t * get_hid(int num)
    {
       if (p->open)
       {
+         /*
          CFTypeRef prod = IOHIDDeviceGetProperty(p->ref, CFSTR(kIOHIDProductKey));
          const char* prodstr = CFStringGetCStringPtr(prod, kCFStringEncodingMacRoman);
          //fprintf(stderr,"get_hid prodstr: %s\n",prodstr);
@@ -180,7 +181,7 @@ static hid_t * get_hid(int num)
          
          
          
-         
+         */
          return p;
       }
    }

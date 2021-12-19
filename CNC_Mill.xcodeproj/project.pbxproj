@@ -190,10 +190,10 @@
 				BD337554248816170087C9FF /* rCNC.h */,
 				BD337555248816170087C9FF /* rCNC.m */,
 				BDF6595424841374009F2E67 /* defines.swift */,
+				BDF6594A2483B7A1009F2E67 /* CNC_Mill-Bridging-Header.h */,
 				BDF6595024840043009F2E67 /* rPlatteView.swift */,
 				BDF6594B2483FE7F009F2E67 /* rProfilGraph.h */,
 				BDF6594C2483FE7F009F2E67 /* rProfilGraph.m */,
-				BDF6594A2483B7A1009F2E67 /* CNC_Mill-Bridging-Header.h */,
 			);
 			path = Code;
 			sourceTree = "<group>";

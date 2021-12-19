@@ -47,7 +47,7 @@ if ((self = [super init]) != nil)
 	DatenArray = [[NSMutableArray alloc]init];
 	
 	speed=10;
-	steps=48;
+	steps=200;
    red_pwm = 0.4;
 
 return self;

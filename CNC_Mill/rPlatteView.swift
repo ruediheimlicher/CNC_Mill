@@ -474,6 +474,21 @@ class rPlatteView: NSView
    func setfloatWeg(newWeg:[[Double]], scalefaktor:Int , transform:Double)-> Int
    {
       //print("\t ******   PlatteView setfloatWeg newWeg: \(newWeg)")
+      let flip = 1 // Darstellung im Graph spiegeln
+      var maxy:Double = 0
+      if flip == 1
+      {
+         
+         for line in newWeg
+         {
+            if (line[2] > maxy)
+            {
+               maxy = line[2] 
+            }
+         }
+         print("maxy: \(maxy)")
+         maxy += 10 // Abstand vom unteren Rand in Graph
+      }
       weg.removeAllPoints()
       kreuz.removeAllPoints()
       kreis.removeAllPoints()
@@ -513,7 +528,14 @@ class rPlatteView: NSView
             wegfloatarray.append([newWeg[pos][1] * Double(faktor * transformfaktor),newWeg[pos][2] * Double(faktor * transformfaktor)])
          }
          */
-         wegfloatarray.append([newWeg[pos][1] * Double(faktor * transformfaktor),newWeg[pos][2] * Double(faktor * transformfaktor)])
+         var wegy = newWeg[pos][2]
+         if flip == 1
+         {
+            wegy = maxy - newWeg[pos][2]
+         }
+ 
+         //wegfloatarray.append([newWeg[pos][1] * Double(faktor * transformfaktor),newWeg[pos][2] * Double(faktor * transformfaktor)])
+         wegfloatarray.append([newWeg[pos][1] * Double(faktor * transformfaktor),wegy * Double(faktor * transformfaktor)])
 
          
       }
