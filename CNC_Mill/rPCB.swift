@@ -2146,6 +2146,7 @@ class rPCB: rViewController
          wegArray[37] = 0xFF // default L fuer tabledataZeile
          
          wegArray[39] =  UInt8((anzeigezeile & 0xFF00)>>8)
+         
          wegArray[40] =  UInt8(anzeigezeile & 0x00FF)
          // drillzeile ausschliessen
          wegArray[41] = 0xFF
@@ -2207,7 +2208,15 @@ class rPCB: rViewController
       //  var speed = speedFeld.intValue
       var PCB_Datenarray = [[UInt8]]()
       drillweg = drillwegFeld.integerValue
-      var drillArray:[[UInt8]] = [drillvektor(szInt: -drillweg),drillvektor(szInt: (drillweg))]
+      var drillwegmod = Int(drillwegFeld.integerValue) 
+      // microstep einrechnen
+      let microstepindex = schritteweitepop.indexOfSelectedItem
+      let microstep = Int(schritteweitepop.itemTitle(at: microstepindex))
+      print("microstep: \(microstep)")
+  //    drillwegmod *= microstep ?? 1
+      drillwegmod *= 1
+      
+      var drillArray:[[UInt8]] = [drillvektor(szInt: -drillwegmod),drillvektor(szInt: (drillwegmod))]
       
       //Schnittdatenarray.removeAll()
       Schnittdatenarray_n.removeAll()
@@ -3542,7 +3551,7 @@ class rPCB: rViewController
       
       //print("drillvektor  szInt_raw: \(szInt_raw) )")
       
-      let stepwert = stepsFeld.integerValue
+      //let stepwert = stepsFeld.integerValue
        
       //var vektor = schrittdatenvektor(sxInt: 0, syInt: 0, szInt: szInt_raw, zeit: 1)
       
@@ -3746,14 +3755,14 @@ class rPCB: rViewController
    func write_CNC_Abschnitt()
    {
       //print("+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
-      //print("\n+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition)")
+      //print("+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition)")
       stepperpositionFeld.integerValue = cncstepperposition
- /*
-      for i in 0..<Schnittdatenarray.count
-      {
-         print("i \(i) \(Schnittdatenarray[i])")
-      }
-  */    
+ 
+      //for i in 0..<48
+      ////{
+         print("cncstepperposition: \(cncstepperposition) \(Schnittdatenarray[cncstepperposition])")
+     // }
+     
       if cncstepperposition == Schnittdatenarray.count
       {
          print("write_CNC_Abschnitt cncstepperposition ist Schnittdatenarray.count, END")
@@ -3782,10 +3791,22 @@ class rPCB: rViewController
   //          print("write_CNC     schritteAX: \(schritteAX) schritteAY: \(schritteAY)")
                
             
+            Schnittdatenarray[cncstepperposition][4] = 0 
+            Schnittdatenarray[cncstepperposition][5] = 0
+            Schnittdatenarray[cncstepperposition][6] = 0
+            Schnittdatenarray[cncstepperposition][7] = 0
+            
+            Schnittdatenarray[cncstepperposition][12] = 0 
+            Schnittdatenarray[cncstepperposition][13] = 0
+            Schnittdatenarray[cncstepperposition][14] = 0
+            Schnittdatenarray[cncstepperposition][15] = 0
+
+            
             Schnittdatenarray[cncstepperposition][20] = 0 
             Schnittdatenarray[cncstepperposition][21] = 0
             Schnittdatenarray[cncstepperposition][22] = 0
             Schnittdatenarray[cncstepperposition][23] = 0
+
             
             teensy.write_byteArray = Schnittdatenarray[cncstepperposition]
             
@@ -4950,9 +4971,11 @@ class rPCB: rViewController
             
          // MARK: ***     B6  
          case 0xB6:
-            //print("newDataAktion  B6 Abschnitt 0 abschnitte: \(Schnittdatenarray.count)")
-            usbzeit = CFAbsoluteTimeGetCurrent() - usbtime
-            tasktime = CFAbsoluteTimeGetCurrent() 
+            let abschnittnum = Int((data[5] << 8) | data[6])
+            print("\t\t\tnewDataAktion  B6 abschnittnummer: \(abschnittnum)  anzabschnitte: \(Schnittdatenarray.count)")
+            //usbzeit = CFAbsoluteTimeGetCurrent() - usbtime
+            //tasktime = CFAbsoluteTimeGetCurrent() 
+            
             //print("newDataAktion B6 usbzeit: \(pd3(usbzeit))")
             // Data angekommen
             /*
@@ -5180,7 +5203,7 @@ class rPCB: rViewController
             
          // MARK: ***     ***   D6        
          case 0xD6:
-            //print("D6")
+           // print("D6")
             if (Schnittdatenarray.count == 0)
             {
                break
@@ -5194,7 +5217,7 @@ class rPCB: rViewController
             
             var abschnittnummer:Int = Int(((d5 << 8) | (d6 )))
             let ladepos =  Int(data[8] )
-            //print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
+            print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
             //print("\(abschnittnummer)\t\(pd4(responsezeit))\t \(pd3(usbzeit)) \t\(pd3(taskzeit))")
             //print("\(abschnittnummer)\t\(pd3(usbzeit)) \t\(pd3(taskzeit)) ")
             //print("\(abschnittnummer)")

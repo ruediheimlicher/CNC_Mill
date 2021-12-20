@@ -262,7 +262,7 @@ open class usb_teensy: NSObject
          var readarray = [UInt8](repeating: 0x00, count: BUFFER_SIZE)
          //var buffer = [Int8](repeating:0, count:64)
 
-        let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 0)
+        let result = rawhid_recv(0, &readarray, Int32(BUFFER_SIZE), 10)
         // let result = rawhid_recv(0, &buffer, Int32(BUFFER_SIZE), 0)
          if (result == 0)
          {
