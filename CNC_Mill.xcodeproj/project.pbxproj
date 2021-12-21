@@ -49,7 +49,7 @@
 /* Begin PBXFileReference section */
 		BD337554248816170087C9FF /* rCNC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rCNC.h; path = CNC_Mill/rCNC.h; sourceTree = SOURCE_ROOT; };
 		BD337555248816170087C9FF /* rCNC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = rCNC.m; path = CNC_Mill/rCNC.m; sourceTree = SOURCE_ROOT; };
-		BD3375572488165F0087C9FF /* rUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rUtils.h; path = CNC_Mill/rUtils.h; sourceTree = SOURCE_ROOT; };
+		BD3375572488165F0087C9FF /* rUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rUtils.h; path = CNC_Mill/Code/rUtils.h; sourceTree = SOURCE_ROOT; };
 		BD3375582488165F0087C9FF /* rUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = rUtils.m; path = CNC_Mill/rUtils.m; sourceTree = SOURCE_ROOT; };
 		BD33755A248817750087C9FF /* rCNC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = rCNC.swift; path = CNC_Mill/rCNC.swift; sourceTree = SOURCE_ROOT; };
 		BD33757F248D71F30087C9FF /* notok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notok.png; sourceTree = "<group>"; };
@@ -132,6 +132,7 @@
 		BD33758B249604B60087C9FF /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				BD3375572488165F0087C9FF /* rUtils.h */,
 				BD33758C249604B60087C9FF /* CNC_Mill-Bridging-Header.h */,
 			);
 			name = Code;
@@ -181,7 +182,6 @@
 			isa = PBXGroup;
 			children = (
 				BD33758B249604B60087C9FF /* Code */,
-				BD3375572488165F0087C9FF /* rUtils.h */,
 				BD337590249604F40087C9FF /* rEinstellungen.swift */,
 				BD337592249606230087C9FF /* rJoystickView.swift */,
 				BD3375582488165F0087C9FF /* rUtils.m */,

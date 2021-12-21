@@ -43,7 +43,7 @@ class rPCB: rViewController
    var dpi2mmfaktor:Double = 0
    var mmFormatter = NumberFormatter()
 
-   var drillweg = 10
+   var drillweg = 100
    
    var dicke = 1.5
    
@@ -5194,7 +5194,7 @@ class rPCB: rViewController
             
             var abschnittnummer:Int = Int(((d5 << 8) | (d6 )))
             let ladepos =  Int(data[8] )
-            //print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
+            print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
             //print("\(abschnittnummer)\t\(pd4(responsezeit))\t \(pd3(usbzeit)) \t\(pd3(taskzeit))")
             //print("\(abschnittnummer)\t\(pd3(usbzeit)) \t\(pd3(taskzeit)) ")
             //print("\(abschnittnummer)")
