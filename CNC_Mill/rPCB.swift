@@ -87,6 +87,8 @@ class rPCB: rViewController
    
    //  var teensy = usb_teensy()
    
+   let cncpropfaktor   = 2848529.40262766
+   //let cncpropfaktor   =   2.8485294026E6
    @IBOutlet weak var readSVG_Knopf: NSButton!
    @IBOutlet weak var SVG_Pfad: NSTextField!
    @IBOutlet weak var SVG_Testfeld: NSTextField!
@@ -187,8 +189,8 @@ class rPCB: rViewController
       formatter.minimumIntegerDigits = 1
       //formatter.roundingMode = .down
       
-      transformfaktor = INTEGERFAKTOR/10/propfaktor
-      dpi2mmfaktor = propfaktor / INTEGERFAKTOR
+      transformfaktor = INTEGERFAKTOR/10/cncpropfaktor 
+      dpi2mmfaktor = cncpropfaktor  / INTEGERFAKTOR
       //mmFormatter.usesGroupingSeparator = false
       //mmFormatter.numberStyle = .currency
       // localize to your grouping and decimal separator
@@ -2357,7 +2359,7 @@ class rPCB: rViewController
       /*
        [KoordinatenTabelle addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:PositionA.x],@"ax",[NSNumber numberWithFloat:PositionA.y],@"ay",[NSNumber numberWithFloat:PositionB.x],@"bx", [NSNumber numberWithFloat:PositionB.y],@"by",[NSNumber numberWithInt:index],@"index",[NSNumber numberWithInt:0],@"lage",[NSNumber numberWithFloat:aktuellepwm*red_pwm],@"pwm",nil]];
        */
-      //      print("report_PCB_Daten propfaktor: \(propfaktor)")
+      //      print("report_PCB_Daten cncpropfaktor : \(cncpropfaktor )")
       
       var speed = speedFeld.intValue
       
@@ -2365,8 +2367,8 @@ class rPCB: rViewController
       {
          speed *= 2
       }
-      //    propfaktor = 283464.567 // 14173.23
-      //     propfaktor = 4000
+      //    cncpropfaktor  = 283464.567 // 14173.23
+      //     cncpropfaktor  = 4000
       
       Schnittdatenarray.removeAll()
       Schnittdatenarray_n.removeAll()
@@ -2499,7 +2501,7 @@ class rPCB: rViewController
             
          print("reportPCB zeilenindex: \(zeilenindex)  kgvx: \(kgvx)")
             
-         schrittex /= propfaktor
+         schrittex /= cncpropfaktor 
          let schrittexRound = round(schrittex)
          var schrittexInt:Int = 0
          if schrittexRound >= Double(Int.min) && schrittexRound < Double(Int.max)
@@ -2528,7 +2530,7 @@ class rPCB: rViewController
          // Schritte Y
          var schrittey = Double(stepsFeld.integerValue) * distanzY  
          //let schrittey = distanzY
-         schrittey /= propfaktor
+         schrittey /= cncpropfaktor 
          let schritteyRound = round(schrittey)
          var schritteyInt:Int = 0
          if schritteyRound >= Double(Int.min) && schritteyRound < Double(Int.max)
@@ -3571,7 +3573,7 @@ class rPCB: rViewController
    {
       
       zoomfaktor = zoomFeld.doubleValue
-      //print("PCB wegArrayMitWegZ wegZ: \(wegz) propfaktor: \(propfaktor)")
+      //print("PCB wegArrayMitWegZ wegZ: \(wegz) cncpropfaktor : \(cncpropfaktor )")
       var maxsteps:Double = 0
       var weg = [Double]()
       
@@ -3589,9 +3591,9 @@ class rPCB: rViewController
          speed *= 2
       }
        
-      //let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
-      //let propfaktor = 2802444.0952 // korr 211202
-      let propfaktor = 2.8185448826E6 // M
+      //let cncpropfaktor  = 2834645.67 // 72 dpi -> 25.4mm
+      //let cncpropfaktor  = 2802444.0952 // korr 211202
+      //let cncpropfaktor  = 2.8185448826E6 // M
       let start = [0,0]
       //let ziel = [wegZ]
       
@@ -3604,7 +3606,7 @@ class rPCB: rViewController
       //     var schrittex = Double(stepsFeld.integerValue) * wegX  
       
       
-     // schrittez /= propfaktor // Umrechnung in mm
+     // schrittez /= cncpropfaktor  // Umrechnung in mm
       let schrittezmm = schrittez/stepsZFeld.doubleValue
       //print("wegArrayMitWegZ schrittez mm: \(schrittezmm) mm")
       
@@ -3643,7 +3645,7 @@ class rPCB: rViewController
    {
       
       zoomfaktor = zoomFeld.doubleValue
-      //print("PCB wegArrayMitWegXY wegX: \(wegx) wegY: \(wegy) propfaktor: \(propfaktor)")
+      //print("PCB wegArrayMitWegXY wegX: \(wegx) wegY: \(wegy) cncpropfaktor : \(cncpropfaktor )")
       var maxsteps:Double = 0
       var weg = [Double]()
       
@@ -3669,11 +3671,11 @@ class rPCB: rViewController
        Multiplikator in readSVG: 1000000 (INTEGERFAKTOR)
        
        */
-      //let propfaktor =   2802444.0952// korr 211202
-      //let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
-      let propfaktor = 2.8185448826E6 // M
+      //let cncpropfaktor  =   2802444.0952// korr 211202
+      //let cncpropfaktor  = 2834645.67 // 72 dpi -> 25.4mm
+      //let cncpropfaktor  = 2.8185448826E6 // M
       
-      let dpi2mmfaktor = propfaktor / INTEGERFAKTOR
+      let dpi2mmfaktor = cncpropfaktor  / INTEGERFAKTOR
       
       let start = [0,0]
       let ziel = [wegX,wegY]
@@ -3687,7 +3689,7 @@ class rPCB: rViewController
       //     var schrittex = Double(stepsFeld.integerValue) * wegX  
       
       
-      schrittex /= propfaktor // Umrechnung in mm
+      schrittex /= cncpropfaktor  // Umrechnung in mm
       let schrittexmm = schrittex/stepsFeld.doubleValue
       //print("wegArrayMitWegXY schrittex mm: \(schrittexmm) mm")
       
@@ -3714,7 +3716,7 @@ class rPCB: rViewController
       var schrittey = Double(stepsFeld.integerValue) * distanzY 
       // var schrittey = Double(stepsFeld.integerValue) * wegY
       
-      schrittey /= propfaktor
+      schrittey /= cncpropfaktor 
       let schritteymm = schrittey/stepsFeld.doubleValue
       //     print("wegArrayMitWegXY schrittey mm: \(schritteymm)")
       var schritteyRound = round(schrittey)
@@ -4166,8 +4168,8 @@ class rPCB: rViewController
       let distanzX = Double(aktX - lastX)  * zoomfaktor  
       let distanzY = Double(aktY - lastY)  * zoomfaktor  
       
-      let dx = (Double(aktX - lastX))/propfaktor
-      let dy = (Double(aktY - lastY))/propfaktor
+      let dx = (Double(aktX - lastX))/cncpropfaktor 
+      let dy = (Double(aktY - lastY))/cncpropfaktor 
       
       
       var dataTableWeg = wegArrayMitWegXY(wegx:dx, wegy:dy)
@@ -4239,8 +4241,8 @@ class rPCB: rViewController
  //     let distanzX = Double(aktX - lastX)  * zoomfaktor  
  //     let distanzY = Double(aktY - lastY)  * zoomfaktor  
       
-    //  let dx = (Double(aktX - lastX))/propfaktor
-    //  let dy = (Double(aktY - lastY))/propfaktor
+    //  let dx = (Double(aktX - lastX))/cncpropfaktor 
+    //  let dy = (Double(aktY - lastY))/cncpropfaktor 
 
       let dx = (Double(aktX - lastX))
       let dy = (Double(aktY - lastY))
@@ -4306,7 +4308,7 @@ class rPCB: rViewController
       print("distanz: \(distanz)")
       
       var schrittez = Double(stepsFeld.integerValue) * distanz// * distanzZ 
-//      schrittez /= propfaktor
+//      schrittez /= cncpropfaktor 
       let schrittezRound = round(schrittez)
       var schrittezInt:Int = 0
       if schrittezRound >= Double(Int.min) && schrittezRound < Double(Int.max)
@@ -5842,7 +5844,7 @@ class rPCB: rViewController
    {
       // 
       // left: 1, right: 2, up: 3, down: 4
-      print("PCB report_goXY tag: \(sender.tag) propfaktor: \(propfaktor)")
+      print("PCB report_goXY tag: \(sender.tag) cncpropfaktor : \(cncpropfaktor )")
       var dx = 0
       var dy = 0
       let schrittweite = 25
