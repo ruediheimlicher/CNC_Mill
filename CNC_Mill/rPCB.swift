@@ -43,11 +43,11 @@ class rPCB: rViewController
    var dpi2mmfaktor:Double = 0
    var mmFormatter = NumberFormatter()
 
-   var drillweg = 100
+   var drillweg = 10
    
    var dicke = 1.5
    
-   var drillspeed = 3000
+   var drillspeed = 2400
    
    var speedA = 2400
    var speedB = 2400;
@@ -2207,6 +2207,13 @@ class rPCB: rViewController
       //  var speed = speedFeld.intValue
       var PCB_Datenarray = [[UInt8]]()
       drillweg = drillwegFeld.integerValue
+      let microstepindex = schritteweitepop.indexOfSelectedItem
+      let microstep = Int(schritteweitepop.itemTitle(at: microstepindex))
+      print("microstep: \(microstep)")
+      drillweg *= microstep ?? 1
+     
+      
+      
       var drillArray:[[UInt8]] = [drillvektor(szInt: -drillweg),drillvektor(szInt: (drillweg))]
       
       //Schnittdatenarray.removeAll()
@@ -3529,6 +3536,7 @@ class rPCB: rViewController
    func drillvektor(szInt:Int) -> [UInt8]
    {
       //      print("+++++++++++                               drillvektor szInt: \(szInt)")
+      // von PCB_Daten
       // Vorzeichenbit auskomm:
       var szInt_raw = szInt
       if szInt < 0
@@ -3540,9 +3548,7 @@ class rPCB: rViewController
       }
       var vektor:[UInt8] = wegArrayMitWegZ(wegz:Double(szInt))
       
-      //print("drillvektor  szInt_raw: \(szInt_raw) )")
       
-      let stepwert = stepsFeld.integerValue
        
       //var vektor = schrittdatenvektor(sxInt: 0, syInt: 0, szInt: szInt_raw, zeit: 1)
       
@@ -3569,7 +3575,7 @@ class rPCB: rViewController
       var maxsteps:Double = 0
       var weg = [Double]()
       
-      let distanzZ = wegz *  INTEGERFAKTOR
+      let distanzZ = wegz //*  INTEGERFAKTOR
       
       //     let distanzZ = wegz *  1000000
       
@@ -3598,7 +3604,7 @@ class rPCB: rViewController
       //     var schrittex = Double(stepsFeld.integerValue) * wegX  
       
       
-      schrittez /= propfaktor // Umrechnung in mm
+     // schrittez /= propfaktor // Umrechnung in mm
       let schrittezmm = schrittez/stepsZFeld.doubleValue
       //print("wegArrayMitWegZ schrittez mm: \(schrittezmm) mm")
       
@@ -4608,6 +4614,13 @@ class rPCB: rViewController
       let stepperpos = stepperpositionFeld.integerValue
       print("drill stepperpos: \(stepperpos)");
       var tempdrillweg = weg
+      // microstep einrechnen
+      let microstepindex = schritteweitepop.indexOfSelectedItem
+      let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
+      print("microstep: \(microstep)")
+      tempdrillweg *= Int(microstep ?? 1)
+
+      
       var drillWegArray = drillMoveArray(wegz: Double(tempdrillweg))
       drillWegArray[24] = 0xBA
       drillWegArray[26] = 0
