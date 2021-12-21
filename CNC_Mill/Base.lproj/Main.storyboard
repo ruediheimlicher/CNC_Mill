@@ -1050,7 +1050,7 @@
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q5z-H2-hEX">
                                 <rect key="frame" x="978" y="391" width="76" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="100" drawsBackground="YES" id="BIP-uQ-jgC">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="20" drawsBackground="YES" id="BIP-uQ-jgC">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1581,14 +1581,6 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yvu-r7-qT2">
-                                <rect key="frame" x="1115" y="555" width="24" height="82"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="255" doubleValue="64" tickMarkPosition="right" sliderType="linear" id="5sh-fX-8mN"/>
-                                <connections>
-                                    <action selector="report_PWM_Slider:" target="wFL-7s-Z8p" id="QQL-lQ-6gf"/>
-                                </connections>
-                            </slider>
                             <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7OA-0z-iMw">
                                 <rect key="frame" x="1115" y="366" width="24" height="113"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1816,6 +1808,14 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yvu-r7-qT2">
+                                <rect key="frame" x="1115" y="555" width="24" height="82"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="255" doubleValue="180" tickMarkPosition="right" sliderType="linear" id="5sh-fX-8mN"/>
+                                <connections>
+                                    <action selector="report_PWM_Slider:" target="wFL-7s-Z8p" id="QQL-lQ-6gf"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
