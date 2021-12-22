@@ -186,7 +186,8 @@ class rPCB: rViewController
       formatter.minimumFractionDigits = 2
       formatter.minimumIntegerDigits = 1
       //formatter.roundingMode = .down
-      
+      print("propfaktor: \(propfaktor)")
+         
       transformfaktor = INTEGERFAKTOR/10/propfaktor
       dpi2mmfaktor = propfaktor / INTEGERFAKTOR
       //mmFormatter.usesGroupingSeparator = false
@@ -1757,6 +1758,7 @@ class rPCB: rViewController
  
           */
          stepperschritteFeld.integerValue = mill_floatarray.count-1   
+         transformfaktor = 0.2
          setPCB_Output(floatarray: mill_floatarray, scale: 5, transform: transformfaktor)
          /*
           print("mill_floatarray B")
@@ -1775,14 +1777,14 @@ class rPCB: rViewController
 */
          //         lasttabledataindex = 0 // Zeile 0 in circlearray
          
-         
+         /*
           print("mill_floatarray C")
           for el in mill_floatarray
           {
           print("\(el)")
           //     iii += 1
           }
-          
+          */
         
          
           
@@ -1966,7 +1968,7 @@ class rPCB: rViewController
    
    func setPCB_Output(floatarray: [[Double]], scale: Int, transform: Double)
    {
-      //print("setPCB_Output Start")
+      print("setPCB_Output Start transform: \(transform)")
       
         /* 
        print("setPCB_Output floatarray: \(floatarray.count)")
@@ -3671,6 +3673,7 @@ class rPCB: rViewController
        */
       //let propfaktor =   2802444.0952// korr 211202
       //let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
+      //print("propfaktor vor: \(propfaktor)")
       let propfaktor = 2.8185448826E6 // M
       
       let dpi2mmfaktor = propfaktor / INTEGERFAKTOR
@@ -5207,7 +5210,7 @@ class rPCB: rViewController
             
             var abschnittnummer:Int = Int(((d5 << 8) | (d6 )))
             let ladepos =  Int(data[8] )
-            print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
+            //print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
             //print("\(abschnittnummer)\t\(pd4(responsezeit))\t \(pd3(usbzeit)) \t\(pd3(taskzeit))")
             //print("\(abschnittnummer)\t\(pd3(usbzeit)) \t\(pd3(taskzeit)) ")
             //print("\(abschnittnummer)")
