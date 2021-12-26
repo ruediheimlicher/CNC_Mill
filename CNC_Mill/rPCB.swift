@@ -2275,21 +2275,21 @@ class rPCB: rViewController
          }
          
          // dic aufbauen
-         var position:UInt16 = 0
+         //var position:UInt16 = 0
          
-         var zeilendic:[String:Any] = [:]
+         //var zeilendic:[String:Any] = [:]
          
          
-         let aktX = (akt[1]) //
-         let aktY = (akt[2]) //
-         let nextX = (next[1])
-         let nextY = (next[2])
+         //let aktX = (akt[1]) //
+         //let aktY = (akt[2]) //
+         //let nextX = (next[1])
+         //let nextY = (next[2])
          //print("vor: \t diffX: \(diffX) diffY: \(diffY)")
          var wegArray = wegArrayMitWegXY(wegx: diffX, wegy: diffY)
          //         print("set_PCB_Daten wegArray\n\(wegArray)")
          
          wegArray[25] = UInt8(zeilenposition)
-         wegArray[26] = UInt8((zeilenindex & 0xFF00)<<8)
+         wegArray[26] = UInt8((zeilenindex & 0xFF00)>>8)
          wegArray[27] = UInt8((zeilenindex & 0x00FF))
          wegArray[30] = UInt8(Int(zoomFeld.doubleValue * 10))
          wegArray[36] = 0 // default H fuer tabledataZeile
@@ -3593,7 +3593,7 @@ class rPCB: rViewController
        
       //let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
       //let propfaktor = 2802444.0952 // korr 211202
-      let propfaktor = 2.8185448826E6 // M
+      //let propfaktor = 2.8185448826E6 // 
       let start = [0,0]
       //let ziel = [wegZ]
       
@@ -3674,12 +3674,13 @@ class rPCB: rViewController
       //let propfaktor =   2802444.0952// korr 211202
       //let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
       //print("propfaktor vor: \(propfaktor)")
-      let propfaktor = 2.8185448826E6 // M
+      //let propfaktor = 2.8185448826E6 // M
+      //let propfaktor = 2812907.7928348
+      let propfaktor = 2815160 // 211226
+      let dpi2mmfaktor = 2.81515 // propfaktor / INTEGERFAKTOR
       
-      let dpi2mmfaktor = propfaktor / INTEGERFAKTOR
-      
-      let start = [0,0]
-      let ziel = [wegX,wegY]
+    //  let start = [0,0]
+    //  let ziel = [wegX,wegY]
       
       // Fahrzeit
       let zeit:Double = Double(distanz)/Double(speed) //   Schnittzeit für Distanz

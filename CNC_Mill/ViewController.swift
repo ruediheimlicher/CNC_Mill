@@ -495,6 +495,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    }
    
    
+   
    func kgv(m:Int,n:Int)->Int
    {
       var o = ggt(m:m,n:n)
