@@ -34,16 +34,16 @@ class rCNC
       
       var steuerdatendic:[String:Int] = [:]
       
-      var  anzSchritte:Int = 0;
-      var  anzaxplus:Int=0;
-      var  anzaxminus:Int=0;
-      var  anzayplus:Int=0;
-      var  anzayminus:Int=0;
+  //    var  anzSchritte:Int = 0;
+  //    var  anzaxplus:Int=0;
+  //    var  anzaxminus:Int=0;
+  //    var  anzayplus:Int=0;
+  //    var  anzayminus:Int=0;
       
-      var  anzbxplus:Int=0;
-      var  anzbxminus:Int=0;
-      var  anzbyplus:Int=0;
-      var  anzbyminus:Int=0;
+  //    var  anzbxplus:Int=0;
+  //    var  anzbxminus:Int=0;
+ //     var  anzbyplus:Int=0;
+  //    var  anzbyminus:Int=0;
       
       var code:Int = 0
       

@@ -413,7 +413,10 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
 //   var webView: WKWebView!
    var notokimage :NSImage = NSImage(named:NSImage.Name(rawValue: "notok_image"))!
    var okimage :NSImage = NSImage(named:NSImage.Name(rawValue: "ok_image"))!
+   var haltimage :NSImage = NSImage(named:NSImage.Name(rawValue: "Halt"))!
+   var pauseimage :NSImage = NSImage(named:NSImage.Name(rawValue: "pause"))!
 
+   
    var hintergrundfarbe = NSColor()
    var formatter = NumberFormatter()
    var selectedDevice:String = ""
@@ -643,6 +646,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
  */66
    }
    
+ 
    
    @nonobjc  func windowShouldClose(_ sender: Any) 
    {
@@ -1481,7 +1485,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    let code = 24
    let lage = 0
    
-   let MOTOR_BIT = 28
+   let DRILL_BIT = 28
    let PWM_BIT = 29
    
    let DRILLSPEEDH_BIT = 20

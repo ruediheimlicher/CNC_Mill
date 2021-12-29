@@ -1462,14 +1462,6 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Buo-3L-NMd">
-                                <rect key="frame" x="614" y="593" width="101" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Stepper cont" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="SHB-th-bTK">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="izn-CQ-bEp">
                                 <rect key="frame" x="559" y="542" width="60" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1816,6 +1808,14 @@
                                     <action selector="report_PWM_Slider:" target="wFL-7s-Z8p" id="QQL-lQ-6gf"/>
                                 </connections>
                             </slider>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Buo-3L-NMd">
+                                <rect key="frame" x="561" y="565" width="101" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Stepper cont" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="SHB-th-bTK">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>

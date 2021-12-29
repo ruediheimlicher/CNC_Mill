@@ -43,15 +43,15 @@ class rPCB: rViewController
    var dpi2mmfaktor:Double = 0
    var mmFormatter = NumberFormatter()
 
-   var drillweg = 10
+   var drillweg = 6
    
-   var dicke = 1.5
+   var platinendicke = 2.5
    
    var drillspeed = 2400
    
    var speedA = 2400
    var speedB = 2400;
-   var speedC = 2400;
+   var speedC = 2000;
 
  
    var anschlagstatus = 0;
@@ -86,6 +86,7 @@ class rPCB: rViewController
    //  var usbstatus: Int32 = 0
    
    //  var teensy = usb_teensy()
+   
    
    @IBOutlet weak var readSVG_Knopf: NSButton!
    @IBOutlet weak var SVG_Pfad: NSTextField!
@@ -150,7 +151,7 @@ class rPCB: rViewController
    
    @IBOutlet weak var Zeilen_Stepper: NSStepper!
    
-   
+   @IBOutlet weak var PauseKnopf: NSButton!
    
     
    override func viewDidAppear() 
@@ -166,7 +167,22 @@ class rPCB: rViewController
    override func viewDidLoad() 
    {
       super.viewDidLoad()
-      let q = kgv(m:200,n:1096)
+      
+      NSEvent.addLocalMonitorForEvents(matching: .keyDown) 
+      {
+         if self.myKeyDown(with: $0) {
+            return nil
+         } else {
+            return $0
+         }
+      }
+      NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) {
+          self.flagsChanged(with: $0)
+          return $0
+      }
+
+      
+      //let q = kgv(m:200,n:1096)
       // 
       let hh = phex(200);
       print("phex: \(hh)")
@@ -252,6 +268,7 @@ class rPCB: rViewController
       // schnittPfad
       schnittPfad?.setStartposition(x: 0x800, y: 0x800, z: 0)
       
+      dickeFeld.doubleValue = platinendicke
       // Pot 0
       /*
        Pot0_Slider.integerValue = Int(ACHSE0_START)
@@ -321,6 +338,132 @@ class rPCB: rViewController
    
    
    }
+   
+   // https://stackoverflow.com/questions/49724924/nsevent-keycode-to-unicode-character-in-swift
+   func myKeyDown(with event: NSEvent) -> Bool {
+       // handle keyDown only if current window has focus, i.e. is keyWindow
+       guard let locWindow = self.view.window,
+          NSApplication.shared.keyWindow === locWindow else { return false }
+      print("myKeyDown    keyCode: \(event.keyCode)\n") 
+       switch Int( event.keyCode) {
+ 
+       
+       /*
+ case kVK_Escape:
+          // do what you want to do at "Escape"
+          return true
+ */
+       default: 
+          return false
+       }
+    }
+
+   override  func keyDown(with event: NSEvent) 
+   {
+      //https://stackoverflow.com/questions/32446978/swift-capture-keydown-from-nsviewcontroller
+      print("*****    ****    keyDown code: \(event.keyCode)")  
+      switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) 
+      {
+      /*
+       case [.command] where event.characters == "l",
+            [.command, .shift] where event.characters == "l":
+           print("command-l or command-shift-l")
+ */
+      case [.shift]:
+          print("shift key is pressed")
+      case [.control]:
+          print("control key is pressed")
+      case [.option] :
+          print("option key is pressed keycode: \(event.keyCode)")
+         switch event.keyCode 
+         {
+         case 123:
+             print("option-left arrow")
+         case 124:
+             print("option-right arrow")
+         case 125:
+             print("option-down arrow")
+         case 126:
+             print("option-up arrow")
+         default:
+             break
+         }
+
+      case [.command]:
+          print("Command key is pressed")
+      case [.control, .shift]:
+          print("control-shift keys are pressed")
+      case [.option, .shift]:
+          print("option-shift keys are pressed")
+ 
+      case [.command, .shift]:
+          print("command-shift keys are pressed")
+      case [.control, .option]:
+          print("control-option keys are pressed")
+      case [.control, .command]:
+          print("control-command keys are pressed")
+      case [.option, .command]:
+          print("option-command keys are pressed ")
+ 
+      case [.shift, .control, .option]:
+          print("shift-control-option keys are pressed")
+      case [.shift, .control, .command]:
+          print("shift-control-command keys are pressed")
+      case [.control, .option, .command]:
+          print("control-option-command keys are pressed")
+      case [.shift, .command, .option]:
+          print("shift-command-option keys are pressed")
+      case [.shift, .control, .option, .command]:
+          print("shift-control-option-command keys are pressed")
+
+      
+      default:
+         
+         print("default  char: \(event.characters)")
+           break
+       }
+      print("char: \(event.characters)")
+   
+   }
+/*
+   override func flagsChanged(with event: NSEvent) 
+   {
+        switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
+        case [.shift]:
+            print("shift key is pressed")
+        case [.control]:
+            print("control key is pressed")
+        case [.option] :
+            print("option key is pressed")
+        case [.command]:
+            print("Command key is pressed")
+        case [.control, .shift]:
+            print("control-shift keys are pressed")
+        case [.option, .shift]:
+            print("option-shift keys are pressed")
+        case [.command, .shift]:
+            print("command-shift keys are pressed")
+        case [.control, .option]:
+            print("control-option keys are pressed")
+        case [.control, .command]:
+            print("control-command keys are pressed")
+        case [.option, .command]:
+            print("option-command keys are pressed")
+        case [.shift, .control, .option]:
+            print("shift-control-option keys are pressed")
+        case [.shift, .control, .command]:
+            print("shift-control-command keys are pressed")
+        case [.control, .option, .command]:
+            print("control-option-command keys are pressed")
+        case [.shift, .command, .option]:
+            print("shift-command-option keys are pressed")
+        case [.shift, .control, .option, .command]:
+            print("shift-control-option-command keys are pressed")
+        default:
+            print("no modifier keys are pressed")
+        }
+    }
+*/
    func updatePfeilschrittweite(sw:Int)
    {
       let tagarray = [1,2,3,4,11,22,33,44,22,24]
@@ -1196,11 +1339,12 @@ class rPCB: rViewController
                   {
                      circle = 1 // serie end, 
                      circlecountB += 1
+                     /*
                      if (circlecount > circlecountB)
                      {
                         print("zeilenindex: \(zeilenindex) DIFF")
                      }
-                     
+                     */
                      
                      //print("circle ist 1 zeilenindex: \(zeilenindex) circlecount: \(circlecount) circlecountB: \(circlecountB) circleorellipsefloatelementarray: \(circleorellipsefloatelementarray)\n")
                      
@@ -2202,6 +2346,7 @@ class rPCB: rViewController
   
       return PCB_Datenarray
    } 
+   // MARK: ***      ***  PCB_Daten
    
    func PCB_Daten(floatarray:[[Double]])->[[UInt8]]
    {
@@ -2316,20 +2461,37 @@ class rPCB: rViewController
          //print("ablaufstatus: \(ablaufstatus) zeilenindex: \(zeilenindex)")
          if ((ablaufstatus & (1<<DRILL_OK) > 0) && (zeilenindex < (floatarray.count - 2)))
          {
+            if zeilenindex > 124
+              {
             //print("drillArray anzeigezeile: \(anzeigezeile) drillzeile: \(drillzeile)")
             // anzeigezeile angeben
             drillArray[0][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
             drillArray[0][40] =  UInt8(anzeigezeile & 0x00FF)
             drillArray[1][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
             drillArray[1][40] =  UInt8(anzeigezeile & 0x00FF)
-           // drillzeile angeben
+            // drillzeile angeben
             drillArray[0][41] = UInt8((drillzeile & 0xFF00)>>8)
             drillArray[0][42] = UInt8(drillzeile & 0x00FF)
             drillArray[1][41] = UInt8((drillzeile & 0xFF00)>>8)
             drillArray[1][42] = UInt8(drillzeile & 0x00FF)
             drillzeile += 1 
-            PCB_Datenarray.append(drillArray[0])
+            if zeilenindex == 0
+            {
+               
+               //let firstdrillweg = (drillwegFeld.integerValue * 2) * (microstep ?? 1)
+               var firstdrillzeile = drillArray[0] 
+               //firstdrillzeile[16] = UInt8(((firstdrillweg & 0xFF00)>>8)) 
+               //firstdrillzeile[17] = UInt8(firstdrillweg & 0x00FF)
+               PCB_Datenarray.append(firstdrillzeile)
+            
+            }
+            else
+            {
+               PCB_Datenarray.append(drillArray[0])
+            }
+            
             PCB_Datenarray.append(drillArray[1])
+             }
          }
          
          anzeigezeile += 1
@@ -2367,9 +2529,7 @@ class rPCB: rViewController
       {
          speed *= 2
       }
-      //    propfaktor = 283464.567 // 14173.23
-      //     propfaktor = 4000
-      
+       
       Schnittdatenarray.removeAll()
       Schnittdatenarray_n.removeAll()
       
@@ -2878,7 +3038,7 @@ class rPCB: rViewController
        i += 1
        }
        
-      /* 
+       
        for el in SchritteArray
        {
        print(el)
@@ -2886,7 +3046,7 @@ class rPCB: rViewController
        //  print("\(el["distanz"] ?? 0)\t \(el["schrittex"] ?? 0)\t\(el["schrittey"] ?? 0) \t\(el["zoomfaktor"] ?? 0) \t\(el["code"] ?? 0)")
        
        }
-       */   
+          
    }// report_PCB_Daten
    
    @IBAction func report_NN(_ sender: NSButton)
@@ -2971,7 +3131,7 @@ class rPCB: rViewController
    {
       print("report_Nullpunkt")
       
-      teensy.write_byteArray[24] = 0xBD // code fuer set Nullpunkt
+      teensy.write_byteArray[24] = 0xBC // code fuer set Nullpunkt
       if (teensy.status() > 0)
       {
          let senderfolg = teensy.send_USB()
@@ -2980,6 +3140,12 @@ class rPCB: rViewController
 
    }
    
+   
+   @IBAction func report_Pause(_ sender: NSButton)
+   {
+      print("report_Pause")
+
+   }
     
    @IBAction override func report_HALT(_ sender: NSButton)
    {
@@ -3591,10 +3757,7 @@ class rPCB: rViewController
          speed *= 2
       }
        
-      //let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
-      //let propfaktor = 2802444.0952 // korr 211202
-      //let propfaktor = 2.8185448826E6 // 
-      let start = [0,0]
+        let start = [0,0]
       //let ziel = [wegZ]
       
       // Fahrzeit
@@ -3671,13 +3834,12 @@ class rPCB: rViewController
        Multiplikator in readSVG: 1000000 (INTEGERFAKTOR)
        
        */
-      //let propfaktor =   2802444.0952// korr 211202
-      //let propfaktor = 2834645.67 // 72 dpi -> 25.4mm
-      //print("propfaktor vor: \(propfaktor)")
-      //let propfaktor = 2.8185448826E6 // M
+       //let propfaktor = 2.8185448826E6 // M
       //let propfaktor = 2812907.7928348
-      let propfaktor = 2815160 // 211226
-      let dpi2mmfaktor = 2.81515 // propfaktor / INTEGERFAKTOR
+      //let propfaktor = 2815159.92077142 // 211226
+      //let propfaktor = 2787008.32156371 // 211228 neue M6
+      let propfaktor = 2788841.55370412
+      let dpi2mmfaktor = 2.81516 // propfaktor / INTEGERFAKTOR
       
     //  let start = [0,0]
     //  let ziel = [wegX,wegY]
@@ -4448,10 +4610,11 @@ class rPCB: rViewController
    @IBAction func report_DrillspeedSlider(_ sender: NSSlider)
    {
       print("report_DrillspeedSlider Val: \(sender.integerValue) ")
+      let sliderspeed = 0xFF - sender.integerValue
       drillspeedFeld.integerValue = sender.integerValue
       teensy.write_byteArray[24] = 0xB9
-      teensy.write_byteArray[DRILLSPEEDH_BIT] = UInt8((sender.integerValue & 0xFF00)>>8)
-      teensy.write_byteArray[DRILLSPEEDL_BIT] = UInt8(sender.integerValue & 0x00FF)
+      teensy.write_byteArray[DRILLSPEEDH_BIT] = UInt8((sliderspeed & 0xFF00)>>8)
+      teensy.write_byteArray[DRILLSPEEDL_BIT] = UInt8(sliderspeed & 0x00FF)
       
  //     if (usbstatus > 0)
  //     {
@@ -4533,7 +4696,7 @@ class rPCB: rViewController
       // microstep einrechnen
       let microstepindex = schritteweitepop.indexOfSelectedItem
       let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
-      print("microstep: \(microstep)")
+      //print("microstep: \(microstep)")
       drillwegmod *= microstep ?? 1
       var drillWegArray = drillMoveArray(wegz: drillwegmod)
       
@@ -5653,8 +5816,8 @@ class rPCB: rViewController
    
    @IBAction func report_Motor_Slider(_ sender: NSSlider)
    {
-      teensy.write_byteArray[0] = 0xDA // Code 
-      print("report_Motor_Slider IntVal: \(sender.intValue)")
+      teensy.write_byteArray[24] = 0xDA // Code 
+  //    print("report_Motor_Slider IntVal: \(sender.intValue)")
       
       let pos = sender.doubleValue
       
@@ -5662,17 +5825,17 @@ class rPCB: rViewController
       let Ustring = formatter.string(from: NSNumber(value: int8pos))
       
       
-      print("report_Motor_Slider pos: \(pos) intpos: \(int8pos)  Ustring: \(Ustring ?? "0")")
+ //     print("report_Motor_Slider pos: \(pos) intpos: \(int8pos)  Ustring: \(Ustring ?? "0")")
       // Pot0_Feld.stringValue  = Ustring!
       Motor_Feld.integerValue  = Int(int8pos)
-       
-      teensy.write_byteArray[MOTOR_BIT] = 0xFF - int8pos// 0xFF ist speed 0
+      teensy.write_byteArray[DRILL_BIT] = int8pos
+ 
       
-      if (usbstatus > 0)
-      {
+  //    if (usbstatus > 0)
+  //    {
          let senderfolg = teensy.send_USB()
-         //print("report_Motor_Slider senderfolg: \(senderfolg)")
-      }
+   //      print("report_Motor_Slider senderfolg: \(senderfolg) code: \(teensy.write_byteArray[24])")
+  //    }
    }
    
    
@@ -5680,23 +5843,23 @@ class rPCB: rViewController
    @IBAction override func report_PWM_Slider(_ sender: NSSlider)
    {
       teensy.write_byteArray[24] = 0xD8 // Code 
-      print("report_PWM_Slider: \(sender.intValue)")
+  //    print("report_PWM_Slider: \(sender.intValue)")
       
       let pos = sender.integerValue
       
       let int8pos = UInt8(pos)
       let Ustring = formatter.string(from: NSNumber(value: int8pos))
       
-      print("report_PWM_Slider pos: \(pos) intpos: \(int8pos)  Ustring: \(Ustring ?? "0")")
+      //print("report_PWM_Slider pos: \(pos) intpos: \(int8pos)  Ustring: \(Ustring ?? "0")")
       // Pot0_Feld.stringValue  = Ustring!
       PWM_Feld.integerValue  = Int(int8pos)
        
-      teensy.write_byteArray[PWM_BIT] = 0xFF - int8pos
+      teensy.write_byteArray[PWM_BIT] = int8pos
       
  //     if (usbstatus > 0)
  //     {
          let senderfolg = teensy.send_USB()
-         print("report_PWM_Slider senderfolg: \(senderfolg)")
+   //      print("report_PWM_Slider senderfolg: \(senderfolg)")
  //     }
    }
   

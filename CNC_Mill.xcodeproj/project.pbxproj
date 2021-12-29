@@ -20,6 +20,7 @@
 		BD337593249606240087C9FF /* rJoystickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD337592249606230087C9FF /* rJoystickView.swift */; };
 		BD52CE412743B35A00956AEB /* pfeilup.png in Resources */ = {isa = PBXBuildFile; fileRef = BD52CE402743B35900956AEB /* pfeilup.png */; };
 		BD52CE472743B8A700956AEB /* pfeilup2.png in Resources */ = {isa = PBXBuildFile; fileRef = BD52CE462743B8A700956AEB /* pfeilup2.png */; };
+		BD5981A4277CE32D00ADA5F9 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = BD5981A3277CE32D00ADA5F9 /* pause.png */; };
 		BDC357EE24BB2DF4003F20F8 /* pfeil_links_mini.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E524BB2DF2003F20F8 /* pfeil_links_mini.jpg */; };
 		BDC357EF24BB2DF4003F20F8 /* pfeil_up_mini.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E624BB2DF2003F20F8 /* pfeil_up_mini.jpg */; };
 		BDC357F024BB2DF4003F20F8 /* pfeil_rechts.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357E724BB2DF2003F20F8 /* pfeil_rechts.jpg */; };
@@ -63,6 +64,7 @@
 		BD337592249606230087C9FF /* rJoystickView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = rJoystickView.swift; path = CNC_Mill/rJoystickView.swift; sourceTree = SOURCE_ROOT; };
 		BD52CE402743B35900956AEB /* pfeilup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pfeilup.png; sourceTree = "<group>"; };
 		BD52CE462743B8A700956AEB /* pfeilup2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pfeilup2.png; sourceTree = "<group>"; };
+		BD5981A3277CE32D00ADA5F9 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
 		BDC357E524BB2DF2003F20F8 /* pfeil_links_mini.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_links_mini.jpg; sourceTree = "<group>"; };
 		BDC357E624BB2DF2003F20F8 /* pfeil_up_mini.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_up_mini.jpg; sourceTree = "<group>"; };
 		BDC357E724BB2DF2003F20F8 /* pfeil_rechts.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeil_rechts.jpg; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		BD33757E248D71E10087C9FF /* Bilder */ = {
 			isa = PBXGroup;
 			children = (
+				BD5981A3277CE32D00ADA5F9 /* pause.png */,
 				BD52CE462743B8A700956AEB /* pfeilup2.png */,
 				BD52CE402743B35900956AEB /* pfeilup.png */,
 				BDC357ED24BB2DF4003F20F8 /* home.jpg */,
@@ -266,6 +269,7 @@
 				BD337585248D71F30087C9FF /* ok.png in Resources */,
 				BD337583248D71F30087C9FF /* notok.png in Resources */,
 				BDC357F024BB2DF4003F20F8 /* pfeil_rechts.jpg in Resources */,
+				BD5981A4277CE32D00ADA5F9 /* pause.png in Resources */,
 				BDC357EE24BB2DF4003F20F8 /* pfeil_links_mini.jpg in Resources */,
 				BDC357F824C099C2003F20F8 /* BBB.txt in Resources */,
 				BDC357FA24C83C24003F20F8 /* CCC.txt in Resources */,
