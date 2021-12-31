@@ -56,6 +56,13 @@ class rPCB: rViewController
  
    var anschlagstatus = 0;
    
+   var cncstatus:UInt8 = 0 // cncstatus
+   let RUN = 0
+   let PAUSE = 1
+   let GO_BACK = 2
+   let GO_END  = 3
+   
+   
    var CNC_DatendicArray = [[String:String]]()
    
    var lastklickposition:position = position()
@@ -2461,7 +2468,7 @@ class rPCB: rViewController
          //print("ablaufstatus: \(ablaufstatus) zeilenindex: \(zeilenindex)")
          if ((ablaufstatus & (1<<DRILL_OK) > 0) && (zeilenindex < (floatarray.count - 2)))
          {
-            if zeilenindex > 124
+            if zeilenindex > 0
               {
             //print("drillArray anzeigezeile: \(anzeigezeile) drillzeile: \(drillzeile)")
             // anzeigezeile angeben
@@ -2508,6 +2515,7 @@ class rPCB: rViewController
          PCB_Datenarray[z][27] = UInt8(z & 0x00FF)
          PCB_Datenarray[z][26] = UInt8((z & 0xFF00) >> 8)
          //print("PCBzeile: \(z) \(PCB_Datenarray[z][27])")
+         print("PCBzeile: \(z) \(PCB_Datenarray[z])")
          
       }
       //print("PCB Daten PCB_Datenarray count nach: \(PCB_Datenarray.count)\n\(PCB_Datenarray)")
@@ -3144,7 +3152,19 @@ class rPCB: rViewController
    @IBAction func report_Pause(_ sender: NSButton)
    {
       print("report_Pause")
-
+      let state = sender.state
+      if state == .on
+      {
+         cncstatus |= (1<<PAUSE)
+         print("PAUSE")
+      }
+      else
+      {
+         cncstatus &= ~(1<<PAUSE)
+         print("GO")
+         self.write_CNC_Abschnitt()
+      }
+      
    }
     
    @IBAction override func report_HALT(_ sender: NSButton)
@@ -3730,7 +3750,7 @@ class rPCB: rViewController
 
     
  //     print("drillvektor count: \(vektor.count)")
-  //    print("drillvektor count: \(vektor.count) vektor: \(vektor)")
+      print("drillvektor count: \(vektor.count) vektor: \n\(vektor)")
       
       return vektor
    }
@@ -3757,7 +3777,7 @@ class rPCB: rViewController
          speed *= 2
       }
        
-        let start = [0,0]
+      //  let start = [0,0]
       //let ziel = [wegZ]
       
       // Fahrzeit
@@ -5010,7 +5030,7 @@ class rPCB: rViewController
          return
       }
       var notificationDic = [String:Any]()
-      let cncstatus:UInt8 = data[20] // cncstatus
+      
       
       let abschnittnummer:Int = Int((data[5] << 8) | data[6])
       let ladeposition = data[8]
@@ -5462,6 +5482,10 @@ class rPCB: rViewController
             //print("newDataAktion writecncabschnitt go cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
             if cncstepperposition < Schnittdatenarray.count
             { 
+               if ((cncstatus & (1<<PAUSE)) != 0)
+               {
+                  return
+               }
                //print("cncstepperposition < Schnittdatenarray.count: newDataAktion taskcode: \(taskcode)")
                self.write_CNC_Abschnitt()
                /*

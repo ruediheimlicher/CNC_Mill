@@ -1819,10 +1819,13 @@
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o9l-t8-B1J">
                                 <rect key="frame" x="677" y="575" width="48" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Vdw-3S-NAz">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pause" imagePosition="only" alignment="center" alternateImage="rewind" imageScaling="proportionallyUpOrDown" inset="2" id="Vdw-3S-NAz">
+                                    <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="report_Pause:" target="wFL-7s-Z8p" id="omr-pr-X3a"/>
+                                </connections>
                             </button>
                         </subviews>
                         <accessibility identifier="1"/>
@@ -1836,6 +1839,7 @@
                         <outlet property="NN_OK_Check" destination="rxh-NJ-6tV" id="GJy-TN-Vny"/>
                         <outlet property="PWM_Feld" destination="HBk-Si-7Vo" id="3wL-cT-7H4"/>
                         <outlet property="PWM_Slider" destination="Yvu-r7-qT2" id="aXz-Ag-cav"/>
+                        <outlet property="PauseKnopf" destination="o9l-t8-B1J" id="ZZJ-Kl-Wd0"/>
                         <outlet property="PlatteScroller" destination="EQG-jy-Qht" id="dS1-G5-ggE"/>
                         <outlet property="Plattefeld" destination="XUX-V5-xCg" id="5lZ-Hg-XVD"/>
                         <outlet property="SVG_Pfad" destination="Ukl-fa-02Y" id="wZc-uz-gHU"/>
@@ -2289,11 +2293,13 @@
         <image name="Halt" width="538" height="530"/>
         <image name="home" width="94.765937805175781" height="95.081825256347656"/>
         <image name="notok_image" width="131" height="129"/>
+        <image name="pause" width="225" height="225"/>
         <image name="pfeil_down" width="40" height="35"/>
         <image name="pfeil_down_mini" width="20" height="12"/>
         <image name="pfeil_links" width="35" height="40"/>
         <image name="pfeil_rechts" width="35" height="40"/>
         <image name="pfeil_up" width="40" height="35"/>
         <image name="pfeil_up_mini" width="20" height="12"/>
+        <image name="rewind" width="225" height="225"/>
     </resources>
 </document>

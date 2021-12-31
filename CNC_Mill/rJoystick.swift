@@ -2405,7 +2405,6 @@ let answer = dialogOKCancel(question: "Ok?", text: "Choose your answer.")
       print("\n\t                            Joystick newDataAktion taskcode hex: \(codehex) device: \(device)")
     
       var notificationDic = [String:Any]()
-      let cncstatus:UInt8 = data[20] // cncstatus
       
       let abschnittnummer:Int = Int((data[5] << 8) | data[6])
       let ladeposition = data[8]

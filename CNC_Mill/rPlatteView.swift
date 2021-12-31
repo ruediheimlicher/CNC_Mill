@@ -263,7 +263,7 @@ class rPlatteView: NSView
          }
          //print("draw fahrtweg: \(fahrtweg) element count: \(elcount)")
          
-         
+         drawstatus = 0
          
       }
       else
