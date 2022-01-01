@@ -36,6 +36,7 @@ class rPlatteView: NSView
    var fahrtweg:CGFloat = 0
    
    var stepperposition:Int = 0
+   var oldstepperposition:Int = 0
    
  //  var wegarray:[[Int]] = [[Int]]()
    var wegfloatarray:[[Double]] = [[Double]]()
@@ -49,7 +50,7 @@ class rPlatteView: NSView
    var kreisclearfarbe:NSColor = NSColor()
    
    var drawstatus = 0 // 0: setweg zeichnet den Weg  1: draw zeichnet den Weg nach setstepperposition
-
+   var drawcount:Int = 0
    required init?(coder  aDecoder : NSCoder) 
    {
       super.init(coder: aDecoder)
@@ -126,7 +127,9 @@ class rPlatteView: NSView
       
       kreis.lineWidth = 1.5
       // neu
-   //   Swift.print("drawstatus: \(drawstatus)")
+      Swift.print("drawstatus: \(drawstatus) drawcount: \(drawcount) stepperposition: \(stepperposition) oldstepperposition: \(oldstepperposition) ")
+      drawcount += 1
+      
       if (drawstatus == 1)
       {
          //Swift.print("drawstatus 1")
@@ -137,133 +140,134 @@ class rPlatteView: NSView
          var elcount:Int = 0
          var lastpunkt = NSMakePoint(0, 0)
          wegindex = 0
-   //      let korr:CGFloat = 31.15
+         //      let korr:CGFloat = 31.15
          let korr:CGFloat = 1
          markarray.removeAll()
          numarray.removeAll()
-         for zeile in wegfloatarray
-         {
-            elcount += 1
-            //  let x = CGFloat(zeile[0])
-            //let lokalpunkt = NSMakePoint(CGFloat(zeile[1])/faktor/redfaktor * transformfaktor*korr,CGFloat(zeile[2])/faktor/redfaktor * transformfaktor*korr)
-           
-            let lokalpunkt = NSMakePoint(CGFloat(zeile[0]),CGFloat(zeile[1]))
-            //Swift.print("lokalpunkt: \(lokalpunkt) stepperposition: \(stepperposition)" )
-            //Swift.print("wegindex: \(wegindex) lokalpunkt: \(lokalpunkt) stepperposition: \(stepperposition)" )
-            // Marke setzen
-            var tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-3.1, lokalpunkt.y-3.1, 6.1, 6.1);
-
-            if (wegindex == 0)
+             for zeile in wegfloatarray
             {
-               tempMarkRect = NSMakeRect(lokalpunkt.x-5.1, lokalpunkt.y-5.1, 10.1, 10.1);
-            }
-             // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
-            // Nummer setzen
-            //          var tempNumRect:NSRect = NSMakeRect(lokalpunkt.x-12.1, lokalpunkt.y+4.1, 24.1, 8.1);
-            var localkreis:NSBezierPath =  NSBezierPath()
-            localkreis.appendOval(in: tempMarkRect)
-            //              var fillcolor:NSColor = NSColor.blue
-            //              fillcolor.setFill()
-            markarray.append(localkreis)
-             
-            kreis.move(to: lokalpunkt)
-            //    kreis.appendOval(in: tempMarkRect)
-            
-            linienfarbe.set() 
-            
- //           var localnumfeld:NSBezierPath =  NSBezierPath()
- //           var numrect:NSRect  = NSMakeRect(tempNumPunkt.x-1, lokalpunkt.y+3, 12, 10);
-//            localnumfeld.appendRect(numrect)
-            //numarray.append(localnumfeld)
-            NSColor.white.set()
-            //localnumfeld.fill()
-            kreislinienfarbe.set() 
-            localkreis.stroke()
-            var tempNumPunkt:NSPoint = NSMakePoint(0, 0)
-            if wegindex == wegfloatarray.count - 1
-            {
-               tempNumPunkt = NSMakePoint(lokalpunkt.x - 12, lokalpunkt.y - 12)
-            }
-            else
-            {
-               tempNumPunkt = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
-            }
-            let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
-            let numstring = String(wegindex)
-            numstring.draw(
-               at: tempNumPunkt, 
-               withAttributes: atts as [NSAttributedStringKey : Any])
-
-            if (wegindex <= stepperposition) || (klickmarkIndexset.contains(wegindex)) // Start, Marke fuellen
-            {
-               //    var localkreis: NSBezierPath = NSBezierPath()
-               lastpunkt = lokalpunkt
-               weg.move(to: lokalpunkt)
-               /*
-               var localkreis:NSBezierPath =  NSBezierPath()
-               localkreis.appendOval(in: tempMarkRect)
-               //              var fillcolor:NSColor = NSColor.blue
-               //              fillcolor.setFill()
-               markarray.append(localkreis)
-                */
-               kreisfillfarbe.set() // choose color
-               if (wegindex > 0)
-               {
-                  localkreis.fill()
-               }
-               kreislinienfarbe.set() // choose color
-               localkreis.lineWidth = 1.0
-               localkreis.stroke()
-               linienfarbe.set() 
-               //              kreis.append(localkreis)
-               /*
-               var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
-               let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
-               let numstring = String(wegindex)
-               numstring.draw(
-                  at: tempNumPunkt, 
-                  withAttributes: atts as [NSAttributedStringKey : Any])
-            */
-            }
-            else
-            {
-               let dx = lokalpunkt.x - lastpunkt.x
-               let dy = lokalpunkt.y - lastpunkt.y
-               fahrtweg += hypotenuse(dx, dy)
-               lastpunkt = lokalpunkt
-               weg.line(to: lokalpunkt)
-               //       kreis.fill()
-               /*
-               var localkreis:NSBezierPath =  NSBezierPath()
-               localkreis.appendOval(in: tempMarkRect)
-               markarray.append(localkreis)
- */
-               //              var fillcolor:NSColor = NSColor.blue
-               //              fillcolor.setFill()
-               NSColor.yellow.set() // choose color
-               localkreis.fill()
-               kreislinienfarbe.set() // choose color
-               localkreis.lineWidth = 1.0
-               localkreis.stroke()
-               NSColor.green.set() 
-               //              kreis.append(localkreis)
-               linienfarbe.set() 
-               /*
-               var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
-               let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
-               let numstring = String(wegindex)
-               numstring.draw(
-                  at: tempNumPunkt, 
-                  withAttributes: atts as [NSAttributedStringKey : Any])
-               */
+               elcount += 1
+               //  let x = CGFloat(zeile[0])
+               //let lokalpunkt = NSMakePoint(CGFloat(zeile[1])/faktor/redfaktor * transformfaktor*korr,CGFloat(zeile[2])/faktor/redfaktor * transformfaktor*korr)
                
+               let lokalpunkt = NSMakePoint(CGFloat(zeile[0]),CGFloat(zeile[1]))
+               //Swift.print("lokalpunkt: \(lokalpunkt) stepperposition: \(stepperposition)" )
+               //Swift.print("wegindex: \(wegindex) lokalpunkt: \(lokalpunkt) stepperposition: \(stepperposition)" )
+               // Marke setzen
+               var tempMarkRect:NSRect = NSMakeRect(lokalpunkt.x-3.1, lokalpunkt.y-3.1, 6.1, 6.1);
+               
+               if (wegindex == 0)
+               {
+                  tempMarkRect = NSMakeRect(lokalpunkt.x-5.1, lokalpunkt.y-5.1, 10.1, 10.1);
+               }
+               // tempMark=[NSBezierPath bezierPathWithOvalInRect:tempMarkRect]
+               // Nummer setzen
+               //          var tempNumRect:NSRect = NSMakeRect(lokalpunkt.x-12.1, lokalpunkt.y+4.1, 24.1, 8.1);
+               var localkreis:NSBezierPath =  NSBezierPath()
+               localkreis.appendOval(in: tempMarkRect)
+               //              var fillcolor:NSColor = NSColor.blue
+               //              fillcolor.setFill()
+               markarray.append(localkreis)
+               
+               kreis.move(to: lokalpunkt)
+               //    kreis.appendOval(in: tempMarkRect)
+               
+               linienfarbe.set() 
+               
+               //           var localnumfeld:NSBezierPath =  NSBezierPath()
+               //           var numrect:NSRect  = NSMakeRect(tempNumPunkt.x-1, lokalpunkt.y+3, 12, 10);
+               //            localnumfeld.appendRect(numrect)
+               //numarray.append(localnumfeld)
+               NSColor.white.set()
+               //localnumfeld.fill()
+               kreislinienfarbe.set() 
+               localkreis.stroke()
+               var tempNumPunkt:NSPoint = NSMakePoint(0, 0)
+               if wegindex == wegfloatarray.count - 1
+               {
+                  tempNumPunkt = NSMakePoint(lokalpunkt.x - 12, lokalpunkt.y - 12)
+               }
+               else
+               {
+                  tempNumPunkt = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
+               }
+               let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
+               let numstring = String(wegindex)
+               numstring.draw(
+                  at: tempNumPunkt, 
+                  withAttributes: atts as [NSAttributedStringKey : Any])
+               
+               if (wegindex <= stepperposition) || (klickmarkIndexset.contains(wegindex)) // Start, Marke fuellen
+               {
+                  //    var localkreis: NSBezierPath = NSBezierPath()
+                  lastpunkt = lokalpunkt
+                  weg.move(to: lokalpunkt)
+                  /*
+                   var localkreis:NSBezierPath =  NSBezierPath()
+                   localkreis.appendOval(in: tempMarkRect)
+                   //              var fillcolor:NSColor = NSColor.blue
+                   //              fillcolor.setFill()
+                   markarray.append(localkreis)
+                   */
+                  kreisfillfarbe.set() // choose color
+                  if (wegindex > 0)
+                  {
+                     localkreis.fill()
+                  }
+                  kreislinienfarbe.set() // choose color
+                  localkreis.lineWidth = 1.0
+                  localkreis.stroke()
+                  linienfarbe.set() 
+                  //              kreis.append(localkreis)
+                  /*
+                   var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
+                   let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
+                   let numstring = String(wegindex)
+                   numstring.draw(
+                   at: tempNumPunkt, 
+                   withAttributes: atts as [NSAttributedStringKey : Any])
+                   */
+               }
+               else
+               {
+                  let dx = lokalpunkt.x - lastpunkt.x
+                  let dy = lokalpunkt.y - lastpunkt.y
+                  fahrtweg += hypotenuse(dx, dy)
+                  lastpunkt = lokalpunkt
+                  weg.line(to: lokalpunkt)
+                  //       kreis.fill()
+                  /*
+                   var localkreis:NSBezierPath =  NSBezierPath()
+                   localkreis.appendOval(in: tempMarkRect)
+                   markarray.append(localkreis)
+                   */
+                  //              var fillcolor:NSColor = NSColor.blue
+                  //              fillcolor.setFill()
+                  NSColor.yellow.set() // choose color
+                  localkreis.fill()
+                  kreislinienfarbe.set() // choose color
+                  localkreis.lineWidth = 1.0
+                  localkreis.stroke()
+                  NSColor.green.set() 
+                  //              kreis.append(localkreis)
+                  linienfarbe.set() 
+                  /*
+                   var tempNumPunkt:NSPoint = NSMakePoint(lokalpunkt.x + 3, lokalpunkt.y + 3)
+                   let atts = [NSAttributedStringKey.font:NSFont.init(name: "Helvetica", size: 10)]
+                   let numstring = String(wegindex)
+                   numstring.draw(
+                   at: tempNumPunkt, 
+                   withAttributes: atts as [NSAttributedStringKey : Any])
+                   */
+                  
+               }
+               //localnumfeld.stroke()
+               wegindex += 1
             }
-            //localnumfeld.stroke()
-             wegindex += 1
-         }
+         
          //print("draw fahrtweg: \(fahrtweg) element count: \(elcount)")
          
-         drawstatus = 0
+         //         drawstatus = 0
          
       }
       else
@@ -299,7 +303,7 @@ class rPlatteView: NSView
       //let ident  = self.identifier as! String
       let ident  = self.identifier
       let nc = NotificationCenter.default
-      //Swift.print("left mouse ident: \(ident)")
+      Swift.print("mouseDowne ident: \(ident)")
       var identstring = ""
       if let rawident:String = ident?.rawValue
       {
@@ -458,12 +462,14 @@ class rPlatteView: NSView
       {
          print("\t ******   PlatteView setStepperposition pos: \(pos) wegfloatarray: \(wegfloatarray) \nwegfloatarray: \(wegfloatarray)")
       }
- */
-       if(markfeldarray.count > stepperposition) // 
+       */
+      
+       if ((markfeldarray.count > stepperposition) && (stepperposition > oldstepperposition))// 
       {
+         oldstepperposition = stepperposition
          //print("\t ******   PlatteView setStepperposition pos: \(pos) markfeldarray.count: \(markfeldarray.count) \nmarkrect: \(markfeldarray[stepperposition])")
 
-         //print("\t ******   PlatteView setStepperposition pos: \(pos) needs display")
+         //print("\t ******   PlatteView setStepperposition pos: \(pos) feld: \(markfeldarray[stepperposition]) needs display")
          self.setNeedsDisplay(markfeldarray[stepperposition])
       //needsDisplay = true
          self.displayIfNeeded()
@@ -596,7 +602,7 @@ class rPlatteView: NSView
       
      
       
-      //print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
+      print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
       needsDisplay = true
       return Int(fahrtweg)
    }
@@ -691,7 +697,7 @@ class rPlatteView: NSView
    func clearMark()
    {
 
-      //Swift.print( "clearMark markfeldarray: \(markfeldarray)")
+      Swift.print( "clearMark markfeldarray: \(markfeldarray)")
       setStepperposition(pos: 0)
       needsDisplay = true
    }

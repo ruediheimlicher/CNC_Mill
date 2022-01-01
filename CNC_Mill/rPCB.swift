@@ -1437,7 +1437,7 @@ class rPCB: rViewController
       guard let fileURL = SVG_URL else { return  }
       let urlstring = SVG_URL?.absoluteString
       let dateiname:String = urlstring?.components(separatedBy: "/").last ?? "-"
-      //     print("report_readSVG fileURL: \(fileURL)")
+      print("report_readSVG fileURL: \(fileURL)")
       SVG_Pfad.stringValue = dateiname
       circledicarray.removeAll()
       circlefloatarray.removeAll()
@@ -2468,8 +2468,8 @@ class rPCB: rViewController
          //print("ablaufstatus: \(ablaufstatus) zeilenindex: \(zeilenindex)")
          if ((ablaufstatus & (1<<DRILL_OK) > 0) && (zeilenindex < (floatarray.count - 2)))
          {
-            if zeilenindex > 0
-              {
+            if zeilenindex >= 0
+            {
             //print("drillArray anzeigezeile: \(anzeigezeile) drillzeile: \(drillzeile)")
             // anzeigezeile angeben
             drillArray[0][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
@@ -2482,6 +2482,7 @@ class rPCB: rViewController
             drillArray[1][41] = UInt8((drillzeile & 0xFF00)>>8)
             drillArray[1][42] = UInt8(drillzeile & 0x00FF)
             drillzeile += 1 
+               /*
             if zeilenindex == 0
             {
                
@@ -2496,8 +2497,9 @@ class rPCB: rViewController
             {
                PCB_Datenarray.append(drillArray[0])
             }
-            
-            PCB_Datenarray.append(drillArray[1])
+            */
+               PCB_Datenarray.append(drillArray[0])
+               PCB_Datenarray.append(drillArray[1])
              }
          }
          
@@ -2515,7 +2517,7 @@ class rPCB: rViewController
          PCB_Datenarray[z][27] = UInt8(z & 0x00FF)
          PCB_Datenarray[z][26] = UInt8((z & 0xFF00) >> 8)
          //print("PCBzeile: \(z) \(PCB_Datenarray[z][27])")
-         print("PCBzeile: \(z) \(PCB_Datenarray[z])")
+        //print("PCBzeile: \(z) \(PCB_Datenarray[z])")
          
       }
       //print("PCB Daten PCB_Datenarray count nach: \(PCB_Datenarray.count)\n\(PCB_Datenarray)")
@@ -3750,7 +3752,7 @@ class rPCB: rViewController
 
     
  //     print("drillvektor count: \(vektor.count)")
-      print("drillvektor count: \(vektor.count) vektor: \n\(vektor)")
+ //     print("drillvektor count: \(vektor.count) vektor: \n\(vektor)")
       
       return vektor
    }
@@ -5482,7 +5484,7 @@ class rPCB: rViewController
             //print("newDataAktion writecncabschnitt go cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
             if cncstepperposition < Schnittdatenarray.count
             { 
-               if ((cncstatus & (1<<PAUSE)) != 0)
+               if (((cncstatus & (1<<PAUSE)) != 0) && (Schnittdatenarray[cncstepperposition][41] == 255))
                {
                   return
                }
