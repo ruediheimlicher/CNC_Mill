@@ -455,6 +455,12 @@ class rPlatteView: NSView
       return (a * a + b * b).squareRoot()
    }
    
+   func resetStepperposition()
+   {
+      stepperposition = 0
+      oldstepperposition = 0
+      needsDisplay = true
+   }
    func setStepperposition(pos:Int)
    {
       stepperposition = pos
@@ -699,7 +705,7 @@ class rPlatteView: NSView
    func clearMark()
    {
 
-      Swift.print( "clearMark markfeldarray: \(markfeldarray)")
+      //Swift.print( "clearMark markfeldarray: \(markfeldarray)")
       setStepperposition(pos: 0)
       needsDisplay = true
    }

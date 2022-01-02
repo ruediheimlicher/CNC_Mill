@@ -94,6 +94,10 @@ class rPCB: rViewController
    
    //  var teensy = usb_teensy()
    
+   var now = Date()
+   var startzeit = Date()
+   
+   var zeitformatter = DateComponentsFormatter()
    
    @IBOutlet weak var readSVG_Knopf: NSButton!
    @IBOutlet weak var SVG_Pfad: NSTextField!
@@ -113,6 +117,8 @@ class rPCB: rViewController
    @IBOutlet weak var speedFeld: NSTextField!
    
    @IBOutlet weak var timerintervallFeld: NSTextField!
+   
+   @IBOutlet weak var ablaufzeitFeld: NSTextField!
    
    @IBOutlet weak var stepsFeld: NSTextField!
    @IBOutlet weak var ramp_OK_Check: NSButton!
@@ -208,6 +214,14 @@ class rPCB: rViewController
       formatter.maximumFractionDigits = 1
       formatter.minimumFractionDigits = 2
       formatter.minimumIntegerDigits = 1
+      
+      //Ablaufzeit
+      zeitformatter.allowedUnits = [ .minute, .second]
+      zeitformatter.unitsStyle = .positional
+      zeitformatter.zeroFormattingBehavior = [ .pad ]
+      ablaufzeitFeld.stringValue = zeitformatter.string(from: TimeInterval(0))!
+      
+      
       //formatter.roundingMode = .down
       print("propfaktor: \(propfaktor)")
          
@@ -1428,6 +1442,30 @@ class rPCB: rViewController
       return punktarray
    }
    
+   func eckelinksunten(floatarray:[[Double]]) ->Int
+   {
+      // ecke links unten bestimmen 
+      var eckedistanzmin:Int = Int.max
+      var eckedistanzminindex:Int = 0;
+      var z = 0
+      for el in floatarray
+      {
+         
+         let eckedistanz:Int = Int(el[4])
+         //print("\(z) eckedistanz: \(eckedistanz)")
+         if eckedistanz < eckedistanzmin
+         {
+            eckedistanzmin = eckedistanz
+            eckedistanzminindex = z
+         }
+         
+         z += 1
+      }
+      print("eckedistanzminindex: \(eckedistanzminindex) eckedistanzmin: \(eckedistanzmin)")
+      
+      return eckedistanzminindex
+   }
+   
    // MARK: ***      ***  report_readSVG
    
    @IBAction func report_readSVG(_ sender: NSButton)
@@ -1451,7 +1489,7 @@ class rPCB: rViewController
       homeY = 0
       floathomeX = 0
       floathomeY = 0
-
+      ablaufzeitFeld.stringValue = zeitformatter.string(from: TimeInterval(0))!
       //reading
       do {
          print("readSVG URL: \(fileURL)")
@@ -1536,7 +1574,7 @@ class rPCB: rViewController
          }
  */            
            
-         
+         teensy.clear_writearray()
          
          // https://useyourloaf.com/blog/sorting-an-array-of-dictionaries/
          var sortedarray = [[String:Int]]()  // mit circledicarray
@@ -1783,13 +1821,13 @@ class rPCB: rViewController
          
          
          // definitever circlefloatarray
-         
+         /*
          print("report_readSVG definitiver circlefloatarray. count: \(circlefloatarray.count)")         
           for el in circlefloatarray
           {
             print("\(el[0] )\t \(el[1] )\t \(el[2])  \(el[3])")
           }
-          
+          */
          /*
          let newsortedarray:[[Double]] = circlefloatarray.sorted(by: {
                                                       ($0[2]) < ($1[2])})
@@ -1861,26 +1899,13 @@ class rPCB: rViewController
          var mill_floatarray = mill_floatArray(circarray: circlefloatarray) //
   
          // ecke links unten bestimmen 
-         var eckedistanzmin:Int = Int.max
-         var eckedistanzminindex:Int = 0;
-         z = 0
-          for el in mill_floatarray
-          {
-          
-            let eckedistanz:Int = Int(el[4])
-            print("\(z) eckedistanz: \(eckedistanz)")
-            if eckedistanz < eckedistanzmin
-            {
-               eckedistanzmin = eckedistanz
-               eckedistanzminindex = z
-            }
+         let eckelinksuntenindex = eckelinksunten(floatarray: mill_floatarray)
+         print("eckelinksuntenindex: \(eckelinksuntenindex)")
 
-            z += 1
-          }
-         print("eckedistanzminindex: \(eckedistanzminindex) eckedistanzmin: \(eckedistanzmin)")
-
-
-         
+         // Element an (0)einsetzen
+         let firstzeile = mill_floatarray[eckelinksuntenindex]
+         mill_floatarray.remove(at:eckelinksuntenindex)
+         mill_floatarray.insert(firstzeile, at:0)
          
          // Figur schliessen
          if figurschliessen_checkbox.state == .on
@@ -3107,6 +3132,7 @@ class rPCB: rViewController
          print("report_NN circlefloatarray leer")
          return
       }
+      teensy.clear_writearray()
       Schnittdatenarray.removeAll()
       print("report_NN circlefloatarray.count: \(circlefloatarray.count)")
       var mill_floatarray = mill_floatArray(circarray: circlefloatarray_raw) //
@@ -3237,6 +3263,7 @@ class rPCB: rViewController
  //        }
 
          CNC_HALT_Knopf.state = .off
+         teensy.clear_writearray()
       }
   
       
@@ -3305,7 +3332,7 @@ class rPCB: rViewController
       Plattefeld.clearMark()
       Plattefeld.stepperposition = 0
       cncstepperposition = 0
-      
+      ablaufzeitFeld.stringValue = zeitformatter.string(from: TimeInterval(0))!
       //     Plattefeld.setStepperposition(pos:cncstepperposition)
       let anzabschnitte = Schnittdatenarray.count
       
@@ -3319,6 +3346,7 @@ class rPCB: rViewController
             let senderfolg = teensy.send_USB()
             //            print("report_send_Daten report_goXY senderfolg: \(senderfolg)")
  //        }
+         teensy.clear_writearray()
          return
       }
       Schnittdatenarray[0][33] = UInt8((anzabschnitte & 0xFF00) >> 8)
@@ -3343,7 +3371,8 @@ class rPCB: rViewController
          var start_read_USB_erfolg = teensy.start_read_USB(true)
       }
       */
-      
+      Plattefeld.resetStepperposition()
+      teensy.clear_writearray()
       Plattefeld.setStepperposition(pos: 0) // Ersten Punkt markieren
       Schnittdatenarray[0][24] = 0xD5     // start neue serie
       for i in 1..<Schnittdatenarray.count
@@ -3353,6 +3382,8 @@ class rPCB: rViewController
     //  Schnittdatenarray[2][24] = 0xD5 //
     //  Schnittdatenarray[3][24] = 0xD5 //
       }
+      now = Date()
+      startzeit = Date()
       write_CNC_Abschnitt()
       
          
@@ -3381,6 +3412,7 @@ class rPCB: rViewController
       let senderfolg = teensy.send_USB()
       print("PCB report_clear senderfolg: \(senderfolg)")
       //    }
+      ablaufzeitFeld.stringValue = zeitformatter.string(from: TimeInterval(0))!
       cncstepperposition = 0
       teensy.clear_writearray()
       Schnittdatenarray.removeAll()
@@ -5495,7 +5527,8 @@ class rPCB: rViewController
              
          // MARK: ***     default        
          default:
-            print("newDataAktion default abschnittnummer: \(abschnittnummer)")
+            let zeit = now.timeAgoDisplay()
+            print("newDataAktion default abschnittnummer: \(abschnittnummer) zeir: \(zeit)")
             //Plattefeld.setStepperposition(pos:abschnittnummer)
             break
          }// switch taskcode
@@ -5514,7 +5547,25 @@ class rPCB: rViewController
          //state = .on
          if state == .on
          {
+            // https://tech.julienkarst.com/How-to-display-time-ago-from-a-date-in-Swift-(This-is-how-to-get-the-difference-between-two-dates-in-a-string)
+            //var zeit = now.timeAgoDisplay()
             
+            //print("newDataAktion zeit: \(zeit)")
+            
+            var zeitint =  startzeit.seconds(from:startzeit)
+            //print("newDataAktion zeitint: \(zeitint)")
+            
+            //https://stackoverflow.com/questions/26794703/swift-integer-conversion-to-hours-minutes-seconds
+            //let formatter = DateComponentsFormatter()
+           // formatter.allowedUnits = [.hour, .minute, .second]
+           // zeitformatter.allowedUnits = [ .minute, .second]
+           // zeitformatter.unitsStyle = .positional
+           // zeitformatter.zeroFormattingBehavior = [ .pad ]
+            
+            let ablaufzeitString = zeitformatter.string(from: TimeInterval(zeitint))!
+            //print(ablaufzeitString)
+
+            ablaufzeitFeld.stringValue = ablaufzeitString
             //print("newDataAktion writecncabschnitt go cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
             if cncstepperposition < Schnittdatenarray.count
             { 
