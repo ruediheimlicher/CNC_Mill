@@ -1192,13 +1192,16 @@ class rPCB: rViewController
       // find maxY
       var fliparray = [[Double]]()
       var maxY:Double = 0
+      var maxIndex = 0
       for zeile in svgarray
       {
          if zeile[2] > maxY
          {
             maxY = zeile[2]
+            
          }
       }
+      
       //print("flipSVG maxY: \(maxY)")
       for zeile in svgarray
       {
@@ -1606,8 +1609,6 @@ class rPCB: rViewController
             let cx:Int = (zeilendic["cx"]!) 
             let cy:Int = (zeilendic["cy"]!) 
             let cz:Int = (zeilendic["cz"]!) 
-            
-            //print("\(zeilendicindex) \(cx) \(cy)")
             let zeilenarray = [zeilendicindex,cx,cy,cz]
             circlearray.append(zeilenarray)
             zeilendicindex += 1
@@ -1667,9 +1668,9 @@ class rPCB: rViewController
             let cx:Double = (zeilendic["cx"]!) 
             let cy:Double = (zeilendic["cy"]!) 
             let cz:Double = (zeilendic["cz"]!)
-            // print("\(zeilendicindex) \(cx) \(cy)")
-            let zeilendicarray:[Double] = [Double(zeilendicindex),cx,cy,cz]
-     //       circlefloatarray.append(zeilendicarray)
+
+            //let zeilendicarray:[Double] = [Double(zeilendicindex),cx,cy,cz]
+            //circlefloatarray.append(zeilendicarray)
             zeilendicindex += 1
          }
   
@@ -1679,8 +1680,12 @@ class rPCB: rViewController
             let cx:Double = (zeilendic[0]) 
             let cy:Double = (zeilendic[1]) 
             let cz:Double = (zeilendic[2])
+            let eckedistanz:Double = pow(cx,2) + pow(cy,2)
+            let zeilenarray = [Double(zeilendicindex),cx,cy,cz,eckedistanz]
+
             // print("\(zeilendicindex) \(cx) \(cy)")
-            let zeilenarray:[Double] = [Double(zeilendicindex),cx,cy,cz]
+
+            //let zeilenarray:[Double] = [Double(zeilendicindex),cx,cy,cz]
             circlefloatarray.append(zeilenarray)
             zeilendicindex += 1
          }
@@ -1759,29 +1764,32 @@ class rPCB: rViewController
          let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
          //print("microstep: \(microstep)")
          // umnummerieren und microstep
-          
+          // ecke links unten bestimmen
+ 
          for z in 0..<circlefloatarray.count
          {
             circlefloatarray[z][0] = Double(z)
             let el1 = circlefloatarray[z][1] * (microstep ?? 1)
             circlefloatarray[z][1] = el1
             let el2 = circlefloatarray[z][2] * (microstep ?? 1) 
-            circlefloatarray[z][2] = el2         
+            circlefloatarray[z][2] = el2   
             let el3 = circlefloatarray[z][3] * (microstep ?? 1) 
             circlefloatarray[z][3] = el3         
          
-         }         
+         }    
+         
          circlefloatarray = flipSVG(svgarray: circlefloatarray)  
          
          
+         
          // definitever circlefloatarray
-         /*
+         
          print("report_readSVG definitiver circlefloatarray. count: \(circlefloatarray.count)")         
           for el in circlefloatarray
           {
             print("\(el[0] )\t \(el[1] )\t \(el[2])  \(el[3])")
           }
-          */
+          
          /*
          let newsortedarray:[[Double]] = circlefloatarray.sorted(by: {
                                                       ($0[2]) < ($1[2])})
@@ -1808,6 +1816,7 @@ class rPCB: rViewController
             break
          }
          
+          
          // neu Nummerieren
          for z in 0..<circlefloatarray.count
          {
@@ -1851,6 +1860,27 @@ class rPCB: rViewController
          
          var mill_floatarray = mill_floatArray(circarray: circlefloatarray) //
   
+         // ecke links unten bestimmen 
+         var eckedistanzmin:Int = Int.max
+         var eckedistanzminindex:Int = 0;
+         z = 0
+          for el in mill_floatarray
+          {
+          
+            let eckedistanz:Int = Int(el[4])
+            print("\(z) eckedistanz: \(eckedistanz)")
+            if eckedistanz < eckedistanzmin
+            {
+               eckedistanzmin = eckedistanz
+               eckedistanzminindex = z
+            }
+
+            z += 1
+          }
+         print("eckedistanzminindex: \(eckedistanzminindex) eckedistanzmin: \(eckedistanzmin)")
+
+
+         
          
          // Figur schliessen
          if figurschliessen_checkbox.state == .on
@@ -1883,6 +1913,7 @@ class rPCB: rViewController
             
          }
  
+         
          circlefloatarray = mill_floatarray
          
          /*
@@ -1899,15 +1930,15 @@ class rPCB: rViewController
           //     iii += 1
           }
           */
-         /*
-          print("mill_floatarray A")
-          for el in mill_floatarray
-          {
-          print("\(el)")
-          //     iii += 1
-          }
+         
+         // print("mill_floatarray A")
+         
+           
+         
  
-          */
+         
+         
+         
          stepperschritteFeld.integerValue = mill_floatarray.count-1   
          transformfaktor = 0.2
          setPCB_Output(floatarray: mill_floatarray, scale: 5, transform: transformfaktor)
@@ -1962,6 +1993,8 @@ class rPCB: rViewController
                
             }
          }
+         
+         
 
          var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
          //circlefloatarray = PCBDaten
@@ -3860,7 +3893,8 @@ class rPCB: rViewController
       //let propfaktor = 2812907.7928348
       //let propfaktor = 2815159.92077142 // 211226
       //let propfaktor = 2787008.32156371 // 211228 neue M6
-      let propfaktor = 2788841.55370412
+      //let propfaktor = 2788841.55370412
+      let propfaktor = 2801856.14762141
       let dpi2mmfaktor = 2.81516 // propfaktor / INTEGERFAKTOR
       
     //  let start = [0,0]
@@ -3940,7 +3974,7 @@ class rPCB: rViewController
    func write_CNC_Abschnitt()
    {
       //print("+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition) Schnittdatenarray.count: \(Schnittdatenarray.count)")
-      //print("\n+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition)")
+      print("+++              PCB write_CNC_Abschnitt cncstepperposition: \(cncstepperposition)")
       stepperpositionFeld.integerValue = cncstepperposition
  /*
       for i in 0..<Schnittdatenarray.count
@@ -4078,8 +4112,8 @@ class rPCB: rViewController
              print("schritteAZ: \(schritteAZ) ")
         
          
-         print("write_CNC_Zeile   code: \(phex(zeilenarray[24]))  schritteAX: \(schritteAX) schritteAY: \(schritteAY) schritteAZ: \(schritteAZ) lage: \(zeilenarray[25])")
-         print("write_CNC_Zeile  zeilenarray: \(zeilenarray)")
+         //print("write_CNC_Zeile   code: \(phex(zeilenarray[24]))  schritteAX: \(schritteAX) schritteAY: \(schritteAY) schritteAZ: \(schritteAZ) lage: \(zeilenarray[25])")
+       //  print("write_CNC_Zeile  zeilenarray: \(zeilenarray)")
          
          for element in zeilenarray
          {
@@ -4097,7 +4131,7 @@ class rPCB: rViewController
   //       if teensy.dev_present() > 0
   //       {
             let senderfolg = teensy.send_USB()
-            print("write_CNC_Zeile senderfolg: \(senderfolg)")
+           // print("write_CNC_Zeile senderfolg: \(senderfolg)")
  //        }
          //   cncstepperposition += 1
          
@@ -4106,7 +4140,7 @@ class rPCB: rViewController
          
          
       }// if count
-      print("                                            write_CNC_Zeile END\n")
+     // print("                                            write_CNC_Zeile END\n")
    }
    
    
@@ -4150,7 +4184,7 @@ class rPCB: rViewController
       }
       */
       let info = notification.userInfo
-      print("PCB klickpunktAktion:\t \(String(describing: info))")
+      //print("PCB klickpunktAktion:\t \(String(describing: info))")
       let klickpunkt = info?["klickpunkt"] as! NSPoint
       let index = info?["index"] as! Int
       let dx = Double(klickpunkt.x)
@@ -4398,9 +4432,9 @@ class rPCB: rViewController
  
       //let lastdatafloatzeile = circlearray[lasttabledataindex]
       let lastdatafloatzeile = circlefloatarray[lasttabledataindex]
-      print("datatabletask lastzeile: \(lasttabledataindex)  lastdatafloatzeile: \(lastdatafloatzeile)")
+      //print("datatabletask lastzeile: \(lasttabledataindex)  lastdatafloatzeile: \(lastdatafloatzeile)")
       
-      print("datatabletask zielzeile: \(zeile)  datafloatzeile: \(datafloatzeile)")
+      //print("datatabletask zielzeile: \(zeile)  datafloatzeile: \(datafloatzeile)")
 
       
       if zeile == lasttabledataindex
@@ -4707,7 +4741,7 @@ class rPCB: rViewController
       drillWegArray[32] = DEVICE_MILL
       drillWegArray[35] = 0 // drillstatus beginn
       drillWegArray[25] = 3
-      print("drill_up drillWegArray: \(drillWegArray)")
+      //print("drill_up drillWegArray: \(drillWegArray)")
       write_CNC_Zeile(zeilenarray: drillWegArray)
    }
 

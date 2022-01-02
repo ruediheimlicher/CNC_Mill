@@ -127,7 +127,9 @@ class rPlatteView: NSView
       
       kreis.lineWidth = 1.5
       // neu
-      Swift.print("drawstatus: \(drawstatus) drawcount: \(drawcount) stepperposition: \(stepperposition) oldstepperposition: \(oldstepperposition) ")
+      
+      //Swift.print("drawstatus: \(drawstatus) drawcount: \(drawcount) stepperposition: \(stepperposition) oldstepperposition: \(oldstepperposition) ")
+      //Swift.print("draw  drawcount: \(drawcount) stepperposition: \(stepperposition)  dirtyRect: \(dirtyRect)")
       drawcount += 1
       
       if (drawstatus == 1)
@@ -602,7 +604,7 @@ class rPlatteView: NSView
       
      
       
-      print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
+      //print("setfloatWeg markfeldarray count: \(markfeldarray.count) \n \(markfeldarray) ")
       needsDisplay = true
       return Int(fahrtweg)
    }
