@@ -4385,7 +4385,7 @@ class rPCB: rViewController
          }
          pfeilwegarray[25] = 2 // nur ein Abschnitt
          pfeilwegarray[32] = 1
-         pfeilwegarray[24] = 0xDE
+         pfeilwegarray[24] = 0xDF
          pfeilwegarray[38] = UInt8(pfeiltag)
          /*
          if (mousedownindex == 1)
