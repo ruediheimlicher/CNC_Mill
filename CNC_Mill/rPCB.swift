@@ -16,6 +16,20 @@ class rPCB: rViewController
    
    var PCB_Test = 0
    
+   var urlarray = [[String]]()
+   
+   var urldicarray = [[String:String]]() // dic dateiname:url
+   var svgdicarray = [String:String]() // dic dateiname:url
+   
+   struct svgdata
+   {
+      let svgname:String
+      let svgurl:String
+   }
+   var svgdataArray:[svgdata] = []
+   
+   var svgpoparray:[(svgname:String,svgurl:String)] = []
+      
    var circledicarray = [[String:Int]]()
    
    var circlefloatdicarray = [[String:Double]]()
@@ -43,7 +57,7 @@ class rPCB: rViewController
    var dpi2mmfaktor:Double = 0
    var mmFormatter = NumberFormatter()
 
-   var drillweg = 6
+   var drillweg = 8
    
    var platinendicke = 2.5
    
@@ -100,6 +114,9 @@ class rPCB: rViewController
    var zeitformatter = DateComponentsFormatter()
    
    @IBOutlet weak var readSVG_Knopf: NSButton!
+   
+   @IBOutlet weak var readSVG_Pop: NSPopUpButton!
+   
    @IBOutlet weak var SVG_Pfad: NSTextField!
    @IBOutlet weak var SVG_Testfeld: NSTextField!
    
@@ -356,7 +373,7 @@ class rPCB: rViewController
       schritteweitepop.addItems(withTitles: schritteweitearray)
       schritteweitepop.selectItem(withTitle: schritteweitearray[1])
       
-   
+      readSVG_Pop.removeAllItems()
    
    }
    
@@ -1466,6 +1483,22 @@ class rPCB: rViewController
       return eckedistanzminindex
    }
    
+   
+   @IBAction func report_readSVG_Pop(_ sender: NSPopUpButton)
+   {
+      print("report_readSVG_Pop titel: \(sender.titleOfSelectedItem) index: \(sender.indexOfSelectedItem)")
+      guard let titel = sender.titleOfSelectedItem else { return } 
+      
+      let titelindex = sender.indexOfSelectedItem
+
+      guard let tempurl = svgdicarray[titel]  else { return } 
+      print("titel: \(titel) url: \(tempurl)")
+      
+      guard URL(fileURLWithPath: tempurl ) != nil else { return }
+      
+     // let url = urldicarray as NSDictionary[titel]
+      //sender.selectItem(withTitle: titel)
+   }
    // MARK: ***      ***  report_readSVG
    
    @IBAction func report_readSVG(_ sender: NSButton)
@@ -1476,10 +1509,25 @@ class rPCB: rViewController
       let SVG_URL = openFile()
       // https://stackoverflow.com/questions/10016475/create-nsscrollview-programmatically-in-an-nsview-cocoa
       guard let fileURL = SVG_URL else { return  }
-      let urlstring = SVG_URL?.absoluteString
-      let dateiname:String = urlstring?.components(separatedBy: "/").last ?? "-"
+      let urlstring:String = SVG_URL!.absoluteString
+      var dateiname = urlstring.components(separatedBy: "/").last ?? "-"
       print("report_readSVG fileURL: \(fileURL)")
+      dateiname = dateiname.components(separatedBy: ".").first ?? "-"
       SVG_Pfad.stringValue = dateiname
+      let index = String(urlarray.count)
+      var svgarray = [dateiname,urlstring]
+      var svgdic = [dateiname:urlstring]
+      
+      urlarray.append(svgarray)
+      svgpoparray.append((svgname:dateiname, svgurl: urlstring))
+      
+      // https://www.dotnetperls.com/dictionary-swift
+      svgdicarray[dateiname] = urlstring
+      
+ //     var temp:svgdata = [svgname:dateiname, svgurl:urlstring]
+ //     svgdataArray[dateiname] = urlstring
+      urldicarray.append(svgdic)
+      readSVG_Pop.addItem(withTitle: dateiname)
       circledicarray.removeAll()
       circlefloatarray.removeAll()
       circlefloatdicarray.removeAll()
@@ -4239,8 +4287,8 @@ class rPCB: rViewController
    {
       let info = notification.userInfo
      print("PCB mausstatusAktion:\t \(String(describing: info))")
-      let usb_ok = teensy.dev_present()
-      print("PCB mausstatusAktion usb_ok: \(usb_ok)")
+      //let usb_ok = teensy.dev_present()
+      //print("PCB mausstatusAktion usb_ok: \(usb_ok)")
       
       let devtag = info?["devtag"] as! Int
       let mousedownindex = info?["mousedown"] as! Int
@@ -4249,7 +4297,7 @@ class rPCB: rViewController
          let pfeiltag = info?["tag"] as! Int
          var mausschrittweite = info?["schrittweite"] as! Int
          var schrittweite = 0
-         schrittweite = 500
+         schrittweite = 50
          var dx:Int = 0
          var dy:Int = 0
          var dz:Int = 0
@@ -4317,13 +4365,14 @@ class rPCB: rViewController
          default:
             break
          }
-         let teensyok = teensy.dev_present()
-         
+        // let teensyok = teensy.dev_present()
+         /*
          if teensy.dev_present() < 0
          {
             print("mausstatusAktion: Kein Teensy")
             return
          }
+ */
          print("mausstatusAktion dx: \(dx) dy: \(dy) dz: \(dz)")
          var pfeilwegarray = [UInt8]()
          if (pfeiltag > 20)
@@ -5462,7 +5511,7 @@ class rPCB: rViewController
             
             var abschnittnummer:Int = Int(((d5 << 8) | (d6 )))
             let ladepos =  Int(data[8] )
-            //print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
+            print("newDataAktion  D6 abschnittnummer: \(abschnittnummer) cncstepperposition: \(cncstepperposition) ladepos: \(ladepos)")
             //print("\(abschnittnummer)\t\(pd4(responsezeit))\t \(pd3(usbzeit)) \t\(pd3(taskzeit))")
             //print("\(abschnittnummer)\t\(pd3(usbzeit)) \t\(pd3(taskzeit)) ")
             //print("\(abschnittnummer)")

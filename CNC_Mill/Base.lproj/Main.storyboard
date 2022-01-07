@@ -896,6 +896,15 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bJR-Ly-FGp">
+                                <rect key="frame" x="271" y="637" width="38" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Zeit" id="j0R-rY-zyt">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wwq-u4-Kg2">
                                 <rect key="frame" x="735" y="573" width="48" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1827,15 +1836,24 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bJR-Ly-FGp">
-                                <rect key="frame" x="271" y="637" width="38" height="17"/>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6it-4u-Hob">
+                                <rect key="frame" x="183" y="592" width="106" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Zeit" id="j0R-rY-zyt">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="6nl-J9-zjr" id="Z2u-pU-AeI">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="QjS-nb-UH4">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="6nl-J9-zjr"/>
+                                            <menuItem title="Item 2" id="LxC-hw-7u3"/>
+                                            <menuItem title="Item 3" id="gIF-Eg-Tmc"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="report_readSVG_Pop:" target="wFL-7s-Z8p" id="rAh-1n-zBD"/>
+                                </connections>
+                            </popUpButton>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1882,6 +1900,7 @@
                         <outlet property="nextKnopf" destination="3Nd-UJ-9iO" id="9q8-Da-5HU"/>
                         <outlet property="ramp_OK_Check" destination="q4r-pV-zV0" id="3st-LK-aWI"/>
                         <outlet property="readSVG_Knopf" destination="eex-tQ-W4N" id="7RP-tf-ddy"/>
+                        <outlet property="readSVG_Pop" destination="6it-4u-Hob" id="Mt6-0c-5vc"/>
                         <outlet property="schritteweitepop" destination="3xh-qt-IoI" id="9kX-oc-GIV"/>
                         <outlet property="speedFeld" destination="FBI-Ov-pSY" id="5KE-yI-L2p"/>
                         <outlet property="steppercontKnopf" destination="Buo-3L-NMd" id="zb3-cQ-nuQ"/>
