@@ -1861,6 +1861,9 @@
                                     <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system" size="12"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="report_Drillmotor:" target="wFL-7s-Z8p" id="FSZ-kQ-BLQ"/>
+                                </connections>
                             </button>
                         </subviews>
                         <accessibility identifier="1"/>
