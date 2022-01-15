@@ -274,7 +274,7 @@ int rawhid_send(int num, uint8_t *buf, int len, int timeout)
    
    if (!hid)
    {
-      fprintf(stderr,"rawhid_send: hid ist NULL\n");
+      //fprintf(stderr,"rawhid_send: hid ist NULL\n");
       return -1;
    }
    int isopen = hid->open;

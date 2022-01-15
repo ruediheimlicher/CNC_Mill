@@ -37,6 +37,8 @@
 		BDC357F624BB2DF4003F20F8 /* home.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BDC357ED24BB2DF4003F20F8 /* home.jpg */; };
 		BDC357F824C099C2003F20F8 /* BBB.txt in Resources */ = {isa = PBXBuildFile; fileRef = BDC357F724C099C2003F20F8 /* BBB.txt */; };
 		BDC357FA24C83C24003F20F8 /* CCC.txt in Resources */ = {isa = PBXBuildFile; fileRef = BDC357F924C83C24003F20F8 /* CCC.txt */; };
+		BDCEB87E278E0D4700E22884 /* Drill OFF.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCEB87C278E0D4600E22884 /* Drill OFF.png */; };
+		BDCEB87F278E0D4700E22884 /* Drill ON.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCEB87D278E0D4600E22884 /* Drill ON.png */; };
 		BDEA297424E03664005331D2 /* rTSP_NN.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEA297324E03664005331D2 /* rTSP_NN.swift */; };
 		BDF6323E24D9524D00F654D9 /* AAA.txt in Resources */ = {isa = PBXBuildFile; fileRef = BDF6323D24D9524C00F654D9 /* AAA.txt */; };
 		BDF6592C2482E2DC009F2E67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF6592B2482E2DC009F2E67 /* AppDelegate.swift */; };
@@ -86,6 +88,8 @@
 		BDC357ED24BB2DF4003F20F8 /* home.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = home.jpg; sourceTree = "<group>"; };
 		BDC357F724C099C2003F20F8 /* BBB.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BBB.txt; sourceTree = "<group>"; };
 		BDC357F924C83C24003F20F8 /* CCC.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CCC.txt; sourceTree = "<group>"; };
+		BDCEB87C278E0D4600E22884 /* Drill OFF.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Drill OFF.png"; sourceTree = "<group>"; };
+		BDCEB87D278E0D4600E22884 /* Drill ON.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Drill ON.png"; sourceTree = "<group>"; };
 		BDEA297324E03664005331D2 /* rTSP_NN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rTSP_NN.swift; sourceTree = "<group>"; };
 		BDF6323D24D9524C00F654D9 /* AAA.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AAA.txt; sourceTree = "<group>"; };
 		BDF659282482E2DC009F2E67 /* CNC_Mill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CNC_Mill.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +125,8 @@
 		BD33757E248D71E10087C9FF /* Bilder */ = {
 			isa = PBXGroup;
 			children = (
+				BDCEB87C278E0D4600E22884 /* Drill OFF.png */,
+				BDCEB87D278E0D4600E22884 /* Drill ON.png */,
 				BD5981AD277CEF2300ADA5F9 /* rewind.png */,
 				BD5981AB277CEE2D00ADA5F9 /* go_on.jpeg */,
 				BD5981A9277CED5E00ADA5F9 /* go.jpeg */,
@@ -302,7 +308,9 @@
 				BD5981AC277CEE2D00ADA5F9 /* go_on.jpeg in Resources */,
 				BDC357F524BB2DF4003F20F8 /* pfeil_up.jpg in Resources */,
 				BD5981A6277CE9E700ADA5F9 /* cont.png in Resources */,
+				BDCEB87F278E0D4700E22884 /* Drill ON.png in Resources */,
 				BD5981A8277CEC3B00ADA5F9 /* restart.png in Resources */,
+				BDCEB87E278E0D4700E22884 /* Drill OFF.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -165,6 +165,8 @@ class rPCB: rViewController
    @IBOutlet weak var drillStepUPKnopf: NSButton!
    @IBOutlet weak var drillStepDOWNKnopf: NSButton!
    
+   @IBOutlet weak var MotorKnopf: NSButton!
+   
    @IBOutlet weak var moveDickeKnopf: NSButton!
    
    @IBOutlet weak var drillwegFeld: NSTextField!
@@ -193,7 +195,8 @@ class rPCB: rViewController
    @objc func printSomething() {
            print("Hello")
        }
-   
+  
+   // MARK: ***    ***   viewDidLoad
    override func viewDidLoad() 
    {
       super.viewDidLoad()
@@ -375,6 +378,7 @@ class rPCB: rViewController
       
       readSVG_Pop.removeAllItems()
    
+      teensy.write_byteArray[DRILL_BIT] = 0
    }
    
    // https://stackoverflow.com/questions/49724924/nsevent-keycode-to-unicode-character-in-swift
@@ -1134,7 +1138,7 @@ class rPCB: rViewController
                   if fabs(diffX) < maxdiff
                   {
                      //print("diffX < maxdiff  zeile: \(doppelindex) n: \(n)\t diffX: \(diffX)")
-                     var diffY:Double = (Double((next[2] - akt[2])))
+                     let diffY:Double = (Double((next[2] - akt[2])))
                      
                      if fabs(diffY) < maxdiff
                      {
@@ -1223,7 +1227,8 @@ class rPCB: rViewController
       // find maxY
       var fliparray = [[Double]]()
       var maxY:Double = 0
-      var maxIndex = 0
+
+
       for zeile in svgarray
       {
          if zeile[2] > maxY
@@ -2532,17 +2537,6 @@ class rPCB: rViewController
             continue
          }
          
-         // dic aufbauen
-         //var position:UInt16 = 0
-         
-         //var zeilendic:[String:Any] = [:]
-         
-         
-         //let aktX = (akt[1]) //
-         //let aktY = (akt[2]) //
-         //let nextX = (next[1])
-         //let nextY = (next[2])
-         //print("vor: \t diffX: \(diffX) diffY: \(diffY)")
          var wegArray = wegArrayMitWegXY(wegx: diffX, wegy: diffY)
          //         print("set_PCB_Daten wegArray\n\(wegArray)")
          
@@ -2576,43 +2570,46 @@ class rPCB: rViewController
          {
             if zeilenindex >= 0
             {
-            //print("drillArray anzeigezeile: \(anzeigezeile) drillzeile: \(drillzeile)")
-            // anzeigezeile angeben
-            drillArray[0][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
-            drillArray[0][40] =  UInt8(anzeigezeile & 0x00FF)
-            drillArray[1][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
-            drillArray[1][40] =  UInt8(anzeigezeile & 0x00FF)
-            // drillzeile angeben
-            drillArray[0][41] = UInt8((drillzeile & 0xFF00)>>8)
-            drillArray[0][42] = UInt8(drillzeile & 0x00FF)
-            drillArray[1][41] = UInt8((drillzeile & 0xFF00)>>8)
-            drillArray[1][42] = UInt8(drillzeile & 0x00FF)
-            drillzeile += 1 
+               //print("drillArray anzeigezeile: \(anzeigezeile) drillzeile: \(drillzeile)")
+               // anzeigezeile angeben
+               drillArray[0][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
+               drillArray[0][40] =  UInt8(anzeigezeile & 0x00FF)
+               drillArray[1][39] =  UInt8((anzeigezeile & 0xFF00)>>8)
+               drillArray[1][40] =  UInt8(anzeigezeile & 0x00FF)
+               // drillzeile angeben
+               drillArray[0][41] = UInt8((drillzeile & 0xFF00)>>8)
+               drillArray[0][42] = UInt8(drillzeile & 0x00FF)
+               drillArray[1][41] = UInt8((drillzeile & 0xFF00)>>8)
+               drillArray[1][42] = UInt8(drillzeile & 0x00FF)
+               drillzeile += 1 
                /*
-            if zeilenindex == 0
-            {
-               
-               //let firstdrillweg = (drillwegFeld.integerValue * 2) * (microstep ?? 1)
-               var firstdrillzeile = drillArray[0] 
-               //firstdrillzeile[16] = UInt8(((firstdrillweg & 0xFF00)>>8)) 
-               //firstdrillzeile[17] = UInt8(firstdrillweg & 0x00FF)
-               PCB_Datenarray.append(firstdrillzeile)
-            
-            }
-            else
-            {
-               PCB_Datenarray.append(drillArray[0])
-            }
-            */
+                if zeilenindex == 0
+                {
+                
+                //let firstdrillweg = (drillwegFeld.integerValue * 2) * (microstep ?? 1)
+                var firstdrillzeile = drillArray[0] 
+                //firstdrillzeile[16] = UInt8(((firstdrillweg & 0xFF00)>>8)) 
+                //firstdrillzeile[17] = UInt8(firstdrillweg & 0x00FF)
+                PCB_Datenarray.append(firstdrillzeile)
+                
+                }
+                else
+                {
+                PCB_Datenarray.append(drillArray[0])
+                }
+                */
                PCB_Datenarray.append(drillArray[0])
                PCB_Datenarray.append(drillArray[1])
-             }
+            }
          }
          
          anzeigezeile += 1
          
          
       } // for zeilenindex
+      
+      // drilldown nach erstem Weg:
+ 
       
       
       // Zeilennummern kontrollieren
@@ -3204,6 +3201,28 @@ class rPCB: rViewController
    
    }
    
+   @IBAction func report_Drillmotor(_ sender: NSButton)
+   {
+      print("report_Drillmotor")
+      let state = sender.state
+      let pos = Motor_Slider.doubleValue
+      let int8pos = UInt8(pos)
+      // aus report_Motor_Slider
+      teensy.write_byteArray[24] = 0xDA // Code 
+      if state == .on
+      {
+         teensy.write_byteArray[DRILL_BIT] = int8pos
+      }
+      else
+      {
+         teensy.write_byteArray[DRILL_BIT] = 0
+         
+      }
+      let senderfolg = teensy.send_USB()
+      
+      
+   }
+   
    @IBAction func report_drillOK(_ sender: NSButton)
    {
       print("report_Drill")
@@ -3312,6 +3331,7 @@ class rPCB: rViewController
 
          CNC_HALT_Knopf.state = .off
          teensy.clear_writearray()
+      clear()
       }
   
       
@@ -3446,8 +3466,31 @@ class rPCB: rViewController
    
     
  
-   
-   
+   func clear()
+   {
+      ablaufzeitFeld.stringValue = zeitformatter.string(from: TimeInterval(0))!
+      cncstepperposition = 0
+      teensy.clear_writearray()
+      Schnittdatenarray.removeAll()
+      circlearray.removeAll()
+      circlefloatarray.removeAll()
+      circlefloatarray_raw.removeAll()
+      CNC_DatendicArray.removeAll()
+      
+      dataTable.reloadData()
+      Plattefeld.clearWeg()
+      Plattefeld.needsDisplay = true
+      lastklickposition.x = 0
+      lastklickposition.y = 0
+      
+      print("PCB reportclear homeX: \(homeX) homeY: \(homeY)")
+      homeX = 0
+      homeY = 0
+      homexFeld.integerValue = 0
+      homeyFeld.integerValue = 0
+      
+
+   }
    
    @IBAction func report_clear(_ sender: NSButton)
    {
@@ -3460,6 +3503,9 @@ class rPCB: rViewController
       let senderfolg = teensy.send_USB()
       print("PCB report_clear senderfolg: \(senderfolg)")
       //    }
+      clear()
+      return
+         
       ablaufzeitFeld.stringValue = zeitformatter.string(from: TimeInterval(0))!
       cncstepperposition = 0
       teensy.clear_writearray()
@@ -4749,10 +4795,10 @@ class rPCB: rViewController
       print("report_DrillspeedSlider Val: \(sender.integerValue) ")
       let sliderspeed = 0xFF - sender.integerValue
       drillspeedFeld.integerValue = sender.integerValue
+      
       teensy.write_byteArray[24] = 0xB9
       teensy.write_byteArray[DRILLSPEEDH_BIT] = UInt8((sliderspeed & 0xFF00)>>8)
       teensy.write_byteArray[DRILLSPEEDL_BIT] = UInt8(sliderspeed & 0x00FF)
-      
  //     if (usbstatus > 0)
  //     {
          let senderfolg = teensy.send_USB()
@@ -5480,6 +5526,8 @@ class rPCB: rViewController
                teensy.readtimer?.invalidate()
             }
             cncstepperposition = 0
+            
+            clear()
             break
             
          case 0xEA:
@@ -5988,12 +6036,14 @@ class rPCB: rViewController
  //     print("report_Motor_Slider pos: \(pos) intpos: \(int8pos)  Ustring: \(Ustring ?? "0")")
       // Pot0_Feld.stringValue  = Ustring!
       Motor_Feld.integerValue  = Int(int8pos)
+      MotorKnopf.title = String(sender.integerValue)
+
       teensy.write_byteArray[DRILL_BIT] = int8pos
  
       
   //    if (usbstatus > 0)
   //    {
-         let senderfolg = teensy.send_USB()
+ //        let senderfolg = teensy.send_USB()
    //      print("report_Motor_Slider senderfolg: \(senderfolg) code: \(teensy.write_byteArray[24])")
   //    }
    }

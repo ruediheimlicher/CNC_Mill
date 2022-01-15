@@ -1387,7 +1387,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" tag="24" translatesAutoresizingMaskIntoConstraints="NO" id="Bcx-Ll-Ia9" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="1117" y="273" width="26" height="27"/>
+                                <rect key="frame" x="1117" y="221" width="26" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_down" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pIP-mp-Skx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1735,7 +1735,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" tag="22" translatesAutoresizingMaskIntoConstraints="NO" id="hbe-7j-aQb" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="1117" y="301" width="26" height="27"/>
+                                <rect key="frame" x="1117" y="249" width="26" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7Mp-Fa-joY">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1854,6 +1854,14 @@
                                     <action selector="report_readSVG_Pop:" target="wFL-7s-Z8p" id="rAh-1n-zBD"/>
                                 </connections>
                             </popUpButton>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FDi-xJ-f4b">
+                                <rect key="frame" x="1104" y="274" width="41" height="62"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" title="0" bezelStyle="shadowlessSquare" image="Drill ON" imagePosition="above" alignment="center" alternateImage="Drill OFF" state="on" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="bnf-jN-CkN">
+                                    <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system" size="12"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1861,6 +1869,7 @@
                         <outlet property="CNC_HALT_Knopf" destination="Wwq-u4-Kg2" id="wnv-7E-wxc"/>
                         <outlet property="ClearPCBTaste" destination="vua-Lc-4z0" id="nfX-4A-9VS"/>
                         <outlet property="DataSendTaste" destination="EBu-nO-PLk" id="u6H-AD-jDN"/>
+                        <outlet property="MotorKnopf" destination="FDi-xJ-f4b" id="7J0-pH-ZQP"/>
                         <outlet property="Motor_Feld" destination="LPQ-V8-Tsw" id="dWg-iv-TKR"/>
                         <outlet property="Motor_Slider" destination="7OA-0z-iMw" id="hDi-Sb-Ray"/>
                         <outlet property="NN_OK_Check" destination="rxh-NJ-6tV" id="GJy-TN-Vny"/>
@@ -2319,6 +2328,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Drill OFF" width="82" height="81"/>
+        <image name="Drill ON" width="82" height="81"/>
         <image name="Halt" width="538" height="530"/>
         <image name="home" width="94.765937805175781" height="95.081825256347656"/>
         <image name="notok_image" width="131" height="129"/>
