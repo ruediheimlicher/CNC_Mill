@@ -2323,6 +2323,32 @@ class rPCB: rViewController
       return DrillDatenarray
    }
    
+   func print_tabarray(_ floatarray:[[UInt8]]) //->[String] // Array von Strings mit tabs
+   {
+      //https://docs.swift.org/swift-book/LanguageGuide/Functions.html
+   var tabarray = [[UInt8]]()
+   var tabstringarray = [String]()
+   for z in stride(from: 0, to: floatarray.count-1, by: 1)
+   {
+      var zeilenstringarray = [String]()
+      var zeilentabarray = [UInt8]()
+      zeilentabarray.append(UInt8(z))
+      for element in floatarray[z]
+      {
+         let elementstring = String(element)
+         zeilenstringarray.append(elementstring)
+         zeilentabarray.append(element)
+      }
+      var zeilenstring = zeilenstringarray.joined(separator: "\t")
+      print(zeilenstring)
+      tabstringarray.append(zeilenstring)
+      tabarray.append(zeilentabarray)
+   }
+   
+  // return tabstringarray
+   }
+   
+   
    func PCB_Abs_Daten(floatarray:[[Double]])->[[UInt8]]
    {
       print("PCB_Abs_Daten\n")
@@ -2582,25 +2608,18 @@ class rPCB: rViewController
                drillArray[1][41] = UInt8((drillzeile & 0xFF00)>>8)
                drillArray[1][42] = UInt8(drillzeile & 0x00FF)
                drillzeile += 1 
-               /*
-                if zeilenindex == 0
-                {
-                
-                //let firstdrillweg = (drillwegFeld.integerValue * 2) * (microstep ?? 1)
-                var firstdrillzeile = drillArray[0] 
-                //firstdrillzeile[16] = UInt8(((firstdrillweg & 0xFF00)>>8)) 
-                //firstdrillzeile[17] = UInt8(firstdrillweg & 0x00FF)
-                PCB_Datenarray.append(firstdrillzeile)
-                
-                }
-                else
-                {
-                PCB_Datenarray.append(drillArray[0])
-                }
-                */
-               
+ 
+               if zeilenindex == 0 // nach erstem Schritt eine Stufe down
+               {
+                  PCB_Datenarray.append(drillArray[0])
+               }
                PCB_Datenarray.append(drillArray[0])
                PCB_Datenarray.append(drillArray[1])
+               
+               if zeilenindex == (floatarray.count - 3)  // vor letztem Schritt eine Stufe up
+               {
+                  PCB_Datenarray.append(drillArray[1])
+               }
             }
          }
          
@@ -2615,15 +2634,16 @@ class rPCB: rViewController
       
       // Zeilennummern kontrollieren
       
-      var z=0
+      //var z=0
       for z in 0..<PCB_Datenarray.count
       {
          PCB_Datenarray[z][27] = UInt8(z & 0x00FF)
          PCB_Datenarray[z][26] = UInt8((z & 0xFF00) >> 8)
          //print("PCBzeile: \(z) \(PCB_Datenarray[z][27])")
         //print("PCBzeile: \(z) \(PCB_Datenarray[z])")
-         
+        
       }
+      print_tabarray(PCB_Datenarray)
       //print("PCB Daten PCB_Datenarray count nach: \(PCB_Datenarray.count)\n\(PCB_Datenarray)")
       return PCB_Datenarray
    }
