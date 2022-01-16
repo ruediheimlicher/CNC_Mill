@@ -2598,6 +2598,7 @@ class rPCB: rViewController
                 PCB_Datenarray.append(drillArray[0])
                 }
                 */
+               
                PCB_Datenarray.append(drillArray[0])
                PCB_Datenarray.append(drillArray[1])
             }
@@ -3524,8 +3525,6 @@ class rPCB: rViewController
       homeY = 0
       homexFeld.integerValue = 0
       homeyFeld.integerValue = 0
-      
-      
    }
    
    @IBAction func report_home(_ sender: NSButton)
