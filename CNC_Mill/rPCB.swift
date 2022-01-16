@@ -57,7 +57,7 @@ class rPCB: rViewController
    var dpi2mmfaktor:Double = 0
    var mmFormatter = NumberFormatter()
 
-   var drillweg = 8
+   var drillweg = 4
    
    var platinendicke = 2.5
    
@@ -4373,7 +4373,7 @@ class rPCB: rViewController
          
          if (mousedownindex == 1)
          {
-            
+            print("mousedown")
             mausstatus |= (1<<1)
          }
          else
@@ -4440,7 +4440,7 @@ class rPCB: rViewController
  */
          print("mausstatusAktion dx: \(dx) dy: \(dy) dz: \(dz)")
          var pfeilwegarray = [UInt8]()
-         if (pfeiltag > 20)
+         if (pfeiltag > 20) // Z-Achse
          {
             pfeilwegarray = wegArrayMitWegZ(wegz:Double(dz))
          }
@@ -4898,7 +4898,7 @@ class rPCB: rViewController
       // microstep einrechnen
       let microstepindex = schritteweitepop.indexOfSelectedItem
       let microstep = Double(schritteweitepop.itemTitle(at: microstepindex))
-      //print("microstep: \(microstep)")
+      print("microstep: \(microstep)")
       drillwegmod *= microstep ?? 1
       var drillWegArray = drillMoveArray(wegz: drillwegmod)
       
@@ -4936,18 +4936,7 @@ class rPCB: rViewController
       print("\n+++++++     report_Drill_down tag: \(sender.tag) ")
     
       drill_down()
-      return
-      var drillWegArray = drillMoveArray(wegz: (Double(drillwegFeld.integerValue)) * -1)
-      drillWegArray[24] = 0xB7
-      drillWegArray[26] = 0
-      drillWegArray[27] = 0
-      drillWegArray[29] = 99 // PWM
-      drillWegArray[25] = 2 // lage
-      drillWegArray[32] = DEVICE_MILL
-      drillWegArray[35] = 0 // drillstatus beginn
-
-      write_CNC_Zeile(zeilenarray: drillWegArray)
-   }
+     }
    
    @IBAction func report_dicke(_ sender: NSButton)
    {
@@ -5970,8 +5959,11 @@ class rPCB: rViewController
       var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
       
       wegarray[32] = DEVICE_MILL
-      Schnittdatenarray.removeAll(keepingCapacity: true)
-      cncstepperposition = 0
+      //
+//      Schnittdatenarray.removeAll(keepingCapacity: true)
+//      cncstepperposition = 0
+      
+      
       if Schnittdatenarray.count == 0 // Array im Teensy loeschen
       {
          teensy.write_byteArray[25] = 1 //erstes Element
@@ -5988,14 +5980,17 @@ class rPCB: rViewController
       wegarray[24] = 0xD5
       
       var zeilenposition:UInt8 = 0
-      Schnittdatenarray.append(wegarray)
-      stepperschritteFeld.integerValue = Schnittdatenarray.count
-      print("send_Move Schnittdatenarray: \(Schnittdatenarray)")
+  //    Schnittdatenarray.append(wegarray)
+  //    stepperschritteFeld.integerValue = Schnittdatenarray.count
+ //     print("send_Move Schnittdatenarray: \(Schnittdatenarray)")
       
-      if Schnittdatenarray.count == 1
+ //     if Schnittdatenarray.count == 1
+      if wegarray.count > 0
       {
          print("report_send_TextDaten start CNC")
-         write_CNC_Abschnitt()   
+         //write_CNC_Abschnitt()   
+         write_CNC_Zeile(zeilenarray: wegarray)
+         
          if teensy.readtimervalid() == true
          {
             print("PCB readtimer valid vor")
