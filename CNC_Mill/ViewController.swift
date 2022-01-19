@@ -431,7 +431,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
 
    var  CNCDatenArray = [[String:Int]]();
    
-   var propfaktor = 283464.567 // 14173.23
+   var propfaktor = 2841194.0
   
    var pfeilschrittweite:Int = 4
   /*

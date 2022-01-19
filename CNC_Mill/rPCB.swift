@@ -14,6 +14,7 @@ let USBREMOVED:Int      =      6
 class rPCB: rViewController 
 {
    
+   
    var PCB_Test = 0
    
    var urlarray = [[String]]()
@@ -56,6 +57,8 @@ class rPCB: rViewController
    let DRILL_OK = 1
    var dpi2mmfaktor:Double = 0
    var mmFormatter = NumberFormatter()
+
+  // var propfaktor = 2801856.14762141
 
    var drillweg = 4
    
@@ -112,6 +115,11 @@ class rPCB: rViewController
    var startzeit = Date()
    
    var zeitformatter = DateComponentsFormatter()
+   
+   @IBOutlet weak var propfaktorFeld: NSTextField!
+   
+   @IBOutlet weak var propfaktorStepper: NSStepper!
+
    
    @IBOutlet weak var readSVG_Knopf: NSButton!
    
@@ -310,6 +318,10 @@ class rPCB: rViewController
       schnittPfad?.setStartposition(x: 0x800, y: 0x800, z: 0)
       
       dickeFeld.doubleValue = platinendicke
+      
+      
+      
+      propfaktorFeld.doubleValue = propfaktor
       // Pot 0
       /*
        Pot0_Slider.integerValue = Int(ACHSE0_START)
@@ -1486,6 +1498,13 @@ class rPCB: rViewController
       print("eckedistanzminindex: \(eckedistanzminindex) eckedistanzmin: \(eckedistanzmin)")
       
       return eckedistanzminindex
+   }
+   
+   @IBAction func report_propfaktorStepper(_ sender: NSStepper)
+   {
+      print("report_propfaktorStepper val: \(sender.integerValue)")
+      propfaktor += Double(sender.integerValue)
+      propfaktorFeld.doubleValue = propfaktor
    }
    
    
@@ -4039,7 +4058,7 @@ class rPCB: rViewController
       //let propfaktor = 2815159.92077142 // 211226
       //let propfaktor = 2787008.32156371 // 211228 neue M6
       //let propfaktor = 2788841.55370412
-      let propfaktor = 2801856.14762141
+      //let propfaktor = 2801856.14762141
       let dpi2mmfaktor = 2.81516 // propfaktor / INTEGERFAKTOR
       
     //  let start = [0,0]
