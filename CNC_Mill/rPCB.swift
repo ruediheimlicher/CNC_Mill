@@ -5289,7 +5289,7 @@ class rPCB: rViewController
             //let ladepos =  Int(data[8])
             //let abschnittnum = Int((data[5] << 8) | data[6])
             print("AD \t ladeposition: \(ladeposition) abschnittnum: \(abschnittnum)  sendstatus: \(sendstatus)")
-            print("newDataAktion  AD tabledatastatus 23: \(data[23]) data (13): \(data[13])")
+            print("newDataAktion  AD tabledatastatus 23: \(data[23]) data (13): \(data[13]) lasttabledataindex: \(lasttabledataindex)")
             let ZEILENSTATUS:UInt8 = 0
             if (data[23] < 0xFF) && ((data[23] & (1<<ZEILENSTATUS)) > 0 )
             {
@@ -5316,7 +5316,7 @@ class rPCB: rViewController
              
             print("newDataAktion  AD ladepos: \(ladepos)")
             
-            Plattefeld.setStepperposition(pos:ladepos)
+    //        Plattefeld.setStepperposition(pos:ladepos)
             
             print("newDataAktion  AD abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
             
