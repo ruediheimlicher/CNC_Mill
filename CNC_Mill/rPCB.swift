@@ -541,10 +541,10 @@ class rPCB: rViewController
    {
       //     print("tableView  tableViewSelectionDidChange notification: \(notification)")
       let selectedRow = (notification.object as! NSTableView).selectedRow
-    //  print("tableView  tableViewSelectionDidChange selectedRow: \(selectedRow)")
+      print("tableView  tableViewSelectionDidChange selectedRow: \(selectedRow)")
       
       
-    //  datatabletask(zeile:selectedRow)
+      datatabletask(zeile:selectedRow)
       
       let nc = NotificationCenter.default
       var notificationDic = [String:Any]()
@@ -1979,7 +1979,10 @@ class rPCB: rViewController
          mill_floatarray.remove(at:eckelinksuntenindex)
          mill_floatarray.insert(firstzeile, at:0)
          
-         
+         for z in 0..<mill_floatarray.count
+         {
+            mill_floatarray[z][0] = Double(z)
+         }
          
          // Figur schliessen
          if figurschliessen_checkbox.state == .on
