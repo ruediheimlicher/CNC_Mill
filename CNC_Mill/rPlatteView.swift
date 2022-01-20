@@ -340,7 +340,7 @@ class rPlatteView: NSView
          //    let klickrect = NSMakeRect(punkt.x-5, punkt.y-5, 10, 10)
          if mouse(lokalpunkt, in: feld)
          {
-            Swift.print("klick in \(klickindex)")
+            Swift.print("\nmouseDown klick in \(klickindex)")
             userinformation = ["message":"mousedown", "klickpunkt": lokalpunkt, "index": klickindex] as [String : Any]
             nc.post(name:Notification.Name(rawValue:"klickpunkt"),
                     object: nil,
@@ -471,17 +471,25 @@ class rPlatteView: NSView
          print("\t ******   PlatteView setStepperposition pos: \(pos) wegfloatarray: \(wegfloatarray) \nwegfloatarray: \(wegfloatarray)")
       }
        */
-      
+      print("\t ******   PlatteView setStepperposition pos: \(pos) markfeldarray.count: \(markfeldarray.count) oldstepperposition: \(oldstepperposition)")
        if ((markfeldarray.count > stepperposition) && (stepperposition > oldstepperposition))// 
       {
          oldstepperposition = stepperposition
          //print("\t ******   PlatteView setStepperposition pos: \(pos) markfeldarray.count: \(markfeldarray.count) \nmarkrect: \(markfeldarray[stepperposition])")
-
+         print("\t ******   PlatteView setStepperposition zeichnen pos: \(pos) ")
          //print("\t ******   PlatteView setStepperposition pos: \(pos) feld: \(markfeldarray[stepperposition]) needs display")
          self.setNeedsDisplay(markfeldarray[stepperposition])
       //needsDisplay = true
          self.displayIfNeeded()
       }
+       else if markfeldarray.count > 0
+       {
+         
+         self.setNeedsDisplay(markfeldarray.last! )
+         self.displayIfNeeded()
+         print("\t ******   PlatteView setStepperposition nicht zeichnen pos: \(pos) ")
+         
+       }
    }
    
  

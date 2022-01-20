@@ -15,8 +15,8 @@
             timestampString = "620738269.060933"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "771"
-            endingLineNumber = "771">
+            startingLineNumber = "779"
+            endingLineNumber = "779">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -47,8 +47,8 @@
             timestampString = "620738269.0610909"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "771"
-            endingLineNumber = "771">
+            startingLineNumber = "779"
+            endingLineNumber = "779">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -603,8 +603,8 @@
             timestampString = "620738269.061761"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "563"
-            endingLineNumber = "563"
+            startingLineNumber = "571"
+            endingLineNumber = "571"
             landmarkName = "setfloatWeg(newWeg:scalefaktor:transform:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -620,8 +620,8 @@
             timestampString = "620738269.061813"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "516"
-            endingLineNumber = "516"
+            startingLineNumber = "524"
+            endingLineNumber = "524"
             landmarkName = "setfloatWeg(newWeg:scalefaktor:transform:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -637,8 +637,8 @@
             timestampString = "620738269.06186"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "746"
-            endingLineNumber = "746"
+            startingLineNumber = "754"
+            endingLineNumber = "754"
             landmarkName = "clearWeg()"
             landmarkType = "7">
          </BreakpointContent>
@@ -671,8 +671,8 @@
             timestampString = "620738269.081735"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "751"
-            endingLineNumber = "751"
+            startingLineNumber = "759"
+            endingLineNumber = "759"
             landmarkName = "clearWeg()"
             landmarkType = "7">
          </BreakpointContent>
@@ -833,8 +833,8 @@
             filePath = "CNC_Mill/rPlatteView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "699"
-            endingLineNumber = "699"
+            startingLineNumber = "707"
+            endingLineNumber = "707"
             landmarkName = "clearNum()"
             landmarkType = "7">
          </BreakpointContent>
@@ -945,8 +945,8 @@
             filePath = "CNC_Mill/rPlatteView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "506"
-            endingLineNumber = "506"
+            startingLineNumber = "514"
+            endingLineNumber = "514"
             landmarkName = "setfloatWeg(newWeg:scalefaktor:transform:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1217,8 +1217,8 @@
             filePath = "CNC_Mill/rPlatteView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "491"
-            endingLineNumber = "491"
+            startingLineNumber = "499"
+            endingLineNumber = "499"
             landmarkName = "setfloatWeg(newWeg:scalefaktor:transform:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1233,8 +1233,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2548"
-            endingLineNumber = "2548"
+            startingLineNumber = "2573"
+            endingLineNumber = "2573"
             landmarkName = "PCB_Daten(floatarray:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1249,8 +1249,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2547"
-            endingLineNumber = "2547"
+            startingLineNumber = "2572"
+            endingLineNumber = "2572"
             landmarkName = "PCB_Daten(floatarray:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1265,8 +1265,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4012"
-            endingLineNumber = "4012"
+            startingLineNumber = "4032"
+            endingLineNumber = "4032"
             landmarkName = "wegArrayMitWegZ(wegz:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1281,8 +1281,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "3959"
-            endingLineNumber = "3959"
+            startingLineNumber = "3979"
+            endingLineNumber = "3979"
             landmarkName = "wegArrayMitWegZ(wegz:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1297,8 +1297,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "3990"
-            endingLineNumber = "3990"
+            startingLineNumber = "4010"
+            endingLineNumber = "4010"
             landmarkName = "wegArrayMitWegZ(wegz:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1313,8 +1313,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4046"
-            endingLineNumber = "4046"
+            startingLineNumber = "4066"
+            endingLineNumber = "4066"
             landmarkName = "wegArrayMitWegXY(wegx:wegy:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1329,8 +1329,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4027"
-            endingLineNumber = "4027"
+            startingLineNumber = "4047"
+            endingLineNumber = "4047"
             landmarkName = "wegArrayMitWegXY(wegx:wegy:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1345,8 +1345,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4028"
-            endingLineNumber = "4028"
+            startingLineNumber = "4048"
+            endingLineNumber = "4048"
             landmarkName = "wegArrayMitWegXY(wegx:wegy:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1377,8 +1377,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2519"
-            endingLineNumber = "2519"
+            startingLineNumber = "2544"
+            endingLineNumber = "2544"
             landmarkName = "PCB_Daten(floatarray:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1393,8 +1393,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2614"
-            endingLineNumber = "2614"
+            startingLineNumber = "2639"
+            endingLineNumber = "2639"
             landmarkName = "PCB_Daten(floatarray:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1409,8 +1409,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "3954"
-            endingLineNumber = "3954"
+            startingLineNumber = "3974"
+            endingLineNumber = "3974"
             landmarkName = "drillvektor(szInt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1425,8 +1425,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2667"
-            endingLineNumber = "2667"
+            startingLineNumber = "2692"
+            endingLineNumber = "2692"
             landmarkName = "PCB_Daten(floatarray:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1457,8 +1457,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1983"
-            endingLineNumber = "1983"
+            startingLineNumber = "1985"
+            endingLineNumber = "1985"
             landmarkName = "report_readSVG(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1521,8 +1521,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5288"
-            endingLineNumber = "5288"
+            startingLineNumber = "5310"
+            endingLineNumber = "5310"
             landmarkName = "newDataAktion(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1537,8 +1537,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2367"
-            endingLineNumber = "2367"
+            startingLineNumber = "2373"
+            endingLineNumber = "2373"
             landmarkName = "print_tabarray(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1553,8 +1553,8 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4862"
-            endingLineNumber = "4862"
+            startingLineNumber = "4884"
+            endingLineNumber = "4884"
             landmarkName = "report_Drill_up(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1569,9 +1569,201 @@
             filePath = "CNC_Mill/rPCB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4404"
-            endingLineNumber = "4404"
+            startingLineNumber = "4424"
+            endingLineNumber = "4424"
             landmarkName = "mausstatusAktion(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1762511A-C033-45FB-B01D-A1BBF82D684D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CNC_Mill/rPCB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "4372"
+            endingLineNumber = "4372"
+            landmarkName = "klickpunktAktion(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1762511A-C033-45FB-B01D-A1BBF82D684D - 555eba6bb82a5d1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CNC_Mill.rPCB.klickpunktAktion(Foundation.Notification) -&gt; ()"
+                  moduleName = "CNC_Mill"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruediheimlicher/Documents/Programming/CNC-Projekt/CNC_Mill/CNC_Mill/rPCB.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "4366"
+                  endingLineNumber = "4366"
+                  offsetFromSymbolStart = "864">
+               </Location>
+               <Location
+                  uuid = "1762511A-C033-45FB-B01D-A1BBF82D684D - 555eba6bb82a5d1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CNC_Mill.rPCB.klickpunktAktion(Foundation.Notification) -&gt; ()"
+                  moduleName = "CNC_Mill"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ruediheimlicher/Documents/Programming/CNC-Projekt/CNC_Mill/CNC_Mill/rPCB.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "4366"
+                  endingLineNumber = "4366"
+                  offsetFromSymbolStart = "2706">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6C15C4C4-4DBB-48CE-9E44-E267B81C2AB4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CNC_Mill/rPCB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "5326"
+            endingLineNumber = "5326"
+            landmarkName = "newDataAktion(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "09B00D3A-0FA0-419A-A22A-A5D8375DA579"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CNC_Mill/rPCB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "5318"
+            endingLineNumber = "5318"
+            landmarkName = "newDataAktion(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6FCF9170-8A49-4771-8CE4-12A7834F099E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CNC_Mill/rPCB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "5352"
+            endingLineNumber = "5352"
+            landmarkName = "newDataAktion(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "12FF58C1-4B5A-4F04-B2C8-1F348E53C9E9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CNC_Mill/rPlatteView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "489"
+            endingLineNumber = "489"
+            landmarkName = "setStepperposition(pos:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5911DDDB-B47D-43DF-BB45-C58AC1F2FC16"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CNC_Mill/rPlatteView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "481"
+            endingLineNumber = "481"
+            landmarkName = "setStepperposition(pos:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F00221BB-0E54-44F4-A8E3-BF091151D7A0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CNC_Mill/rPCB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "4307"
+            endingLineNumber = "4307"
+            landmarkName = "write_CNC_Zeile(zeilenarray:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F591A9C4-D537-476A-8914-D3D505AB48D4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CNC_Mill/rPCB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "4308"
+            endingLineNumber = "4308"
+            landmarkName = "write_CNC_Zeile(zeilenarray:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "35ACB633-4412-4942-B1D1-3DE7F2BC4FB6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CNC_Mill/rPCB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2103"
+            endingLineNumber = "2103"
+            landmarkName = "report_readSVG(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3E156880-2255-400C-9C34-034738069B2F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CNC_Mill/rPCB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2017"
+            endingLineNumber = "2017"
+            landmarkName = "report_readSVG(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

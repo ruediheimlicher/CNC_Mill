@@ -1979,6 +1979,8 @@ class rPCB: rViewController
          mill_floatarray.remove(at:eckelinksuntenindex)
          mill_floatarray.insert(firstzeile, at:0)
          
+         
+         
          // Figur schliessen
          if figurschliessen_checkbox.state == .on
          {
@@ -2009,7 +2011,8 @@ class rPCB: rViewController
             
             
          }
- 
+         
+         print(mill_floatarray)
          
          circlefloatarray = mill_floatarray
          
@@ -2094,6 +2097,9 @@ class rPCB: rViewController
          
 
          var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
+         
+         //print_tabarray(PCBDaten)
+         
          //circlefloatarray = PCBDaten
           /*
           print("mill_floatarray C")
@@ -2345,28 +2351,47 @@ class rPCB: rViewController
    func print_tabarray(_ floatarray:[[UInt8]]) //->[String] // Array von Strings mit tabs
    {
       //https://docs.swift.org/swift-book/LanguageGuide/Functions.html
-   var tabarray = [[UInt8]]()
-   var tabstringarray = [String]()
-   for z in stride(from: 0, to: floatarray.count-1, by: 1)
-   {
-      var zeilenstringarray = [String]()
-      var zeilentabarray = [UInt8]()
-      zeilentabarray.append(UInt8(z))
-      for element in floatarray[z]
+      var tabarray = [[UInt8]]()
+      var tabstringarray = [String]()
+      for z in stride(from: 0, to: floatarray.count-1, by: 1)
       {
-         let elementstring = String(element)
-         zeilenstringarray.append(elementstring)
-         zeilentabarray.append(element)
+         var zeilenstringarray = [String]()
+         var zeilentabarray = [UInt8]()
+         zeilentabarray.append(UInt8(z))
+         for element in floatarray[z]
+         {
+            let elementstring = String(element)
+            zeilenstringarray.append(elementstring)
+            zeilentabarray.append(element)
+         }
+         var zeilenstring = zeilenstringarray.joined(separator: "\t")
+         print(zeilenstring)
+         tabstringarray.append(zeilenstring)
+         tabarray.append(zeilentabarray)
       }
+      
+   }
+   
+   func print_tabzeile(_ floatarray:[UInt8]) // String mit tabs
+   {
+      //https://docs.swift.org/swift-book/LanguageGuide/Functions.html
+      var tabarray = [[UInt8]]()
+      var tabstringarray = [String]()
+          var zeilenstringarray = [String]()
+         //var zeilenstring:String = ""
+         for element in floatarray
+         {
+            let elementstring = String(element)
+            zeilenstringarray.append(elementstring)
+         }
+         
+       
+      
       var zeilenstring = zeilenstringarray.joined(separator: "\t")
+
       print(zeilenstring)
-      tabstringarray.append(zeilenstring)
-      tabarray.append(zeilentabarray)
    }
-   
-  // return tabstringarray
-   }
-   
+
    
    func PCB_Abs_Daten(floatarray:[[Double]])->[[UInt8]]
    {
@@ -3544,7 +3569,7 @@ class rPCB: rViewController
       print("PCB report_clear senderfolg: \(senderfolg)")
       //    }
       clear()
-      return
+       return
          
       ablaufzeitFeld.stringValue = zeitformatter.string(from: TimeInterval(0))!
       cncstepperposition = 0
@@ -3569,54 +3594,49 @@ class rPCB: rViewController
    @IBAction func report_home(_ sender: NSButton)
    {
       
-      print("PCB report_home homex: \(homeX) homey: \(homeY)")
-      Schnittdatenarray.removeAll()
+ //     print("PCB report_home homex: \(homeX) homey: \(homeY)")
+  
       var dx = homexFeld.doubleValue * -1 
       var dy = homeyFeld.doubleValue * -1
       
-      //     dx = -500
-      //     dy = 0
       print("PCB report_home dx: \(dx) dy: \(dy)")
-      //      dx = 10
-      //      dy = 0
       lastklickposition.x = 0
       lastklickposition.y = 0
-      
-      cncstepperposition = 0
+ 
       var homewegarray = wegArrayMitWegXY(wegx:Double(dx), wegy:Double(dy))
+      homewegarray[32] = DEVICE_MILL
+      
+      // print("homewegarray")
+     // print("\(homewegarray)")
+      homewegarray[25] = 3 // nur 1 Abschnitt
+      homewegarray[24] = 0xD5
+      
+      //print_tabzeile(homewegarray)
       
       
-      for z in 0 ... homewegarray.count-1
+      if homewegarray.count > 0
       {
-         teensy.write_byteArray[z] = homewegarray[z]
-         // print("\(pfeilwegarray[z])")
-      }
-      print("homewegarray")
-      print("\(homewegarray)")
-      teensy.write_byteArray[24] = 0xDC
-      teensy.write_byteArray[25] = 3
-      
-      
-      //    homeX += Int(dx)
-      //    homeY += Int(dy)
-      //     print("report_home homeX: \(homeX) homeY: \(homeY)")
-      //    homexFeld.integerValue = homeX
-      //    homeyFeld.integerValue = homeY
-      
-      if teensy.readtimervalid() == true
-      {
-         //print("PCB readtimer valid vor")
+         write_CNC_Zeile(zeilenarray: homewegarray)
+         //    homeX += Int(dx)
+          //   homeY += Int(dy)
+         //     print("report_home homeX: \(homeX) homeY: \(homeY)")
+         //    homexFeld.integerValue = homeX
+         //    homeyFeld.integerValue = homeY
          
+         if teensy.readtimervalid() == true
+         {
+       //     print("PCB readtimer valid vor")
+            
+         }
+         else 
+         {
+            print("PCB readtimer not valid vor")
+            
+            var start_read_USB_erfolg = teensy.start_read_USB(true)
+         }
       }
-      else 
-      {
-         print("PCB readtimer not valid vor")
-         
-         var start_read_USB_erfolg = teensy.start_read_USB(true)
-      }
-      
-      let senderfolg = teensy.send_USB()
-      print("PCB report home senderfolg: \(senderfolg)")
+     // let senderfolg = teensy.send_USB()
+      //print("PCB report home senderfolg: \(senderfolg)")
       
    }
    
@@ -4295,7 +4315,7 @@ class rPCB: rViewController
   //       if teensy.dev_present() > 0
   //       {
             let senderfolg = teensy.send_USB()
-           // print("write_CNC_Zeile senderfolg: \(senderfolg)")
+            print("write_CNC_Zeile senderfolg: \(senderfolg)")
  //        }
          //   cncstepperposition += 1
          
@@ -4348,7 +4368,7 @@ class rPCB: rViewController
       }
       */
       let info = notification.userInfo
-      //print("PCB klickpunktAktion:\t \(String(describing: info))")
+      print("PCB klickpunktAktion:\t \(String(describing: info))")
       let klickpunkt = info?["klickpunkt"] as! NSPoint
       let index = info?["index"] as! Int
       let dx = Double(klickpunkt.x)
@@ -4591,6 +4611,8 @@ class rPCB: rViewController
       {
          return
       }
+      //let selrowindex = 
+      dataTable.selectRowIndexes(.init(integer: zeile), byExtendingSelection: false) 
  //     let datafloatzeile = circlearray[zeile]
       let datafloatzeile = circlefloatarray[zeile]
      print("datatabletask zeile: \(zeile)")
@@ -5285,11 +5307,21 @@ class rPCB: rViewController
             
          // MARK: ***     AD
          case 0xAD: // End Task
-            print("********* *********  *********  PCB newDataAktion  AD TASK END ")
+            print("\n********* *********  *********  PCB newDataAktion  AD TASK END ")
             //let ladepos =  Int(data[8])
-            //let abschnittnum = Int((data[5] << 8) | data[6])
-            print("AD \t ladeposition: \(ladeposition) abschnittnum: \(abschnittnum)  sendstatus: \(sendstatus)")
-            print("newDataAktion  AD tabledatastatus 23: \(data[23]) data (13): \(data[13]) lasttabledataindex: \(lasttabledataindex)")
+            let abschnittnum = Int((data[5] << 8) | data[6])
+            var anzeigezeile:Int = 0
+            if Schnittdatenarray.count > 0 && abschnittnummer > 1
+            {
+            let aH = UInt16(Schnittdatenarray[abschnittnummer - 1][39])
+            let aL =  UInt16(Schnittdatenarray[abschnittnummer - 1][40])
+            anzeigezeile = Int(((aH << 8) | (aL )))
+            }
+
+         //   ***
+            print("AD \t ladeposition: \(ladeposition) abschnittnum: \(abschnittnum)  sendstatus: \(sendstatus) anzeigezeile: \(anzeigezeile)")
+            print("newDataAktion  AD tabledatastatus 23: \(data[23]) data (13): \(data[13]) lasttabledataindex: \(lasttabledataindex) ")
+            
             let ZEILENSTATUS:UInt8 = 0
             if (data[23] < 0xFF) && ((data[23] & (1<<ZEILENSTATUS)) > 0 )
             {
@@ -5300,7 +5332,7 @@ class rPCB: rViewController
            
             if data[23] == 13
             {
-               print("B newDataAktion  AD code 23 ist 13: \(data[23])")
+               print("B newDataAktion  AD code 23 ist 13: \(data[23])  ")
                Plattefeld.setStepperposition(pos:lasttabledataindex)
             }
             
@@ -5316,7 +5348,8 @@ class rPCB: rViewController
              
             print("newDataAktion  AD ladepos: \(ladepos)")
             
-    //        Plattefeld.setStepperposition(pos:ladepos)
+            // 220120 letzten Punkt fuellen
+            Plattefeld.setStepperposition(pos:ladepos)
             
             print("newDataAktion  AD abschnittnummer: \(abschnittnum) ladepos: \(ladepos)")
             
@@ -5617,13 +5650,13 @@ class rPCB: rViewController
                }
                
             }
-            else
+            else // last anzeigezeile
             {
               
                let aH = UInt16(Schnittdatenarray[abschnittnummer-1][39])
                let aL =  UInt16(Schnittdatenarray[abschnittnummer-1][40])
                var anzeigezeile:Int = Int(((aH << 8) | (aL )))
-               //print("setStepperposition last anzeigezeile: \(anzeigezeile)")
+               print("*** setStepperposition last anzeigezeile: \(anzeigezeile)")
                Plattefeld.setStepperposition(pos:Int(anzeigezeile + 1))
             }
     //        Plattefeld.setStepperposition(pos:Int(abschnittnummer))
@@ -5978,36 +6011,25 @@ class rPCB: rViewController
       var wegarray = wegArrayMitWegXY(wegx: Double(punkt.x - CGFloat(lastklickposition.x)),wegy:Double(punkt.y - CGFloat(lastklickposition.y)))
       
       wegarray[32] = DEVICE_MILL
+      
+      //print("wegarray")
+      //print("\(wegarray)")
+      //print_tabzeile(wegarray)
       //
 //      Schnittdatenarray.removeAll(keepingCapacity: true)
 //      cncstepperposition = 0
       
       
-      if Schnittdatenarray.count == 0 // Array im Teensy loeschen
-      {
-         teensy.write_byteArray[25] = 1 //erstes Element
-         //teensy.write_byteArray[24] = 0xE0 // Stopp
-         if teensy.dev_present() > 0
-         {
-            //           let senderfolg = teensy.send_USB()
-            //           print("PCB report_send_TextDaten clear senderfolg: \(senderfolg)")
-         }
-         
-      }
       
       wegarray[25] = 3 // nur 1 Abschnitt
       wegarray[24] = 0xD5
       
       var zeilenposition:UInt8 = 0
-  //    Schnittdatenarray.append(wegarray)
-  //    stepperschritteFeld.integerValue = Schnittdatenarray.count
- //     print("send_Move Schnittdatenarray: \(Schnittdatenarray)")
       
  //     if Schnittdatenarray.count == 1
       if wegarray.count > 0
       {
-         print("report_send_TextDaten start CNC")
-         //write_CNC_Abschnitt()   
+         print("report_send_Move CNC")
          write_CNC_Zeile(zeilenarray: wegarray)
          
          if teensy.readtimervalid() == true
@@ -6018,7 +6040,7 @@ class rPCB: rViewController
          {
             print("PCB report send Move not valid vor")
             var start_read_USB_erfolg = teensy.start_read_USB(true)
-            print("report_send_Movestart_read_USB_erfolg: \(start_read_USB_erfolg)")
+            //print("report_send_Movestart_read_USB_erfolg: \(start_read_USB_erfolg)")
          }
       }
    }
