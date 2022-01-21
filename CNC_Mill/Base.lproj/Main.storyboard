@@ -707,7 +707,7 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="rViewController" customModule="CNC_Mill" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="1187" height="818"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1199" height="818"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3PU-iI-QBc">
@@ -725,7 +725,7 @@
                                 </connections>
                             </button>
                             <containerView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mwe-4y-Gqt">
-                                <rect key="frame" x="20" y="20" width="1147" height="692"/>
+                                <rect key="frame" x="20" y="20" width="1159" height="692"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <connections>
                                     <segue destination="LIf-gm-nAU" kind="embed" id="VW7-fa-zdD"/>
@@ -753,7 +753,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="228.5" y="1385"/>
+            <point key="canvasLocation" x="234.5" y="1385"/>
         </scene>
         <!--CNC-->
         <scene sceneID="VNp-If-XAe">
@@ -946,7 +946,7 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="s5Y-ip-nfy" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="823" y="445" width="22" height="22"/>
+                                <rect key="frame" x="832" y="453" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_links" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="skp-gF-pvI">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
@@ -957,7 +957,7 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="x8t-XN-VxJ" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="846" y="422" width="22" height="22"/>
+                                <rect key="frame" x="864" y="423" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_down" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="K8h-tU-q6q">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
@@ -968,7 +968,7 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" tag="4" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1iJ-Gq-aaM" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="846" y="468" width="22" height="22"/>
+                                <rect key="frame" x="864" y="485" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AVv-Br-EMZ">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
@@ -979,7 +979,7 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="LGx-qT-7EV" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="869" y="445" width="22" height="22"/>
+                                <rect key="frame" x="897" y="453" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_rechts" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HlS-YG-kLM">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
@@ -990,7 +990,7 @@
                                 </connections>
                             </button>
                             <button identifier="pcb" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="JmA-vX-5Lu">
-                                <rect key="frame" x="846" y="445" width="22" height="22"/>
+                                <rect key="frame" x="865" y="455" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="home" imagePosition="only" alignment="center" borderStyle="border" tag="1" imageScaling="proportionallyDown" inset="2" id="eVj-Bb-aYt">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1001,7 +1001,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vua-Lc-4z0">
-                                <rect key="frame" x="804" y="529" width="70" height="32"/>
+                                <rect key="frame" x="722" y="528" width="70" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LwM-u5-W2e">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1012,25 +1012,25 @@
                                 </connections>
                             </button>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uee-Co-Pwj">
-                                <rect key="frame" x="1000" y="453" width="76" height="22"/>
+                                <rect key="frame" x="1017" y="460" width="43" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="50" drawsBackground="YES" id="PUc-vh-aSM">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="right" title="50" drawsBackground="YES" id="PUc-vh-aSM">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ENc-xm-O4U">
-                                <rect key="frame" x="1000" y="425" width="76" height="22"/>
+                                <rect key="frame" x="1017" y="432" width="43" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="50" drawsBackground="YES" id="cqT-M4-Yg9">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="right" title="50" drawsBackground="YES" id="cqT-M4-Yg9">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lng-5j-ntH">
-                                <rect key="frame" x="955" y="454" width="47" height="17"/>
+                                <rect key="frame" x="970" y="461" width="47" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="homeX" id="B3V-9n-kX1">
                                     <font key="font" metaFont="system"/>
@@ -1039,45 +1039,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E6c-Zs-McR">
-                                <rect key="frame" x="956" y="430" width="46" height="17"/>
+                                <rect key="frame" x="971" y="437" width="46" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="homeY" id="sFY-b7-wxT">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q5z-H2-hEX">
-                                <rect key="frame" x="978" y="391" width="76" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="20" drawsBackground="YES" id="BIP-uQ-jgC">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f3n-hq-MCX">
-                                <rect key="frame" x="978" y="363" width="76" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="pyX-F1-IfV">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M7X-P1-7xs">
-                                <rect key="frame" x="906" y="392" width="74" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="homeX mm" id="yxo-R9-S8g">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T6O-2P-cIY">
-                                <rect key="frame" x="905" y="368" width="75" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="homeY mm" id="NG1-zv-oTp">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1161,17 +1125,6 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="report_send_Move:" target="wFL-7s-Z8p" id="S6a-Yw-Cs0"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EQP-kR-c4F">
-                                <rect key="frame" x="872" y="531" width="122" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="TeensyStep" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cMg-k6-LRk">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="report_send_Move:" target="wFL-7s-Z8p" id="DAn-YO-QlD"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5cw-gy-e8u">
@@ -1303,11 +1256,11 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="byE-S7-x0s">
-                                                            <rect key="frame" x="119.5" y="1" width="52" height="17"/>
+                                                            <rect key="frame" x="119.5" y="1" width="51" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YfY-9V-yXE">
-                                                                    <rect key="frame" x="0.0" y="1" width="52" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="1" width="51" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="1Nv-pW-KQ3">
                                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -1387,7 +1340,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" tag="24" translatesAutoresizingMaskIntoConstraints="NO" id="Bcx-Ll-Ia9" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="1117" y="221" width="26" height="27"/>
+                                <rect key="frame" x="1063" y="309" width="26" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_down" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pIP-mp-Skx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1416,52 +1369,14 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VAm-bK-VzE">
-                                <rect key="frame" x="625" y="537" width="30" height="22"/>
+                                <rect key="frame" x="625" y="537" width="55" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" title="0" drawsBackground="YES" id="qkO-XW-3jW">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="right" title="0" drawsBackground="YES" id="qkO-XW-3jW">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Nd-UJ-9iO">
-                                <rect key="frame" x="660" y="533" width="19" height="27"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <stepperCell key="cell" continuous="YES" alignment="left" maxValue="256" id="aGO-f7-5eU"/>
-                                <connections>
-                                    <action selector="report_Zeilen_Stepper:" target="wFL-7s-Z8p" id="KZ6-OY-BDb"/>
-                                </connections>
-                            </stepper>
-                            <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" tag="26" translatesAutoresizingMaskIntoConstraints="NO" id="lji-pv-GVN" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="1062" y="378" width="26" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up_mini" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZhK-AN-kaK">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="cellTitle"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="report_Drill_up:" target="wFL-7s-Z8p" id="QSZ-9v-NEs"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uq8-vp-L1u">
-                                <rect key="frame" x="678" y="528" width="56" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="go" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="htq-7d-WEY">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="report_goto_Zeile:" target="wFL-7s-Z8p" id="xFW-Tr-2ih"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xAL-TO-ABX">
-                                <rect key="frame" x="738" y="527" width="66" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="run" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9GK-Db-sFf">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="izn-CQ-bEp">
                                 <rect key="frame" x="559" y="542" width="60" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1483,7 +1398,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nDW-Ip-gHc">
-                                <rect key="frame" x="953" y="479" width="127" height="17"/>
+                                <rect key="frame" x="970" y="486" width="104" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="+  &gt; vorn links" id="CN5-Is-hRo">
                                     <font key="font" metaFont="system"/>
@@ -1556,7 +1471,7 @@
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5a4-4N-kMd">
-                                <rect key="frame" x="790" y="447" width="32" height="17"/>
+                                <rect key="frame" x="798" y="460" width="32" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Ri 0" id="UR6-nx-j4K">
                                     <font key="font" metaFont="system"/>
@@ -1565,7 +1480,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="80i-xw-Rvh">
-                                <rect key="frame" x="894" y="448" width="32" height="17"/>
+                                <rect key="frame" x="930" y="461" width="25" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Ri 1" id="EOn-Ca-UpM">
                                     <font key="font" metaFont="system"/>
@@ -1583,7 +1498,7 @@
                                 </textFieldCell>
                             </textField>
                             <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7OA-0z-iMw">
-                                <rect key="frame" x="1115" y="366" width="24" height="113"/>
+                                <rect key="frame" x="1118" y="415" width="24" height="91"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="255" tickMarkPosition="right" sliderType="linear" id="yXG-Us-H2B"/>
                                 <connections>
@@ -1637,17 +1552,6 @@
                                     <action selector="report_drillOK:" target="wFL-7s-Z8p" id="MOW-AR-LQf"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" tag="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Uy-DJ-MQm" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="1062" y="354" width="26" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_down_mini" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="33i-4L-vui">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="cellTitle"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="report_Drill_down:" target="wFL-7s-Z8p" id="hhR-Gc-PK2"/>
-                                </connections>
-                            </button>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ukl-fa-02Y">
                                 <rect key="frame" x="885" y="638" width="218" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1687,7 +1591,7 @@
                                 </connections>
                             </button>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HBk-Si-7Vo">
-                                <rect key="frame" x="1107" y="528" width="36" height="22"/>
+                                <rect key="frame" x="1113" y="524" width="36" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="DUe-Di-837">
                                     <font key="font" metaFont="system" size="10"/>
@@ -1734,25 +1638,8 @@
                                     <action selector="report_Nullpunkt:" target="wFL-7s-Z8p" id="mWv-K8-5kZ"/>
                                 </connections>
                             </button>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kRp-p2-DWd">
-                                <rect key="frame" x="1011" y="329" width="43" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="9Jf-k5-5PD">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="22" translatesAutoresizingMaskIntoConstraints="NO" id="hbe-7j-aQb" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="1117" y="249" width="26" height="27"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7Mp-Fa-joY">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DDO-zf-c2L">
-                                <rect key="frame" x="1000" y="243" width="53" height="36"/>
+                                <rect key="frame" x="998" y="253" width="53" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" title="Drill" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LCW-T5-c8w">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1763,7 +1650,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="amp-5V-GGo">
-                                <rect key="frame" x="1111" y="643" width="29" height="17"/>
+                                <rect key="frame" x="1116" y="543" width="29" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="LED" id="rdo-uS-OOs">
                                     <font key="font" metaFont="system"/>
@@ -1772,7 +1659,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X6G-60-LmH">
-                                <rect key="frame" x="1107" y="485" width="40" height="17"/>
+                                <rect key="frame" x="1106" y="392" width="40" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Motor" id="gOZ-UN-2KP">
                                     <font key="font" metaFont="system"/>
@@ -1781,7 +1668,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LPQ-V8-Tsw">
-                                <rect key="frame" x="1109" y="338" width="36" height="22"/>
+                                <rect key="frame" x="1112" y="370" width="36" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="border" alignment="center" drawsBackground="YES" id="ztj-gJ-eeJ">
                                     <font key="font" metaFont="system" size="10"/>
@@ -1810,7 +1697,7 @@
                                 </textFieldCell>
                             </textField>
                             <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yvu-r7-qT2">
-                                <rect key="frame" x="1115" y="555" width="24" height="82"/>
+                                <rect key="frame" x="1118" y="569" width="24" height="82"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="255" doubleValue="180" tickMarkPosition="right" sliderType="linear" id="5sh-fX-8mN"/>
                                 <connections>
@@ -1863,17 +1750,6 @@
                                     <action selector="report_readSVG_Pop:" target="wFL-7s-Z8p" id="rAh-1n-zBD"/>
                                 </connections>
                             </popUpButton>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FDi-xJ-f4b">
-                                <rect key="frame" x="1104" y="274" width="41" height="62"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" title="0" bezelStyle="shadowlessSquare" image="Drill ON" imagePosition="above" alignment="center" alternateImage="Drill OFF" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="bnf-jN-CkN">
-                                    <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="cellTitle"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="report_Drillmotor:" target="wFL-7s-Z8p" id="FSZ-kQ-BLQ"/>
-                                </connections>
-                            </button>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wtg-9G-zTt">
                                 <rect key="frame" x="537" y="627" width="19" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1882,6 +1758,41 @@
                                     <action selector="report_propfaktorStepper:" target="wFL-7s-Z8p" id="14z-LV-0dV"/>
                                 </connections>
                             </stepper>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="22" translatesAutoresizingMaskIntoConstraints="NO" id="hbe-7j-aQb" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
+                                <rect key="frame" x="1063" y="342" width="26" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7Mp-Fa-joY">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" tag="100" translatesAutoresizingMaskIntoConstraints="NO" id="d4X-y6-3Lt" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
+                                <rect key="frame" x="1011" y="341" width="32" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeilup" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9dY-oE-kUf">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" tag="101" translatesAutoresizingMaskIntoConstraints="NO" id="sGH-5X-PYB" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
+                                <rect key="frame" x="1011" y="305" width="32" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeilup2" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QTa-3w-faO">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FDi-xJ-f4b">
+                                <rect key="frame" x="1110" y="329" width="41" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="go" imagePosition="only" alignment="center" alternateImage="pause" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="bnf-jN-CkN">
+                                    <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="cellTitle"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="report_Drillmotor:" target="wFL-7s-Z8p" id="FSZ-kQ-BLQ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1900,7 +1811,6 @@
                         <outlet property="Plattefeld" destination="XUX-V5-xCg" id="5lZ-Hg-XVD"/>
                         <outlet property="SVG_Pfad" destination="Ukl-fa-02Y" id="wZc-uz-gHU"/>
                         <outlet property="SVG_Testfeld" destination="P5o-cM-N2O" id="Kd0-KS-VLz"/>
-                        <outlet property="Zeilen_Stepper" destination="3Nd-UJ-9iO" id="N74-yG-IUG"/>
                         <outlet property="ablaufzeitFeld" destination="NhS-Gk-O4w" id="2AC-hd-gbx"/>
                         <outlet property="dataTable" destination="9Dc-YS-HYC" id="ajU-AM-GdF"/>
                         <outlet property="dickeFeld" destination="5Aa-rj-chz" id="2Wn-Zr-aQs"/>
@@ -1910,10 +1820,11 @@
                         <outlet property="drillMoveAbsUPKnopf" destination="w83-Jj-H3P" id="AB6-Sb-gYM"/>
                         <outlet property="drillNullpunktKnopf" destination="9Od-E7-bVB" id="Jhm-zu-ACR"/>
                         <outlet property="drillOKKnopf" destination="FMp-8K-kag" id="Ssm-Cr-zpD"/>
+                        <outlet property="drillStepDOWNKnopf" destination="sGH-5X-PYB" id="Sl6-HO-3Li"/>
+                        <outlet property="drillStepUPKnopf" destination="d4X-y6-3Lt" id="OKB-Yh-5ER"/>
                         <outlet property="drillspeedFeld" destination="NlK-9B-vfX" id="GSg-Tn-WTq"/>
                         <outlet property="drillspeedSlider" destination="f5P-2D-VFB" id="p5d-ah-oyI"/>
                         <outlet property="drillwegFeld" destination="AmW-Vm-i59" id="12d-0y-hNv"/>
-                        <outlet property="drillwegmmFeld" destination="kRp-p2-DWd" id="lUM-T2-cgT"/>
                         <outlet property="dxFeld" destination="i8B-q7-HKP" id="lI7-4A-MQ0"/>
                         <outlet property="dx_Stepper" destination="ZZR-de-pHe" id="qtl-Zi-wxS"/>
                         <outlet property="dyFeld" destination="Emd-2U-atJ" id="w7v-5v-aBV"/>
@@ -1921,12 +1832,9 @@
                         <outlet property="fahrtweg" destination="uOs-Jd-n3A" id="fED-f6-SaJ"/>
                         <outlet property="figurschliessen_checkbox" destination="Gzh-F2-2Dq" id="ek9-8o-yzG"/>
                         <outlet property="homexFeld" destination="uee-Co-Pwj" id="cGv-94-pTo"/>
-                        <outlet property="homexFeld_mm" destination="q5z-H2-hEX" id="bbY-o6-nYm"/>
                         <outlet property="homeyFeld" destination="ENc-xm-O4U" id="ZCv-1S-otG"/>
-                        <outlet property="homeyFeld_mm" destination="f3n-hq-MCX" id="35o-w5-aBb"/>
                         <outlet property="horizontal_checkbox" destination="Xp2-G1-erb" id="qCm-5a-LjN"/>
                         <outlet property="linear_checkbox" destination="ubb-7P-f7L" id="q9e-aE-2Rw"/>
-                        <outlet property="nextKnopf" destination="3Nd-UJ-9iO" id="9q8-Da-5HU"/>
                         <outlet property="propfaktorFeld" destination="fiT-XO-MFA" id="XHa-So-ZsO"/>
                         <outlet property="propfaktorStepper" destination="wtg-9G-zTt" id="VC8-f4-ddi"/>
                         <outlet property="ramp_OK_Check" destination="q4r-pV-zV0" id="3st-LK-aWI"/>
@@ -1945,7 +1853,7 @@
                 </viewController>
                 <customObject id="IXe-1g-t5Y" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="130" y="2469"/>
+            <point key="canvasLocation" x="130" y="2468.5"/>
         </scene>
         <!--Joystick-->
         <scene sceneID="vOC-B7-MU2">
@@ -2350,18 +2258,17 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Drill OFF" width="82" height="81"/>
-        <image name="Drill ON" width="82" height="81"/>
         <image name="Halt" width="538" height="530"/>
+        <image name="go" width="225" height="224"/>
         <image name="home" width="94.765937805175781" height="95.081825256347656"/>
         <image name="notok_image" width="131" height="129"/>
         <image name="pause" width="225" height="225"/>
         <image name="pfeil_down" width="40" height="35"/>
-        <image name="pfeil_down_mini" width="20" height="12"/>
         <image name="pfeil_links" width="35" height="40"/>
         <image name="pfeil_rechts" width="35" height="40"/>
         <image name="pfeil_up" width="40" height="35"/>
-        <image name="pfeil_up_mini" width="20" height="12"/>
+        <image name="pfeilup" width="41" height="44"/>
+        <image name="pfeilup2" width="41" height="44"/>
         <image name="rewind" width="225" height="225"/>
     </resources>
 </document>

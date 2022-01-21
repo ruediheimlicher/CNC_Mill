@@ -172,7 +172,6 @@ class rPCB: rViewController
    
    @IBOutlet weak var drillStepUPKnopf: NSButton!
    @IBOutlet weak var drillStepDOWNKnopf: NSButton!
-   
    @IBOutlet weak var MotorKnopf: NSButton!
    
    @IBOutlet weak var moveDickeKnopf: NSButton!
@@ -189,7 +188,7 @@ class rPCB: rViewController
    @IBOutlet weak var drillMoveAbsDOWNKnopf: NSButton!
    @IBOutlet weak var drillAbsolutwegFeld: NSTextField!
    
-   @IBOutlet weak var Zeilen_Stepper: NSStepper!
+   //@IBOutlet weak var Zeilen_Stepper: NSStepper!
    
    @IBOutlet weak var PauseKnopf: NSButton!
    
@@ -288,7 +287,8 @@ class rPCB: rViewController
       drillspeedSlider.integerValue = speedC
       
       let stepUpKnopf = NSButton()
-      stepUpKnopf.frame = NSMakeRect(1060,310, 25, 25) 
+      //stepUpKnopf.frame = NSMakeRect(1060,320, 32, 32) 
+      stepUpKnopf.frame = drillStepUPKnopf.frame
       stepUpKnopf.title = "UP"
       stepUpKnopf.setButtonType(NSButton.ButtonType.momentaryPushIn)
       stepUpKnopf.bezelStyle = NSButton.BezelStyle.shadowlessSquare
@@ -302,7 +302,8 @@ class rPCB: rViewController
       self.view.addSubview(stepUpKnopf)
 
       let stepDownKnopf = NSButton()
-      stepDownKnopf.frame = NSMakeRect(1060,285, 25, 25) 
+      //stepDownKnopf.frame = NSMakeRect(1060,285, 32, 32) 
+      stepDownKnopf.frame = drillStepDOWNKnopf.frame
       stepDownKnopf.title = "UP"
       stepDownKnopf.setButtonType(NSButton.ButtonType.momentaryPushIn)
       stepDownKnopf.bezelStyle = NSButton.BezelStyle.shadowlessSquare
@@ -2153,9 +2154,9 @@ class rPCB: rViewController
          //     report_PCB_Daten(DataSendTaste)
          //1128
         //stepperschritteFeld.integerValue = Schnittdatenarray.count
-         Zeilen_Stepper.maxValue = Double(Schnittdatenarray.count - 1)
-         Zeilen_Stepper.intValue = 1
-         stepperpositionFeld.intValue = 1
+         //Zeilen_Stepper.maxValue = Double(Schnittdatenarray.count - 1)
+         //Zeilen_Stepper.intValue = 1
+  //       stepperpositionFeld.intValue = 1
 //         homexFeld.integerValue = homeX
  //        homeyFeld.integerValue = homeY
          let formater = NumberFormatter()
@@ -3269,28 +3270,7 @@ class rPCB: rViewController
    
    }
    
-   @IBAction func report_Drillmotor(_ sender: NSButton)
-   {
-      print("report_Drillmotor")
-      let state = sender.state
-      let pos = Motor_Slider.doubleValue
-      let int8pos = UInt8(pos)
-      // aus report_Motor_Slider
-      teensy.write_byteArray[24] = 0xDA // Code 
-      if state == .on
-      {
-         teensy.write_byteArray[DRILL_BIT] = int8pos
-      }
-      else
-      {
-         teensy.write_byteArray[DRILL_BIT] = 0
-         
-      }
-      let senderfolg = teensy.send_USB()
-      
-      
-   }
-   
+     
    @IBAction func report_drillOK(_ sender: NSButton)
    {
       print("report_Drill")
@@ -4268,12 +4248,12 @@ class rPCB: rViewController
    func write_CNC_Zeile(zeilenarray:[UInt8])
    {
      // print("+++              PCB write_CNC_Zeile zeilenarray: \(zeilenarray) \nSchnittdatenarray.count: \(Schnittdatenarray.count)")
-      
+      /*
       if steppercontKnopf.state == .on
       {
          stepperpositionFeld.integerValue = lasttabledataindex + 1
       }
-      
+      */
       if zeilenarray.count >  64 || zeilenarray.count == 0
       {
          print("write_CNC_Zeile data err")
@@ -4554,8 +4534,8 @@ class rPCB: rViewController
       let task:Int = info?["task"] as! Int
       if (task == 1)
       {
-         stepperpositionFeld.integerValue = zeilenindex
-         Zeilen_Stepper.integerValue = zeilenindex
+        // stepperpositionFeld.integerValue = zeilenindex
+         //Zeilen_Stepper.integerValue = zeilenindex
          return
       }
       let datazeile = circlefloatarray[zeilenindex]
@@ -4852,6 +4832,31 @@ class rPCB: rViewController
       }
       return
    }
+   @IBAction func report_Drillmotor(_ sender: NSButton)
+   {
+      print("report_Drillmotor")
+      let state = sender.state
+      let sliderspeed = Motor_Slider.integerValue
+      let int8pos = UInt8(Motor_Slider.intValue)
+      // aus report_Motor_Slider
+      teensy.write_byteArray[24] = 0xDA // Code 
+  //    teensy.write_byteArray[DRILLSPEEDH_BIT] = UInt8((sliderspeed & 0xFF00)>>8)
+  //    teensy.write_byteArray[DRILLSPEEDL_BIT] = UInt8(sliderspeed & 0x00FF)
+
+      if state == .on
+      {
+         teensy.write_byteArray[DRILL_BIT] = int8pos
+      }
+      else
+      {
+         teensy.write_byteArray[DRILL_BIT] = 0
+         
+      }
+      let senderfolg = teensy.send_USB()
+      
+      
+   }
+
 
    @IBAction func report_DrillspeedSlider(_ sender: NSSlider)
    {
@@ -4862,13 +4867,13 @@ class rPCB: rViewController
       teensy.write_byteArray[24] = 0xB9
       teensy.write_byteArray[DRILLSPEEDH_BIT] = UInt8((sliderspeed & 0xFF00)>>8)
       teensy.write_byteArray[DRILLSPEEDL_BIT] = UInt8(sliderspeed & 0x00FF)
+      let int8pos = UInt8(Motor_Slider.intValue)
+      teensy.write_byteArray[DRILL_BIT] = int8pos
  //     if (usbstatus > 0)
  //     {
          let senderfolg = teensy.send_USB()
          print("report_DrillspeedSlider senderfolg: \(senderfolg)")
  //     }
-
-      
    }
    
    @IBAction func report_Drill(_ sender: NSButton)
@@ -5013,8 +5018,8 @@ class rPCB: rViewController
       print("\n+++++++     drill weg: \(weg)")
       let count = Schnittdatenarray.count
       print("drill Schnittdatenarray.count: \(count)");
-      let stepperpos = stepperpositionFeld.integerValue
-      print("drill stepperpos: \(stepperpos)");
+      //let stepperpos = stepperpositionFeld.integerValue
+      //print("drill stepperpos: \(stepperpos)");
       var tempdrillweg = weg
       // microstep einrechnen
       let microstepindex = schritteweitepop.indexOfSelectedItem
@@ -5492,9 +5497,9 @@ class rPCB: rViewController
          // MARK: ***     Pfeiltaste DC    
          case 0xDC:  // Pfeiltaste
             print("\n                      newDataAktion  DC Drill ")
-            let stepperpos = stepperpositionFeld.integerValue 
+            //let stepperpos = stepperpositionFeld.integerValue 
             let datacount = Schnittdatenarray.count
-            print("newDataAktion  DC stepperpos: \(stepperpos) datacount: \(datacount)")
+            //print("newDataAktion  DC stepperpos: \(stepperpos) datacount: \(datacount)")
             
             var abschnittnummer = data[5]<<8 + data[6]
             print("newDataAktion  DC abschnittnummer A: \(abschnittnummer) cncstepperposition: \(cncstepperposition)")
@@ -6083,27 +6088,29 @@ class rPCB: rViewController
    @IBAction func report_Motor_Slider(_ sender: NSSlider)
    {
       teensy.write_byteArray[24] = 0xDA // Code 
-  //    print("report_Motor_Slider IntVal: \(sender.intValue)")
+      //print("report_Motor_Slider IntVal: \(sender.intValue)")
       
       let pos = sender.doubleValue
       
-      let int8pos = UInt8(pos)
+      var int8pos:UInt8 = UInt8(sender.intValue)
       let Ustring = formatter.string(from: NSNumber(value: int8pos))
       
       
  //     print("report_Motor_Slider pos: \(pos) intpos: \(int8pos)  Ustring: \(Ustring ?? "0")")
       // Pot0_Feld.stringValue  = Ustring!
       Motor_Feld.integerValue  = Int(int8pos)
-      MotorKnopf.title = String(sender.integerValue)
-
-      teensy.write_byteArray[DRILL_BIT] = int8pos
- 
+      //MotorKnopf.title = String(sender.integerValue)
       
-  //    if (usbstatus > 0)
-  //    {
- //        let senderfolg = teensy.send_USB()
-   //      print("report_Motor_Slider senderfolg: \(senderfolg) code: \(teensy.write_byteArray[24])")
-  //    }
+ 
+      if (MotorKnopf.state == .on)
+      {
+         
+         
+         teensy.write_byteArray[DRILL_BIT] = int8pos
+      
+          let senderfolg = teensy.send_USB()
+         //print("report_Motor_Slider senderfolg: \(senderfolg) code: \(teensy.write_byteArray[24])")
+      }
    }
    
    
