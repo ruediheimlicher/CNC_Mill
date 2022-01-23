@@ -1578,6 +1578,7 @@ class rPCB: rViewController
          var circle = 0
          var circlenummer = 0
          circlearray = [[Int]]()
+         /*
          var circleelementarray = [Int]()
          var circlefloatelementarray = [Double]()
          var circleelementdic = [String:Int]()
@@ -1595,7 +1596,7 @@ class rPCB: rViewController
          var heightfloat:Double = 0
          var z = 0
          let lastlabel:String = String(labelarray.last ?? "") // label "transform"
-         
+         */
          var punktarray = punktarrayvonSGV(sgvarray:SVG_array)
          if punktarray.count == 0
          {
@@ -1603,6 +1604,12 @@ class rPCB: rViewController
          }
          //print("punktarray: \(punktarray)")
          
+         let formater = NumberFormatter()
+         formater.groupingSeparator = "."
+         formater.maximumFractionDigits = 3
+         formater.minimumFractionDigits = 3
+         formater.numberStyle = .decimal
+
          /*
   
         */
@@ -1927,6 +1934,39 @@ class rPCB: rViewController
             break
          }
          
+         print("report_readSVG circlefloatarray vor eckelinksunten. count: \(circlefloatarray.count)")         
+          
+         for el in circlefloatarray
+          {
+            print("\(el[0] )\t \(el[1] )\t \(el[2]) \t\(el[3])")
+            
+          }
+
+         
+         // ecke links unten bestimmen 
+         let eckelinksuntenindex_raw = eckelinksunten(floatarray: circlefloatarray)
+         print("eckelinksuntenindex_raw: \(eckelinksuntenindex_raw)")
+
+         
+         // Element an (0)einsetzen
+         let firstzeile_raw = circlefloatarray[eckelinksuntenindex_raw]
+          circlefloatarray.remove(at:eckelinksuntenindex_raw)
+          circlefloatarray.insert(firstzeile_raw, at:0)
+         
+         for z in 0..<circlefloatarray.count
+         {
+          circlefloatarray[z][0] = Double(z)
+         }
+
+         print("report_readSVG circlefloatarray nach eckelinksunten. count: \(circlefloatarray.count)")         
+          
+         for el in circlefloatarray
+          {
+            print("\(el[0] )\t \(el[1] )\t \(el[2]) \t\(el[3])")
+            
+          }
+
+         
           
          // neu Nummerieren
          for z in 0..<circlefloatarray.count
@@ -1939,6 +1979,7 @@ class rPCB: rViewController
          
          circlefloatarray_raw = circlefloatarray // Eingabe sichern, ohne schliessen, ohne NN
          
+           
          /*
          print("report_readSVG circlefloatarray nach new sort. count: \(circlefloatarray.count)")         
           
@@ -1948,14 +1989,16 @@ class rPCB: rViewController
             
           }
           */
-          /*  
+          
          print("report_readSVG circlefloatarray_raw. count: \(circlefloatarray_raw.count)")         
           for el in circlefloatarray_raw
           {
-            print("\(el[0] )\t \(el[1] )\t \(el[2]) \(el[3])")
+            print("\(el[0] )\t \(el[1] )\t \(el[2]) \t\(el[3])")
           }
 
-         */
+         
+         
+         
          
          // nearest neighbour stuff
       //   tsp_nn.setkoordinaten(koord: circlefloatarray)
@@ -1971,10 +2014,11 @@ class rPCB: rViewController
          
          var mill_floatarray = mill_floatArray(circarray: circlefloatarray) //
   
+         
          // ecke links unten bestimmen 
          let eckelinksuntenindex = eckelinksunten(floatarray: mill_floatarray)
          print("eckelinksuntenindex: \(eckelinksuntenindex)")
-
+/*
          // Element an (0)einsetzen
          let firstzeile = mill_floatarray[eckelinksuntenindex]
          mill_floatarray.remove(at:eckelinksuntenindex)
@@ -1984,6 +2028,7 @@ class rPCB: rViewController
          {
             mill_floatarray[z][0] = Double(z)
          }
+*/   
          
          // Figur schliessen
          if figurschliessen_checkbox.state == .on
@@ -2016,7 +2061,7 @@ class rPCB: rViewController
             
          }
          
-         print(mill_floatarray)
+    //     print(mill_floatarray)
          
          circlefloatarray = mill_floatarray
          
@@ -2130,16 +2175,7 @@ class rPCB: rViewController
           }
           */
          
-         // Bohrzeilen einfuegen
          
-         /*
-         print("report_readSVG PCBDaten")
-         for el in PCBDaten
-         {
-         print("\(el)")
-         //     iii += 1
-         }
-        */
         
     /*
  print("vor: \(PCBDaten[0][0]) \(PCBDaten[PCBDaten.count - 1][0])")
@@ -2159,26 +2195,20 @@ class rPCB: rViewController
   //       stepperpositionFeld.intValue = 1
 //         homexFeld.integerValue = homeX
  //        homeyFeld.integerValue = homeY
-         let formater = NumberFormatter()
-         formater.groupingSeparator = "."
-         formater.maximumFractionDigits = 3
-         formater.minimumFractionDigits = 3
-         formater.numberStyle = .decimal
-
+ 
          let homexstring = formater.string(from: NSNumber(value: floathomeX))
          homexFeld.stringValue = homexstring ?? "_"
          //homexFeld.doubleValue = floathomeX
          let homeystring = formater.string(from: NSNumber(value: floathomeY))
           homeyFeld.stringValue = homeystring ?? "_"
          //homeyFeld.doubleValue = floathomeY
-
+//
          let homexstring_mm = formater.string(from: NSNumber(value: floathomeX * transformfaktor))
-         homexFeld_mm.stringValue = homexstring_mm ?? "_"
+         //homexFeld_mm.stringValue = homexstring_mm ?? "_"
          //homexFeld.doubleValue = floathomeX
          let homeystring_mm = formater.string(from: NSNumber(value: floathomeY * transformfaktor))
-         homeyFeld_mm.stringValue = homeystring_mm ?? "_"
+         //homeyFeld_mm.stringValue = homeystring_mm ?? "_"
          //homeyFeld.doubleValue = floathomeY
-
          
       }
       catch 
@@ -2355,23 +2385,16 @@ class rPCB: rViewController
    func print_tabarray(_ floatarray:[[UInt8]]) //->[String] // Array von Strings mit tabs
    {
       //https://docs.swift.org/swift-book/LanguageGuide/Functions.html
-      var tabarray = [[UInt8]]()
-      var tabstringarray = [String]()
       for z in stride(from: 0, to: floatarray.count-1, by: 1)
       {
          var zeilenstringarray = [String]()
-         var zeilentabarray = [UInt8]()
-         zeilentabarray.append(UInt8(z))
          for element in floatarray[z]
          {
             let elementstring = String(element)
             zeilenstringarray.append(elementstring)
-            zeilentabarray.append(element)
          }
          var zeilenstring = zeilenstringarray.joined(separator: "\t")
          print(zeilenstring)
-         tabstringarray.append(zeilenstring)
-         tabarray.append(zeilentabarray)
       }
       
    }
@@ -2379,8 +2402,6 @@ class rPCB: rViewController
    func print_tabzeile(_ floatarray:[UInt8]) // String mit tabs
    {
       //https://docs.swift.org/swift-book/LanguageGuide/Functions.html
-      var tabarray = [[UInt8]]()
-      var tabstringarray = [String]()
           var zeilenstringarray = [String]()
          //var zeilenstring:String = ""
          for element in floatarray
@@ -2523,7 +2544,7 @@ class rPCB: rViewController
          
          
       } // for zeilenindex
-      
+ 
       
       // Zeilennummern kontrollieren
       
@@ -2691,546 +2712,12 @@ class rPCB: rViewController
         //print("PCBzeile: \(z) \(PCB_Datenarray[z])")
         
       }
-      print_tabarray(PCB_Datenarray)
+ //     print_tabarray(PCB_Datenarray)
       //print("PCB Daten PCB_Datenarray count nach: \(PCB_Datenarray.count)\n\(PCB_Datenarray)")
       return PCB_Datenarray
    }
    
-   // NOT
-   @IBAction func report_PCB_Daten(_ sender: NSButton)
-   {
-      // s SteuerdatenVonDic in CNC.m
-      /*
-       [KoordinatenTabelle addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:PositionA.x],@"ax",[NSNumber numberWithFloat:PositionA.y],@"ay",[NSNumber numberWithFloat:PositionB.x],@"bx", [NSNumber numberWithFloat:PositionB.y],@"by",[NSNumber numberWithInt:index],@"index",[NSNumber numberWithInt:0],@"lage",[NSNumber numberWithFloat:aktuellepwm*red_pwm],@"pwm",nil]];
-       */
-      //      print("report_PCB_Daten propfaktor: \(propfaktor)")
-      
-      var speed = speedFeld.intValue
-      
-      if ramp_OK_Check.state == NSControl.StateValue.on
-      {
-         speed *= 2
-      }
-       
-      Schnittdatenarray.removeAll()
-      Schnittdatenarray_n.removeAll()
-      
-      var SchritteArray:[[String:Any]] = [[:]]
-      zoomfaktor = zoomFeld.doubleValue
-      let steps = stepsFeld.intValue // Schritte fuer 1mm
-      var code:UInt8 = 0
-      
-      var maxsteps:Double = 0
-      //var relevanteschritte
-      var zeilenposition = 0
-      var zeilenanzahl = circlearray.count
-      //      print("report_PCB_Daten circlearray vor doppelcheck count: \(zeilenanzahl)")
-      //      var doppelindex:Int = 0
-      
-      zeilenanzahl = circlearray.count
-      //    print("report_PCB_Daten circlearray nach doppelcheck count: \(zeilenanzahl)")
-      
-      /*
-       var ii = 0
-       for el in circlearray
-       {
-       print("\(ii) \(el)")
-       ii += 1
-       }
-       */
-      
-      let l = Plattefeld.setWeg(newWeg: circlearray, scalefaktor: 800, transform:  transformfaktor)
-      fahrtweg.integerValue = l
-      
-      
-      var homedataarray = [[Int]]() 
-      var xhome = 0
-      var yhome = 0
-      
-      //     print("report_PCB_Daten: \t speed: \(speed) ")
-      for zeilenindex in stride(from: 0, to: circlearray.count-1, by: 1)
-      {
-         //        print("vor: \t xhome: \(xhome) yhome: \(yhome)")
-         zeilenposition = 0
-         if zeilenindex == 0
-         {
-            zeilenposition |= (1<<FIRST_BIT); // Erstes Element, Start
-         }
-         if zeilenindex == circlearray.count - 2
-         {
-            zeilenposition |= (1<<LAST_BIT);
-         }
-         
-         let next = circlearray[zeilenindex+1] // next punkt
-         let akt = circlearray[zeilenindex] // aktueller punkt
-         
-         
-         
-         //        let next = circlefloatarray[zeilenindex+1] // next punkt
-         //        let akt = circlefloatarray[zeilenindex] // aktueller punkt
-         
-         
-         
-         // Differenz X
-         let diffX:Double = (Double((next[1] - akt[1]))) //* zoomfaktor
-         
-         
-         // Differenz Y
-         let diffY:Double = (Double((next[2] - akt[2]))) //* zoomfaktor
-         /*
-          if diffY == 0
-          {
-          print(" diffY null zeile: \(zeilenindex)")
-          }
-          */
-         if diffX == 0 && diffY == 0
-         {
-            print(" stride *********    differenz null zeile: \(zeilenindex)")
-            continue
-         }
-         
-         // dic aufbauen
-         var position:UInt8 = 0
-         
-         var zeilendic:[String:Any] = [:]
-         
-         
-         let aktX = (akt[1]) //
-         let aktY = (akt[2]) //
-         let nextX = (next[1])
-         let nextY = (next[2])
-         
-         // Beginn wegArrayMitWegXY
-         
-         
-         let distanzX = Double(nextX - aktX)  * zoomfaktor  
-         let distanzY = Double(nextY - aktY)  * zoomfaktor  
-         
-         //        print("reportPCB zeilenindex: \t\(zeilenindex) \tdiffX: \t\(diffX) \tdistanzX: \t\(distanzX)  \tdiffY: \t\(diffY) \tdistanzY: \t\(distanzY)")
-         //      print("reportPCB zeilenindex: \tdistanzX: \t\(distanzX) \tdistanzY: \t\(distanzY)")
-         if distanzX == 0 && distanzY == 0
-         {
-            print(" stride *********    differenz null zeile: \(zeilenindex)")
-            continue
-         }
-         
-         //       var distanz = Double(hypotf(Float(distanzX),Float(distanzY)))
-         //       let distanzA = (distanzX * distanzX + distanzY * distanzY).squareRoot() // ohne zoomfaktor
-         //let distanz = (diffX * diffX + diffY * diffY).squareRoot()
-         let distanz = (distanzX * distanzX + distanzY * distanzY).squareRoot()
-         
-         
-         //      let distanzstring = String(distanz)
-         print(" ")
-         //      print("++++   reportPCB zeilenindex: \(zeilenindex) distanzX: \(distanzX)  distanzY: \(distanzY)  distanz: \(distanz)")
-         zeilendic["startpunktx"] = aktX
-         zeilendic["startpunkty"] = aktY
-         zeilendic["endpunktx"] = nextX
-         zeilendic["endpunkty"] = nextY
-         zeilendic["distanz"] = distanz
-         
-         // Zeit fuer Abschnitt
-         let zeit:Double = Double(distanz)/Double(speed) //   Schnittzeit für Distanz
-         
-         print("reportPCB zeilenindex: \(zeilenindex)  zeit: \(zeit)")
-         
-         // Schritte X
-         
-         var schrittex = Double(stepsFeld.integerValue) * distanzX 
-         
-         let stepwert = stepsFeld.integerValue
-         var kgvx = kgv(m:stepwert,n:Int(distanzX))
-            
-         print("reportPCB zeilenindex: \(zeilenindex)  kgvx: \(kgvx)")
-            
-         schrittex /= propfaktor
-         let schrittexRound = round(schrittex)
-         var schrittexInt:Int = 0
-         if schrittexRound >= Double(Int.min) && schrittexRound < Double(Int.max)
-         {
-            schrittexInt = Int(schrittexRound)
-            //          print("schritteXInt OK: \(schrittexInt)")
-            xhome = xhome + schrittexInt
-            if Double(schrittexInt) > maxsteps
-            {
-               maxsteps = Double(schrittexInt)
-            }
-            if schrittexInt < 0 // negativer Weg
-            {
-               //            print("schritteX negativ")
-               schrittexInt *= -1
-               schrittexInt |= 0x80000000
-            }
-         }
-         else
-         {
-            print("schritteXround zu gross")
-         }
-         
-         zeilendic["schrittex"] = schrittexInt
-         
-         // Schritte Y
-         var schrittey = Double(stepsFeld.integerValue) * distanzY  
-         //let schrittey = distanzY
-         schrittey /= propfaktor
-         let schritteyRound = round(schrittey)
-         var schritteyInt:Int = 0
-         if schritteyRound >= Double(Int.min) && schritteyRound < Double(Int.max)
-         {
-            //    print("schritteYInt OK: \(schritteyInt)")
-            schritteyInt = Int(schritteyRound)
-            yhome += schritteyInt
-            
-            if Double(schritteyInt) > maxsteps
-            {
-               maxsteps = Double(schritteyInt)
-            }
-            if schritteyInt < 0 // negativer Weg
-            {
-               schritteyInt *= -1
-               schritteyInt |= 0x80000000
-            }
-         }
-         else
-         {
-            print("schritteYInt zu gross")
-         }
-         zeilendic["schrittey"] = schritteyInt
-         //        print("schrittey: \(schritteyInt) ")
-         
-         zeilendic["code"] = code
-         if zeilenindex == 0
-         {
-            position |= (1<<FIRST_BIT) // Start markieren
-         }
-         if zeilenindex == circlearray.count - 1
-         {
-            position |= (1<<LAST_BIT)
-         }
-         zeilendic["position"] = position
-         zeilendic["zoomfaktor"] = zoomfaktor
-         //   SchritteArray.append(zeilendic)
-         
-         let schrittezInt = 0
-         
-         //var zeilenschnittdatenarray = [UInt8]()
-         
-         //         print("+++           report_PCB vor schnittdatenvektor schrittexInt: \(schrittexInt) schritteyInt: \(schritteyInt) schrittezInt: \(schrittezInt) zeit: \(zeit) speed: \(speed)")
-         let xmm = schrittex / Double(steps)
-         let ymm = schrittey / Double(steps)
-         //         print("report_PCB xmm: \(xmm) ymm: \(ymm)")
-         
-         var zeilenschnittdatenarray:[UInt8] =  schrittdatenvektor(sxInt:schrittexInt,syInt:schritteyInt, szInt:schrittezInt, zeit:zeit  )// Array mit Daten fuer USB
-         
-         zeilenschnittdatenarray[25] = UInt8(zeilenposition)
-         zeilenschnittdatenarray[26] = UInt8((zeilenindex & 0xFF00)<<8)
-         zeilenschnittdatenarray[27] = UInt8((zeilenindex & 0x00FF))
-         
-         //        print("zeilenschnittdatenarray: \(zeilenschnittdatenarray)")
-         
-         if zeilenschnittdatenarray.count > 0
-         {
-            
-            if !(schrittexInt == 0 && schritteyInt == 0)
-            {
-               //             Schnittdatenarray.append(zeilenschnittdatenarray_n)
-               Schnittdatenarray.append(zeilenschnittdatenarray)
-            }
-            
-         }
-         
-         continue
-         
-         
-         /*    
-          
-          
-          // 
-          
-          let sxInt_raw = (schrittexInt & 0x0FFFFFFF)
-          let syInt_raw = (schritteyInt & 0x0FFFFFFF)
-          let szInt_raw = (schrittezInt & 0x0FFFFFFF)
-          print("report_PCB schrittdatenvektor sxInt_raw: \(sxInt_raw) syInt_raw: \(syInt_raw) szInt_raw: \(szInt_raw) zeit: \(zeit)")
-          
-          // Schritte X
-          print("schrittexInt: \(schrittexInt) ")
-          let schrittexA = UInt8(schrittexInt & 0x000000FF)
-          let schrittexB = UInt8((schrittexInt & 0x0000FF00) >> 8)
-          let schrittexC = UInt8((schrittexInt & 0x00FF0000) >> 16)
-          let schrittexD = UInt8((schrittexInt & 0xFF000000) >> 24)
-          print("report_PCB schrittexInt: \(schrittexInt) schrittexA: \(schrittexA) schrittexB: \(schrittexB)")
-          
-          
-          
-          zeilenschnittdatenarray.append(schrittexA)
-          zeilenschnittdatenarray.append(schrittexB)
-          zeilenschnittdatenarray.append(schrittexC)
-          zeilenschnittdatenarray.append(schrittexD)
-          
-          var delayx:Double = 0
-          var delayxInt:Int = 0
-          var korrekturintervallx:Int = 0
-          
-          //         let delayx:Double = (zeit * 1000.0/Double((schrittexInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
-          delayx = (zeit / Double((schrittexInt & 0x0FFFFFFF))) // Vorzeichen-Bit weg
-          
-          let delayxIntround = round(delayx)
-          
-          if delayxIntround >= Double(Int.min) && delayxIntround < Double(Int.max)
-          {
-          // print("delayxInt OK")
-          delayxInt = Int(delayxIntround)
-          }
-          //      print("delayx: \(delayx) \t delayxInt: \(delayxInt) \tdelayy: \(delayy) \t delayyInt: \(delayyInt)")
-          
-          let delayxA = UInt8(delayxInt & 0x00FF)
-          let delayxB = UInt8((delayxInt & 0xFF00) >> 8)
-          zeilenschnittdatenarray.append(delayxA)
-          zeilenschnittdatenarray.append(delayxB)
-          
-          print("Fehlerkorrektur X")
-          
-          if schrittexInt != 0   
-          { 
-          
-          let vorzeichenx = (schrittexInt & 0x80000000)
-          
-          //           print("vorzeichenx: \(vorzeichenx)")
-          
-          print("schrittexInt: \(schrittexInt) delayx: \(delayx) delayxInt: \(delayxInt)")
-          
-          let kontrolledoublex = Int(Double(schrittexInt) * delayx) //  Kontrolle mit Double-Wert von dx
-          let kontrolleintx = schrittexInt * delayxInt //               Kontrolle mit Int-Wert von dx
-          var diffx = Int(kontrolledoublex) - kontrolleintx // differenz, Rundungsfehler
-          if diffx == 0
-          {
-          diffx = 1
-          }
-          
-          
-          print("kontrolledoublex: \(kontrolledoublex) kontrolleintx: \(kontrolleintx) diffx: \(diffx)")
-          
-          let intervallx = Double(kontrolleintx / diffx)
-          korrekturintervallx = Int(round(intervallx)) // Rundungsfehler aufteilen ueber Abschnitt: 
-          // alle korrekturintervallx dexInt incrementieren oder decrementieren
-          //      print("korrekturintervallx: \(korrekturintervallx)")
-          
-          if korrekturintervallx < 0 // negative korrektur
-          {
-          print("korrekturintervallx negativ")
-          korrekturintervallx *= -1
-          korrekturintervallx |= 0x8000
-          }
-          print("korrekturintervallx mit Vorzeichenkorr: \(korrekturintervallx) \n")
-          }
-          
-          
-          //       korrekturintervallx = 0
-          zeilenschnittdatenarray.append(UInt8(korrekturintervallx & 0x00FF))
-          zeilenschnittdatenarray.append(UInt8((korrekturintervallx & 0xFF00)>>8))
-          
-          
-          //         let delayxC = UInt8((delayxInt & 0x00FF0000) >> 16)
-          //         let delayxD = UInt8((delayxInt & 0xFF000000) >> 24)
-          //print("delayxA: \(delayxA) ")
-          //print("delayxB: \(delayxB) ")
-          //print("delayxC: \(delayxC) ")
-          //print("delayxD: \(delayxD) ")
-          //      zeilenschnittdatenarray.append(delayxC)
-          //      zeilenschnittdatenarray.append(delayxD)
-          
-          // Schritte Y
-          print("*** schritteyInt: \(schritteyInt) ")
-          let schritteyA = UInt8(schritteyInt & 0x000000FF)
-          // print("schritteyA: \(schritteyA) ")
-          let schritteyB = UInt8((schritteyInt & 0x0000FF00) >> 8)
-          //print("schritteyB: \(schritteyB) ")
-          let schritteyC = UInt8((schritteyInt & 0x00FF0000) >> 16)
-          //print("schritteyC: \(schritteyC) ")
-          let schritteyD = UInt8((schritteyInt & 0xFF000000) >> 24)
-          //print("schritteyA: \(schritteyD) ")
-          zeilenschnittdatenarray.append(schritteyA)
-          zeilenschnittdatenarray.append(schritteyB)
-          zeilenschnittdatenarray.append(schritteyC)
-          zeilenschnittdatenarray.append(schritteyD)
-          
-          //      var schritteY_check:UInt32 = UInt32(schritteyA) | UInt32(schritteyB)<<8 | UInt32(schritteyC)<<16 | UInt32(schritteyD)<<24;
-          //       print("schritteY_check: \(schritteY_check) ")
-          
-          var delayy:Double = 0
-          var delayyInt:Int = 0
-          var korrekturintervally:Int = 0
-          if schritteyInt != 0
-          {
-          delayy = (zeit / Double((schritteyInt & 0x0FFFFFFF)))
-          //    let delayy:Double = (zeit * 1000.0/Double((schritteyInt & 0x0FFFFFFF)))
-          let delayyIntround = round(delayy)
-          if delayyIntround >= Double(Int.min) && delayyIntround < Double(Int.max)
-          {
-          // print("schritteYInt OK")
-          delayyInt = Int(delayyIntround)
-          }
-          
-          let delayyA = UInt8(delayyInt & 0x000000FF)
-          let delayyB = UInt8((delayyInt & 0x0000FF00) >> 8)
-          zeilenschnittdatenarray.append(delayyA)
-          zeilenschnittdatenarray.append(delayyB)
-          
-          print("Fehlerkorrektur Y")
-          
-          let vorzeicheny = (schritteyInt & 0x80000000)
-          
-          print("vorzeicheny: \(vorzeicheny)")
-          
-          print("schritteyInt: \(schritteyInt) delayy: \(delayy) delayyInt: \(delayyInt)")
-          let kontrolledoubley = Int(Double(schritteyInt) * delayy) //  Kontrolle mit Double-Wert von dx
-          let kontrolleinty = schritteyInt * delayyInt //               Kontrolle mit Int-Wert von dx
-          var diffy = Int(kontrolledoubley) - kontrolleinty // differenz, Rundungsfehler
-          
-          if diffy == 0
-          {
-          diffy = 1
-          }
-          
-          print("kontrolledoubley: \(kontrolledoubley) kontrolleinty: \(kontrolleinty) diffy: \(diffy)")
-          
-          let intervally = Double(kontrolleinty / diffy)
-          korrekturintervally = Int(round(intervally)) // Rundungsfehler aufteilen ueber Abschnitt: 
-          // alle korrekturintervallx dexInt incrementieren oder decrementieren
-          print("korrekturintervally: \(korrekturintervally)")
-          
-          if korrekturintervally < 0 // negative korrektur
-          {
-          print("korrekturintervally negativ")
-          korrekturintervally *= -1
-          korrekturintervally |= 0x8000
-          }
-          print("korrekturintervally mit Vorzeichenkorr: \(korrekturintervally) \n")
-          }
-          
-          
-          //       korrekturintervally = 0
-          zeilenschnittdatenarray.append(UInt8(korrekturintervally & 0x00FF))
-          zeilenschnittdatenarray.append(UInt8((korrekturintervally & 0xFF00)>>8))
-          
-          
-          
-          // Motor C Schritte
-          zeilenschnittdatenarray.append(0)
-          zeilenschnittdatenarray.append(0)
-          zeilenschnittdatenarray.append(0)
-          zeilenschnittdatenarray.append(0)
-          // Motor C delay
-          zeilenschnittdatenarray.append(0)
-          zeilenschnittdatenarray.append(0)
-          zeilenschnittdatenarray.append(0)
-          zeilenschnittdatenarray.append(0)
-          
-          // code, 
-          zeilenschnittdatenarray.append(UInt8(code))
-          // position im Ablauf
-          zeilenschnittdatenarray.append(UInt8(zeilenposition))
-          
-          // zeilennummer
-          var zeilenindexh = UInt8((zeilenindex & 0xFF00)>>8)
-          var zeilenindexl = UInt8((zeilenindex & 0x00FF))
-          
-          zeilenschnittdatenarray.append(zeilenindexh)
-          zeilenschnittdatenarray.append(zeilenindexl)
-          
-          // motorstatus
-          var motorstatus:UInt8 = 0
-          
-          if (fabs(schritteyRound) > fabs(schrittexRound)) // wer hat mehr schritte x
-          {
-          maxsteps = fabs(schritteyRound)
-          
-          motorstatus = (1<<MOTOR_B)
-          }
-          else 
-          {
-          maxsteps = fabs(schrittexRound)
-          motorstatus = (1<<MOTOR_A)
-          }
-          
-          // Testphase
-          //       motorstatus = (1<<MOTOR_A)
-          
-          //       print("motorstatus: \(motorstatus) maxsteps: \(maxsteps)")
-          
-          zeilenschnittdatenarray.append(motorstatus)
-          zeilenschnittdatenarray.append(77) // Pöatzhalter PWM
-          
-          // timerintervall
-          let timerintervall = timerintervallFeld.integerValue
-          zeilenschnittdatenarray.append(UInt8((timerintervall & 0xFF00)>>8))
-          zeilenschnittdatenarray.append(UInt8(timerintervall & 0x00FF))
-          zeilenschnittdatenarray.append(DEVICE_MILL)
-          //       print("zeilenschnittdatenarray:\t\(zeilenschnittdatenarray)")
-          if schrittexInt == 0 && schritteyInt == 0
-          {
-          print("******  schrittexInt  0 schritteyInt  0 zeilenindex: \(zeilenindex)")
-          print("\t\tdiffX: \(diffX) diffY: \(diffY)")
-          }
-          print("zeilenschnittdatenarray: \(zeilenschnittdatenarray)")
-          
-          
-          if zeilenschnittdatenarray.count > 0
-          {
-          if !(schrittexInt == 0 && schritteyInt == 0)
-          {
-          //              Schnittdatenarray.append(zeilenschnittdatenarray)
-          }
-          }
-          
-          print("nach: \t xhome: \(xhome) yhome: \(yhome)")
-          homedataarray.append([xhome,yhome])
-          */
-      } // for Zeilendaten
-      print("homedataarray:\t\(homedataarray)")
-      
-      homexFeld.integerValue = xhome
-      homeyFeld.integerValue = yhome
-      
-      print("report_PCB_Daten Schnittdatenarray:")
-      for linie in Schnittdatenarray
-      {
-         print("\(linie) ")
-         
-      }
-      print("Schnittdatenarray_n:")
-      for linie in Schnittdatenarray_n
-      {
-         print("\(linie) ")
-         
-      }
-      
-      
-      print("report_PCBDaten Schnittdatenarray count: \(Schnittdatenarray.count)")
-      
-       var i = 0
-       for el in Schnittdatenarray
-       {
-       let iH = (i & 0xFF00) >> 8
-       let iL = i & 0x00FF
-       let index = (Int(el[26]) * 256) + Int(el[27])
-             print("\(iH) \(iL) index: \(index)")
-       
-       //       print("\(i) \(el)")
-       i += 1
-       }
-       
-       
-       for el in SchritteArray
-       {
-       print(el)
-       //      print("\(el["startpunktx"] ?? 0)\t \(el["startpunkty"] ?? 0) \t\(el["endpunktx"] ?? 0)\t \(el["endpunkty"] ?? 0) \t\(el["distanz"] ?? 0)\t \(el["schrittex"] ?? 0)\t\(el["schrittey"] ?? 0) \t\(el["zoomfaktor"] ?? 0) \t\(el["code"] ?? 0)")
-       //  print("\(el["distanz"] ?? 0)\t \(el["schrittex"] ?? 0)\t\(el["schrittey"] ?? 0) \t\(el["zoomfaktor"] ?? 0) \t\(el["code"] ?? 0)")
-       
-       }
-          
-   }// report_PCB_Daten
-   
+     
    @IBAction func report_NN(_ sender: NSButton)
    {
       //print("report_NN")
@@ -3260,12 +2747,12 @@ class rPCB: rViewController
       {
          print("Figur schon geschlossen")
       }
-      print("report_readSVG mill_floatarray: \(mill_floatarray)")
+      //print("report_NN mill_floatarray: \(mill_floatarray)")
       
       setPCB_Output(floatarray: mill_floatarray, scale: 5, transform: transformfaktor)
       var PCBDaten = PCB_Daten(floatarray: mill_floatarray)
       
-      //print("report_readSVG PCBDaten")
+      //print("report_NN PCBDaten")
       Schnittdatenarray.append(contentsOf:PCBDaten)
    
    }
