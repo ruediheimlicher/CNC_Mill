@@ -1076,9 +1076,6 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <connections>
-                                    <action selector="report_testPCB:" target="wFL-7s-Z8p" id="tGa-KK-fEj"/>
-                                </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uEC-ii-7tz">
                                 <rect key="frame" x="794" y="602" width="19" height="17"/>
