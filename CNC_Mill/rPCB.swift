@@ -1407,14 +1407,11 @@ class rPCB: rViewController
          {
          case .off:
             //print("horizontal_checkbox: off")
-      //      sortedarray = sortDicArray_opt(origDicArray: circledicarray,key0:"cx", key1:"cy", order: false)
             
             sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:1, order:false)
          case .on:
-            //print("horizontal_checkbox: on")
-       //     sortedarray = sortDicArray_opt(origDicArray: circledicarray,key0:"cx", key1:"cy", order: true)
-            
-            sortedfloatarray =  sortArrayofArrays(origArray:circlefloatarray, index:2, order:false)
+             
+            sortedfloatarray = sortArrayofArrays(origArray:circlefloatarray, index:2, order:false)
             
          default:
             break
@@ -1486,7 +1483,7 @@ class rPCB: rViewController
             let cx:Double = (zeilendic[0]) 
             let cy:Double = (zeilendic[1]) 
             let cz:Double = (zeilendic[2])
-            let eckedistanz:Double = pow(cx,2) + pow(cy,2)
+            let eckedistanz:Double = hypot(cx,cy) //pow(cx,2) + pow(cy,2)
             let zeilenarray = [Double(zeilendicindex),cx,cy,cz,eckedistanz]
 
             // print("\(zeilendicindex) \(cx) \(cy)")

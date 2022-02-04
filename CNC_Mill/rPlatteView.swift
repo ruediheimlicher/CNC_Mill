@@ -471,12 +471,12 @@ class rPlatteView: NSView
          print("\t ******   PlatteView setStepperposition pos: \(pos) wegfloatarray: \(wegfloatarray) \nwegfloatarray: \(wegfloatarray)")
       }
        */
-      print("\t ******   PlatteView setStepperposition pos: \(pos) markfeldarray.count: \(markfeldarray.count) oldstepperposition: \(oldstepperposition)")
+      //print("\t ******   PlatteView setStepperposition pos: \(pos) markfeldarray.count: \(markfeldarray.count) oldstepperposition: \(oldstepperposition)")
        if ((markfeldarray.count > stepperposition) && (stepperposition > oldstepperposition))// 
       {
          oldstepperposition = stepperposition
          //print("\t ******   PlatteView setStepperposition pos: \(pos) markfeldarray.count: \(markfeldarray.count) \nmarkrect: \(markfeldarray[stepperposition])")
-         print("\t ******   PlatteView setStepperposition zeichnen pos: \(pos) ")
+         //print("\t ******   PlatteView setStepperposition zeichnen pos: \(pos) ")
          //print("\t ******   PlatteView setStepperposition pos: \(pos) feld: \(markfeldarray[stepperposition]) needs display")
          self.setNeedsDisplay(markfeldarray[stepperposition])
       //needsDisplay = true
@@ -487,7 +487,7 @@ class rPlatteView: NSView
          
          self.setNeedsDisplay(markfeldarray.last! )
          self.displayIfNeeded()
-         print("\t ******   PlatteView setStepperposition nicht zeichnen pos: \(pos) ")
+         //print("\t ******   PlatteView setStepperposition nicht zeichnen pos: \(pos) ")
          
        }
    }
