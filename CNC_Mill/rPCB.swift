@@ -58,7 +58,6 @@ class rPCB: rViewController
    var dpi2mmfaktor:Double = 0
    var mmFormatter = NumberFormatter()
 
-  // var propfaktor = 2801856.14762141
 
    var drillweg = 4
    
@@ -222,6 +221,17 @@ class rPCB: rViewController
       }
 
       
+      if UserDefaults.standard.object(forKey: "propfaktor") != nil 
+      {
+         print("PCB UserDefaults Key exists");
+         propfaktor = UserDefaults.standard.object(forKey: "propfaktor") as! Double
+      
+      }
+      else
+      {
+         propfaktor = 2845000.0
+      }
+
       //let q = kgv(m:200,n:1096)
       // 
       let hh = phex(200);
@@ -250,7 +260,7 @@ class rPCB: rViewController
       
       
       //formatter.roundingMode = .down
-      print("propfaktor: \(propfaktor)")
+      print("viewDidLoad propfaktor: \(propfaktor)")
          
       transformfaktor = INTEGERFAKTOR/10/propfaktor
       dpi2mmfaktor = propfaktor / INTEGERFAKTOR
@@ -321,7 +331,7 @@ class rPCB: rViewController
       dickeFeld.doubleValue = platinendicke
       
       
-      
+      propfaktorStepper.doubleValue = propfaktor
       propfaktorFeld.doubleValue = propfaktor
       // Pot 0
       /*
@@ -390,7 +400,8 @@ class rPCB: rViewController
       schritteweitepop.selectItem(withTitle: schritteweitearray[1])
       
       readSVG_Pop.removeAllItems()
-   
+      readSVG_Pop.addItem(withTitle: "Neu")
+      
       teensy.write_byteArray[DRILL_BIT] = 0
    }
    
@@ -1254,9 +1265,10 @@ class rPCB: rViewController
    
    @IBAction func report_propfaktorStepper(_ sender: NSStepper)
    {
-      print("report_propfaktorStepper val: \(sender.integerValue)")
-      propfaktor += Double(sender.integerValue)
+      print("report_propfaktorSteppern propfaktor vor: \(propfaktor)  val: \(sender.integerValue)")
+      propfaktor = Double(sender.integerValue)
       propfaktorFeld.doubleValue = propfaktor
+      print("report_propfaktorStepper propfaktor nach: \(propfaktor)")
    }
    
    
@@ -1267,10 +1279,19 @@ class rPCB: rViewController
       
       let titelindex = sender.indexOfSelectedItem
 
-      guard let tempurl = svgdicarray[titel]  else { return } 
+      guard let tempurl = svgdicarray[titel] else 
+      {
+        print("keine url")
+         return 
+      } 
       print("titel: \(titel) url: \(tempurl)")
       
-      guard URL(fileURLWithPath: tempurl ) != nil else { return }
+      guard URL(fileURLWithPath: tempurl ) != nil else 
+      { 
+         print("keine datei")
+         return 
+         
+      }
       
      // let url = urldicarray as NSDictionary[titel]
       //sender.selectItem(withTitle: titel)
@@ -1282,28 +1303,45 @@ class rPCB: rViewController
       // transform: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform
       let labelarray:[String] = ["id","cx","cy","transform"] // relevante daten
       let drillarray = DrillDaten(tiefe: drillweg)
-      let SVG_URL = openFile()
-      // https://stackoverflow.com/questions/10016475/create-nsscrollview-programmatically-in-an-nsview-cocoa
-      guard let fileURL = SVG_URL else { return  }
-      let urlstring:String = SVG_URL!.absoluteString
-      var dateiname = urlstring.components(separatedBy: "/").last ?? "-"
-      print("report_readSVG fileURL: \(fileURL)")
-      dateiname = dateiname.components(separatedBy: ".").first ?? "-"
-      SVG_Pfad.stringValue = dateiname
-      let index = String(urlarray.count)
-      var svgarray = [dateiname,urlstring]
-      var svgdic = [dateiname:urlstring]
+      var dateiname = ""
+      var urlstring:String = ""
+      //var fileURL:URL 
+      if readSVG_Pop.titleOfSelectedItem == "Neu"
+      {
+         //let SVG_URL = openFile()
+         // https://stackoverflow.com/questions/10016475/create-nsscrollview-programmatically-in-an-nsview-cocoa
+         guard let fileURL = openFile() else { return  }
+         
+         urlstring = fileURL.absoluteString
+         dateiname = urlstring.components(separatedBy: "/").last ?? "-"
+         print("report_readSVG fileURL: \(fileURL)")
+         dateiname = dateiname.components(separatedBy: ".").first ?? "-"
+         SVG_Pfad.stringValue = dateiname
+         
+         // https://www.dotnetperls.com/dictionary-swift
+         svgdicarray[dateiname] = urlstring
+          
+         if readSVG_Pop.itemTitles.contains(dateiname)
+         {
+            print("dateiname schon da")
+         }
+         else 
+         {
+            readSVG_Pop.insertItem(withTitle: dateiname, at: 1)
+            
+            if readSVG_Pop.numberOfItems > 5
+            {
+               readSVG_Pop.removeItem(at: 5)
+            }
+         }
+      }
+      else
+      {
+         guard let dateiname = readSVG_Pop.titleOfSelectedItem else {return}
+         guard let dateiurl = svgdicarray[dateiname] else {return}
+         urlstring = dateiurl
+      }
       
-      urlarray.append(svgarray)
-      svgpoparray.append((svgname:dateiname, svgurl: urlstring))
-      
-      // https://www.dotnetperls.com/dictionary-swift
-      svgdicarray[dateiname] = urlstring
-      
- //     var temp:svgdata = [svgname:dateiname, svgurl:urlstring]
- //     svgdataArray[dateiname] = urlstring
-      urldicarray.append(svgdic)
-      readSVG_Pop.addItem(withTitle: dateiname)
       circledicarray.removeAll()
       circlefloatarray.removeAll()
       circlefloatdicarray.removeAll()
@@ -1316,12 +1354,16 @@ class rPCB: rViewController
       ablaufzeitFeld.stringValue = zeitformatter.string(from: TimeInterval(0))!
       //reading
       do {
-         print("readSVG URL: \(fileURL)")
          
-         let SVG_data = try String(contentsOf: fileURL, encoding: .utf8)
+         guard let  fileURL = URL.init(string:urlstring) else {return }
+         print("readSVG URL: \(fileURL)")
+         print("report_readSVG propfaktor: \(propfaktor)")
+         let SVG_data = try String(contentsOf: fileURL , encoding: .utf8)
          //print("SVGdata: \(SVG_data)")
          //let anz = SVG_data.count
          //print("SVGdata count: \(anz)")
+         
+         
          let SVG_text = SVG_data.components(separatedBy: "\n")
          // print("SVG_text: \(SVG_text)")
          let SVG_array = Array(SVG_text)
@@ -1603,15 +1645,13 @@ class rPCB: rViewController
             print("\(el[0] )\t \(el[1] )\t \(el[2])")
           }
          */
-         
-            print("report_readSVG circlefloatarray vor eckelinksunten. count: \(circlefloatarray.count)")         
-          
+         /*
+         print("report_readSVG circlefloatarray vor eckelinksunten. count: \(circlefloatarray.count)")                   
          for el in circlefloatarray
           {
             print("\(el[0] )\t \(el[1] )\t \(el[2]) \t\(el[3])")
-            
           }
-
+          */
          
          // ecke links unten bestimmen 
          let eckelinksuntenindex_raw = eckelinksunten(floatarray: circlefloatarray)
@@ -1631,12 +1671,13 @@ class rPCB: rViewController
 
          print("report_readSVG circlefloatarray nach eckelinksunten. count: \(circlefloatarray.count)")         
           
+         /*
          for el in circlefloatarray
           {
             print("\(el[0] )\t \(el[1] )\t \(el[2]) \t\(el[3])")
             
           }
-
+*/
 
     
          circlefloatarray_raw.removeAll()
@@ -1654,13 +1695,14 @@ class rPCB: rViewController
             
           }
           */
-          
+         /* 
          print("report_readSVG circlefloatarray_raw. count: \(circlefloatarray_raw.count)")         
-          for el in circlefloatarray_raw
+         
+         for el in circlefloatarray_raw
           {
             print("\(el[0] )\t \(el[1] )\t \(el[2]) \t\(el[3])")
           }
-
+          */
          
          
          
@@ -3490,7 +3532,6 @@ class rPCB: rViewController
          // USB_OK_Feld.image = notokimage
       }
       //usbstatus = Int32(status)
-      
    }
    
    @objc  func klickpunktAktion(_ notification:Notification)
@@ -4366,7 +4407,8 @@ class rPCB: rViewController
       // analog readUSB() in USB_Stepper
       
       
-      //print("                       newDataAktion  start\n")
+      
+      print("                       newDataAktion  start\n")
       //    let lastData = teensy.getlastDataRead()
       
       // print("lastData:\t \(lastData[1])\t\(lastData[2])   ")

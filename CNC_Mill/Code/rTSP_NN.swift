@@ -75,6 +75,8 @@ class rTSP_NN:NSObject
       let dy = plan[a].my - plan[b].my
       return (dx*dx + dy*dy).squareRoot()
    }
+   
+   
    func nextmillpunkt(aktuellerpunkt:Int)->(Int)
    {
       var mindist:Double = Double(Int.max)
@@ -101,8 +103,7 @@ class rTSP_NN:NSObject
 //           print("               neue  mindist: \(mindist) tempdist: \(tempdist)")
             mindist = tempdist
             nextpunktindex = start
-         }
-         
+         }         
 //         print("nextpunktindex: \(nextpunktindex) mindist: \(mindist)")   
          start += 1
       }

@@ -290,7 +290,7 @@ open class usb_teensy: NSObject
      
  //           let timerdic:Dictionary<String,Int?> = timer.userInfo as! Dictionary<String,Int?>
    
-              new_Data = true
+            new_Data = true
             datatruecounter += 1
             //var codehex = String(format:"%02X", read_byteArray[0])
             

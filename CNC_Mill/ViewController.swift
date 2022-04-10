@@ -431,7 +431,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
 
    var  CNCDatenArray = [[String:Int]]();
    
-   var propfaktor = 2841194.0
+   var propfaktor = 2840000.0
   
    var pfeilschrittweite:Int = 4
   /*
@@ -451,6 +451,23 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    var teensy = usb_teensy()
    
    var CNC = rCNC()
+   
+   // https://stackoverflow.com/questions/31203241/how-can-i-use-userdefaults-in-swift
+   /*
+    Store:
+    UserDefaults.standard.set(true, forKey: "Key") //Bool
+    UserDefaults.standard.set(1, forKey: "Key")  //Integer
+    UserDefaults.standard.set("TEST", forKey: "Key") //setObject
+    
+    Retrieve:
+    UserDefaults.standard.bool(forKey: "Key")
+    UserDefaults.standard.integer(forKey: "Key")
+     UserDefaults.standard.string(forKey: "Key")
+    Remove:
+     UserDefaults.standard.removeObject(forKey: "Key")
+    */
+   
+    
    
 //   var readtimer: Timer?
    
@@ -568,6 +585,43 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
       // kgV(a,b,c) = kgV(a,kgV(b,c))
  //     print("kgv3: \(b3)")
       
+      // https://stackoverflow.com/questions/31203241/how-can-i-use-userdefaults-in-swift
+      /*
+       Store:
+       UserDefaults.standard.set(true, forKey: "Key") //Bool
+       UserDefaults.standard.set(1, forKey: "Key")  //Integer
+       UserDefaults.standard.set("TEST", forKey: "Key") //setObject
+       
+       Retrieve:
+       UserDefaults.standard.bool(forKey: "Key")
+       UserDefaults.standard.integer(forKey: "Key")
+        UserDefaults.standard.string(forKey: "Key")
+       Remove:
+        UserDefaults.standard.removeObject(forKey: "Key")
+       */
+
+      /*
+      if UserDefaults.standard.object(forKey: "propfaktor") != nil 
+      {
+         print("UserDefaults Key exists");
+         propfaktor = UserDefaults.standard.object(forKey: "propfaktor") as! Double
+      
+      }
+       */
+      /*
+      if let p =  UserDefaults.standard.integer(forKey: "propfaktor")
+      {
+         propfaktor = p
+      }
+      else
+      {
+         propfaktor =    2845000.0
+         
+        // let defaults = UserDefaults.standard
+        // defaults.set(2878000.0,forKey:"propfaktor")
+
+      }
+      */
       self.view.wantsLayer = true
       self.view.superview?.wantsLayer = true
       hintergrundfarbe  = NSColor.init(red: 0.25, 
@@ -668,7 +722,7 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    @objc func beendenAktion(_ notification:Notification) 
    {
       
-      print("CNC_Mill beendenAktion")
+      print("ViewController beendenAktion")
       /*
        //https://learnappmaking.com/userdefaults-swift-setting-getting-data-how-to/
        
@@ -689,13 +743,17 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
        
 
       */
+      UserDefaults.standard.set(propfaktor, forKey: "propfaktor")
       NSApplication.shared.terminate(self)
    }
    
    func beenden()
    {
-      print("CNC_Mill beenden")
+      print("CNC_Mill beenden propfaktor: \(propfaktor)")
+      
+      UserDefaults.standard.set(propfaktor, forKey: "propfaktor")
       NSApplication.shared.terminate(self)
+
    }
 
     
