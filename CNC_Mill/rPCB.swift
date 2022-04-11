@@ -206,7 +206,8 @@ class rPCB: rViewController
    override func viewDidLoad() 
    {
       super.viewDidLoad()
-      
+      NotificationCenter.default.addObserver(self, selector:#selector(beendenAktion(_:)),name:NSNotification.Name(rawValue: "beenden"),object:nil)
+
       NSEvent.addLocalMonitorForEvents(matching: .keyDown) 
       {
          if self.myKeyDown(with: $0) {
@@ -219,19 +220,43 @@ class rPCB: rViewController
           self.flagsChanged(with: $0)
           return $0
       }
-
+      /*
+      print("PCB viewDidLoad UserDefaults Key value")
+      for (key, value) in UserDefaults.standard.dictionaryRepresentation() {
+          print("\(key) = \(value) \n")
+      }
+      */
       
       if UserDefaults.standard.object(forKey: "propfaktor") != nil 
       {
-         print("PCB UserDefaults Key exists");
+         print("PCB viewDidLoad UserDefaults Key exists");
          propfaktor = UserDefaults.standard.object(forKey: "propfaktor") as! Double
-      
+         print("PCB viewDidLoad UserDefaults propfaktor : \(propfaktor)");
       }
       else
       {
          propfaktor = 2845000.0
       }
 
+  //    readSVG_Pop.removeAllItems()
+      
+      /*
+      if   UserDefaults.standard.array(forKey: "pcbpoparray")  as? [[String]] == nil //
+      {
+      readSVG_Pop.addItem(withTitle: "Neu")         
+      }
+      else
+      {
+         readSVG_Pop.addItem(withTitle: "Neu")
+         let pcbpoparray:[[String]] = (UserDefaults.standard.array(forKey: "pcbpoparray") ?? [["leer"]])  as [[String]] 
+         for popzeile in pcbpoparray
+         {
+            readSVG_Pop.addItem(withTitle: popzeile[0])
+            svgdicarray[popzeile[0]] = popzeile[1]
+         }
+      }
+      */
+  //    readSVG_Pop.addItem(withTitle: "Neu")
       //let q = kgv(m:200,n:1096)
       // 
       let hh = phex(200);
@@ -399,11 +424,74 @@ class rPCB: rViewController
       schritteweitepop.addItems(withTitles: schritteweitearray)
       schritteweitepop.selectItem(withTitle: schritteweitearray[1])
       
-      readSVG_Pop.removeAllItems()
-      readSVG_Pop.addItem(withTitle: "Neu")
-      
+       
       teensy.write_byteArray[DRILL_BIT] = 0
    }
+   
+   @objc override func beendenAktion(_ notification:Notification)
+   {
+      
+      print("PCB beendenAktion propfaktor: \(propfaktor)")
+      /*
+       //https://learnappmaking.com/userdefaults-swift-setting-getting-data-how-to/
+       
+       print("beendenAktion Pot1_Stepper_L: \(Pot1_Stepper_L.integerValue) Pot2_Stepper_L: \(Pot2_Stepper_L.integerValue)")
+       UserDefaults.standard.set(Pot1_Stepper_L.integerValue, forKey: "robot1min")
+       UserDefaults.standard.set(Pot2_Stepper_L.integerValue, forKey: "robot2min")
+       
+       UserDefaults.standard.set(rotoffsetstepper.integerValue, forKey: "rotoffset")
+       UserDefaults.standard.set(pot1offsetstepper.integerValue, forKey: "robot1offset")
+       UserDefaults.standard.set(pot2offsetstepper.integerValue, forKey: "robot2offset")
+       
+       UserDefaults.standard.set(winkelfaktor1stepper.floatValue,forKey: "winkelfaktor1")
+       UserDefaults.standard.set(winkelfaktor2stepper.floatValue,forKey: "winkelfaktor2")
+       
+       
+       print("PCB beendenAktion")
+       
+       
+
+      */
+      
+      print("\nPCB beendenAktion")
+      /*
+       // unbenutzt. Keine Berechtigung
+      let keyarray = Array(svgdicarray.keys)
+      var pcbpoparray = [[String]]()
+      for pcbkey  in keyarray
+      {
+         guard let pcburl = svgdicarray[pcbkey] else { return }
+         if pcburl.count > 0
+         {
+         print("key: \(pcbkey) urlstring: \(pcburl)")
+            pcbpoparray.append([pcbkey, pcburl])
+         }
+         //UserDefaults.standard.set(dateiurlstring, forKey: pcbkey)
+         
+      }
+      UserDefaults.standard.set(pcbpoparray, forKey:"pcbpoparray")
+      */
+      UserDefaults.standard.set(propfaktor, forKey: "propfaktor")
+      
+      let testpropfaktor = UserDefaults.standard.object(forKey: "propfaktor") as! Double
+      print("VC  beenden testpropfaktor: \(testpropfaktor)")
+
+    //  let testpcbpoparray = UserDefaults.standard.array(forKey: "pcbpoparray")  as? [[String]] 
+      NSApplication.shared.terminate(self)
+   }
+   
+   
+   override func beenden()
+   {
+      print("PCB  beenden propfaktor: \(propfaktor)")
+      
+      UserDefaults.standard.set(propfaktor, forKey: "propfaktor")
+      
+      let testpropfaktor = UserDefaults.standard.object(forKey: "propfaktor") as! Double
+      print("PCB  beenden testpropfaktor: \(testpropfaktor)")
+      NSApplication.shared.terminate(self)
+   }
+
    
    // https://stackoverflow.com/questions/49724924/nsevent-keycode-to-unicode-character-in-swift
    func myKeyDown(with event: NSEvent) -> Bool {
@@ -1306,6 +1394,16 @@ class rPCB: rViewController
       var dateiname = ""
       var urlstring:String = ""
       //var fileURL:URL 
+      
+      guard let fileURL = openFile() else { return  }
+      
+      urlstring = fileURL.absoluteString
+      dateiname = urlstring.components(separatedBy: "/").last ?? "-"
+      print("report_readSVG fileURL: \(fileURL)")
+      dateiname = dateiname.components(separatedBy: ".").first ?? "-"
+      SVG_Pfad.stringValue = dateiname
+
+      /*
       if readSVG_Pop.titleOfSelectedItem == "Neu"
       {
          //let SVG_URL = openFile()
@@ -1341,6 +1439,11 @@ class rPCB: rViewController
          guard let dateiurl = svgdicarray[dateiname] else {return}
          urlstring = dateiurl
       }
+      */
+      
+  //    print(Array(svgdicarray.keys))
+  //    print(Array(svgdicarray.values))
+      
       
       circledicarray.removeAll()
       circlefloatarray.removeAll()
@@ -1356,9 +1459,13 @@ class rPCB: rViewController
       do {
          
          guard let  fileURL = URL.init(string:urlstring) else {return }
+         
+         //guard 
+         //let  fileURL = URL(fileURLWithPath: "/Users/ruediheimlicher/Desktop/CNC_SVG/ATest0.svg" )// else {return }
+         
          print("readSVG URL: \(fileURL)")
          print("report_readSVG propfaktor: \(propfaktor)")
-         let SVG_data = try String(contentsOf: fileURL , encoding: .utf8)
+         let SVG_data = try String(contentsOf: fileURL , encoding: String.Encoding.utf8)
          //print("SVGdata: \(SVG_data)")
          //let anz = SVG_data.count
          //print("SVGdata count: \(anz)")
@@ -1920,7 +2027,8 @@ class rPCB: rViewController
       }
       catch 
       {
-         print("readSVG error")
+         print("readSVG  error: \(error)")
+         
          /* error handling here */
          return
       }
@@ -2041,13 +2149,13 @@ class rPCB: rViewController
          //      print("zeilendic: \(zeilendic)")
          CNC_DatendicArray.append(zeilendic)
          
-         /*
+         
           print("report_readSVG CNC_DatendicArray")
           for el in CNC_DatendicArray
           {
           print("\(el["ind"] ) \(el["X"] ) \(el["Y"] )")
           }
-          */
+          
          //dataTable.reloadData()
           
          lasttabledataindex = 0 // Zeile 0 in circlearray

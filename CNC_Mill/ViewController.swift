@@ -712,17 +712,17 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
    func windowWillClose(_ aNotification: Notification) {
       print("CNC_Mill windowWillClose")
       let nc = NotificationCenter.default
-  //    nc.post(name:Notification.Name(rawValue:"beenden"),
-  //            object: nil,
-  //            userInfo: nil)
-      beenden()
+    nc.post(name:Notification.Name(rawValue:"beenden"),
+              object: nil,
+              userInfo: nil)
+     // beenden()
    }
 
  
    @objc func beendenAktion(_ notification:Notification) 
    {
       
-      print("ViewController beendenAktion")
+      print("ViewController beendenAktion propfaktor: \(propfaktor)")
       /*
        //https://learnappmaking.com/userdefaults-swift-setting-getting-data-how-to/
        
@@ -744,16 +744,19 @@ class rViewController: NSViewController, NSWindowDelegate,XMLParserDelegate,NSTa
 
       */
       UserDefaults.standard.set(propfaktor, forKey: "propfaktor")
+      let testpropfaktor = UserDefaults.standard.object(forKey: "propfaktor") as! Double
+      
       NSApplication.shared.terminate(self)
    }
    
    func beenden()
    {
-      print("CNC_Mill beenden propfaktor: \(propfaktor)")
+      print("VC  beenden propfaktor: \(propfaktor)")
       
       UserDefaults.standard.set(propfaktor, forKey: "propfaktor")
       NSApplication.shared.terminate(self)
-
+      let testpropfaktor = UserDefaults.standard.object(forKey: "propfaktor") as! Double
+      print("VC  beenden testpropfaktor: \(testpropfaktor)")
    }
 
     

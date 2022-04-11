@@ -792,11 +792,11 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eex-tQ-W4N">
-                                <rect key="frame" x="134" y="595" width="108" height="32"/>
+                                <rect key="frame" x="108" y="625" width="138" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="read SVG" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ibR-U5-Igg">
+                                <buttonCell key="cell" type="push" title="read SVG" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ibR-U5-Igg">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="systemBold" size="14"/>
+                                    <font key="font" metaFont="system" size="18"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="report_readSVG:" target="wFL-7s-Z8p" id="rSa-WA-l3c"/>
@@ -1220,17 +1220,6 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EBu-nO-PLk">
-                                <rect key="frame" x="296" y="629" width="111" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Send Daten" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nVS-Hd-aFd">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="report_send_Daten:" target="wFL-7s-Z8p" id="02O-yS-ZkQ"/>
-                                </connections>
-                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nDW-Ip-gHc">
                                 <rect key="frame" x="970" y="486" width="104" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1555,24 +1544,6 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6it-4u-Hob">
-                                <rect key="frame" x="138" y="632" width="106" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="6nl-J9-zjr" id="Z2u-pU-AeI">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="menu"/>
-                                    <menu key="menu" id="QjS-nb-UH4">
-                                        <items>
-                                            <menuItem title="Item 1" state="on" id="6nl-J9-zjr"/>
-                                            <menuItem title="Item 2" id="LxC-hw-7u3"/>
-                                            <menuItem title="Item 3" id="gIF-Eg-Tmc"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <action selector="report_readSVG_Pop:" target="wFL-7s-Z8p" id="rAh-1n-zBD"/>
-                                </connections>
-                            </popUpButton>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wtg-9G-zTt">
                                 <rect key="frame" x="537" y="627" width="19" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1788,6 +1759,17 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EBu-nO-PLk">
+                                <rect key="frame" x="279" y="625" width="151" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Send Daten" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nVS-Hd-aFd">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system" size="16"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="report_send_Daten:" target="wFL-7s-Z8p" id="02O-yS-ZkQ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1834,7 +1816,6 @@
                         <outlet property="propfaktorStepper" destination="wtg-9G-zTt" id="VC8-f4-ddi"/>
                         <outlet property="ramp_OK_Check" destination="q4r-pV-zV0" id="3st-LK-aWI"/>
                         <outlet property="readSVG_Knopf" destination="eex-tQ-W4N" id="7RP-tf-ddy"/>
-                        <outlet property="readSVG_Pop" destination="6it-4u-Hob" id="Mt6-0c-5vc"/>
                         <outlet property="schritteweitepop" destination="3xh-qt-IoI" id="9kX-oc-GIV"/>
                         <outlet property="speedFeld" destination="FBI-Ov-pSY" id="5KE-yI-L2p"/>
                         <outlet property="steppercontKnopf" destination="Buo-3L-NMd" id="zb3-cQ-nuQ"/>
