@@ -787,7 +787,7 @@
         <scene sceneID="agF-0r-WIo">
             <objects>
                 <viewController title="PCB" id="wFL-7s-Z8p" customClass="rPCB" customModule="CNC_Mill" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" identifier="pcbview" id="uSC-dm-ZpO">
+                    <view key="view" identifier="pcb" id="uSC-dm-ZpO">
                         <rect key="frame" x="0.0" y="0.0" width="1154" height="671"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
@@ -963,20 +963,14 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <connections>
-                                    <action selector="report_goXY:" target="wFL-7s-Z8p" id="60O-8x-nNR"/>
-                                </connections>
                             </button>
-                            <button fixedFrame="YES" tag="4" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1iJ-Gq-aaM" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
+                            <button fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="1iJ-Gq-aaM" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
                                 <rect key="frame" x="864" y="485" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AVv-Br-EMZ">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeil_up" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AVv-Br-EMZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <connections>
-                                    <action selector="report_goXY:" target="wFL-7s-Z8p" id="F7H-AO-TJt"/>
-                                </connections>
                             </button>
                             <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="LGx-qT-7EV" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
                                 <rect key="frame" x="897" y="453" width="32" height="32"/>
@@ -1559,14 +1553,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                            </button>
-                            <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" tag="100" translatesAutoresizingMaskIntoConstraints="NO" id="d4X-y6-3Lt" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
-                                <rect key="frame" x="1011" y="341" width="32" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeilup" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9dY-oE-kUf">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
+                                <connections>
+                                    <action selector="report_Move_Up:" target="wFL-7s-Z8p" id="dm2-Da-DfK"/>
+                                </connections>
                             </button>
                             <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" tag="101" translatesAutoresizingMaskIntoConstraints="NO" id="sGH-5X-PYB" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
                                 <rect key="frame" x="1011" y="305" width="32" height="31"/>
@@ -1687,7 +1676,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="byE-S7-x0s">
-                                                            <rect key="frame" x="109.5" y="1" width="51" height="17"/>
+                                                            <rect key="frame" x="110" y="1" width="51" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YfY-9V-yXE">
@@ -1770,6 +1759,14 @@
                                     <action selector="report_send_Daten:" target="wFL-7s-Z8p" id="02O-yS-ZkQ"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" tag="100" translatesAutoresizingMaskIntoConstraints="NO" id="d4X-y6-3Lt" customClass="rPfeiltaste" customModule="CNC_Mill" customModuleProvider="target">
+                                <rect key="frame" x="1011" y="338" width="32" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pfeilup" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9dY-oE-kUf">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <accessibility identifier="1"/>
                     </view>
@@ -1812,6 +1809,8 @@
                         <outlet property="homeyFeld" destination="ENc-xm-O4U" id="ZCv-1S-otG"/>
                         <outlet property="horizontal_checkbox" destination="Xp2-G1-erb" id="qCm-5a-LjN"/>
                         <outlet property="linear_checkbox" destination="ubb-7P-f7L" id="q9e-aE-2Rw"/>
+                        <outlet property="pfeilDownKnopf" destination="x8t-XN-VxJ" id="pqH-Y1-UcN"/>
+                        <outlet property="pfeilUpKnopf" destination="1iJ-Gq-aaM" id="HjM-jx-Gyh"/>
                         <outlet property="propfaktorFeld" destination="fiT-XO-MFA" id="XHa-So-ZsO"/>
                         <outlet property="propfaktorStepper" destination="wtg-9G-zTt" id="VC8-f4-ddi"/>
                         <outlet property="ramp_OK_Check" destination="q4r-pV-zV0" id="3st-LK-aWI"/>

@@ -169,8 +169,8 @@ class rPCB: rViewController
    @IBOutlet weak var drillOKKnopf: NSButton!
    @IBOutlet weak var drillUPKnopf: NSButton!
    
-   @IBOutlet weak var pfeilupKnopf: NSButton!
-   @IBOutlet weak var pfeildownKnopf: NSButton!
+   @IBOutlet weak var pfeilUpKnopf: NSButton!
+   @IBOutlet weak var pfeilDownKnopf: NSButton!
    
    
    @IBOutlet weak var drillStepUPKnopf: NSButton!
@@ -365,6 +365,29 @@ class rPCB: rViewController
       self.view.addSubview(stepDownKnopf)
       
       let pfeilUpKnopf = NSButton()
+      pfeilUpKnopf.frame = pfeilUpKnopf.frame
+      pfeilUpKnopf.title = "UP"
+      pfeilUpKnopf.setButtonType(NSButton.ButtonType.momentaryPushIn)
+      pfeilUpKnopf.bezelStyle = NSButton.BezelStyle.shadowlessSquare
+      pfeilUpKnopf.imageScaling = .scaleProportionallyUpOrDown
+      pfeilUpKnopf.image = NSImage(named: NSImage.Name(rawValue: "pfeilup2"))
+      pfeilUpKnopf.tag = 4
+      pfeilUpKnopf.target = self
+      pfeilUpKnopf.action = #selector(self.drill_down) 
+      self.view.addSubview(pfeilUpKnopf)
+ 
+      let pfeilDownKnopf = NSButton()
+      pfeilDownKnopf.frame = pfeilDownKnopf.frame
+      pfeilDownKnopf.title = "UP"
+      pfeilDownKnopf.setButtonType(NSButton.ButtonType.momentaryPushIn)
+      pfeilDownKnopf.bezelStyle = NSButton.BezelStyle.shadowlessSquare
+      pfeilDownKnopf.imageScaling = .scaleProportionallyUpOrDown
+      pfeilDownKnopf.image = NSImage(named: NSImage.Name(rawValue: "pfeilup2"))
+      pfeilDownKnopf.tag = 2
+      pfeilDownKnopf.target = self
+      pfeilDownKnopf.action = #selector(self.move_up) 
+      self.view.addSubview(pfeilDownKnopf)
+
       
       // schnittPfad
       schnittPfad?.setStartposition(x: 0x800, y: 0x800, z: 0)
@@ -4425,6 +4448,15 @@ class rPCB: rViewController
       write_CNC_Zeile(zeilenarray: drillWegArray)
    }
    
+   @objc func move_down()
+   {
+      print("\n+++++++     move_down  ")
+   }
+
+   @objc func move_up()
+   {
+      print("\n+++++++     move_up  ")
+   }
    
    @IBAction func report_Drill_Abs_down(_ sender: NSButton)
    {
@@ -4449,6 +4481,22 @@ class rPCB: rViewController
     
       drill_down()
      }
+  
+   @IBAction func report_Move_down(_ sender: NSButton)
+   {
+      print("\n+++++++     report_Drill_down tag: \(sender.tag) ")
+    
+      drill_down()
+     }
+
+   @IBAction func report_Move_Up(_ sender: NSButton)
+   {
+      print("\n+++++++     report_Drill_down tag: \(sender.tag) ")
+    
+      drill_down()
+     }
+
+   
    
    @IBAction func report_dicke(_ sender: NSButton)
    {
