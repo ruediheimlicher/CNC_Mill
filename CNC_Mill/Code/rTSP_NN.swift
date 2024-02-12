@@ -24,10 +24,12 @@ class rTSP_NN:NSObject
 {
    var plan = [millpkt]()
    var anzahl = 0
-    var weg = [Int]()
-   override init() {
+   var weg = [Int]()
+   override init() 
+   {
       
    }
+   
    func setkoordinaten(koord:[[Double]])
    {
       var zeilenindex = 0
@@ -66,7 +68,7 @@ class rTSP_NN:NSObject
          }
          plan[anzahl - 1].next = 0
       }
-      //print("firstrun plan: \(plan)")
+      print("firstrun plan: \(plan)")
    }// firstrun
    
    func entfernung(a:Int, b:Int)->Double
